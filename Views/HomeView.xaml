@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="FlightJobsDesktop.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:views="clr-namespace:FlightJobsDesktop.Views"
+             mc:Ignorable="d">
+    <Grid>
+        <Controls:MetroAnimatedTabControl Margin="5,5,5,5" Controls:HeaderedControlHelper.HeaderFontSize="18" Controls:HeaderedControlHelper.HeaderFontStretch="Expanded">
+            <TabItem Header="Connector">
+                <views:ConnectorView />
+            </TabItem>
+            <TabItem Header="Manager">
+                <views:ManagerJobsView />
+            </TabItem>
+            <TabItem Header="Logbook">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Airlines">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Analysis">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Map">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Faq">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </Controls:MetroAnimatedTabControl>
+
+    </Grid>
+</UserControl>
