@@ -85,8 +85,8 @@
                         </mah:HamburgerMenuGlyphItem.Tag>
                     </mah:HamburgerMenuGlyphItem>
 
-                    <mah:HamburgerMenuGlyphItem Glyph=""
-                                                     Label="User">
+                    <mah:HamburgerMenuGlyphItem Glyph="" x:Name="TabUserView"
+                                                     Label="Captain: rrr">
                         <mah:HamburgerMenuGlyphItem.Tag>
                             <views:PrivateView />
                         </mah:HamburgerMenuGlyphItem.Tag>
