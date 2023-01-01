@@ -99,11 +99,20 @@
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Account\ForgotPassword.xaml.cs">
+      <DependentUpon>ForgotPassword.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\Register.xaml.cs">
+      <DependentUpon>Register.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ConnectorView.xaml.cs">
       <DependentUpon>ConnectorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ManagerJobsView.xaml.cs">
       <DependentUpon>ManagerJobsView.xaml</DependentUpon>
@@ -139,6 +148,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Account\ForgotPassword.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Account\Register.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ConnectorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -146,6 +163,10 @@
     <Page Include="Views\HomeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Account\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ManagerJobsView.xaml">
       <SubType>Designer</SubType>
@@ -206,7 +227,17 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection">
+      <Version>7.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="MySql.Data.EntityFramework">
+      <Version>8.0.31</Version>
+    </PackageReference>
+    <PackageReference Include="ScottPlot.WPF">
+      <Version>4.1.31</Version>
+    </PackageReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="img\planes\A319.JPG" />
     <Resource Include="img\planes\A320.JPG" />
@@ -280,6 +311,16 @@
     <Content Include="web\web-map.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlightJobs.Domain\FlightJobs.Domain.csproj">
+      <Project>{3e95ca57-758a-4a00-a2db-fe1ad6c370a0}</Project>
+      <Name>FlightJobs.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FlightJobs.Infrastructure\FlightJobs.Infrastructure.csproj">
+      <Project>{2ec3f861-6ab6-4b44-aca6-122394ced4d2}</Project>
+      <Name>FlightJobs.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
