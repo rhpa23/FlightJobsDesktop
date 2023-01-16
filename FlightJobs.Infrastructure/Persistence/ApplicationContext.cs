@@ -1,12 +1,28 @@
 ﻿using FlightJobs.Domain.Common;
 using FlightJobs.Domain.Entities;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System.Configuration;
 using System.Data.Common;
 using System.Data.Entity;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace FlightJobs.Infrastructure.Persistence
 {
-    internal partial class ApplicationContext : DbContext
+    // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
+    public class ApplicationUser : IdentityUser
+    {
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+        {
+            // Observe que o authenticationType deve corresponder àquele definido em CookieAuthenticationOptions.AuthenticationType
+            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            // Adicionar declarações de usuário personalizado aqui
+            return userIdentity;
+        }
+    }
+
+    internal partial class ApplicationContext : IdentityDbContext<ApplicationUser>
     {
         private const string DB_KEY = "hfjfbjnkds55ytr@99866543#xdghhggfdw";
 

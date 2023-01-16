@@ -12,7 +12,7 @@ namespace FlightJobs.Infrastructure
     {
         static void Main(string[] args)
         {
-            var user =  new UserAccessService().GetAspnetUser("rhpa23@gmail.com");
+            var user =  new UserAccessService().GetAspnetuser("rhpa23@gmail.com");
             Console.WriteLine($"UserName: {user.UserName}");
         }
     }

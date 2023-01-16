@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlightJobs.Infrastructure.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,14 +20,16 @@ namespace FlightJobsDesktop.Views.Account
     /// </summary>
     public partial class Login : Window
     {
-        public Login()
+        private IUserAccessService _userAccessService;
+        public Login(IUserAccessService userAccessService)
         {
             InitializeComponent();
+            _userAccessService = userAccessService;
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            new Register().Show();
+            //new Register(_userAccessService).Show();
             this.Close();
         }
 

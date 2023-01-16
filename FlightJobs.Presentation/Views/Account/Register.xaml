@@ -3,10 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FlightJobsDesktop.Views.Account"
+        xmlns:validationrules="clr-namespace:FlightJobsDesktop.ValidationRules" 
+        xmlns:helpers="clr-namespace:FlightJobsDesktop.Helpers" 
+        xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="FlightJobs Register" Height="580" Width="600" ResizeMode="NoResize">
+    <Window.DataContext>
+        <local:AspnetUserViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -23,14 +28,66 @@
         </Grid.RowDefinitions>
         <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="Create a new account" Margin="5,30,0,10" FontSize="22"/>
         <Label Grid.Column="0" Grid.Row="1" Content="Nick name:" Margin="5,30,0,10" FontSize="22"/>
-        <TextBox Name="txbNickName" Grid.Column="1" Grid.Row="1" Height="33" TextWrapping="Wrap" Text="" Margin="5,30,30,5" />
+        <TextBox Name="txbNickName" Grid.Column="1" Grid.Row="1" Height="33" TextWrapping="Wrap" Margin="5,30,30,5">
+            <TextBox.Text>
+                <Binding Path="NickName" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <validationrules:MinimumCharacterRule MinimumCharacters="6" ValidatesOnTargetUpdated="True"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
         <Label Grid.Column="0" Grid.Row="2" Content="Email:" Margin="5,30,0,10" FontSize="22"/>
-        <TextBox Name="txbEmail" Grid.Column="1" Grid.Row="2" Height="33" TextWrapping="Wrap" Text="" Margin="5,30,30,5" />
+        <TextBox Name="txbEmail" Grid.Column="1" Grid.Row="2" Height="33" TextWrapping="Wrap" Margin="5,30,30,5">
+            <TextBox.Text>
+                <Binding Path="Email" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <validationrules:EmailValidationRule  ValidatesOnTargetUpdated="True"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
         <Label Grid.Column="0" Grid.Row="3" Content="Password:" Margin="5,30,0,10" FontSize="22"/>
-        <PasswordBox Name="txbPassword" Grid.Column="1" Grid.Row="3" Height="33" Margin="5,30,30,5" />
+        <PasswordBox Name="txbPassword" Grid.Column="1" Grid.Row="3" Height="33" Margin="5,30,30,5" helpers:PasswordBoxHelper.BindPassword="True">
+            <helpers:PasswordBoxHelper.BoundPassword>
+                <Binding Path="Password" Mode="TwoWay">
+                    <Binding.ValidationRules>
+                        <validationrules:MinimumCharacterRule MinimumCharacters="6" ValidatesOnTargetUpdated="True" />
+                    </Binding.ValidationRules>
+                </Binding>
+            </helpers:PasswordBoxHelper.BoundPassword>
+        </PasswordBox>
+        <TextBlock Text="{Binding InfoCollection[PasswordStrengthMsg]}" Foreground="Orange"
+                            VerticalAlignment="Center" HorizontalAlignment="Right"
+                            Margin="0,25,40,0" Grid.Column="1" Grid.Row="3"/>
         <Label Grid.Column="0" Grid.Row="4" Content="Confirm password:" Margin="5,30,0,10" FontSize="22"/>
-        <PasswordBox Name="txbPasswordConfirm" Grid.Column="1" Grid.Row="4" Height="33" Margin="5,30,30,5" />
-        <Label Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="* Password required a minimum of 5 characters and at least one digit." Margin="5,10,0,10" FontSize="14"/>
-        <Button Name="btnRegister" Content="Register" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Right" Margin="6,20,30,2" VerticalAlignment="Top" Width="150" FontSize="18" Click="btnRegister_Click" />
+        <PasswordBox Name="txbPasswordConfirm" Grid.Column="1" Grid.Row="4" Height="33" Margin="5,30,30,5" helpers:PasswordBoxHelper.BindPassword="True">
+            <helpers:PasswordBoxHelper.BoundPassword>
+                <Binding Path="PasswordConfirmed" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" />
+            </helpers:PasswordBoxHelper.BoundPassword>
+        </PasswordBox>
+        <TextBlock Text="{Binding ErrorCollection[PasswordConfirmedMsg]}" Foreground="Orange" 
+                            VerticalAlignment="Center" HorizontalAlignment="Right"
+                            Margin="0,25,40,0" Grid.Column="1" Grid.Row="4"/>
+
+        <Label Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="* Password required a minimum of 6 characters and at least one digit." Margin="5,10,0,10" FontSize="14"/>
+        <Button Name="btnRegister" Content="Register" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Right" Margin="6,20,30,2" VerticalAlignment="Top" Width="150" FontSize="18" Click="btnRegister_Click">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=txbNickName}" Value="False"/>
+                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=txbEmail}" Value="False"/>
+                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=txbPassword}" Value="False"/>
+                                <Condition Binding="{Binding ErrorCollection[PasswordConfirmedMsg]}" Value="ok"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="IsEnabled" Value="True"/>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
     </Grid>
 </Window>
