@@ -18,7 +18,7 @@ namespace FlightJobsDesktop.Views
         {
             InitializeComponent();
 
-            LoadChart();
+            //LoadChart();
         }
 
         private void Avatar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -39,7 +39,7 @@ namespace FlightJobsDesktop.Views
 
         private void LoadChart()
         {
-            
+            /*
             var plt = WpfPlot1.Plot;
             plt.Title("Total in 6 months: $ 129,946      Month goal: $ 31,306", true, Color.Black, 16); //TODO:  
             plt.Style(ScottPlot.Style.Monospace);
@@ -63,6 +63,8 @@ namespace FlightJobsDesktop.Views
             // define tick spacing as 1 Month (every Month will be shown)
             plt.XAxis.ManualTickSpacing(1, ScottPlot.Ticks.DateTimeUnit.Month);
             WpfPlot1.Refresh();
+
+            */
         }
     }
 }

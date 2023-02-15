@@ -1,8 +1,14 @@
-﻿using FlightJobsDesktop.Views.Modals;
+﻿using FlightJobsDesktop.Utils;
+using FlightJobsDesktop.ViewModels;
+using FlightJobsDesktop.Views.Modals;
+using ModernWpf.Controls;
 using System;
+using System.Collections;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Linq;
 
 namespace FlightJobsDesktop.Views
 {
@@ -15,9 +21,9 @@ namespace FlightJobsDesktop.Views
         {
             InitializeComponent();
 
-            this.Map.IsScriptNotifyAllowed = true;
-            this.Map.ScriptNotify += Map_ScriptNotify;
-            this.Map.NavigateToLocal("\\web\\web-map.html");
+            //this.Map.IsScriptNotifyAllowed = true;
+            //this.Map.ScriptNotify += Map_ScriptNotify;
+            //this.Map.NavigateToLocal("\\web\\web-map.html");
         }
 
         private void Map_ScriptNotify(object sender, Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT.WebViewControlScriptNotifyEventArgs e)
@@ -32,13 +38,13 @@ namespace FlightJobsDesktop.Views
                 switch (inputName)
                 {
                     case "Departure":
-                        TxtDeparture.Text = inputValue;
+                        txtDeparture.Text = inputValue;
                         break;
                     case "Arrival":
-                        TxtArrival.Text = inputValue;
+                        txtArrival.Text = inputValue;
                         break;
                     case "Alternative":
-                        TxtAlternative.Text = inputValue;
+                        txtAlternative.Text = inputValue;
                         break;
                     default:
                         break;
@@ -49,9 +55,9 @@ namespace FlightJobsDesktop.Views
 
         private void TxtArrival_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (TxtDeparture.Text.Length == 4 && TxtArrival.Text.Length == 4)
+            if (txtDeparture.Text.Length == 4 && txtArrival.Text.Length == 4)
             {
-                LoadMap();
+                //LoadMap();
             }
         }
 
@@ -66,10 +72,10 @@ namespace FlightJobsDesktop.Views
 
         private void SwapIcon_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var departure = TxtDeparture.Text;
-            var arrival  = TxtArrival.Text;
-            TxtDeparture.Text = arrival;
-            TxtArrival.Text = departure;
+            var departure = txtDeparture.Text;
+            var arrival  = txtArrival.Text;
+            txtDeparture.Text = arrival;
+            txtArrival.Text = departure;
         }
 
         private void BtnDestinationTips_Click(object sender, RoutedEventArgs e)
@@ -106,6 +112,51 @@ namespace FlightJobsDesktop.Views
             };
 
             window.ShowDialog();
+        }
+
+
+        private async void AutoSuggestBoxICAO_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            // Only get results when it was a user typing, 
+            // otherwise assume the value got filled in by TextMemberPath 
+            // or the handler for SuggestionChosen.
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                //Set the ItemsSource to be your filtered dataset
+                var text = sender.Text;
+                if (text.Length > 1)
+                {
+                    sender.ItemsSource = await Task.Run(() => GetIcaoSugestions(text));
+                }
+                else
+                {
+                    sender.ItemsSource = new string[] { "No suggestion.." };
+                }
+            }
+        }
+
+        private IEnumerable GetIcaoSugestions(string text)
+        {
+            var list = AirportDatabaseFile.FindAirportInfoByTerm(text);
+            return list.Select(x => $"{x.ICAO} - {x.Name}" ).ToArray();
+        }
+
+        private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            // Set sender.Text. You can use args.SelectedItem to build your text string.
+        }
+
+
+        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if (args.ChosenSuggestion != null)
+            {
+                // User selected an item from the suggestion list, take an action on it here.
+            }
+            else
+            {
+                // Use args.QueryText to determine what to do.
+            }
         }
     }
 }

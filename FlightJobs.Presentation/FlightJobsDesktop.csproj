@@ -42,12 +42,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
       <HintPath>packages\ControlzEx.4.4.0\lib\net45\ControlzEx.dll</HintPath>
-    </Reference>
-    <Reference Include="MahApps.Metro, Version=2.0.0.0, Culture=neutral, PublicKeyToken=51482d6f650b2b3f, processorArchitecture=MSIL">
-      <HintPath>packages\MahApps.Metro.2.4.9\lib\net46\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Toolkit.Win32.UI.XamlHost.Managed, Version=6.1.0.0, Culture=neutral, PublicKeyToken=4aff67a105548ee2, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Toolkit.UI.XamlHost.6.1.2\lib\net462\Microsoft.Toolkit.Win32.UI.XamlHost.Managed.dll</HintPath>
@@ -69,6 +69,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Web" />
@@ -92,15 +93,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppConstants.cs" />
     <Compile Include="core\SelectedItemToContentConverter.cs" />
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Mapper\DbModelToViewModelMapper.cs" />
     <Compile Include="Mapper\ViewModelToDbModelMapper.cs" />
+    <Compile Include="Utils\AirportDatabaseFile.cs" />
     <Compile Include="ValidationRules\EmailValidationRule.cs" />
     <Compile Include="ValidationRules\MinimumCharacterRule.cs" />
+    <Compile Include="ViewModels\AirportViewModel.cs" />
+    <Compile Include="ViewModels\UserSettingsViewModel.cs" />
+    <Compile Include="ViewModels\CurrentJobViewModel.cs" />
     <Compile Include="ViewModels\AspnetUserViewModel.cs" />
+    <Compile Include="ViewModels\LastJobViewModel.cs" />
     <Compile Include="ViewModels\ObservableObject.cs" />
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
@@ -226,6 +234,15 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="ResourceData\LoginSavedData.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ResourceData\Settings.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ResourceData\Settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\moq.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -243,8 +260,17 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection">
       <Version>7.0.0</Version>
     </PackageReference>
+    <PackageReference Include="ModernWpfUI">
+      <Version>0.9.6</Version>
+    </PackageReference>
     <PackageReference Include="MySql.Data.EntityFramework">
       <Version>8.0.31</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Notification.Wpf">
+      <Version>6.1.0.5</Version>
     </PackageReference>
     <PackageReference Include="ScottPlot.WPF">
       <Version>4.1.31</Version>
@@ -311,6 +337,42 @@
     <Resource Include="img\graduation\16.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Properties\GlobalAirportDatabase.txt" />
+    <Content Include="favicon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="img\logo\android-icon-144x144.png" />
+    <Resource Include="img\logo\android-icon-192x192.png" />
+    <Resource Include="img\logo\android-icon-36x36.png" />
+    <Resource Include="img\logo\android-icon-48x48.png" />
+    <Resource Include="img\logo\android-icon-72x72.png" />
+    <Resource Include="img\logo\android-icon-96x96.png" />
+    <Resource Include="img\logo\apple-icon-114x114.png" />
+    <Resource Include="img\logo\apple-icon-120x120.png" />
+    <Resource Include="img\logo\apple-icon-144x144.png" />
+    <Resource Include="img\logo\apple-icon-152x152.png" />
+    <Resource Include="img\logo\apple-icon-180x180.png" />
+    <Resource Include="img\logo\apple-icon-57x57.png" />
+    <Resource Include="img\logo\apple-icon-60x60.png" />
+    <Resource Include="img\logo\apple-icon-72x72.png" />
+    <Resource Include="img\logo\apple-icon-76x76.png" />
+    <Resource Include="img\logo\apple-icon-precomposed.png" />
+    <Resource Include="img\logo\apple-icon.png" />
+    <Resource Include="img\logo\browserconfig.xml" />
+    <Resource Include="img\logo\favicon-16x16.png" />
+    <Resource Include="img\logo\favicon-32x32.png" />
+    <Resource Include="img\logo\favicon-96x96.png" />
+    <Resource Include="img\logo\favicon.ico" />
+    <Resource Include="img\logo\ms-icon-144x144.png" />
+    <Resource Include="img\logo\ms-icon-150x150.png" />
+    <Resource Include="img\logo\ms-icon-310x310.png" />
+    <Resource Include="img\logo\ms-icon-70x70.png" />
+    <Resource Include="img\logo\FlightJobsLogo0001.png" />
+    <Resource Include="img\logo\FlightJobsLogo0002.png" />
+    <Resource Include="img\logo\FlightJobsLogo0003.png" />
+    <Resource Include="img\logo\FlightJobsLogo0004.png" />
+    <Resource Include="img\logo\FlightJobsLogo0005.png" />
+    <Resource Include="img\logo\FlightJobsLogo0006.png" />
     <Content Include="web\img\arrival.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -325,16 +387,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FlightJobs.Domain\FlightJobs.Domain.csproj">
-      <Project>{3e95ca57-758a-4a00-a2db-fe1ad6c370a0}</Project>
-      <Name>FlightJobs.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FlightJobs.Infrastructure\FlightJobs.Infrastructure.csproj">
-      <Project>{2ec3f861-6ab6-4b44-aca6-122394ced4d2}</Project>
-      <Name>FlightJobs.Infrastructure</Name>
+    <ProjectReference Include="..\ConnectorClientAPI\ConnectorClientAPI.csproj">
+      <Project>{e274cce3-f4e3-42fb-82eb-137839180389}</Project>
+      <Name>ConnectorClientAPI</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

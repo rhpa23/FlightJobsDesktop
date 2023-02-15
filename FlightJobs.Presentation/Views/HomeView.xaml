@@ -3,11 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:views="clr-namespace:FlightJobsDesktop.Views"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d">
     <Grid>
-        <Controls:MetroAnimatedTabControl Margin="5,5,5,5" Controls:HeaderedControlHelper.HeaderFontSize="18" Controls:HeaderedControlHelper.HeaderFontStretch="Expanded">
+        <TabControl
+                    Style="{StaticResource TabControlPivotStyle}"
+                    MinHeight="400" MinWidth="1000">
             <TabItem Header="Connector">
                 <views:ConnectorView />
             </TabItem>
@@ -20,16 +22,15 @@
             <TabItem Header="Airlines">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
-            <TabItem Header="Analysis">
+            <TabItem Header="Map">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
-            <TabItem Header="Map">
+            <TabItem Header="Analysis">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
             <TabItem Header="Faq">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
-        </Controls:MetroAnimatedTabControl>
-
+        </TabControl>
     </Grid>
 </UserControl>

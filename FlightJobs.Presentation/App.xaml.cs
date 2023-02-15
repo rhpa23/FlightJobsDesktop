@@ -1,13 +1,8 @@
-﻿using FlightJobs.Infrastructure.Services;
+﻿using ConnectorClientAPI;
 using FlightJobsDesktop.Mapper;
+using FlightJobsDesktop.Views;
 using FlightJobsDesktop.Views.Account;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace FlightJobsDesktop
@@ -28,20 +23,23 @@ namespace FlightJobsDesktop
 
         private void ConfigureServices(ServiceCollection services)
         {
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo("en-US");
+
+            DbModelToViewModelMapper.Initialize();
             var mapCfg = ViewModelToDbModelMapper.Initialize();
-            var userAccess = new UserAccessService();
+            //var userAccess = new UserAccessService();
+            var flightJobsConnectorClientAPI = new FlightJobsConnectorClientAPI();
 
             services.AddSingleton<MainWindow>();
-            services.AddSingleton(userAccess);
-            services.AddSingleton(new Login(userAccess));
-            services.AddSingleton(new Register(userAccess, mapCfg));
-
+            //services.AddSingleton(userAccess);
+            services.AddSingleton(new Login(flightJobsConnectorClientAPI));
+            services.AddSingleton(new Register(flightJobsConnectorClientAPI, mapCfg));
         }
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
-            var mainWindow = _serviceProvider.GetService<MainWindow>();
-            mainWindow.Show();
+            var loginWindow = _serviceProvider.GetService<Login>();
+            loginWindow.Show();
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using FlightJobs.Domain.Entities;
-using FlightJobs.Infrastructure.Persistence;
 using FlightJobsDesktop.ViewModels;
 
 namespace FlightJobsDesktop.Mapper
@@ -13,8 +11,8 @@ namespace FlightJobsDesktop.Mapper
             if (!_isInitialized)
             {
                 var configuration = new MapperConfiguration(cfg => {
-                    cfg.CreateMap<AspnetUserViewModel, ApplicationUser>()
-                        .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.NickName));
+                    //cfg.CreateMap<AspnetUserViewModel, ApplicationUser>()
+                    //    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.NickName));
                 });
 
                 _isInitialized = true;

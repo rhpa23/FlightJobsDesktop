@@ -12,7 +12,7 @@ namespace FlightJobsDesktop.ValidationRules
             return new ValidationResult(false, "Email is invalid");
         }
 
-        bool IsValidEmail(string email)
+        public static bool IsValidEmail(string email)
         {
             var trimmedEmail = email?.Trim();
 

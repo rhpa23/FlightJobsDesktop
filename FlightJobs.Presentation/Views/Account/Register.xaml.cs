@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
-using FlightJobs.Domain.Entities;
-using FlightJobs.Infrastructure.Persistence;
-using FlightJobs.Infrastructure.Services.Interfaces;
+using ConnectorClientAPI;
 using FlightJobsDesktop.ViewModels;
 using System;
 using System.Windows;
-using System.Windows.Controls;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace FlightJobsDesktop.Views.Account
 {
@@ -15,12 +11,12 @@ namespace FlightJobsDesktop.Views.Account
     /// </summary>
     public partial class Register : Window
     {
-        private IUserAccessService _userAccessService;
+        private FlightJobsConnectorClientAPI _flightJobsConnectorClientAPI;
         private MapperConfiguration _mapper;
-        public Register(IUserAccessService userAccessService, MapperConfiguration mapper)
+        public Register(FlightJobsConnectorClientAPI flightJobsConnectorClientAPI, MapperConfiguration mapper)
         {
             InitializeComponent();
-            _userAccessService = userAccessService;
+            _flightJobsConnectorClientAPI = flightJobsConnectorClientAPI;
             _mapper= mapper;
         }
 
@@ -29,15 +25,15 @@ namespace FlightJobsDesktop.Views.Account
             try
             {
                 var viewModel = (AspnetUserViewModel)DataContext;
-                var user = new AutoMapper.Mapper(_mapper).Map<AspnetUserViewModel, ApplicationUser>(viewModel);
+                //var user = new AutoMapper.Mapper(_mapper).Map<AspnetUserViewModel, ApplicationUser>(viewModel);
 
-                var userSaved = _userAccessService.RegisterUserAsync(user, viewModel.PasswordConfirmed);
+                //var userSaved = _userAccessService.RegisterUserAsync(user, viewModel.PasswordConfirmed);
                 //Console.WriteLine($"UserName: {userSaved.Id}");
 
-                if (userSaved.Exception != null)
-                {
-                    MessageBox.Show(userSaved.Exception.InnerException.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                //if (userSaved.Exception != null)
+                //{
+                //    MessageBox.Show(userSaved.Exception.InnerException.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //}
             }
             catch (Exception ex)
             {
