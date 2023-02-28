@@ -11,5 +11,14 @@ namespace FlightJobsDesktop.Views
         {
             InitializeComponent();
         }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source is TabControl && ((TabControl)e.Source).SelectedContent is ManagerJobsView)
+            {
+                var managerView = (ManagerJobsView) ((TabControl)e.Source).SelectedContent;
+                managerView.LoadManagerView();
+            }
+        }
     }
 }

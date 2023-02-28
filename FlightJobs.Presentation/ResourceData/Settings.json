@@ -1,1 +1,8 @@
-{"ThemeName":"Dark"}
+{
+  "StartInSysTray": true,
+  "ExitWithFS": true,
+  "AutoStartJob": true,
+  "AutoFinishJob": true,
+  "ShowLandingData": true,
+  "ThemeName": "Dark"
+}

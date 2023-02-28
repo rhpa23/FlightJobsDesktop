@@ -1,4 +1,6 @@
-﻿using ConnectorClientAPI;
+﻿using FlightJobs.Infrastructure;
+using FlightJobs.Infrastructure.Services;
+using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using Notification.Wpf;
@@ -24,14 +26,14 @@ namespace FlightJobsDesktop.Views
     /// </summary>
     public partial class ConnectorView : UserControl
     {
-        private FlightJobsConnectorClientAPI _flightJobsConnectorClientAPI;
         private NotificationManager _notificationManager;
 
         public ConnectorView()
         {
             InitializeComponent();
-            _flightJobsConnectorClientAPI = new FlightJobsConnectorClientAPI();
             _notificationManager = new NotificationManager();
+
+            LoadUserJobData();
         }
 
         private void BtnRemoveJob_MouseUp(object sender, MouseButtonEventArgs e)
@@ -39,57 +41,43 @@ namespace FlightJobsDesktop.Views
 
         }
 
-        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        internal async void LoadUserJobData()
         {
-            var loginData = Application.Current.Properties[AppConstants.KEY_LOGIN_DATA];
-            if (loginData != null)
-            {
-                var userId = ((LoginResponseModel)loginData).UserId;
-                await LoadUserJobList(userId);
-                LoadUserJobData(userId);
-            }
-        }
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowArea");
 
-        private void LoadUserJobData(string userId)
-        {
-            var jobs = Application.Current.Properties[AppConstants.KEY_JOBS_DATA];
-            if (jobs != null)
-            {
-                var currentJob = ((List<JobModel>)jobs).FirstOrDefault(x => x.IsActivated);
-                var lastJob = ((List<JobModel>)jobs).OrderBy(x => x.EndTime).FirstOrDefault(x => x.IsDone);
-                if (currentJob != null)
-                {
-
-                    var jobView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, CurrentJobViewModel>(currentJob);
-                    jobView.JobSummary = $"Setup departure for aircraft on {jobView.DepartureDesc} and the total payload to {jobView.PayloadComplete} then fly to {jobView.ArrivalDesc}.";
-                    //if (lastJob != null) TODO: Get last job from API
-                    //{
-                    //    var lastJobView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, LastJobViewModel>(currentJob);
-                    //    currentJobView.LastJob = lastJobView;
-                    //}
-                    DataContext = jobView;
-                }
-                else
-                {
-                    DataContext = new CurrentJobViewModel() { JobSummary = "You don't have any job active. Click on Manager to generate your next job." };
-                }
-            }
-        }
-
-        private async Task LoadUserJobList(string userId)
-        {
             try
             {
-                var jobs = await _flightJobsConnectorClientAPI.GetUserJobs(userId);
-                if (jobs != null && Application.Current.Properties[AppConstants.KEY_JOBS_DATA] == null)
+                var currentJobView = new CurrentJobViewModel() { JobSummary = "You don't have any job active. Click on Manager to generate your next job." };
+
+                var currentJob = AppProperties.UserJobs.FirstOrDefault(x => x.IsActivated);
+                if (currentJob != null)
                 {
-                    Application.Current.Properties.Add(AppConstants.KEY_JOBS_DATA, jobs);
+                    currentJobView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, CurrentJobViewModel>(currentJob);
+                    currentJobView.JobSummary = $"Setup departure for aircraft on {currentJobView.DepartureDesc} and the total payload to {currentJobView.PayloadComplete} then fly to {currentJobView.ArrivalDesc}.";
                 }
+
+                var lastJob = await new JobService().GetLastUserJob(AppProperties.UserLogin.UserId);
+                if (lastJob != null)
+                {
+                    var lastJobView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, LastJobViewModel>(lastJob);
+                    currentJobView.LastJob = lastJobView;
+                }
+
+                DataContext = currentJobView;
             }
-            catch
+            catch (Exception)
             {
-                _notificationManager.Show("Error", "User jobs could not be loaded. Please try again later.", NotificationType.Error, "WindowArea");
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
             }
+            finally
+            {
+                progress.Dispose();
+            }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadUserJobData();
         }
     }
 }

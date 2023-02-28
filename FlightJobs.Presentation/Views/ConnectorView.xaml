@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
-             mc:Ignorable="d" Loaded="UserControl_Loaded" >
+             mc:Ignorable="d" Loaded="UserControl_Loaded">
     <UserControl.DataContext>
         <local:CurrentJobViewModel/>
     </UserControl.DataContext>
@@ -19,78 +19,85 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="0" Width="250" Style="{StaticResource StackPanelBoxStyle}">
-            <TextBlock Text="Airplane" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" />
-            <Border Style="{StaticResource LightBorderBoxStyle}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Column="0" Grid.Row="0" Content="Payload:"  Margin="15,15,0,15" FontSize="14"/>
-                    <Label Grid.Column="1" Grid.Row="0" Content="0"  Margin="15,15,0,15" FontSize="14"/>
-                    <Label Grid.Column="0" Grid.Row="1" Content="Name:"  Margin="15,15,0,15" FontSize="14"/>
-                    <Label Grid.Column="1" Grid.Row="1" Content="0"  Margin="15,15,0,15" FontSize="14" />
-                </Grid>
-            </Border>
-        </StackPanel>
+        <Grid Grid.Row="0" Grid.RowSpan="3" Width="255">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0" Width="250" Style="{StaticResource StackPanelBoxStyle}" Margin="0,15,0,0">
+                <TextBlock Text="Airplane" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" />
+                <Border Style="{StaticResource LightBorderBoxStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0" Grid.Row="0" Content="Payload:"  Margin="15,10,0,5" FontSize="14"/>
+                        <Label Grid.Column="1" Grid.Row="0" Content="0"  Margin="15,10,10,15" FontSize="14"/>
+                        <Label Grid.Column="0" Grid.Row="1" Content="Name:"  Margin="15,10,0,15" FontSize="14"/>
+                        <Label Grid.Column="1" Grid.Row="1" Content="0"  Margin="15,10,0,15" FontSize="14" />
+                    </Grid>
+                </Border>
+            </StackPanel>
 
-        <StackPanel Grid.Row="1" Grid.Column="0" Width="250" Style="{StaticResource StackPanelBoxStyle}">
-            <TextBlock Text="Weather" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" />
-            <Border Style="{StaticResource LightBorderBoxStyle}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Column="0" Grid.Row="0" Content="Baro:" Margin="15,15,0,15" FontSize="14"/>
-                    <Label Grid.Column="1" Grid.Row="0" Content="0" Name="LblBaroValue"   Margin="15,15,0,15" FontSize="14" />
-                    <Label Grid.Column="0" Grid.Row="1" Content="Wind:" Margin="15,10,0,5" FontSize="14"/>
-                    <Label Grid.Column="1" Grid.Row="1" Content="0" Name="LblWindValue"   Margin="15,15,0,15" FontSize="14" />
-                    <Label Grid.Column="0" Grid.Row="2" Content="Temp:"  Margin="15,10,0,5" FontSize="14"/>
-                    <Label Grid.Column="1" Grid.Row="2" Content="0" Name="LblTempValue"  Margin="15,15,0,15" FontSize="14" />
-                    <Label Grid.Column="0" Grid.Row="3" Content="Visibility:"  Margin="15,15,0,15" FontSize="14"/>
-                    <Label Grid.Column="1" Grid.Row="3" Content="0" Name="LblVisibilityValue"  Margin="15,15,0,15" FontSize="14" />
-                </Grid>
-            </Border>
-        </StackPanel>
-        <DockPanel Grid.Row="2" Grid.Column="0" Width="250" Margin="0,15,0,10">
-            <TextBlock Text="Last Job" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" DockPanel.Dock="Top" />
-            <Border Style="{StaticResource LightBorderBoxStyle}" VerticalAlignment="Stretch">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Column="0" Grid.Row="0" Content="LOWW" FontSize="20" Padding="5,0,5,0" Margin="5,10,0,10"/>
-                    <Label Grid.Column="1" Grid.Row="0" Content="555 NM" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5,0,5,0" Margin="5,10,0,10"/>
-                    <Label Grid.Column="2" Grid.Row="0" Content="LPWW" FontSize="20" Padding="5,0,5,0" Margin="5,10,0,10"/>
-                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xED28;" Grid.Column="0" Grid.Row="1"/>
-                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE916;" Grid.Column="0" Grid.Row="2"/>
-                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE709;" Grid.Column="0" Grid.Row="3"/>
-                    <Label Grid.Column="1" Grid.Row="1" Content="{Binding Path=LastJob.EndTime}" FontSize="18" Margin="0,10,0,10" Grid.ColumnSpan="3"/>
-                    <Label Grid.Column="1" Grid.Row="2" Content="00:57" FontSize="18" Grid.ColumnSpan="3" Margin="0,10,0,10"/>
-                    <Label Grid.Column="1" Grid.Row="3" Content="FenixA320_AZUPRAJB - MSFS" FontSize="10" Grid.ColumnSpan="3" Margin="0,10,0,10"/>
-                </Grid>
-            </Border>
-        </DockPanel>
+            <StackPanel Grid.Row="1" Grid.Column="0" Width="250" Style="{StaticResource StackPanelBoxStyle}" Margin="0,15,0,0" >
+                <TextBlock Text="Weather" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" />
+                <Border Style="{StaticResource LightBorderBoxStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0" Grid.Row="0" Content="Baro:" Margin="15,10,0,5" FontSize="14"/>
+                        <Label Grid.Column="1" Grid.Row="0" Content="0" Name="LblBaroValue"   Margin="15,10,0,5" FontSize="14" />
+                        <Label Grid.Column="0" Grid.Row="1" Content="Wind:" Margin="15,10,0,5" FontSize="14"/>
+                        <Label Grid.Column="1" Grid.Row="1" Content="0" Name="LblWindValue"   Margin="15,10,0,5" FontSize="14" />
+                        <Label Grid.Column="0" Grid.Row="2" Content="Temp:"  Margin="15,10,0,5" FontSize="14"/>
+                        <Label Grid.Column="1" Grid.Row="2" Content="0" Name="LblTempValue"  Margin="15,10,0,5" FontSize="14" />
+                        <Label Grid.Column="0" Grid.Row="3" Content="Visibility:"  Margin="15,10,0,5" FontSize="14"/>
+                        <Label Grid.Column="1" Grid.Row="3" Content="0" Name="LblVisibilityValue"  Margin="15,10,0,5" FontSize="14" />
+                    </Grid>
+                </Border>
+            </StackPanel>
+            <DockPanel Grid.Row="2" Grid.Column="0" Width="250" Margin="0,15,0,15">
+                <TextBlock Text="Last Job" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" DockPanel.Dock="Top" />
+                <Border Style="{StaticResource LightBorderBoxStyle}" VerticalAlignment="Stretch">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0" Grid.Row="0" Content="{Binding Path=LastJob.DepartureICAO}" FontSize="20" Padding="5,0,5,0" Margin="5,10,0,10"/>
+                        <Label Grid.Column="1" Grid.Row="0" Content="{Binding Path=LastJob.DistComplete}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5,0,5,0" Margin="5,10,0,10"/>
+                        <Label Grid.Column="2" Grid.Row="0" Content="{Binding Path=LastJob.ArrivalICAO}" FontSize="20" Padding="5,0,5,0" Margin="5,10,0,10"/>
+                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xED28;" Grid.Column="0" Grid.Row="1"/>
+                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE916;" Grid.Column="0" Grid.Row="2"/>
+                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE709;" Grid.Column="0" Grid.Row="3"/>
+                        <Label Grid.Column="1" Grid.Row="1" Content="{Binding Path=LastJob.EndTime}" FontSize="18" Margin="0,10,0,10" Grid.ColumnSpan="3"/>
+                        <Label Grid.Column="1" Grid.Row="2" Content="{Binding Path=LastJob.FlightTime}" FontSize="18" Grid.ColumnSpan="3" Margin="0,10,0,10"/>
+                        <Label Grid.Column="1" Grid.Row="3" Content="{Binding Path=LastJob.ModelDescription}" FontSize="10" Grid.ColumnSpan="3" Margin="0,10,0,10"/>
+                    </Grid>
+                </Border>
+            </DockPanel>
+        </Grid>
         <DockPanel Margin="20,15,10,0" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
             <TextBlock Text="Current Job" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" DockPanel.Dock="Top" />
             <Border Style="{StaticResource LightBorderBoxStyle}">
@@ -149,20 +156,17 @@
                     </Rectangle>
                     <Label Grid.Column="6" Grid.Row="3" Grid.ColumnSpan="2" Content="Total payload:" FontSize="18" Padding="0,0,5,0" HorizontalAlignment="Left"/>
                     <Label Grid.Column="8" Grid.Row="3" Content="{Binding Path=PayloadComplete}" FontSize="18" Padding="3,0,0,0" Name="LblCurrentTotalCargoWeight" HorizontalContentAlignment="Right"/>
-                    <TextBlock Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="10" Text="{Binding Path=JobSummary}" FontSize="16" Padding="5,40,5,0" Width="650" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" TextAlignment="Center" />
+                    <TextBlock Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="10" Text="{Binding Path=JobSummary}" FontSize="16" Padding="5,40,5,0" Width="600" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" TextAlignment="Center" />
                     <StackPanel Grid.Row="5" Grid.ColumnSpan="10" Margin="0,15,0,15" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                        <ui:AppBarButton x:Name="btnRandom" Label="Refresh" Icon="Refresh" Margin="0,0,240,0" />
-                        <ui:AppBarButton x:Name="btnSimbrief" Label="Start" Margin="0,0,240,0">
-                            <ui:AppBarButton.Icon>
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA3F;" />
-                            </ui:AppBarButton.Icon>
-                        </ui:AppBarButton>
-
-                        <ui:AppBarButton x:Name="btnGenerate" Label="Finish">
-                            <ui:AppBarButton.Icon>
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71A;" />
-                            </ui:AppBarButton.Icon>
-                        </ui:AppBarButton>
+                        <Border Margin="0,0,200,0" Style="{DynamicResource BorderButtonYellow}">
+                            <Button x:Name="btnRefresh" Content="Refresh" Width="100"  />
+                        </Border>
+                        <Border Margin="0,0,200,0" Style="{DynamicResource BorderButtonYellow}">
+                            <Button x:Name="btnStart" Content="Start" Width="100" />
+                        </Border>
+                        <Border Margin="0,0,0,0" Style="{DynamicResource BorderButtonYellow}">
+                            <Button x:Name="btnFinish" Content="Finish" Width="100" />
+                        </Border>
                     </StackPanel>
 
                 </Grid>

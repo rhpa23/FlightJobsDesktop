@@ -1,4 +1,6 @@
-﻿using ConnectorClientAPI;
+﻿using FlightJobs.Infrastructure;
+using FlightJobs.Infrastructure.Services.Interfaces;
+using FlightJobs.Model.Models;
 using FlightJobsDesktop.ValidationRules;
 using FlightJobsDesktop.ViewModels;
 using Notification.Wpf;
@@ -17,12 +19,15 @@ namespace FlightJobsDesktop.Views.Account
     /// </summary>
     public partial class Login : Window
     {
-        private FlightJobsConnectorClientAPI _flightJobsConnectorClientAPI;
+        private IJobService _jobService;
+        private IUserAccessService _userAccessService;
         private NotificationManager _notificationManager;
-        public Login(FlightJobsConnectorClientAPI flightJobsConnectorClientAPI)
+        private LoginResponseModel _loginData;
+        public Login(IUserAccessService userAccessService, IJobService jobService)
         {
             InitializeComponent();
-            _flightJobsConnectorClientAPI = flightJobsConnectorClientAPI;
+            _jobService = jobService;
+            _userAccessService = userAccessService;
             _notificationManager = new NotificationManager();
         }
 
@@ -68,39 +73,38 @@ namespace FlightJobsDesktop.Views.Account
 
         private async Task<bool> SignIn(AspnetUserViewModel userViewModel, bool discreteLogin)
         {
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowArea");
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
                 EnableControls(false);
-                var loginData = await _flightJobsConnectorClientAPI.Login(userViewModel.Email, userViewModel.Password);
-                if (loginData != null)
+                _loginData = await _userAccessService.Login(userViewModel.Email, userViewModel.Password);
+                if (_loginData != null)
                 {
-                    loginData.UserId = loginData.UserId.Replace("\"", "");
-                    Application.Current.Properties.Add(AppConstants.KEY_LOGIN_DATA, loginData);
-
-                    var userStatistics = await _flightJobsConnectorClientAPI.GetUserStatistics(loginData.UserId);
-                    Application.Current.Properties.Add(AppConstants.KEY_USER_STATISTICS_DATA, userStatistics);
+                    await _userAccessService.GetUserStatistics(_loginData.UserId);
 
                     if (!discreteLogin)
                     {
-                        _notificationManager.Show("Success", $"Welcome capitan {loginData.UserName}", NotificationType.Success, "WindowArea");
+                        _notificationManager.Show("Success", $"Welcome capitan {_loginData.UserName}", NotificationType.Success, "WindowArea");
                         await Task.Delay(TimeSpan.FromSeconds(3));
                         SaveLoginData();
                     }
-                    
+                    await LoadUserJobList(_loginData.UserId);
                     return true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //log.Error($"btnLogin_Click failed.", ex);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
             }
             finally
             {
+                progress.Dispose();
                 Mouse.OverrideCursor = Cursors.Arrow;
                 EnableControls(true);
             }
+            
             return false;
         }
 
@@ -137,10 +141,22 @@ namespace FlightJobsDesktop.Views.Account
                 string createText = $"{txbEmail.Text}|{txbPassword.Password}";
                 File.WriteAllText(path, createText);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _notificationManager.Show("Error", "Cannot save the login data.", NotificationType.Error, "WindowArea");
                 //log.Error($"SaveLoginData failed.", ex);
+            }
+        }
+
+        private async Task LoadUserJobList(string userId)
+        {
+            try
+            {
+                await _jobService.GetAllUserJobs(_loginData.UserId);
+            }
+            catch
+            {
+                _notificationManager.Show("Error", "User jobs could not be loaded. Please try again later.", NotificationType.Error, "WindowArea");
             }
         }
 

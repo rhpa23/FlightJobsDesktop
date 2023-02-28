@@ -7,7 +7,7 @@ namespace FlightJobsDesktop.ViewModels
     {
         public string JobSummary { get; set; }
         public object User { get; set; }
-        public int PaxWeight { get; set; }
+        public int PaxWeight { get; set; } = 88;
         public int Id { get; set; }
         public string DepartureICAO { get; set; }
         public string ArrivalICAO { get; set; }

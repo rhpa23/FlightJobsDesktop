@@ -1,4 +1,9 @@
-﻿using System;
+﻿using FlightJobs.Infrastructure.Services;
+using FlightJobs.Model.Models;
+using FlightJobsDesktop.Mapper;
+using FlightJobsDesktop.ViewModels;
+using Notification.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,15 +26,64 @@ namespace FlightJobsDesktop.Views.Modals
     /// </summary>
     public partial class AlternativeTipsModal : UserControl
     {
+        private string _arrivalICAO;
+
+        private NotificationManager _notificationManager;
+
+        public TipsDataGridViewModel SelectedJobTip { get; set; }
+
         public AlternativeTipsModal()
         {
             InitializeComponent();
         }
 
-        private void TxtAlternativeRange_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        public AlternativeTipsModal(string arrivalICAO)
         {
-            var textBox = sender as TextBox;
-            e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
+            InitializeComponent();
+            _arrivalICAO = arrivalICAO;
+            _notificationManager = new NotificationManager();
+        }
+
+        private async Task LoadDataGrid()
+        {
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "ModalArea");
+            try
+            {
+                if (!string.IsNullOrEmpty(_arrivalICAO) && _arrivalICAO.Length > 3)
+                {
+                    var list = await new JobService().GetAlternativeTips(_arrivalICAO.Substring(0, 4), (int)RangeNumberBox.Value);
+
+                    var tipJobsListView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<IList<SearchJobTipsModel>, IList<TipsDataGridViewModel>>(list);
+
+                    var tipsDataGridViewModel = new TipsDataGridViewModel();
+                    tipsDataGridViewModel.Tips = tipJobsListView;
+                    DataContext = tipsDataGridViewModel;
+                }
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Alternative jobs tips could not be loaded. Please try again later.", NotificationType.Error, "ModalArea");
+            }
+            finally
+            {
+                progress.Dispose();
+            }
+        }
+
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            await LoadDataGrid();
+        }
+
+        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedJobTip = (TipsDataGridViewModel)dataGrid.SelectedItem;
+            ((Window)Parent).Close();
+        }
+
+        private async void btnReload_Click(object sender, RoutedEventArgs e)
+        {
+            await LoadDataGrid();
         }
     }
 }

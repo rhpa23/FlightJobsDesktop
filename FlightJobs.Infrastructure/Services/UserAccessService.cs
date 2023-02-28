@@ -1,37 +1,29 @@
-﻿using FlightJobs.Domain.Entities;
-using FlightJobs.Infrastructure.Account;
-using FlightJobs.Infrastructure.Persistence;
-using FlightJobs.Infrastructure.Services.Interfaces;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System.Linq;
-using System.Runtime.Remoting.Contexts;
+﻿using FlightJobs.Infrastructure.Services.Interfaces;
+using FlightJobs.Model.Models;
 using System.Threading.Tasks;
 
 namespace FlightJobs.Infrastructure.Services
 {
-    public class UserAccessService : IUserAccessService
+    public class UserAccessService : ServiceBase, IUserAccessService
     {
-        private ApplicationContext _applicationContext;
-
-        public UserAccessService() 
+        public async Task<UserStatisticsModel> GetUserStatistics(string userId)
         {
-            _applicationContext = ApplicationContext.Create();
+            var userStatisticsData = await _flightJobsConnectorClientAPI.GetUserStatistics(userId);
+            AppProperties.UserStatistics = userStatisticsData;
+            return userStatisticsData;
         }
 
-        public Aspnetuser GetAspnetuser(string email) =>
-             _applicationContext.AspnetUsers.FirstOrDefault(u => u.Email == email);
-
-        public async Task<ApplicationUser> RegisterUserAsync(ApplicationUser applicationUser, string password)
+        public async Task<LoginResponseModel> Login(string email, string password)
         {
-            var appManager = ApplicationUserManager.Create(new Microsoft.AspNet.Identity.Owin.IdentityFactoryOptions<ApplicationUserManager>());
+            var loginData = await _flightJobsConnectorClientAPI.Login(email, password);
+            loginData.UserId = loginData.UserId.Replace("\"", "");
+            AppProperties.UserLogin = loginData;
+            return loginData;
+        }
 
-            var result = await appManager.CreateAsync(applicationUser, password);
-            if (result.Succeeded)
-            {
-                return applicationUser;
-            }
-            return null;
+        public async Task<UserStatisticsModel> UpdateUserSettings(UserSettingsModel userSettings)
+        {
+            return await _flightJobsConnectorClientAPI.UpdateUserSettings(userSettings);
         }
     }
 }

@@ -23,20 +23,20 @@
                 
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="StackPanelBoxStyle" TargetType="StackPanel">
-                <Setter Property="Margin" Value="0,15,0,0" />
+                <Setter Property="Margin" Value="0,10,0,0" />
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="VerticalAlignment" Value="Top"/>
             </Style>
             <Style x:Key="TextBlockHeaderBoxStyle" TargetType="TextBlock">
                 <Setter Property="HorizontalAlignment" Value="Stretch" />
                 <Setter Property="Foreground" Value="White"/>
-                <Setter Property="Background" Value="#5BC0DE"/>
+                <Setter Property="Background" Value="#333337"/>
                 <Setter Property="Margin" Value="0"/>
                 <Setter Property="Padding" Value="5"/>
                 <Setter Property="FontSize" Value="16"/>
             </Style>
             <Style x:Key="LightBorderBoxStyle" TargetType="Border">
-                <Setter Property="BorderBrush" Value="#5BC0DE" />
+                <Setter Property="BorderBrush" Value="#333337" />
                 <Setter Property="BorderThickness" Value="1" />
             </Style>
             <Style x:Key="AppTitleBarStyle" TargetType="ui:TitleBarControl">
@@ -47,6 +47,16 @@
             </Style>
             <Style x:Key="BorderHighlight" TargetType="Border">
                 <Setter Property="Border.BorderThickness" Value="1"/>
+                <Style.Triggers>
+                    <Trigger Property="Border.IsMouseOver" Value="True">
+                        <Setter Property="Border.BorderBrush" Value="#F7C600" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="BorderButtonYellow" TargetType="Border">
+                <Setter Property="Border.BorderBrush" Value="Gray"/>
+                <Setter Property="Border.BorderThickness" Value="2"/>
+                <Setter Property="CornerRadius" Value="3"/>
                 <Style.Triggers>
                     <Trigger Property="Border.IsMouseOver" Value="True">
                         <Setter Property="Border.BorderBrush" Value="#F7C600" />

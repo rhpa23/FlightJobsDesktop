@@ -7,8 +7,9 @@ namespace FlightJobsDesktop.ViewModels
         private string _departureICAO = "NA";
         private string _arrivalICAO = "NA";
         private long _dist = 0;
-        private string _modelName = "NA";
+        private string _modelDescription = "NA";
         private string _endTime = "NA";
+        private string _flightTime = "NA";
 
         public string DepartureICAO 
         {
@@ -28,15 +29,21 @@ namespace FlightJobsDesktop.ViewModels
         }
         public string DistComplete { get { return _dist + " NM"; } }
         
-        public string ModelName
+        public string ModelDescription
         {
-            get { return _modelName; }
-            set { _modelName = value; }
+            get { return _modelDescription; }
+            set { _modelDescription = value; }
         }
         public string EndTime
         {
             get { return Convert.ToDateTime(_endTime).ToString("dd-MMMM-yyyy") ; }
             set { _endTime = value; }
         }
-    }
+
+        public string FlightTime
+        {
+            get { return _flightTime; }
+            set { _flightTime = value; }
+        }
+}
 }

@@ -1,16 +1,15 @@
-﻿using FlightJobs.Domain.Entities;
-using FlightJobs.Infrastructure.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ConnectorClientAPI;
+using FlightJobs.Model.Models;
 using System.Threading.Tasks;
 
 namespace FlightJobs.Infrastructure.Services.Interfaces
 {
     public interface IUserAccessService
     {
-        Aspnetuser GetAspnetuser(string email);
-        Task<ApplicationUser> RegisterUserAsync(ApplicationUser applicationUser, string password);
+        Task<LoginResponseModel> Login(string email, string password);
+
+        Task<UserStatisticsModel> GetUserStatistics(string userId);
+
+        Task<UserStatisticsModel> UpdateUserSettings(UserSettingsModel userSettings);
     }
 }

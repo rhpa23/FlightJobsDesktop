@@ -93,7 +93,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AppConstants.cs" />
     <Compile Include="core\SelectedItemToContentConverter.cs" />
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -102,9 +101,12 @@
     <Compile Include="Mapper\DbModelToViewModelMapper.cs" />
     <Compile Include="Mapper\ViewModelToDbModelMapper.cs" />
     <Compile Include="Utils\AirportDatabaseFile.cs" />
+    <Compile Include="Utils\DataConversion.cs" />
     <Compile Include="ValidationRules\EmailValidationRule.cs" />
     <Compile Include="ValidationRules\MinimumCharacterRule.cs" />
     <Compile Include="ViewModels\AirportViewModel.cs" />
+    <Compile Include="ViewModels\GenerateJobViewModel.cs" />
+    <Compile Include="ViewModels\TipsDataGridViewModel.cs" />
     <Compile Include="ViewModels\UserSettingsViewModel.cs" />
     <Compile Include="ViewModels\CurrentJobViewModel.cs" />
     <Compile Include="ViewModels\AspnetUserViewModel.cs" />
@@ -387,9 +389,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConnectorClientAPI\ConnectorClientAPI.csproj">
-      <Project>{e274cce3-f4e3-42fb-82eb-137839180389}</Project>
-      <Name>ConnectorClientAPI</Name>
+    <ProjectReference Include="..\FlightJobs.Infrastructure\FlightJobs.Infrastructure.csproj">
+      <Project>{2ec3f861-6ab6-4b44-aca6-122394ced4d2}</Project>
+      <Name>FlightJobs.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FlightJobs.Model\FlightJobs.Model.csproj">
+      <Project>{C418B841-6E4F-457D-B59F-1451F69AA661}</Project>
+      <Name>FlightJobs.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

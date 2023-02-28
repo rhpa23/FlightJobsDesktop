@@ -1,4 +1,4 @@
-﻿using ConnectorClientAPI;
+﻿using FlightJobs.Infrastructure.Services;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.Views;
 using FlightJobsDesktop.Views.Account;
@@ -28,12 +28,13 @@ namespace FlightJobsDesktop
             DbModelToViewModelMapper.Initialize();
             var mapCfg = ViewModelToDbModelMapper.Initialize();
             //var userAccess = new UserAccessService();
-            var flightJobsConnectorClientAPI = new FlightJobsConnectorClientAPI();
+            var jobService = new JobService();
+            var userAccessService = new UserAccessService();
 
             services.AddSingleton<MainWindow>();
             //services.AddSingleton(userAccess);
-            services.AddSingleton(new Login(flightJobsConnectorClientAPI));
-            services.AddSingleton(new Register(flightJobsConnectorClientAPI, mapCfg));
+            services.AddSingleton(new Login(userAccessService, jobService));
+            services.AddSingleton(new Register());
         }
 
         private void OnStartup(object sender, StartupEventArgs e)

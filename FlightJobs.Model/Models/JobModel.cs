@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ConnectorClientAPI
+﻿namespace FlightJobs.Model.Models
 {
     public class JobModel
     {

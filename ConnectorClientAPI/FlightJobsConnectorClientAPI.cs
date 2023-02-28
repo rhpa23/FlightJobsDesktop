@@ -1,5 +1,5 @@
 ﻿using ConnectorClientAPI.Exceptions;
-using ConnectorClientAPI.Models;
+using FlightJobs.Model.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,9 +14,9 @@ namespace ConnectorClientAPI
 {
     public class FlightJobsConnectorClientAPI
     {
-        string _siteUrl = "http://localhost:5646/";
-        //string _siteUrl = "https://flightjobs.bsite.net/";
-        //string _siteUrl = "https://flightjobs.somee.com/";
+        //public static string SITE_URL = "http://localhost:5646/";
+        //public static string SITE_URL = "https://flightjobs.bsite.net/";
+        public static string SITE_URL = "https://flightjobs.somee.com/";
         static HttpClient client;
 
         public FlightJobsConnectorClientAPI()
@@ -27,7 +27,7 @@ namespace ConnectorClientAPI
             };
             
             client = new HttpClient(handler);
-            client.BaseAddress = new Uri(_siteUrl);
+            client.BaseAddress = new Uri(SITE_URL);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
@@ -35,7 +35,7 @@ namespace ConnectorClientAPI
         {
             try
             {
-                var url = $"{_siteUrl}api/AuthenticationApi/Login";
+                var url = $"{SITE_URL}api/AuthenticationApi/Login";
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Add("Email", email);
                 client.DefaultRequestHeaders.Add("Password", password);
@@ -63,7 +63,7 @@ namespace ConnectorClientAPI
 
         public async Task<StartJobResponseModel> StartJob(DataModel data)
         {
-            var url = $"{_siteUrl}api/JobApi/StartJobMSFS";
+            var url = $"{SITE_URL}api/JobApi/StartJobMSFS";
             client.DefaultRequestHeaders.Clear();
 
             client.DefaultRequestHeaders.Add("UserId", data.UserId);
@@ -88,7 +88,7 @@ namespace ConnectorClientAPI
 
         public async Task<StartJobResponseModel> FinishJob(DataModel data)
         {
-            var url = $"{_siteUrl}api/JobApi/FinishJobMSFS";
+            var url = $"{SITE_URL}api/JobApi/FinishJobMSFS";
             client.DefaultRequestHeaders.Clear();
 
             client.DefaultRequestHeaders.Add("UserId", data.UserId);
@@ -112,7 +112,7 @@ namespace ConnectorClientAPI
 
         public async Task<IList<JobModel>> GetUserJobs(string userId)
         {
-            var url = $"{_siteUrl}api/JobApi/GetUserJobs";
+            var url = $"{SITE_URL}api/JobApi/GetUserJobs";
             client.DefaultRequestHeaders.Clear();
 
             client.DefaultRequestHeaders.Add("UserId", userId);
@@ -123,15 +123,29 @@ namespace ConnectorClientAPI
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
             }
 
-            string json = response.Content.ReadAsStringAsync().Result;
-            var jobs = JsonConvert.DeserializeObject<IList<JobModel>>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
+            string json = response.Content.ReadAsStringAsync().Result.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", "");
+            var jobs = JsonConvert.DeserializeObject<IList<JobModel>>(json);
 
             return jobs;
         }
 
-        public async Task<bool> ActivateUserJob(string userId, int jobId)
+        public async Task<JobModel> GetLastUserJob(string userId)
         {
-            var url = $"{_siteUrl}api/JobApi/ActivateUserJob";
+            var url = $"{SITE_URL}api/JobApi/GetLastUserJob";
+            var body = JsonConvert.SerializeObject(new { id = userId });
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+            }
+
+            string json = response.Content.ReadAsStringAsync().Result.Replace("\"{", "{").Replace("}\"", "}").Replace("\\", "");
+            return JsonConvert.DeserializeObject<JobModel>(json);
+        }
+
+        public async Task<bool> ActivateUserJob(string userId, long jobId)
+        {
+            var url = $"{SITE_URL}api/JobApi/ActivateUserJob";
             client.DefaultRequestHeaders.Clear();
 
             client.DefaultRequestHeaders.Add("UserId", userId);
@@ -143,7 +157,7 @@ namespace ConnectorClientAPI
 
         public async Task<UserStatisticsModel> GetUserStatistics(string userId)
         {
-            var url = $"{_siteUrl}api/UserApi/GetUserStatistics";
+            var url = $"{SITE_URL}api/UserApi/GetUserStatistics";
 
             var body = JsonConvert.SerializeObject(new { id = userId });
 
@@ -154,7 +168,7 @@ namespace ConnectorClientAPI
 
         public async Task<UserStatisticsModel> UpdateUserSettings(UserSettingsModel userSettings)
         {
-            var url = $"{_siteUrl}api/UserApi/UpdateUserSettings";
+            var url = $"{SITE_URL}api/UserApi/UpdateUserSettings";
 
             var body = JsonConvert.SerializeObject(userSettings);
 
@@ -168,6 +182,49 @@ namespace ConnectorClientAPI
             {
                 throw new ApiException(response.Content.ReadAsStringAsync().Result);
             }
+        }
+
+        public async Task<IList<SearchJobTipsModel>> GetArrivalTips(string departure, string userId)
+        {
+            var url = $"{SITE_URL}api/SearchApi/GetArrivalTips?departure={departure}";
+            var body = JsonConvert.SerializeObject(new { id = userId });
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (response.IsSuccessStatusCode)
+            {
+                string json = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<IList<SearchJobTipsModel>>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
+            }
+            else
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+
+        public async Task<IList<SearchJobTipsModel>> GetAlternativeTips(string arrival, int range)
+        {
+            var url = $"{SITE_URL}api/SearchApi/GetAlternativeTips?arrival={arrival}&range={range}";
+            HttpResponseMessage response = await client.GetAsync(new Uri(url));
+            if (response.IsSuccessStatusCode)
+            {
+                string json = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<IList<SearchJobTipsModel>>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
+            }
+            else
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+
+        public async Task<bool> CloneJob(long jobId, string userId)
+        {
+            var url = $"{SITE_URL}api/SearchApi/CloneJob?jobId={jobId}";
+            var body = JsonConvert.SerializeObject(new { id = userId });
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+            }
+            return true;
         }
     }
 }

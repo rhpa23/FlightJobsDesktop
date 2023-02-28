@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ConnectorClientAPI;
 using FlightJobsDesktop.ViewModels;
 using System;
 using System.Windows;
@@ -11,13 +10,9 @@ namespace FlightJobsDesktop.Views.Account
     /// </summary>
     public partial class Register : Window
     {
-        private FlightJobsConnectorClientAPI _flightJobsConnectorClientAPI;
-        private MapperConfiguration _mapper;
-        public Register(FlightJobsConnectorClientAPI flightJobsConnectorClientAPI, MapperConfiguration mapper)
+        public Register()
         {
             InitializeComponent();
-            _flightJobsConnectorClientAPI = flightJobsConnectorClientAPI;
-            _mapper= mapper;
         }
 
         private void btnRegister_Click(object sender, RoutedEventArgs e)

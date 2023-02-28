@@ -13,16 +13,32 @@ namespace FlightJobsDesktop.ViewModels
         public string Password { get; set; }
 
         [JsonIgnoreAttribute]
-        public string WeightUnit { get; set; }
+        public string WeightUnit { get; set; } = "kg";
 
         [JsonIgnoreAttribute]
         public bool ReceiveAlertEmails { get; set; }
 
         [JsonIgnoreAttribute]
-        public bool IsWeightUnitKg { get; set; }
+        public bool IsWeightUnitKg
+        {
+            get { return WeightUnit.Contains("kg"); }
+            set
+            {
+                if (value) WeightUnit = "kg";
+                else WeightUnit = "Pounds";
+            }
+        }
 
         [JsonIgnoreAttribute]
-        public bool IsWeightUnitPounds { get; set; }
+        public bool IsWeightUnitPounds 
+        { 
+            get { return !WeightUnit.Contains("kg"); } 
+            set 
+            { 
+                if (value) WeightUnit = "Pounds"; 
+                else WeightUnit = "kg"; 
+            } 
+        }
 
         public bool StartInSysTray { get; set; }
         public bool ExitWithFS { get; set; }

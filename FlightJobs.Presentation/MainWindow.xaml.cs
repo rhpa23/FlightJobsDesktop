@@ -1,10 +1,14 @@
-﻿using ConnectorClientAPI;
+﻿using FlightJobs.Infrastructure;
+using FlightJobs.Model.Models;
+using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views;
 using ModernWpf;
 using Newtonsoft.Json;
+using Notification.Wpf;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace FlightJobsDesktop
@@ -14,13 +18,18 @@ namespace FlightJobsDesktop
     /// </summary>
     public partial class MainWindow : Window
     {
-             
-        private UserSettingsViewModel userSettings;
+        private UserSettingsViewModel _userSettings;
+
+        private NotificationManager _notificationManager;
+
         public MainWindow()
         {
             InitializeComponent();
             ResizeMode = ResizeMode.CanResizeWithGrip;
-            userSettings = new UserSettingsViewModel() { SimConnectStatus = "Waiting for sim start..." };
+            _notificationManager = new NotificationManager();
+            _userSettings = new UserSettingsViewModel() { SimConnectStatus = "Waiting for sim start..." };
+            _userSettings.Username = AppProperties.UserLogin.UserName;
+            DataContext = _userSettings;
 
             System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
             ni.Icon = new System.Drawing.Icon("favicon.ico");
@@ -36,20 +45,14 @@ namespace FlightJobsDesktop
             miExit.Click += delegate (object sender, EventArgs args) { Application.Current.Shutdown(); };
             
             ni.ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[] { miShow, miExit });
+
+            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
             contentFrame.Navigate(typeof(HomeView));
             nvMain.SelectedItem = HomeViewPageItem;
-
-            var loginData = Application.Current.Properties[AppConstants.KEY_LOGIN_DATA];
-            if (loginData != null)
-            {
-                userSettings.Username = ((LoginResponseModel)loginData).UserName;
-            }
-            DataContext = userSettings;
 
             LoadSettings();
         }
@@ -74,18 +77,24 @@ namespace FlightJobsDesktop
             contentFrame.Navigate(pageType);
         }
 
-        
-
         private void LoadSettings()
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
             var jsonSettings = File.ReadAllText(System.IO.Path.Combine(path, "ResourceData\\Settings.json"));
-            userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
+            _userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
+            _userSettings.SimConnectStatus = "Waiting for sim start...";
 
-            ThemeManager.Current.ApplicationTheme = userSettings.ThemeName == "Light" ? ApplicationTheme.Light : ApplicationTheme.Dark;
-            ControlzEx.Theming.ThemeManager.Current.ChangeThemeBaseColor(Application.Current, userSettings.ThemeName);
+            ThemeManager.Current.ApplicationTheme = _userSettings.ThemeName == "Light" ? ApplicationTheme.Light : ApplicationTheme.Dark;
+            ControlzEx.Theming.ThemeManager.Current.ChangeThemeBaseColor(Application.Current, _userSettings.ThemeName);
 
-            Application.Current.Properties.Add(AppConstants.KEY_SETTINGS_DATA, userSettings);
+            _userSettings.Username = AppProperties.UserLogin.UserName;
+            _userSettings.WeightUnit = AppProperties.UserStatistics.WeightUnit;
+            _userSettings.ReceiveAlertEmails = AppProperties.UserStatistics.SendAirlineBillsWarning && AppProperties.UserStatistics.SendLicenseWarning;
+
+            var userSettingsModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<UserSettingsViewModel, UserSettingsModel>(_userSettings);
+            userSettingsModel.UserId = AppProperties.UserLogin.UserId;
+
+            AppProperties.UserSettings = userSettingsModel;
         }
 
         private void NavigationView_SelectionChanged(ModernWpf.Controls.NavigationView sender, ModernWpf.Controls.NavigationViewSelectionChangedEventArgs args)

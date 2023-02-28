@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.33214.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightJobsDesktop", "FlightJobs.Presentation\FlightJobsDesktop.csproj", "{37F86F6F-86F8-46CC-8A69-AA98F3B4BA98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightJobs.Infrastructure", "FlightJobs.Infrastructure\FlightJobs.Infrastructure.csproj", "{2EC3F861-6AB6-4B44-ACA6-122394CED4D2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightJobs.Domain", "FlightJobs.Domain\FlightJobs.Domain.csproj", "{3E95CA57-758A-4A00-A2DB-FE1AD6C370A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectorClientAPI", "ConnectorClientAPI\ConnectorClientAPI.csproj", "{E274CCE3-F4E3-42FB-82EB-137839180389}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightJobs.Infrastructure", "FlightJobs.Infrastructure\FlightJobs.Infrastructure.csproj", "{F4EE2F05-2BF2-4555-8F91-4A618BCB5F37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightJobs.Model", "FlightJobs.Model\FlightJobs.Model.csproj", "{C418B841-6E4F-457D-B59F-1451F69AA661}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +23,6 @@ Global
 		{37F86F6F-86F8-46CC-8A69-AA98F3B4BA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37F86F6F-86F8-46CC-8A69-AA98F3B4BA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37F86F6F-86F8-46CC-8A69-AA98F3B4BA98}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2EC3F861-6AB6-4B44-ACA6-122394CED4D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2EC3F861-6AB6-4B44-ACA6-122394CED4D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2EC3F861-6AB6-4B44-ACA6-122394CED4D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2EC3F861-6AB6-4B44-ACA6-122394CED4D2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E95CA57-758A-4A00-A2DB-FE1AD6C370A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E95CA57-758A-4A00-A2DB-FE1AD6C370A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E95CA57-758A-4A00-A2DB-FE1AD6C370A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +31,14 @@ Global
 		{E274CCE3-F4E3-42FB-82EB-137839180389}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E274CCE3-F4E3-42FB-82EB-137839180389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E274CCE3-F4E3-42FB-82EB-137839180389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4EE2F05-2BF2-4555-8F91-4A618BCB5F37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4EE2F05-2BF2-4555-8F91-4A618BCB5F37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4EE2F05-2BF2-4555-8F91-4A618BCB5F37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4EE2F05-2BF2-4555-8F91-4A618BCB5F37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C418B841-6E4F-457D-B59F-1451F69AA661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C418B841-6E4F-457D-B59F-1451F69AA661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C418B841-6E4F-457D-B59F-1451F69AA661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C418B841-6E4F-457D-B59F-1451F69AA661}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

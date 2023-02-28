@@ -7,14 +7,14 @@
              xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d">
     <Grid>
-        <TabControl
+        <TabControl SelectionChanged="TabControl_SelectionChanged"
                     Style="{StaticResource TabControlPivotStyle}"
                     MinHeight="400" MinWidth="1000">
             <TabItem Header="Connector">
                 <views:ConnectorView />
             </TabItem>
             <TabItem Header="Manager">
-                <views:ManagerJobsView />
+                <views:ManagerJobsView  />
             </TabItem>
             <TabItem Header="Logbook">
                 <Grid Background="#FFE5E5E5"/>
