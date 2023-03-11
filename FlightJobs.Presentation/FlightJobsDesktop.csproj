@@ -105,7 +105,9 @@
     <Compile Include="ValidationRules\EmailValidationRule.cs" />
     <Compile Include="ValidationRules\MinimumCharacterRule.cs" />
     <Compile Include="ViewModels\AirportViewModel.cs" />
+    <Compile Include="ViewModels\CapacityViewModel.cs" />
     <Compile Include="ViewModels\GenerateJobViewModel.cs" />
+    <Compile Include="ViewModels\JobItemViewModel.cs" />
     <Compile Include="ViewModels\TipsDataGridViewModel.cs" />
     <Compile Include="ViewModels\UserSettingsViewModel.cs" />
     <Compile Include="ViewModels\CurrentJobViewModel.cs" />
@@ -123,6 +125,9 @@
     </Compile>
     <Compile Include="Views\ConnectorView.xaml.cs">
       <DependentUpon>ConnectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GenerateView.xaml.cs">
+      <DependentUpon>GenerateView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
@@ -145,6 +150,9 @@
     </Compile>
     <Compile Include="Views\Modals\DestinationTipsModal.xaml.cs">
       <DependentUpon>DestinationTipsModal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modals\FlightTypeModal.xaml.cs">
+      <DependentUpon>FlightTypeModal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PrivateView.xaml.cs">
       <DependentUpon>PrivateView.xaml</DependentUpon>
@@ -176,6 +184,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\GenerateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HomeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -201,6 +213,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Modals\DestinationTipsModal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modals\FlightTypeModal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -375,6 +391,10 @@
     <Resource Include="img\logo\FlightJobsLogo0004.png" />
     <Resource Include="img\logo\FlightJobsLogo0005.png" />
     <Resource Include="img\logo\FlightJobsLogo0006.png" />
+    <Resource Include="img\types\air-transport.jpg" />
+    <Resource Include="img\types\cargo.jpg" />
+    <Resource Include="img\types\general-aviation.jpg" />
+    <Resource Include="img\types\heavy.jpg" />
     <Content Include="web\img\arrival.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

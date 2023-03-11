@@ -14,9 +14,9 @@ namespace ConnectorClientAPI
 {
     public class FlightJobsConnectorClientAPI
     {
-        //public static string SITE_URL = "http://localhost:5646/";
+        public static string SITE_URL = "http://localhost:5646/";
         //public static string SITE_URL = "https://flightjobs.bsite.net/";
-        public static string SITE_URL = "https://flightjobs.somee.com/";
+        //public static string SITE_URL = "https://flightjobs.somee.com/";
         static HttpClient client;
 
         public FlightJobsConnectorClientAPI()
@@ -58,6 +58,66 @@ namespace ConnectorClientAPI
             catch (Exception ex)
             {
                 throw new HttpRequestException("Fail to connect FlightJobs API. Please try again and if the error persists contact the site administrator.", ex);
+            }
+        }
+
+        public async Task ConfirmJob(ConfirmJobModel confirmJobModel)
+        {
+            var url = $"{SITE_URL}api/SearchApi/ConfirmJobs";
+            var body = JsonConvert.SerializeObject(confirmJobModel);
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+
+        public async Task RemoveJob(string userId, long jobId)
+        {
+            var url = $"{SITE_URL}api/JobApi/RemoveJob?jobId={jobId}";
+            var body = JsonConvert.SerializeObject(new { id = userId });
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+
+        public async Task<IList<JobListItemModel>> GenerateConfirmJobs(GenerateJobModel generateJobData)
+        {
+            var url = $"{SITE_URL}api/SearchApi/GenerateConfirmJobs";
+            var body = JsonConvert.SerializeObject(generateJobData);
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (response.IsSuccessStatusCode)
+            {
+                string json = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<IList<JobListItemModel>>(json.Replace("\\", ""));
+            }
+            else
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+
+        public async Task RemovePlaneCapacity(CustomPlaneCapacityModel capacityModel)
+        {
+            var url = $"{SITE_URL}api/SearchApi/RemoveCapacity";
+            var body = JsonConvert.SerializeObject(capacityModel);
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+
+        public async Task SavePlaneCapacity(CustomPlaneCapacityModel capacityModel)
+        {
+            var url = $"{SITE_URL}api/SearchApi/SaveCapacity";
+            var body = JsonConvert.SerializeObject(capacityModel);
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
             }
         }
 
@@ -225,6 +285,22 @@ namespace ConnectorClientAPI
                 throw new ApiException(response.Content.ReadAsStringAsync().Result);
             }
             return true;
+        }
+
+        public async Task<IList<CustomPlaneCapacityModel>> GetPlaneCapacities(string userId)
+        {
+            var url = $"{SITE_URL}api/JobApi/GetUserPlaneCapacities";
+            var body = JsonConvert.SerializeObject(new { id = userId });
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (response.IsSuccessStatusCode)
+            {
+                string json = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<IList<CustomPlaneCapacityModel>>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
+            }
+            else
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+            }
         }
     }
 }

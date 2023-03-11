@@ -112,6 +112,6 @@
 
             <ui:Frame x:Name="contentFrame" HorizontalAlignment="Stretch"/>
         </ui:NavigationView>
-        <notifications:NotificationArea x:Name="WindowArea" Position="BottomCenter" MaxItems="3" Grid.Row="4" Grid.ColumnSpan="2" />
+        <notifications:NotificationArea x:Name="WindowArea" Position="TopCenter" MaxItems="3" Grid.Row="1" Grid.ColumnSpan="2" />
     </Grid>
 </Window>

@@ -41,9 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\AviationType.cs" />
     <Compile Include="Models\AirlineModel.cs" />
+    <Compile Include="Models\ConfirmJobModel.cs" />
     <Compile Include="Models\CustomPlaneCapacityModel.cs" />
     <Compile Include="Models\DataModel.cs" />
+    <Compile Include="Models\GenerateJobModel.cs" />
+    <Compile Include="Models\JobListItemModel.cs" />
     <Compile Include="Models\JobModel.cs" />
     <Compile Include="Models\LoginResponseModel.cs" />
     <Compile Include="Models\SearchJobTipsModel.cs" />

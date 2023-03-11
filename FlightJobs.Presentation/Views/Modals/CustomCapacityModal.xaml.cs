@@ -1,4 +1,11 @@
-﻿using System;
+﻿using FlightJobs.Infrastructure;
+using FlightJobs.Infrastructure.Services;
+using FlightJobs.Model.Models;
+using FlightJobsDesktop.Mapper;
+using FlightJobsDesktop.ViewModels;
+using ModernWpf.Controls;
+using Notification.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,10 +28,21 @@ namespace FlightJobsDesktop.Views.Modals
     /// </summary>
     public partial class CustomCapacityModal : UserControl
     {
+        private NotificationManager _notificationManager;
+
         public CustomCapacityModal()
         {
             InitializeComponent();
+            _notificationManager = new NotificationManager();
         }
+        private async void LoadCapacityList()
+        {
+            var generateJobData = (GenerateJobViewModel)DataContext;
+            var capacitiesModel = await new JobService().GetPlaneCapacities(AppProperties.UserLogin.UserId);
+            generateJobData.CapacityList = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
+                .Map<IList<CustomPlaneCapacityModel>, IList<CapacityViewModel>>(capacitiesModel);
+        }
+
 
         private void TxtAlternativeRange_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -34,20 +52,68 @@ namespace FlightJobsDesktop.Views.Modals
 
         private void BtnNewAndSave_Click(object sender, RoutedEventArgs e)
         {
-            if (BtnNewAndSave.Content.ToString() == "New")
+            var generateJobData = (GenerateJobViewModel)DataContext;
+            generateJobData.Capacity = new CapacityViewModel();
+            TxtCapacityName.Focus();
+        }
+
+        private async void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            try
             {
-
-                TxtCapacityName.Text = string.Empty;
-                TxtCargoCapacityWeight.Text = string.Empty;
-                TxtPassengerCapacity.Text = string.Empty;
-
-                BtnUpdate.IsEnabled = BtnRemove.IsEnabled = false;
-                BtnNewAndSave.Content = "Save";
+                var generateJobData = (GenerateJobViewModel)DataContext;
+                var capacityModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg)
+                    .Map<CapacityViewModel, CustomPlaneCapacityModel>(generateJobData.Capacity);
+                capacityModel.UserId = AppProperties.UserLogin.UserId;
+                await new JobService().SavePlaneCapacity(capacityModel);
+                _notificationManager.Show("Success", $"Capacity saved.", NotificationType.Success, "WindowArea");
+                LoadCapacityList();
             }
-            else
+            catch (Exception)
             {
-                BtnUpdate.IsEnabled = BtnRemove.IsEnabled = true;
-                BtnNewAndSave.Content = "New";
+                _notificationManager.Show("Error", "Data could not be saved. Please try again later.", NotificationType.Error, "WindowArea");
+            }
+        }
+
+        private async void BtnRemoveYes_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var generateJobData = (GenerateJobViewModel)DataContext;
+                var capacityModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg)
+                    .Map<CapacityViewModel, CustomPlaneCapacityModel>(generateJobData.Capacity);
+                capacityModel.UserId = AppProperties.UserLogin.UserId;
+                await new JobService().RemovePlaneCapacity(capacityModel);
+                _notificationManager.Show("Success", $"Capacity removed.", NotificationType.Success, "WindowArea");
+                LoadCapacityList();
+
+                Flyout f = FlyoutService.GetFlyout(BtnRemove) as Flyout;
+                if (f != null)
+                {
+                    f.Hide();
+                }
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Data could not be saved. Please try again later.", NotificationType.Error, "WindowArea");
+            }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            var generateJobData = (GenerateJobViewModel)DataContext;
+            if (generateJobData.Capacity != null && generateJobData.CapacityList.Count > 0)
+            {
+                lsvCapacityList.SelectedIndex = generateJobData.CapacityList.ToList().FindIndex(x => x.Id == generateJobData.Capacity.Id);
+            }
+        }
+
+        private void lsvCapacityList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var generateJobData = (GenerateJobViewModel)DataContext;
+            if (lsvCapacityList.SelectedItem != null)
+            {
+                generateJobData.Capacity = (CapacityViewModel)lsvCapacityList.SelectedItem;
             }
         }
     }

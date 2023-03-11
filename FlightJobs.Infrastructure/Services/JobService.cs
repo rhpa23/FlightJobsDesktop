@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using FlightJobs.Model.Models;
+using System;
 
 namespace FlightJobs.Infrastructure.Services
 {
@@ -39,6 +40,36 @@ namespace FlightJobs.Infrastructure.Services
         public async Task ActivateJob(string userId, long jobId)
         {
             await _flightJobsConnectorClientAPI.ActivateUserJob(userId, jobId);
+        }
+
+        public async Task<IList<CustomPlaneCapacityModel>> GetPlaneCapacities(string userId)
+        {
+            return await _flightJobsConnectorClientAPI.GetPlaneCapacities(userId);
+        }
+
+        public async Task SavePlaneCapacity(CustomPlaneCapacityModel capacityModel)
+        {
+            await _flightJobsConnectorClientAPI.SavePlaneCapacity(capacityModel);
+        }
+
+        public async Task<IList<JobListItemModel>> GenerateConfirmJobs(GenerateJobModel generateJobData)
+        {
+            return await _flightJobsConnectorClientAPI.GenerateConfirmJobs(generateJobData);
+        }
+
+        public async Task RemovePlaneCapacity(CustomPlaneCapacityModel capacityModel)
+        {
+            await _flightJobsConnectorClientAPI.RemovePlaneCapacity(capacityModel);
+        }
+
+        public async Task ConfirmJob(ConfirmJobModel confirmJobModel)
+        {
+            await _flightJobsConnectorClientAPI.ConfirmJob(confirmJobModel);
+        }
+
+        public async Task RemoveJob(string userId, long jobId)
+        {
+            await _flightJobsConnectorClientAPI.RemoveJob(userId, jobId);
         }
     }
 }

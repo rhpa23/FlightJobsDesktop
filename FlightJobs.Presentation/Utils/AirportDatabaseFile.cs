@@ -113,22 +113,38 @@ namespace FlightJobsDesktop.Utils
             return verifyCoord.GetDistanceTo(actualCoord) < 10000;
         }
 
-
-       /* public static List<AirportModel> FindClosestLocation(double latitude, double longitude)
+        public static int CalcDistance(string departure, string arrival)
         {
-            var coord = new GeoCoordinate(latitude, longitude);
-            var airportInfos = GetAllAirportInfo();
+            var departureInfo = FindAirportInfo(departure);
+            var arrivalInfo = FindAirportInfo(arrival);
+            if (departureInfo != null && arrivalInfo != null)
+            {
+                var departureCoord = new GeoCoordinate(departureInfo.Latitude, departureInfo.Longitude);
+                var arrivalCoord = new GeoCoordinate(arrivalInfo.Latitude, arrivalInfo.Longitude);
 
-            int minDistance = 15000;
+                var distMeters = departureCoord.GetDistanceTo(arrivalCoord);
+                var distMiles = (int)DataConversion.ConvertMetersToMiles(distMeters);
+                return distMiles;
+            }
+            return 0;
+        }
 
-            var nearest = airportInfos.Select(x => new { nearest = x, co = new GeoCoordinate(x.Latitude, x.Longitude) })
-                                   //.Where(x => x.co.GetDistanceTo(coord) < 1000)
-                                   .OrderBy(x => x.co.GetDistanceTo(coord))
-                                   .Take(5)
-                                   .Where(x => x.co.GetDistanceTo(coord) < minDistance);
 
-            return nearest.Select(x => x.nearest).ToList();
-        }*/
+        /* public static List<AirportModel> FindClosestLocation(double latitude, double longitude)
+         {
+             var coord = new GeoCoordinate(latitude, longitude);
+             var airportInfos = GetAllAirportInfo();
+
+             int minDistance = 15000;
+
+             var nearest = airportInfos.Select(x => new { nearest = x, co = new GeoCoordinate(x.Latitude, x.Longitude) })
+                                    //.Where(x => x.co.GetDistanceTo(coord) < 1000)
+                                    .OrderBy(x => x.co.GetDistanceTo(coord))
+                                    .Take(5)
+                                    .Where(x => x.co.GetDistanceTo(coord) < minDistance);
+
+             return nearest.Select(x => x.nearest).ToList();
+         }*/
 
     }
 }

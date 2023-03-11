@@ -12,7 +12,7 @@
     </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="715"/>
+            <ColumnDefinition Width="705"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -24,9 +24,9 @@
             <Border Style="{StaticResource LightBorderBoxStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="290"/>
                         <ColumnDefinition Width="60"/>
-                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="290"/>
                         <ColumnDefinition Width="45"/>
                         <ColumnDefinition Width="15"/>
                     </Grid.ColumnDefinitions>
@@ -35,21 +35,21 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <ui:AutoSuggestBox Name="txtDeparture" QueryIcon="Find" Text="{Binding Path=DepartureICAO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                           PlaceholderText="Departure" Grid.Row="0" Grid.Column="0" Margin="10,15,0,0" Width="287"
+                    <ui:AutoSuggestBox Name="txtDeparture" QueryIcon="Find" Text="{Binding Path=Departure, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                           PlaceholderText="Departure" Grid.Row="0" Grid.Column="0" Margin="10,15,0,0" Width="277"
                            TextChanged="AutoSuggestBoxICAO_TextChanged"
                            QuerySubmitted="AutoSuggestBox_QuerySubmitted" 
                            SuggestionChosen="AutoSuggestBox_SuggestionChosen" LostFocus="AutoSuggestBox_LostFocus"/>
                     <Label Name="lblDistance" Grid.Column="1" Content="{Binding Path=DistDesc}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0"/>
 
-                    <ui:AutoSuggestBox Name="txtArrival" QueryIcon="Find" Text="{Binding Path=ArrivalICAO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                           PlaceholderText="Arrival" Grid.Row="0" Grid.Column="2" Margin="10,15,0,0" Width="287"
+                    <ui:AutoSuggestBox Name="txtArrival" QueryIcon="Find" Text="{Binding Path=Arrival, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                           PlaceholderText="Arrival" Grid.Row="0" Grid.Column="2" Margin="10,15,0,0" Width="277"
                            TextChanged="AutoSuggestBoxICAO_TextChanged"
                            QuerySubmitted="AutoSuggestBox_QuerySubmitted"
                            SuggestionChosen="AutoSuggestBox_SuggestionChosen" LostFocus="AutoSuggestBox_LostFocus"/>
 
-                    <ui:AutoSuggestBox Name="txtAlternative" QueryIcon="Find" Text="{Binding Path=AlternativeICAO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                           PlaceholderText="Alternative" Grid.Row="1" Grid.Column="0" Margin="10,20,0,0" Width="287"
+                    <ui:AutoSuggestBox Name="txtAlternative" QueryIcon="Find" Text="{Binding Path=Alternative, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                           PlaceholderText="Alternative" Grid.Row="1" Grid.Column="0" Margin="10,20,0,0" Width="277"
                            TextChanged="AutoSuggestBoxICAO_TextChanged"
                            QuerySubmitted="AutoSuggestBox_QuerySubmitted"
                            SuggestionChosen="AutoSuggestBox_SuggestionChosen" LostFocus="AutoSuggestBox_LostFocus"/>
@@ -61,14 +61,14 @@
 
                     <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,15,0,15" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right">
                         <Border Margin="0,0,0,0" Style="{DynamicResource BorderButtonYellow}">
-                            <Button x:Name="btnRandom" Content="Random" Width="70" Height="37" />
+                            <Button x:Name="BtnRandom" Content="Random" Width="70" Height="37" />
                         </Border>
                         <Border Margin="20,0,0,0" Style="{DynamicResource BorderButtonYellow}">
-                            <Button x:Name="btnSimbrief" Content="Simbrief" Width="70" Height="37"  />
+                            <Button x:Name="BtnSimbrief" Content="Simbrief" Width="70" Height="37"  />
                         </Border>
                         <ui:AppBarSeparator />
-                        <Border Margin="0,0,5,0" Style="{DynamicResource BorderButtonYellow}">
-                            <Button x:Name="btnGenerate" Content="Generate" Width="100" Height="37"  />
+                        <Border x:Name="BtnGenerateBorder" Margin="0,0,5,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="False">
+                            <Button x:Name="BtnGenerate" Content="Generate" Width="100" Height="37" Click="BtnGenerate_Click"  />
                         </Border>
                         
                     </StackPanel>
@@ -82,25 +82,55 @@
                       SelectedValue="{Binding PendingSelectedJob, Mode=TwoWay}">
                 <ListView.View>
                 <GridView>
-                    <GridViewColumn
-                                DisplayMemberBinding="{Binding DepartureICAO, Mode=OneTime}"
-                                Header="Departure" ToolTipService.ToolTip="Click to activate"
-                                Width="95" />
-                        <GridViewColumn Width="40">
+                        <GridViewColumn Header="" Width="33">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE709;" Grid.Column="0" Grid.Row="3"/>
+                                    <StackPanel Orientation="Horizontal" Height="20">
+                                        <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn
-                                DisplayMemberBinding="{Binding ArrivalICAO, Mode=OneTime}"
-                                Header="Arrival"
-                                Width="95" />
-                        <GridViewColumn
-                            DisplayMemberBinding="{Binding DistComplete, Mode=OneTime}"
-                            Header="Distance"
-                            Width="115" />
+                                DisplayMemberBinding="{Binding DepartureICAO, Mode=OneTime}"
+                                Header="Departure" ToolTipService.ToolTip="Click to activate"
+                                Width="90" />
+                    <GridViewColumn Width="35">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE709;"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn
+                            DisplayMemberBinding="{Binding ArrivalICAO, Mode=OneTime}"
+                            Header="Arrival"
+                            Width="90" />
+                    <GridViewColumn
+                        DisplayMemberBinding="{Binding DistComplete, Mode=OneTime}"
+                        Header="Distance"
+                        Width="80" />
+                    <GridViewColumn Width="35">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                    <Button x:Name="BtnRemoveJob" Width="20" Padding="0" Margin="0" HorizontalContentAlignment="Left" HorizontalAlignment="Left">
+                                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xe74d;"/>
+                                        <ui:FlyoutService.Flyout>
+                                            <ui:Flyout x:Name="FlyoutConfirmRemove" Opened="FlyoutConfirmRemove_Opened">
+                                                <StackPanel>
+                                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}"
+                                               Text="Do you want to remove this job?" Margin="0,0,0,12" />
+                                                    <StackPanel Orientation="Horizontal">
+                                                    <Button x:Name="BtnRemoveJobYes" Click="BtnRemoveJobYes_Click" Content="Yes" Tag="{Binding Id}" />
+                                                    <Button x:Name="BtnRemoveJobNo" Click="BtnRemoveJobNo_Click" Content="No" Margin="20,0,0,0" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </ui:Flyout>
+                                        </ui:FlyoutService.Flyout>
+                                    </Button>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     </GridView>
             </ListView.View>
         </ListView>

@@ -12,5 +12,11 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
         Task<IList<SearchJobTipsModel>> GetArrivalTips(string departure, string userId);
         Task<bool> CloneJob(long jobId, string userId);
         Task ActivateJob(string userId, long jobId);
+        Task<IList<CustomPlaneCapacityModel>> GetPlaneCapacities(string userId);
+        Task SavePlaneCapacity(CustomPlaneCapacityModel capacityModel);
+        Task RemovePlaneCapacity(CustomPlaneCapacityModel capacityModel);
+        Task<IList<JobListItemModel>> GenerateConfirmJobs(GenerateJobModel generateJobData);
+        Task ConfirmJob(ConfirmJobModel confirmJobModel);
+        Task RemoveJob(string userId, long jobId);
     }
 }

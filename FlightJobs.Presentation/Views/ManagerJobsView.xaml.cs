@@ -32,6 +32,8 @@ namespace FlightJobsDesktop.Views
         private string mapUrl = $"{new InfraService().GetApiUrl()}Maps/GenerateJobsMap";
         private string mapUrlQuery = "?departure={0}&arrival={1}&alternative={2}&username={3}";
 
+        private Flyout _flyoutConfirmRemove;
+
         public ManagerJobsView()
         {
             InitializeComponent();
@@ -40,12 +42,25 @@ namespace FlightJobsDesktop.Views
             _notificationManager = new NotificationManager();
         }
 
+        private void HideConfirmRemovePopup()
+        {
+            if (_flyoutConfirmRemove != null)
+            {
+                _flyoutConfirmRemove.Hide();
+            }
+        }
+
+        private void FlyoutConfirmRemove_Opened(object sender, object e)
+        {
+            _flyoutConfirmRemove = (Flyout)sender;
+        }
+
         private void SwapIcon_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var departure = _generateJobViewModel.DepartureICAO;
-            var arrival  = _generateJobViewModel.ArrivalICAO;
-            _generateJobViewModel.DepartureICAO = arrival;
-            _generateJobViewModel.ArrivalICAO = departure;
+            var departure = _generateJobViewModel.Departure;
+            var arrival  = _generateJobViewModel.Arrival;
+            _generateJobViewModel.Departure = arrival;
+            _generateJobViewModel.Arrival = departure;
         }
 
         private void BtnDestinationTips_Click(object sender, RoutedEventArgs e)
@@ -80,14 +95,29 @@ namespace FlightJobsDesktop.Views
             }
         }
 
-        private void BtnCustoCapacity_Click(object sender, RoutedEventArgs e)
+        private async void BtnGenerate_Click(object sender, RoutedEventArgs e)
         {
-            ShowModal("Custom capacity", new CustomCapacityModal());
-        }
-
-        private void BtnGerate_Click(object sender, RoutedEventArgs e)
-        {
-            ShowModal("Confirm jobs", new ConfirmJobModal());
+            try
+            {
+                GenerateView window = new GenerateView(_generateJobViewModel)
+                {
+                    ResizeMode = ResizeMode.CanResize,
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    ShowInTaskbar = true,
+                    WindowStyle = WindowStyle.ToolWindow
+                };
+                if (window.ShowDialog().Value)
+                {
+                    _generateJobViewModel = new GenerateJobViewModel();
+                    await new JobService().GetAllUserJobs(AppProperties.UserLogin.UserId);// To reload pedding list
+                    lblDistance.Content = "0";
+                    LoadManagerView();
+                }
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Data could not be loaded. Please try again later.", NotificationType.Error, "WindowArea");
+            }
         }
 
         private void ShowModal(string title, object content)
@@ -114,6 +144,7 @@ namespace FlightJobsDesktop.Views
         {
             BtnArrivalTips.IsEnabled = _generateJobViewModel.DepartureICAO?.Length > 3;
             BtnAlternativeTips.IsEnabled = _generateJobViewModel.DepartureICAO?.Length > 3 && _generateJobViewModel.ArrivalICAO?.Length > 3;
+            BtnGenerateBorder.IsEnabled = _generateJobViewModel.DepartureICAO?.Length > 3 && _generateJobViewModel.ArrivalICAO?.Length > 3;
 
             // Only get results when it was a user typing, 
             // otherwise assume the value got filled in by TextMemberPath 
@@ -143,29 +174,15 @@ namespace FlightJobsDesktop.Views
 
         private string GetIcaoInfo(string text)
         {
-            if (!string.IsNullOrEmpty(text))
+            if (!string.IsNullOrEmpty(text) && text?.Length > 3)
             {
-                var info = AirportDatabaseFile.FindAirportInfo(text);
-                return $"{info.ICAO} - {info.Name}";
+                var info = AirportDatabaseFile.FindAirportInfo(text.Substring(0,4));
+                return $"{info?.ICAO} - {info?.Name}";
             }
             return "";
         }
 
-        public int CalcDistance(string departure, string arrival)
-        {
-            var departureInfo = AirportDatabaseFile.FindAirportInfo(departure);
-            var arrivalInfo = AirportDatabaseFile.FindAirportInfo(arrival);
-            if (departureInfo != null && arrivalInfo != null)
-            {
-                var departureCoord = new GeoCoordinate(departureInfo.Latitude, departureInfo.Longitude);
-                var arrivalCoord = new GeoCoordinate(arrivalInfo.Latitude, arrivalInfo.Longitude);
-
-                var distMeters = departureCoord.GetDistanceTo(arrivalCoord);
-                var distMiles = (int)DataConversion.ConvertMetersToMiles(distMeters);
-                return distMiles;
-            }
-            return 0;
-        }
+        
 
         private void AutoSuggestBoxSuggestionChosen()
         {
@@ -173,15 +190,15 @@ namespace FlightJobsDesktop.Views
             {
                 if (_generateJobViewModel.DepartureICAO?.Length > 3 && _generateJobViewModel.ArrivalICAO?.Length > 3)
                 {
-                    var departure = _generateJobViewModel.DepartureICAO?.Substring(0, 4);
-                    var arrival = _generateJobViewModel.ArrivalICAO?.Substring(0, 4);
-                    var alternative = _generateJobViewModel.AlternativeICAO?.Length >= 4 ? _generateJobViewModel.AlternativeICAO.Substring(0, 4) : "";
+                    var departure = _generateJobViewModel.DepartureICAO;
+                    var arrival = _generateJobViewModel.ArrivalICAO;
+                    var alternative = _generateJobViewModel.AlternativeICAO;
                     var user = AppProperties.UserLogin.UserName;
 
                     string url = mapUrl + string.Format(mapUrlQuery, departure, arrival, alternative, user);
                     MapWebView.Navigate(url);
 
-                    _generateJobViewModel.Dist = CalcDistance(departure, arrival);
+                    _generateJobViewModel.Dist = AirportDatabaseFile.CalcDistance(departure, arrival);
                     lblDistance.Content = _generateJobViewModel.DistDesc;
                 }
             }
@@ -193,6 +210,7 @@ namespace FlightJobsDesktop.Views
 
         private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
+            sender.Text = args.SelectedItem.ToString();
             AutoSuggestBoxSuggestionChosen();
         }
 
@@ -220,6 +238,9 @@ namespace FlightJobsDesktop.Views
                     txtDeparture.Text = GetIcaoInfo(queryDictionary[0].ToString());
                     txtArrival.Text = GetIcaoInfo(queryDictionary[1].ToString());
                     txtAlternative.Text = GetIcaoInfo(queryDictionary[2].ToString());
+                    
+                    _generateJobViewModel.Dist = AirportDatabaseFile.CalcDistance(queryDictionary[0].ToString(), queryDictionary[1].ToString());
+                    lblDistance.Content = _generateJobViewModel.DistDesc;
                 }
             }
             catch (Exception)
@@ -258,7 +279,7 @@ namespace FlightJobsDesktop.Views
             var autoSuggestBox = (AutoSuggestBox)sender;
             if (autoSuggestBox.Text?.Length >= 4 && autoSuggestBox.Items?.Count > 0)
             {
-                autoSuggestBox.Text = autoSuggestBox.Items.CurrentItem.ToString();
+                autoSuggestBox.Text = GetIcaoInfo(autoSuggestBox.Text);
                 AutoSuggestBoxSuggestionChosen();
             }
         }
@@ -283,5 +304,38 @@ namespace FlightJobsDesktop.Views
             }
         }
 
+        private async void BtnRemoveJobYes_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedId = ((FrameworkElement)sender).Tag;
+                if (selectedId != null)
+                {
+                    await new JobService().RemoveJob(AppProperties.UserLogin.UserId, (int)selectedId);
+
+                    _notificationManager.Show("Success", $"Job removed.", NotificationType.Success, "WindowArea");
+
+                    await new JobService().GetAllUserJobs(AppProperties.UserLogin.UserId);// To reload pedding list
+                    
+                    var userJobsListView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<IList<JobModel>, IList<CurrentJobViewModel>>(AppProperties.UserJobs);
+                    _generateJobViewModel.PendingJobs = userJobsListView;
+                    lsvPendingJobs.ItemsSource = _generateJobViewModel.PendingJobs;
+                    lsvPendingJobs.SelectedIndex = AppProperties.UserJobs.ToList().FindIndex(x => x.IsActivated);
+                }
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Data could not be removed. Please try again later.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                HideConfirmRemovePopup();
+            }
+        }
+
+        private void BtnRemoveJobNo_Click(object sender, RoutedEventArgs e)
+        {
+            HideConfirmRemovePopup();
+        }
     }
 }

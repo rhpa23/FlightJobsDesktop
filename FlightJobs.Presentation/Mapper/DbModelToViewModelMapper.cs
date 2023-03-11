@@ -18,6 +18,13 @@ namespace FlightJobsDesktop.Mapper
                     cfg.CreateMap<JobModel, CurrentJobViewModel>();
                     cfg.CreateMap<JobModel, LastJobViewModel>();
                     cfg.CreateMap<SearchJobTipsModel, TipsDataGridViewModel>();
+                    cfg.CreateMap<JobListItemModel, JobItemViewModel>();
+                    cfg.CreateMap<CustomPlaneCapacityModel, CapacityViewModel>()
+                          .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.CustomNameCapacity))
+                          .ForMember(dest => dest.PassengersNumber, opt => opt.MapFrom(src => src.CustomPassengerCapacity))
+                          .ForMember(dest => dest.PassengerWeight, opt => opt.MapFrom(src => src.CustomPaxWeight))
+                          .ForMember(dest => dest.CargoWeight, opt => opt.MapFrom(src => src.CustomCargoCapacityWeight))
+                          .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(src => src.ImagePath));
                     cfg.CreateMap<UserSettingsModel, UserSettingsViewModel>()
                           .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.UserName))
                           .ForPath(dest => dest.AutoFinishJob, opt => opt.MapFrom(src => src.LocalSettings.AutoFinishJob))
