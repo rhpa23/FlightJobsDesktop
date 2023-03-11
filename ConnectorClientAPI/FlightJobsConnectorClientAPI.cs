@@ -14,9 +14,9 @@ namespace ConnectorClientAPI
 {
     public class FlightJobsConnectorClientAPI
     {
-        public static string SITE_URL = "http://localhost:5646/";
+        //public static string SITE_URL = "http://localhost:5646/";
         //public static string SITE_URL = "https://flightjobs.bsite.net/";
-        //public static string SITE_URL = "https://flightjobs.somee.com/";
+        public static string SITE_URL = "https://flightjobs.somee.com/";
         static HttpClient client;
 
         public FlightJobsConnectorClientAPI()

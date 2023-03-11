@@ -17,6 +17,7 @@ using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services;
 using FlightJobs.Model.Models;
 using System.Windows.Input;
+using FlightJobs.Infrastructure.Services.Interfaces;
 
 namespace FlightJobsDesktop.Views
 {
@@ -26,11 +27,13 @@ namespace FlightJobsDesktop.Views
     public partial class ManagerJobsView : UserControl
     {
         private NotificationManager _notificationManager;
+        private IJobService _jobService;
+        private IInfraService _infraService;
 
         private GenerateJobViewModel _generateJobViewModel;
 
-        private string mapUrl = $"{new InfraService().GetApiUrl()}Maps/GenerateJobsMap";
-        private string mapUrlQuery = "?departure={0}&arrival={1}&alternative={2}&username={3}";
+        private string _mapUrl;
+        private string _mapUrlQuery;
 
         private Flyout _flyoutConfirmRemove;
 
@@ -40,6 +43,11 @@ namespace FlightJobsDesktop.Views
 
             _generateJobViewModel = new GenerateJobViewModel();
             _notificationManager = new NotificationManager();
+            _jobService = MainWindow.JobServiceFactory.Create();
+            _infraService = MainWindow.InfraServiceFactory.Create();
+
+            _mapUrl = $"{_infraService.GetApiUrl()}Maps/GenerateJobsMap";
+            _mapUrlQuery =  "?departure={0}&arrival={1}&alternative={2}&username={3}";
         }
 
         private void HideConfirmRemovePopup()
@@ -109,7 +117,7 @@ namespace FlightJobsDesktop.Views
                 if (window.ShowDialog().Value)
                 {
                     _generateJobViewModel = new GenerateJobViewModel();
-                    await new JobService().GetAllUserJobs(AppProperties.UserLogin.UserId);// To reload pedding list
+                    await _jobService.GetAllUserJobs(AppProperties.UserLogin.UserId);// To reload pedding list
                     lblDistance.Content = "0";
                     LoadManagerView();
                 }
@@ -195,7 +203,7 @@ namespace FlightJobsDesktop.Views
                     var alternative = _generateJobViewModel.AlternativeICAO;
                     var user = AppProperties.UserLogin.UserName;
 
-                    string url = mapUrl + string.Format(mapUrlQuery, departure, arrival, alternative, user);
+                    string url = _mapUrl + string.Format(_mapUrlQuery, departure, arrival, alternative, user);
                     MapWebView.Navigate(url);
 
                     _generateJobViewModel.Dist = AirportDatabaseFile.CalcDistance(departure, arrival);
@@ -254,7 +262,7 @@ namespace FlightJobsDesktop.Views
             var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowArea");
             try
             {
-                string url = mapUrl + string.Format(mapUrlQuery, "", "", "", AppProperties.UserLogin.UserName);
+                string url = _mapUrl + string.Format(_mapUrlQuery, "", "", "", AppProperties.UserLogin.UserName);
                 MapWebView.Navigate(url);
 
                 var userJobsListView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<IList<JobModel>, IList<CurrentJobViewModel>>(AppProperties.UserJobs);
@@ -289,10 +297,12 @@ namespace FlightJobsDesktop.Views
             var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowArea");
             try
             {
-                var jobService = new JobService();
                 var selected = (CurrentJobViewModel)lsvPendingJobs.SelectedValue;
-                await jobService.ActivateJob(AppProperties.UserLogin.UserId, selected.Id);
-                await jobService.GetAllUserJobs(AppProperties.UserLogin.UserId);// Reload the job list
+                if (selected != null)
+                {
+                    await _jobService.ActivateJob(AppProperties.UserLogin.UserId, selected.Id);
+                    await _jobService.GetAllUserJobs(AppProperties.UserLogin.UserId);// Reload the job list
+                }
             }
             catch (Exception)
             {
@@ -311,11 +321,12 @@ namespace FlightJobsDesktop.Views
                 var selectedId = ((FrameworkElement)sender).Tag;
                 if (selectedId != null)
                 {
-                    await new JobService().RemoveJob(AppProperties.UserLogin.UserId, (int)selectedId);
+                    var jobService = MainWindow.JobServiceFactory.Create();
+                    await jobService.RemoveJob(AppProperties.UserLogin.UserId, (int)selectedId);
 
                     _notificationManager.Show("Success", $"Job removed.", NotificationType.Success, "WindowArea");
 
-                    await new JobService().GetAllUserJobs(AppProperties.UserLogin.UserId);// To reload pedding list
+                    await jobService.GetAllUserJobs(AppProperties.UserLogin.UserId);// To reload pedding list
                     
                     var userJobsListView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<IList<JobModel>, IList<CurrentJobViewModel>>(AppProperties.UserJobs);
                     _generateJobViewModel.PendingJobs = userJobsListView;

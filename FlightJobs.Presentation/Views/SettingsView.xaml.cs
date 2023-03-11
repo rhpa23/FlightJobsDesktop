@@ -1,5 +1,6 @@
 ﻿using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services;
+using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
@@ -20,6 +21,7 @@ namespace FlightJobsDesktop.Views
     public partial class SettingsView : UserControl
     {
         private NotificationManager _notificationManager;
+        private IUserAccessService _userAccessService;
 
         private UserSettingsViewModel _userSettings;
 
@@ -27,6 +29,7 @@ namespace FlightJobsDesktop.Views
         {
             InitializeComponent();
             _notificationManager = new NotificationManager();
+            _userAccessService = MainWindow.UserServiceFactory.Create();
         }
 
         private void SaveSettings()
@@ -76,7 +79,7 @@ namespace FlightJobsDesktop.Views
             {
                 var userSettingsModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<UserSettingsViewModel, UserSettingsModel>(_userSettings);
                 userSettingsModel.UserId = AppProperties.UserLogin.UserId;
-                var result = await new UserAccessService().UpdateUserSettings(userSettingsModel);
+                var result = await _userAccessService.UpdateUserSettings(userSettingsModel);
                     
                 _notificationManager.Show("Success", "Settings saved!", NotificationType.Success, "WindowArea");
             }

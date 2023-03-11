@@ -1,5 +1,6 @@
 ﻿using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services;
+using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
@@ -29,16 +30,19 @@ namespace FlightJobsDesktop.Views.Modals
     public partial class CustomCapacityModal : UserControl
     {
         private NotificationManager _notificationManager;
+        private IJobService _jobService;
 
         public CustomCapacityModal()
         {
             InitializeComponent();
             _notificationManager = new NotificationManager();
+            
+            _jobService = MainWindow.JobServiceFactory.Create();
         }
         private async void LoadCapacityList()
         {
             var generateJobData = (GenerateJobViewModel)DataContext;
-            var capacitiesModel = await new JobService().GetPlaneCapacities(AppProperties.UserLogin.UserId);
+            var capacitiesModel = await _jobService.GetPlaneCapacities(AppProperties.UserLogin.UserId);
             generateJobData.CapacityList = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
                 .Map<IList<CustomPlaneCapacityModel>, IList<CapacityViewModel>>(capacitiesModel);
         }
@@ -65,7 +69,7 @@ namespace FlightJobsDesktop.Views.Modals
                 var capacityModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg)
                     .Map<CapacityViewModel, CustomPlaneCapacityModel>(generateJobData.Capacity);
                 capacityModel.UserId = AppProperties.UserLogin.UserId;
-                await new JobService().SavePlaneCapacity(capacityModel);
+                await _jobService.SavePlaneCapacity(capacityModel);
                 _notificationManager.Show("Success", $"Capacity saved.", NotificationType.Success, "WindowArea");
                 LoadCapacityList();
             }
@@ -83,7 +87,7 @@ namespace FlightJobsDesktop.Views.Modals
                 var capacityModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg)
                     .Map<CapacityViewModel, CustomPlaneCapacityModel>(generateJobData.Capacity);
                 capacityModel.UserId = AppProperties.UserLogin.UserId;
-                await new JobService().RemovePlaneCapacity(capacityModel);
+                await _jobService.RemovePlaneCapacity(capacityModel);
                 _notificationManager.Show("Success", $"Capacity removed.", NotificationType.Success, "WindowArea");
                 LoadCapacityList();
 

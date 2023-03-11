@@ -1,5 +1,6 @@
 ﻿using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services;
+using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
@@ -28,11 +29,14 @@ namespace FlightJobsDesktop.Views.Modals
     public partial class ConfirmJobModal : UserControl
     {
         private NotificationManager _notificationManager;
+        private IJobService _jobService;
 
         public ConfirmJobModal()
         {
             InitializeComponent();
             _notificationManager = new NotificationManager();
+            
+            _jobService = MainWindow.JobServiceFactory.Create();
         }
 
         private void TxtAlternativeRange_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -56,7 +60,7 @@ namespace FlightJobsDesktop.Views.Modals
 
                 generateJobFilter.UserId = AppProperties.UserLogin.UserId;
 
-                var listJobsModel = await new JobService().GenerateConfirmJobs(generateJobFilter);
+                var listJobsModel = await _jobService.GenerateConfirmJobs(generateJobFilter);
                 generateJobData.JobItemList = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
                         .Map<IList<JobListItemModel>, IList<JobItemViewModel>>(listJobsModel);
             }

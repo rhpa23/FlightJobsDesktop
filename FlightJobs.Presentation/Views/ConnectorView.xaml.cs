@@ -1,5 +1,6 @@
 ﻿using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services;
+using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
@@ -27,11 +28,13 @@ namespace FlightJobsDesktop.Views
     public partial class ConnectorView : UserControl
     {
         private NotificationManager _notificationManager;
+        private IJobService _jobService;
 
         public ConnectorView()
         {
             InitializeComponent();
             _notificationManager = new NotificationManager();
+            _jobService = MainWindow.JobServiceFactory.Create();
 
             LoadUserJobData();
         }
@@ -56,7 +59,7 @@ namespace FlightJobsDesktop.Views
                     currentJobView.JobSummary = $"Setup departure for aircraft on {currentJobView.DepartureDesc} and the total payload to {currentJobView.PayloadComplete} then fly to {currentJobView.ArrivalDesc}.";
                 }
 
-                var lastJob = await new JobService().GetLastUserJob(AppProperties.UserLogin.UserId);
+                var lastJob = await _jobService.GetLastUserJob(AppProperties.UserLogin.UserId);
                 if (lastJob != null)
                 {
                     var lastJobView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, LastJobViewModel>(lastJob);

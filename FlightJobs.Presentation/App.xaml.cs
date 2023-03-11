@@ -1,4 +1,6 @@
 ﻿using FlightJobs.Infrastructure.Services;
+using FlightJobs.Infrastructure.Services.Interfaces;
+using FlightJobsDesktop.Factorys;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.Views;
 using FlightJobsDesktop.Views.Account;
@@ -27,14 +29,16 @@ namespace FlightJobsDesktop
 
             DbModelToViewModelMapper.Initialize();
             var mapCfg = ViewModelToDbModelMapper.Initialize();
-            //var userAccess = new UserAccessService();
-            var jobService = new JobService();
-            var userAccessService = new UserAccessService();
+
+            services.AddAbstractFactory<IJobService, JobService>();
+            services.AddAbstractFactory<IUserAccessService, UserAccessService>();
+            services.AddAbstractFactory<IInfraService, InfraService>();
 
             services.AddSingleton<MainWindow>();
-            //services.AddSingleton(userAccess);
-            services.AddSingleton(new Login(userAccessService, jobService));
-            services.AddSingleton(new Register());
+            services.AddSingleton<Login>();
+            services.AddSingleton<Register>();
+
+            
         }
 
         private void OnStartup(object sender, StartupEventArgs e)

@@ -1,24 +1,15 @@
 ﻿using FlightJobs.Infrastructure;
-using FlightJobs.Infrastructure.Services;
+using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
-using FlightJobsDesktop.Utils;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views.Modals;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace FlightJobsDesktop.Views
 {
@@ -29,6 +20,7 @@ namespace FlightJobsDesktop.Views
     {
         private NotificationManager _notificationManager;
         private GenerateJobViewModel _generateJobViewModel;
+        private IJobService _jobService;
 
         public GenerateView()
         {
@@ -40,6 +32,7 @@ namespace FlightJobsDesktop.Views
             InitializeComponent();
             _generateJobViewModel = generateJobViewModel;
             _notificationManager = new NotificationManager();
+            _jobService = MainWindow.JobServiceFactory.Create();
         }
 
         private void UpdateFrameDataContext()
@@ -90,7 +83,7 @@ namespace FlightJobsDesktop.Views
                 _generateJobViewModel.Capacity = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
                     .Map<CustomPlaneCapacityModel, CapacityViewModel>(AppProperties.UserStatistics.CustomPlaneCapacity);
 
-                var capacitiesModel = await new JobService().GetPlaneCapacities(AppProperties.UserLogin.UserId);
+                var capacitiesModel = await _jobService.GetPlaneCapacities(AppProperties.UserLogin.UserId);
                 _generateJobViewModel.CapacityList = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
                     .Map<IList<CustomPlaneCapacityModel>, IList<CapacityViewModel>>(capacitiesModel);
             }
@@ -136,7 +129,7 @@ namespace FlightJobsDesktop.Views
 
                     confirmJobModel.UserId = AppProperties.UserLogin.UserId;
 
-                    await new JobService().ConfirmJob(confirmJobModel);
+                    await _jobService.ConfirmJob(confirmJobModel);
                     _notificationManager.Show("Success", "Confirmed with success.", NotificationType.Success, "WindowArea");
                     progress.Dispose();
                     await Task.Delay(3000);

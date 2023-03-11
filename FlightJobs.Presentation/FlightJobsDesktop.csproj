@@ -94,6 +94,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="core\SelectedItemToContentConverter.cs" />
+    <Compile Include="Factorys\AbstractFactory.cs" />
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -1,23 +1,13 @@
-﻿using FlightJobs.Infrastructure.Services;
+﻿using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FlightJobsDesktop.Views.Modals
 {
@@ -29,12 +19,15 @@ namespace FlightJobsDesktop.Views.Modals
         private string _arrivalICAO;
 
         private NotificationManager _notificationManager;
+        private IJobService _jobService;
 
         public TipsDataGridViewModel SelectedJobTip { get; set; }
 
         public AlternativeTipsModal()
         {
             InitializeComponent();
+
+            _jobService = MainWindow.JobServiceFactory.Create();
         }
 
         public AlternativeTipsModal(string arrivalICAO)
@@ -51,7 +44,7 @@ namespace FlightJobsDesktop.Views.Modals
             {
                 if (!string.IsNullOrEmpty(_arrivalICAO) && _arrivalICAO.Length > 3)
                 {
-                    var list = await new JobService().GetAlternativeTips(_arrivalICAO.Substring(0, 4), (int)RangeNumberBox.Value);
+                    var list = await _jobService.GetAlternativeTips(_arrivalICAO.Substring(0, 4), (int)RangeNumberBox.Value);
 
                     var tipJobsListView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<IList<SearchJobTipsModel>, IList<TipsDataGridViewModel>>(list);
 

@@ -1,6 +1,7 @@
 ﻿using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
+using FlightJobsDesktop.Factorys;
 using FlightJobsDesktop.ValidationRules;
 using FlightJobsDesktop.ViewModels;
 using Notification.Wpf;
@@ -23,12 +24,18 @@ namespace FlightJobsDesktop.Views.Account
         private IUserAccessService _userAccessService;
         private NotificationManager _notificationManager;
         private LoginResponseModel _loginData;
-        public Login(IUserAccessService userAccessService, IJobService jobService)
+        private MainWindow _mainWindow;
+
+        public Login(IAbstractFactory<IJobService> factoryJob, 
+                     IAbstractFactory<IUserAccessService> factoryUser, 
+                     MainWindow mainWindow)
         {
             InitializeComponent();
-            _jobService = jobService;
-            _userAccessService = userAccessService;
             _notificationManager = new NotificationManager();
+
+            _jobService = factoryJob.Create();
+            _userAccessService = factoryUser.Create();
+            _mainWindow = mainWindow;
         }
 
         protected override void OnClosed(EventArgs e)
@@ -56,7 +63,7 @@ namespace FlightJobsDesktop.Views.Account
             if (await SignIn(userViewModel, false))
             {
                 this.Hide();
-                new MainWindow().Show();
+                _mainWindow.Show();
             }
             else
             {
@@ -169,7 +176,7 @@ namespace FlightJobsDesktop.Views.Account
                 if (await SignIn(userViewModel, true))
                 {
                     this.Hide();
-                    new MainWindow().Show();
+                    _mainWindow.Show();
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services;
+using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
@@ -30,6 +31,7 @@ namespace FlightJobsDesktop.Views.Modals
         private string _departureICAO;
 
         private NotificationManager _notificationManager;
+        private IJobService _jobService;
 
         public TipsDataGridViewModel SelectedJobTip { get; set; }
         public bool CloneEvent { get; set; }
@@ -44,6 +46,7 @@ namespace FlightJobsDesktop.Views.Modals
             InitializeComponent();
             _departureICAO = departureICAO;
             _notificationManager = new NotificationManager();
+            _jobService = MainWindow.JobServiceFactory.Create();
         }
 
         private async Task LoadDataGrid()
@@ -53,7 +56,7 @@ namespace FlightJobsDesktop.Views.Modals
             {
                 if (!string.IsNullOrEmpty(_departureICAO) && _departureICAO.Length > 3)
                 {
-                    var list = await new JobService().GetArrivalTips(_departureICAO.Substring(0, 4), AppProperties.UserLogin.UserId);
+                    var list = await _jobService.GetArrivalTips(_departureICAO.Substring(0, 4), AppProperties.UserLogin.UserId);
 
                     var tipJobsListView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<IList<SearchJobTipsModel>, IList<TipsDataGridViewModel>>(list);
 
@@ -83,7 +86,7 @@ namespace FlightJobsDesktop.Views.Modals
             try
             {
                 var jobId = (long)((Button)sender).Tag;
-                await new JobService().CloneJob(jobId, AppProperties.UserLogin.UserId);
+                await _jobService.CloneJob(jobId, AppProperties.UserLogin.UserId);
                 CloneEvent = true;
                 ((Window)Parent).Close();
             }

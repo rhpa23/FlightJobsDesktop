@@ -1,5 +1,7 @@
 ﻿using FlightJobs.Infrastructure;
+using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
+using FlightJobsDesktop.Factorys;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views;
@@ -18,18 +20,24 @@ namespace FlightJobsDesktop
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static IAbstractFactory<IJobService> JobServiceFactory;
+        public static IAbstractFactory<IUserAccessService> UserServiceFactory;
+        public static IAbstractFactory<IInfraService> InfraServiceFactory;
+
         private UserSettingsViewModel _userSettings;
 
-        private NotificationManager _notificationManager;
-
-        public MainWindow()
+        public MainWindow(IAbstractFactory<IInfraService> factoryInfra,
+                          IAbstractFactory<IJobService> factoryJob, 
+                          IAbstractFactory<IUserAccessService> factoryUser)
         {
             InitializeComponent();
+
+            JobServiceFactory = factoryJob;
+            UserServiceFactory = factoryUser;
+            InfraServiceFactory = factoryInfra;
+
             ResizeMode = ResizeMode.CanResizeWithGrip;
-            _notificationManager = new NotificationManager();
-            _userSettings = new UserSettingsViewModel() { SimConnectStatus = "Waiting for sim start..." };
-            _userSettings.Username = AppProperties.UserLogin.UserName;
-            DataContext = _userSettings;
+            
 
             System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
             ni.Icon = new System.Drawing.Icon("favicon.ico");
@@ -95,6 +103,7 @@ namespace FlightJobsDesktop
             userSettingsModel.UserId = AppProperties.UserLogin.UserId;
 
             AppProperties.UserSettings = userSettingsModel;
+            DataContext = _userSettings;
         }
 
         private void NavigationView_SelectionChanged(ModernWpf.Controls.NavigationView sender, ModernWpf.Controls.NavigationViewSelectionChangedEventArgs args)
