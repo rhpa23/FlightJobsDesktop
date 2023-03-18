@@ -4,6 +4,7 @@ using FlightJobs.Model.Models;
 using FlightJobsDesktop.Factorys;
 using FlightJobsDesktop.ValidationRules;
 using FlightJobsDesktop.ViewModels;
+using ModernWpf;
 using Notification.Wpf;
 using System;
 using System.IO;
@@ -22,19 +23,27 @@ namespace FlightJobsDesktop.Views.Account
     {
         private IJobService _jobService;
         private IUserAccessService _userAccessService;
+        private IInfraService _infraService;
         private NotificationManager _notificationManager;
         private LoginResponseModel _loginData;
         private MainWindow _mainWindow;
 
-        public Login(IAbstractFactory<IJobService> factoryJob, 
+        private IAbstractFactory<IUserAccessService> _factoryUser;
+
+        public bool AutoSingIn = true;
+
+        public Login(IAbstractFactory<IInfraService> factoryInfra, 
+                     IAbstractFactory<IJobService> factoryJob, 
                      IAbstractFactory<IUserAccessService> factoryUser, 
                      MainWindow mainWindow)
         {
             InitializeComponent();
             _notificationManager = new NotificationManager();
+            _factoryUser = factoryUser;
 
             _jobService = factoryJob.Create();
             _userAccessService = factoryUser.Create();
+            _infraService = factoryInfra.Create();
             _mainWindow = mainWindow;
         }
 
@@ -46,14 +55,23 @@ namespace FlightJobsDesktop.Views.Account
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            //new Register(_flightJobsConnectorClientAPI).Show();
-            this.Hide();
+            if (!new Register(_factoryUser).ShowDialog().Value)
+            {
+                Application.Current.Shutdown();
+            }
         }
 
         private void ForgotPassword_Click(object sender, RoutedEventArgs e)
         {
-            new ForgotPassword().Show();
-            this.Hide();
+            var destinationurl = $"{_infraService.GetApiUrl()}Account/ForgotPassword";
+            var sInfo = new System.Diagnostics.ProcessStartInfo(destinationurl)
+            {
+                UseShellExecute = true,
+            };
+            System.Diagnostics.Process.Start(sInfo);
+
+            //new ForgotPassword().Show();
+            //Hide();
         }
 
         private async void btnSignIn_Click(object sender, RoutedEventArgs e)
@@ -62,7 +80,7 @@ namespace FlightJobsDesktop.Views.Account
 
             if (await SignIn(userViewModel, false))
             {
-                this.Hide();
+                Hide();
                 _mainWindow.Show();
             }
             else
@@ -75,7 +93,7 @@ namespace FlightJobsDesktop.Views.Account
         {
             txbEmail.IsEnabled = enabled;
             txbPassword.IsEnabled = enabled;
-            btnSignIn.IsEnabled = enabled;
+            //btnSignIn.IsEnabled = enabled;
         }
 
         private async Task<bool> SignIn(AspnetUserViewModel userViewModel, bool discreteLogin)
@@ -169,16 +187,26 @@ namespace FlightJobsDesktop.Views.Account
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
+
             if (LoadLoginData())
             {
                 var userViewModel = (AspnetUserViewModel)DataContext;
 
-                if (await SignIn(userViewModel, true))
+                if (AutoSingIn)
                 {
-                    this.Hide();
-                    _mainWindow.Show();
+                    if (await SignIn(userViewModel, true))
+                    {
+                        this.Hide();
+                        _mainWindow.Show();
+                    }
                 }
             }
+        }
+
+        private void TextChanged(object sender, EventArgs e)
+        {
+            btnSignIn.IsEnabled = EmailValidationRule.IsValidEmail(txbEmail.Text) && !string.IsNullOrEmpty(txbPassword.Password);
         }
     }
 }

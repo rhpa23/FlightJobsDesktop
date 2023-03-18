@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using FlightJobsDesktop.ValidationRules;
+using System.Collections.Generic;
 
 namespace FlightJobsDesktop.ViewModels
 {
@@ -23,7 +24,7 @@ namespace FlightJobsDesktop.ViewModels
                 string result = "ok";
 
                 if (!IsPasswordConfirmed)
-                    result = "Passwords do NOT match";
+                    result = "NOT match";
 
                 if (ErrorCollection.ContainsKey("PasswordConfirmedMsg"))
                     ErrorCollection["PasswordConfirmedMsg"] = result;
@@ -77,6 +78,7 @@ namespace FlightJobsDesktop.ViewModels
             }
             
         }
+
         private string PasswordStrength
         {
             get

@@ -11,10 +11,15 @@ namespace FlightJobsDesktop.ValidationRules
         {
             string charString = value as string;
 
-            if (charString?.Length >= MinimumCharacters)
+            if (IsValid(charString, MinimumCharacters))
                 return new ValidationResult(true, null);
 
-            return new ValidationResult(false, $"User atleast {MinimumCharacters} characters.");
+            return new ValidationResult(false, $"At least {MinimumCharacters} characters.");
+        }
+
+        public static bool IsValid(string charString, int minimumCharacters)
+        {
+            return charString?.Length >= minimumCharacters;
         }
     }
 }

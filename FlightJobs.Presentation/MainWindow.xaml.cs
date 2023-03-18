@@ -5,7 +5,9 @@ using FlightJobsDesktop.Factorys;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views;
+using FlightJobsDesktop.Views.Account;
 using ModernWpf;
+using ModernWpf.Controls;
 using Newtonsoft.Json;
 using Notification.Wpf;
 using System;
@@ -88,7 +90,7 @@ namespace FlightJobsDesktop
         private void LoadSettings()
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
-            var jsonSettings = File.ReadAllText(System.IO.Path.Combine(path, "ResourceData\\Settings.json"));
+            var jsonSettings = File.ReadAllText(Path.Combine(path, "ResourceData\\Settings.json"));
             _userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
             _userSettings.SimConnectStatus = "Waiting for sim start...";
 
@@ -124,14 +126,32 @@ namespace FlightJobsDesktop
             }
         }
 
-
-
-        private void TitleBarButton_Click(object sender, RoutedEventArgs e)
+        private void BtnLogoff_Click(object sender, RoutedEventArgs e)
         {
-            string pageName = "FlightJobsDesktop.Views." + (string)PrivateViewPageItem.Tag;
-            NavigateToPageControl(pageName);
-            nvMain.SelectedItem = PrivateViewPageItem;
+            var loginWindow = new Login(InfraServiceFactory, 
+                                        JobServiceFactory, 
+                                        UserServiceFactory, 
+                                        new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory));
+
+            loginWindow.AutoSingIn = false;
+            loginWindow.Show();
+
+            Flyout f = FlyoutService.GetFlyout(BtnUserMenu) as Flyout;
+            if (f != null)
+            {
+                f.Hide();
+            }
+
+            Close();
         }
+
+
+        //private void TitleBarButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    string pageName = "FlightJobsDesktop.Views." + (string)PrivateViewPageItem.Tag;
+        //    NavigateToPageControl(pageName);
+        //    nvMain.SelectedItem = PrivateViewPageItem;
+        //}
 
 
     }

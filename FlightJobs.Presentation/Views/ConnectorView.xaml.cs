@@ -36,7 +36,7 @@ namespace FlightJobsDesktop.Views
             _notificationManager = new NotificationManager();
             _jobService = MainWindow.JobServiceFactory.Create();
 
-            LoadUserJobData();
+            //LoadUserJobData();
         }
 
         private void BtnRemoveJob_MouseUp(object sender, MouseButtonEventArgs e)

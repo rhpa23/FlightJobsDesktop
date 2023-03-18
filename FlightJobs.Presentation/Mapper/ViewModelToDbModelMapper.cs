@@ -15,6 +15,10 @@ namespace FlightJobsDesktop.Mapper
             if (!_isInitialized)
             {
                 MapperCfg = new MapperConfiguration(cfg => {
+                    cfg.CreateMap<AspnetUserViewModel, UserRegisterModel>()
+                           .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.NickName))
+                           .ForMember(dest => dest.ConfirmPassword, opt => opt.MapFrom(src => src.PasswordConfirmed))
+                           .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password));
                     cfg.CreateMap<GenerateJobViewModel, ConfirmJobModel>()
                           .ForMember(dest => dest.Pax, opt => opt.MapFrom(src => src.SelectedPax))
                           .ForMember(dest => dest.Cargo, opt => opt.MapFrom(src => src.SelectedCargo))

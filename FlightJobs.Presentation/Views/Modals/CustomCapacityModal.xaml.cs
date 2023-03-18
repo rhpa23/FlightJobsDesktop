@@ -110,6 +110,10 @@ namespace FlightJobsDesktop.Views.Modals
             {
                 lsvCapacityList.SelectedIndex = generateJobData.CapacityList.ToList().FindIndex(x => x.Id == generateJobData.Capacity.Id);
             }
+            else
+            {
+                generateJobData.Capacity = new CapacityViewModel();
+            }
         }
 
         private void lsvCapacityList_SelectionChanged(object sender, SelectionChangedEventArgs e)

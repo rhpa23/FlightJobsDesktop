@@ -61,6 +61,19 @@ namespace ConnectorClientAPI
             }
         }
 
+        public async Task UserRegister(UserRegisterModel userModel)
+        {
+            var url = $"{SITE_URL}api/AuthenticationApi/UserRegister";
+
+            var body = JsonConvert.SerializeObject(userModel);
+
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+
         public async Task ConfirmJob(ConfirmJobModel confirmJobModel)
         {
             var url = $"{SITE_URL}api/SearchApi/ConfirmJobs";
@@ -196,7 +209,7 @@ namespace ConnectorClientAPI
             HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
-                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+                return null;
             }
 
             string json = response.Content.ReadAsStringAsync().Result.Replace("\"{", "{").Replace("}\"", "}").Replace("\\", "");

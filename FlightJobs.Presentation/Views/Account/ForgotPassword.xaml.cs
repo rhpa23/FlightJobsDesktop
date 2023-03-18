@@ -23,5 +23,7 @@ namespace FlightJobsDesktop.Views.Account
         {
             InitializeComponent();
         }
+
+
     }
 }

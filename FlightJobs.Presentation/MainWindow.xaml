@@ -70,13 +70,24 @@
                 HorizontalAlignment="Right"
                 Margin="0,0,130,0"
                 Orientation="Horizontal">
-                <ui:TitleBarButton
+                <ui:TitleBarButton x:Name="BtnUserMenu"
                     Style="{StaticResource AppTitleBarButtonStyle}"
                     FontFamily="{DynamicResource ContentControlThemeFontFamily}"
                     FontSize="13"
                     Width="NaN"
                     Padding="16,0"
-                    Content="{Binding Path=Username}" Click="TitleBarButton_Click" />
+                    Content="{Binding Path=Username}">
+                    <ui:FlyoutService.Flyout>
+                        <ui:Flyout x:Name="FlyoutUserMenu">
+                            <StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <Button x:Name="BtnLogoff" Content="Logoff" Click="BtnLogoff_Click" HorizontalAlignment="Stretch"  />
+                                    <Button x:Name="BtnFlightsInfo" Content="Flights info" Margin="0,5,0,0" HorizontalAlignment="Stretch" />
+                                </StackPanel>
+                            </StackPanel>
+                        </ui:Flyout>
+                    </ui:FlyoutService.Flyout>
+                </ui:TitleBarButton>
                 <Rectangle
                     Fill="{Binding ElementName=AppTitleBar, Path=(TextElement.Foreground)}"
                     Width="1"

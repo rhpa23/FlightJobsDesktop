@@ -50,6 +50,7 @@
     <Compile Include="Models\JobListItemModel.cs" />
     <Compile Include="Models\JobModel.cs" />
     <Compile Include="Models\LoginResponseModel.cs" />
+    <Compile Include="Models\UserRegisterModel.cs" />
     <Compile Include="Models\SearchJobTipsModel.cs" />
     <Compile Include="Models\StartJobResponseModel.cs" />
     <Compile Include="Models\UserSettingsModel.cs" />

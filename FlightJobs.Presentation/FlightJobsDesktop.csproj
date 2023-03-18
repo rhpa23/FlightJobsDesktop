@@ -296,6 +296,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="img\background\tower-view.jpg" />
     <Resource Include="img\planes\A319.JPG" />
     <Resource Include="img\planes\A320.JPG" />
     <Resource Include="img\planes\A321.JPG" />

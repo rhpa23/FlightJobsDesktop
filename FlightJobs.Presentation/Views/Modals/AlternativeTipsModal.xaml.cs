@@ -26,8 +26,6 @@ namespace FlightJobsDesktop.Views.Modals
         public AlternativeTipsModal()
         {
             InitializeComponent();
-
-            _jobService = MainWindow.JobServiceFactory.Create();
         }
 
         public AlternativeTipsModal(string arrivalICAO)
@@ -65,6 +63,7 @@ namespace FlightJobsDesktop.Views.Modals
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            _jobService = MainWindow.JobServiceFactory.Create();
             await LoadDataGrid();
         }
 

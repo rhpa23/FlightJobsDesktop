@@ -11,7 +11,7 @@
         xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="FlightJobs - Login" Height="480" Width="500" ResizeMode="NoResize" Loaded="Window_Loaded">
+        Title="FlightJobs - Login" Height="470" Width="680" ResizeMode="NoResize" Loaded="Window_Loaded">
     <Window.DataContext>
         <local:AspnetUserViewModel/>
     </Window.DataContext>
@@ -28,46 +28,49 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="Use you account to login" Margin="5,30,0,10" FontSize="22"/>
-        <Label Grid.Column="0" Grid.Row="1" Content="Email:" Margin="5,30,0,10" FontSize="22"/>
-        <TextBox x:Name="txbEmail" Grid.Column="1" Grid.Row="1" Height="33" TextWrapping="Wrap" Margin="5,30,30,5" ui:ControlHelper.PlaceholderText="Email">
+        <Image Source="/img/background/tower-view.jpg" Width="290" Grid.RowSpan="8" VerticalAlignment="Top" >
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Setter Property="Opacity" Value="0.7" />
+                </Style>
+            </Image.Style>
+        </Image>
+
+        <Image Source="/img/logo/FlightJobsLogo0002.png" Grid.Row="0" Grid.Column="1" Width="70" Margin="0,10,0,0" >
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Setter Property="Opacity" Value="0.4" />
+                </Style>
+            </Image.Style>
+        </Image>
+        <Label Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Content="Sign in to App" Margin="5,5,0,5" FontSize="22"/>
+        <TextBox x:Name="txbEmail" Grid.Column="1" Grid.Row="2" Height="55" Width="280" TextWrapping="Wrap" Margin="0,20,0,0" 
+                 ui:ControlHelper.Header="Email" ui:ControlHelper.PlaceholderText="Email" TextChanged="TextChanged">
             <TextBox.Text>
                 <Binding Path="Email" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
                     <Binding.ValidationRules>
-                        <validationrules:EmailValidationRule  ValidatesOnTargetUpdated="True"/>
+                        <validationrules:EmailValidationRule  ValidatesOnTargetUpdated="False"/>
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <Label Grid.Column="0" Grid.Row="2" Content="Password:" Margin="5,30,0,10" FontSize="22"/>
-        <PasswordBox x:Name="txbPassword" Grid.Column="1" Grid.Row="2" Height="33" Margin="5,30,30,5" helpers:PasswordBoxHelper.BindPassword="True" ui:ControlHelper.PlaceholderText="Password">
+        <PasswordBox x:Name="txbPassword" Grid.Column="1" Grid.Row="3" Height="55" Width="280" Margin="0,20,0,0" helpers:PasswordBoxHelper.BindPassword="True" 
+                     ui:ControlHelper.PlaceholderText="Password" ui:ControlHelper.Header="Password" PasswordChanged="TextChanged">
             <helpers:PasswordBoxHelper.BoundPassword>
                 <Binding Path="Password" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" />
             </helpers:PasswordBoxHelper.BoundPassword>
         </PasswordBox>
-        <TextBlock Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Height="20" Margin="5,20,5,5" HorizontalAlignment="Center" FontSize="16">
+        <TextBlock Grid.Column="1" Grid.Row="5" Height="20" Margin="5,20,5,5" HorizontalAlignment="Center" FontSize="16">
             <Hyperlink Click="Register_Click"><TextBlock Text="New User?" /></Hyperlink>
         </TextBlock>
-        <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Height="20" Margin="5,10,5,5" HorizontalAlignment="Center" FontSize="16">
+        <TextBlock Grid.Column="1" Grid.Row="6" Height="20" Margin="5,10,5,5" HorizontalAlignment="Center" FontSize="16">
             <Hyperlink Click="ForgotPassword_Click"><TextBlock Text="Forgot your password?" /></Hyperlink>
         </TextBlock>
-        <Button x:Name="btnSignIn" Content="Sign in" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Right" Margin="6,30,30,2" VerticalAlignment="Top" Width="150" FontSize="18" Click="btnSignIn_Click">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="IsEnabled" Value="False"/>
-                    <Style.Triggers>
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=txbEmail}" Value="False"/>
-                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=txbPassword}" Value="False"/>
-                            </MultiDataTrigger.Conditions>
-                            <Setter Property="IsEnabled" Value="True"/>
-                        </MultiDataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
-        <notifications:NotificationArea x:Name="WindowArea" Position="BottomCenter" MaxItems="3" Grid.Row="4" Grid.ColumnSpan="2" />
+        <Border x:Name="btnSignIn" Grid.Column="1" Grid.Row="4" Margin="0,30,0,0" Width="280" Style="{DynamicResource BorderButtonYellow}">
+            <Button Content="Sign in" HorizontalAlignment="Center" VerticalAlignment="Top" Width="280" FontSize="18" Click="btnSignIn_Click" IsDefault="True"/>
+        </Border>
+        <notifications:NotificationArea x:Name="WindowArea" Position="TopCenter" MaxItems="3" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="4"  />
     </Grid>
 </Window>

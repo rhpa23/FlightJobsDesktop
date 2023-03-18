@@ -80,7 +80,7 @@ namespace FlightJobsDesktop.Views
                 var userSettingsModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<UserSettingsViewModel, UserSettingsModel>(_userSettings);
                 userSettingsModel.UserId = AppProperties.UserLogin.UserId;
                 var result = await _userAccessService.UpdateUserSettings(userSettingsModel);
-                    
+                AppProperties.UserSettings = userSettingsModel;
                 _notificationManager.Show("Success", "Settings saved!", NotificationType.Success, "WindowArea");
             }
             catch (Exception)

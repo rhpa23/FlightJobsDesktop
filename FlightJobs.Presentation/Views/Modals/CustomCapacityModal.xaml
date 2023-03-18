@@ -30,7 +30,7 @@
                         <GridViewColumn Header="" Width="40">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal"  Height="20">
                                         <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"/>
                                     </StackPanel>
                                 </DataTemplate>
