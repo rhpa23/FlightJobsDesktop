@@ -15,8 +15,8 @@ namespace ConnectorClientAPI
     public class FlightJobsConnectorClientAPI
     {
         //public static string SITE_URL = "http://localhost:5646/";
-        //public static string SITE_URL = "https://flightjobs.bsite.net/";
-        public static string SITE_URL = "https://flightjobs.somee.com/";
+        public static string SITE_URL = "https://flightjobs.bsite.net/";
+        //public static string SITE_URL = "https://flightjobs.somee.com/";
         static HttpClient client;
 
         public FlightJobsConnectorClientAPI()
@@ -202,6 +202,23 @@ namespace ConnectorClientAPI
             return jobs;
         }
 
+        public async Task<PaginatedJobsModel> GetLogbookUserJobs(string sortOrder, string currentSort, int pageNumber, PaginatedJobsFilterModel filterModel)
+        {
+            var url = $"{SITE_URL}api/JobApi/GetUserJobsPaged?sortOrder={sortOrder}&currentSort={currentSort}&pageNumber={pageNumber}";
+            var body = JsonConvert.SerializeObject(filterModel);
+
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            string json = response.Content.ReadAsStringAsync().Result.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", "");
+            var jobs = JsonConvert.DeserializeObject<PaginatedJobsModel>(json);
+
+            return jobs;
+        }
+
         public async Task<JobModel> GetLastUserJob(string userId)
         {
             var url = $"{SITE_URL}api/JobApi/GetLastUserJob";
@@ -314,6 +331,39 @@ namespace ConnectorClientAPI
             {
                 throw new ApiException(response.Content.ReadAsStringAsync().Result);
             }
+        }
+
+        public async Task<PaginatedAirlinersModel> GetAirliners(string sortOrder, string currentSort, int pageNumber, PaginatedAirlinersFilterModel filterModel)
+        {
+            var url = $"{SITE_URL}api/AirlineApi/GetAirliners?sortOrder={sortOrder}&currentSort={currentSort}&pageNumber={pageNumber}";
+            var body = JsonConvert.SerializeObject(filterModel);
+
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            string json = response.Content.ReadAsStringAsync().Result.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", "");
+            var airlines = JsonConvert.DeserializeObject<PaginatedAirlinersModel>(json);
+
+            return airlines;
+        }
+
+        public async Task<IList<UserModel>> GetAirlinePilotsHired(int airlineId)
+        {
+            var url = $"{SITE_URL}api/AirlineApi/GetPilotsHired?id={airlineId}";
+
+            HttpResponseMessage response = await client.GetAsync(new Uri(url));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            string json = response.Content.ReadAsStringAsync().Result.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", "");
+            var userModels = JsonConvert.DeserializeObject<IList<UserModel>>(json);
+
+            return userModels;
         }
     }
 }

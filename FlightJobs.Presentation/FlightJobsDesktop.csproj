@@ -105,10 +105,14 @@
     <Compile Include="Utils\DataConversion.cs" />
     <Compile Include="ValidationRules\EmailValidationRule.cs" />
     <Compile Include="ValidationRules\MinimumCharacterRule.cs" />
+    <Compile Include="ViewModels\AirlineFilterViewModel.cs" />
+    <Compile Include="ViewModels\AirlineViewModel.cs" />
     <Compile Include="ViewModels\AirportViewModel.cs" />
     <Compile Include="ViewModels\CapacityViewModel.cs" />
     <Compile Include="ViewModels\GenerateJobViewModel.cs" />
     <Compile Include="ViewModels\JobItemViewModel.cs" />
+    <Compile Include="ViewModels\LogbookViewModel.cs" />
+    <Compile Include="ViewModels\PilotsHiredViewModel.cs" />
     <Compile Include="ViewModels\TipsDataGridViewModel.cs" />
     <Compile Include="ViewModels\UserSettingsViewModel.cs" />
     <Compile Include="ViewModels\CurrentJobViewModel.cs" />
@@ -124,7 +128,10 @@
     <Compile Include="Views\Account\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ConnectorView.xaml.cs">
+    <Compile Include="Views\Home\AirlinesView.xaml.cs">
+      <DependentUpon>AirlinesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Home\ConnectorView.xaml.cs">
       <DependentUpon>ConnectorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GenerateView.xaml.cs">
@@ -136,7 +143,10 @@
     <Compile Include="Views\Account\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ManagerJobsView.xaml.cs">
+    <Compile Include="Views\Home\LogbookView.xaml.cs">
+      <DependentUpon>LogbookView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Home\ManagerJobsView.xaml.cs">
       <DependentUpon>ManagerJobsView.xaml</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -154,6 +164,12 @@
     </Compile>
     <Compile Include="Views\Modals\FlightTypeModal.xaml.cs">
       <DependentUpon>FlightTypeModal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modals\JoinAirlineModal.xaml.cs">
+      <DependentUpon>JoinAirlineModal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modals\PilotsHiredModal.xaml.cs">
+      <DependentUpon>PilotsHiredModal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PrivateView.xaml.cs">
       <DependentUpon>PrivateView.xaml</DependentUpon>
@@ -181,7 +197,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ConnectorView.xaml">
+    <Page Include="Views\Home\AirlinesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Home\ConnectorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -197,7 +217,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ManagerJobsView.xaml">
+    <Page Include="Views\Home\LogbookView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Home\ManagerJobsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -218,6 +242,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Modals\FlightTypeModal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modals\JoinAirlineModal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modals\PilotsHiredModal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -420,6 +452,7 @@
       <Name>FlightJobs.Model</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

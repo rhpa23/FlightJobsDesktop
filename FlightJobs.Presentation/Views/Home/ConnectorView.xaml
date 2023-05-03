@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="FlightJobsDesktop.Views.ConnectorView"
+﻿<UserControl x:Class="FlightJobsDesktop.Views.Home.ConnectorView"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

@@ -20,7 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FlightJobsDesktop.Views
+namespace FlightJobsDesktop.Views.Home
 {
     /// <summary>
     /// Interação lógica para ConnectorView.xam
@@ -46,7 +46,7 @@ namespace FlightJobsDesktop.Views
 
         internal async void LoadUserJobData()
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowArea");
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
 
             try
             {

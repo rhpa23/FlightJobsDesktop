@@ -51,6 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AirlineService.cs" />
     <Compile Include="Services\InfraService.cs" />
+    <Compile Include="Services\Interfaces\IAirlineService.cs" />
     <Compile Include="Services\Interfaces\IInfraService.cs" />
     <Compile Include="Services\Interfaces\IJobService.cs" />
     <Compile Include="Services\Interfaces\IUserAccessService.cs" />

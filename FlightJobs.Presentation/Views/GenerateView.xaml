@@ -8,7 +8,7 @@
         xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
         xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
         mc:Ignorable="d"
-        Title="GenerateView" Height="Auto" Width="Auto" Loaded="Window_Loaded">
+        Title="Add job" Height="Auto" Width="Auto" Loaded="Window_Loaded">
     <Window.DataContext>
         <local:GenerateJobViewModel/>
     </Window.DataContext>
@@ -40,6 +40,6 @@
         <Border x:Name="BtnConfirmBorder" Style="{DynamicResource BorderButtonYellow}" Grid.Row="1" Grid.Column="1" Visibility="Hidden" HorizontalAlignment="Right" Height="36" Margin="0,0,10,0">
             <Button Name="BtnConfirm" Content="Confirm" Width="65" Height="35" Padding="0" Click="BtnConfirm_Click"/>
         </Border>
-        <notifications:NotificationArea x:Name="WindowArea" Position="BottomCenter" MaxItems="3" Grid.Row="0" VerticalAlignment="Bottom" />
+        <notifications:NotificationArea x:Name="WindowAreaGenerateJob" Position="BottomCenter" MaxItems="3" Grid.Row="0" VerticalAlignment="Bottom" />
     </Grid>
 </Window>

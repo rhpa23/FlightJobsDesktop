@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:views="clr-namespace:FlightJobsDesktop.Views"
+             xmlns:views="clr-namespace:FlightJobsDesktop.Views.Home"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d">
     <Grid>
@@ -17,10 +17,10 @@
                 <views:ManagerJobsView  />
             </TabItem>
             <TabItem Header="Logbook">
-                <Grid Background="#FFE5E5E5"/>
+                <views:LogbookView/>
             </TabItem>
             <TabItem Header="Airlines">
-                <Grid Background="#FFE5E5E5"/>
+                <views:AirlinesView/>
             </TabItem>
             <TabItem Header="Map">
                 <Grid Background="#FFE5E5E5"/>

@@ -120,9 +120,16 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
-
+            <ui:NavigationView.PaneFooter>
+                <ui:NavigationViewItem Content="Exit" Tag="ExitApp" x:Name="ExitApp"  Width="150" HorizontalAlignment="Left" MouseLeftButtonUp="ExitApp_MouseLeftButtonUp" >
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7E8;"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.PaneFooter>
             <ui:Frame x:Name="contentFrame" HorizontalAlignment="Stretch"/>
         </ui:NavigationView>
         <notifications:NotificationArea x:Name="WindowArea" Position="TopCenter" MaxItems="3" Grid.Row="1" Grid.ColumnSpan="2" />
+        <notifications:NotificationArea x:Name="WindowAreaLoading" Position="TopCenter" MaxItems="3" Grid.Row="1" Grid.ColumnSpan="2" />
     </Grid>
 </Window>

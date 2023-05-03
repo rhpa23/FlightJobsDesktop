@@ -37,7 +37,7 @@ namespace FlightJobsDesktop.Utils
         {
             var airportFileDataBase = Properties.Resources.GlobalAirportDatabase;
             List<string> lines = airportFileDataBase.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            var airportInfoList = lines.Where(line => Regex.IsMatch(line, "(^A,.*" + term?.ToUpper() + ".*$)"));
+            var airportInfoList = lines.Where(line => Regex.IsMatch(line.Substring(0,7), "(^A,.*" + term?.ToUpper() + ".*$)"));
 
             if (airportInfoList != null)
             {

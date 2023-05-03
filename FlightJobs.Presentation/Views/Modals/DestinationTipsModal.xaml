@@ -58,5 +58,6 @@
         </DockPanel>
         <Button x:Name="btnReload" Content="Reload" Width="65" Height="35" Padding="0" Margin="10" Grid.Row="1" VerticalAlignment="Bottom"  HorizontalAlignment="Right" Click="btnReload_Click" />
         <notifications:NotificationArea x:Name="ModalArea" Position="BottomCenter" MaxItems="3" Grid.Row="0" />
+        <notifications:NotificationArea x:Name="ModalAreaLoading" Position="BottomCenter" MaxItems="3" Grid.Row="0" />
     </Grid>
 </UserControl>

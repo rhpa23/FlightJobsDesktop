@@ -71,5 +71,10 @@ namespace FlightJobs.Infrastructure.Services
         {
             await _flightJobsConnectorClientAPI.RemoveJob(userId, jobId);
         }
+
+        public async Task<PaginatedJobsModel> GetLogbookUserJobs(string sortOrder, string currentSort, int pageNumber, PaginatedJobsFilterModel filterModel)
+        {
+            return await _flightJobsConnectorClientAPI.GetLogbookUserJobs(sortOrder, currentSort, pageNumber, filterModel);
+        }
     }
 }

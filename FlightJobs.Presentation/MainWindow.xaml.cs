@@ -25,18 +25,21 @@ namespace FlightJobsDesktop
         public static IAbstractFactory<IJobService> JobServiceFactory;
         public static IAbstractFactory<IUserAccessService> UserServiceFactory;
         public static IAbstractFactory<IInfraService> InfraServiceFactory;
+        public static IAbstractFactory<IAirlineService> AirlineServiceFactory;
 
         private UserSettingsViewModel _userSettings;
 
         public MainWindow(IAbstractFactory<IInfraService> factoryInfra,
                           IAbstractFactory<IJobService> factoryJob, 
-                          IAbstractFactory<IUserAccessService> factoryUser)
+                          IAbstractFactory<IUserAccessService> factoryUser,
+                          IAbstractFactory<IAirlineService> factoryAirline)
         {
             InitializeComponent();
 
             JobServiceFactory = factoryJob;
             UserServiceFactory = factoryUser;
             InfraServiceFactory = factoryInfra;
+            AirlineServiceFactory = factoryAirline;
 
             ResizeMode = ResizeMode.CanResizeWithGrip;
             
@@ -108,7 +111,7 @@ namespace FlightJobsDesktop
             DataContext = _userSettings;
         }
 
-        private void NavigationView_SelectionChanged(ModernWpf.Controls.NavigationView sender, ModernWpf.Controls.NavigationViewSelectionChangedEventArgs args)
+        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             if (args.IsSettingsSelected)
             {
@@ -116,11 +119,12 @@ namespace FlightJobsDesktop
             }
             else
             {
-                var selectedItem = (ModernWpf.Controls.NavigationViewItem)args.SelectedItem;
+                var selectedItem = (NavigationViewItem)args.SelectedItem;
                 if (selectedItem != null)
                 {
+                    string tag = (string)selectedItem.Tag;
                     sender.Header = selectedItem.Content;
-                    string pageName = "FlightJobsDesktop.Views." + (string)selectedItem.Tag;
+                    string pageName = "FlightJobsDesktop.Views." + tag;
                     NavigateToPageControl(pageName);
                 }
             }
@@ -131,7 +135,7 @@ namespace FlightJobsDesktop
             var loginWindow = new Login(InfraServiceFactory, 
                                         JobServiceFactory, 
                                         UserServiceFactory, 
-                                        new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory));
+                                        new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, AirlineServiceFactory));
 
             loginWindow.AutoSingIn = false;
             loginWindow.Show();
@@ -143,6 +147,11 @@ namespace FlightJobsDesktop
             }
 
             Close();
+        }
+
+        private void ExitApp_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
 
 

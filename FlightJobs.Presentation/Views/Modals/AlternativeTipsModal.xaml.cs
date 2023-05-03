@@ -37,7 +37,7 @@ namespace FlightJobsDesktop.Views.Modals
 
         private async Task LoadDataGrid()
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "ModalArea");
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "ModalAreaLoading");
             try
             {
                 if (!string.IsNullOrEmpty(_arrivalICAO) && _arrivalICAO.Length > 3)

@@ -51,7 +51,7 @@ namespace FlightJobsDesktop.Views.Modals
 
         private async Task LoadDataGrid()
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "ModalArea");
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "ModalAreaLoading");
             try
             {
                 if (!string.IsNullOrEmpty(_departureICAO) && _departureICAO.Length > 3)
@@ -82,7 +82,7 @@ namespace FlightJobsDesktop.Views.Modals
 
         async void CloneJob(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "ModalArea");
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "ModalAreaLoading");
             try
             {
                 var jobId = (long)((Button)sender).Tag;

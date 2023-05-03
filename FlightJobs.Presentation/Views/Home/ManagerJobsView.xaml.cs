@@ -19,7 +19,7 @@ using FlightJobs.Model.Models;
 using System.Windows.Input;
 using FlightJobs.Infrastructure.Services.Interfaces;
 
-namespace FlightJobsDesktop.Views
+namespace FlightJobsDesktop.Views.Home
 {
     /// <summary>
     /// Interação lógica para PendingJobs.xam
@@ -259,7 +259,7 @@ namespace FlightJobsDesktop.Views
 
         internal void LoadManagerView()
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowArea");
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
             try
             {
                 string url = _mapUrl + string.Format(_mapUrlQuery, "", "", "", AppProperties.UserLogin.UserName);
@@ -269,7 +269,8 @@ namespace FlightJobsDesktop.Views
                 _generateJobViewModel.PendingJobs = userJobsListView;
                 
                 DataContext = _generateJobViewModel;
-
+                
+                lsvPendingJobs.ItemsSource = _generateJobViewModel.PendingJobs;
                 lsvPendingJobs.SelectedIndex = AppProperties.UserJobs.ToList().FindIndex(x => x.IsActivated);
             }
             catch (Exception)
@@ -294,7 +295,7 @@ namespace FlightJobsDesktop.Views
 
         private async void lsvPendingJobs_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowArea");
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
             try
             {
                 var selected = (CurrentJobViewModel)lsvPendingJobs.SelectedValue;

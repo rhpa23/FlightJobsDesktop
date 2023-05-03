@@ -98,7 +98,7 @@ namespace FlightJobsDesktop.Views.Account
 
         private async Task<bool> SignIn(AspnetUserViewModel userViewModel, bool discreteLogin)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowArea");
+            //var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
@@ -120,12 +120,11 @@ namespace FlightJobsDesktop.Views.Account
             }
             catch (Exception)
             {
-                //log.Error($"btnLogin_Click failed.", ex);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
             }
             finally
             {
-                progress.Dispose();
+                //progress.Dispose();
                 Mouse.OverrideCursor = Cursors.Arrow;
                 EnableControls(true);
             }

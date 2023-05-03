@@ -4,11 +4,11 @@ namespace FlightJobs.Model.Models
 {
     public class AirlineModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
 
         public string Description { get; set; }
 
-        //[Required(ErrorMessage = "Country is required")]
         public string Country { get; set; }
 
         public long Salary { get; set; }

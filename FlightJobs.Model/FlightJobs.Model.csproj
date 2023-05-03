@@ -50,10 +50,13 @@
     <Compile Include="Models\JobListItemModel.cs" />
     <Compile Include="Models\JobModel.cs" />
     <Compile Include="Models\LoginResponseModel.cs" />
+    <Compile Include="Models\PaginatedAirlinesModel.cs" />
+    <Compile Include="Models\PaginatedJobsModel.cs" />
     <Compile Include="Models\UserRegisterModel.cs" />
     <Compile Include="Models\SearchJobTipsModel.cs" />
     <Compile Include="Models\StartJobResponseModel.cs" />
     <Compile Include="Models\UserSettingsModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserStatisticsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

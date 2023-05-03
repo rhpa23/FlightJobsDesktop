@@ -33,6 +33,7 @@ namespace FlightJobsDesktop
             services.AddAbstractFactory<IJobService, JobService>();
             services.AddAbstractFactory<IUserAccessService, UserAccessService>();
             services.AddAbstractFactory<IInfraService, InfraService>();
+            services.AddAbstractFactory<IAirlineService, AirlineService>();
 
             services.AddSingleton<MainWindow>();
             services.AddSingleton<Login>();

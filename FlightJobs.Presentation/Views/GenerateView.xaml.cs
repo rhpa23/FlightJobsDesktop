@@ -89,7 +89,7 @@ namespace FlightJobsDesktop.Views
             }
             catch (Exception)
             {
-                _notificationManager.Show("Error", "Data could not be loaded. Please try again later.", NotificationType.Error, "WindowArea");
+                _notificationManager.Show("Error", "Data could not be loaded. Please try again later.", NotificationType.Error, "WindowAreaGenerateJob");
             }
         }
 
@@ -117,7 +117,7 @@ namespace FlightJobsDesktop.Views
 
         private async void BtnConfirm_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowArea");
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
             BtnConfirm.IsEnabled = false;
             try
             {
@@ -130,19 +130,19 @@ namespace FlightJobsDesktop.Views
                     confirmJobModel.UserId = AppProperties.UserLogin.UserId;
 
                     await _jobService.ConfirmJob(confirmJobModel);
-                    _notificationManager.Show("Success", "Confirmed with success.", NotificationType.Success, "WindowArea");
+                    _notificationManager.Show("Success", "Confirmed with success.", NotificationType.Success, "WindowAreaGenerateJob");
                     progress.Dispose();
                     await Task.Delay(3000);
                     DialogResult = true;
                 }
                 else
                 {
-                    _notificationManager.Show("Warning", "Select jobs to confirm.", NotificationType.Warning, "WindowArea");
+                    _notificationManager.Show("Warning", "Select jobs to confirm.", NotificationType.Warning, "WindowAreaGenerateJob");
                 }
             }
             catch (Exception)
             {
-                _notificationManager.Show("Error", "Data could not be Saved. Please try again later.", NotificationType.Error, "WindowArea");
+                _notificationManager.Show("Error", "Data could not be Saved. Please try again later.", NotificationType.Error, "WindowAreaGenerateJob");
             }
             finally
             {

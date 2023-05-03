@@ -34,7 +34,7 @@ namespace FlightJobsDesktop.Views.Account
         private async void btnRegister_Click(object sender, RoutedEventArgs e)
         {
             btnRegister.IsEnabled = false;
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowArea");
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
             try
             {
                 _aspnetUser = (AspnetUserViewModel)DataContext;
