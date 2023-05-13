@@ -18,6 +18,6 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
         Task<IList<JobListItemModel>> GenerateConfirmJobs(GenerateJobModel generateJobData);
         Task ConfirmJob(ConfirmJobModel confirmJobModel);
         Task RemoveJob(string userId, long jobId);
-        Task<PaginatedJobsModel> GetLogbookUserJobs(string sortOrder, string currentSort, int pageNumber, PaginatedJobsFilterModel filterModel);
+        Task<PaginatedJobsModel> GetLogbookUserJobs(string sortOrder, string currentSort, int pageNumber, FilterJobsModel filterModel);
     }
 }

@@ -8,19 +8,10 @@ using ModernWpf.Controls;
 using Notification.Wpf;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FlightJobsDesktop.Views.Home
 {
@@ -52,7 +43,7 @@ namespace FlightJobsDesktop.Views.Home
                 var logbook = (LogbookViewModel)DataContext;
 
                 var filter = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg)
-                                      .Map<FilterLogbook, PaginatedJobsFilterModel>(logbook.Filter);
+                                      .Map<FilterLogbook, FilterJobsModel>(logbook.Filter);
 
                 filter.UserId = AppProperties.UserLogin.UserId;
                 filter.DepartureICAO = !string.IsNullOrEmpty(filter.DepartureICAO) && filter.DepartureICAO.Length >= 4 ? filter.DepartureICAO.Substring(0, 4) : "";

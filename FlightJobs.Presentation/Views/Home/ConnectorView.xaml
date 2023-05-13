@@ -217,9 +217,6 @@
                     <ListBoxItem>
                         <Label Content="[Moq] Before start set the aircraft payload to 11111111"/>
                     </ListBoxItem>
-
-
-
                 </ListBox>
             </Border>
         </DockPanel>

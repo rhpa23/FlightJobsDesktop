@@ -106,11 +106,13 @@
     <Compile Include="ValidationRules\EmailValidationRule.cs" />
     <Compile Include="ValidationRules\MinimumCharacterRule.cs" />
     <Compile Include="ViewModels\AirlineFilterViewModel.cs" />
+    <Compile Include="ViewModels\AirlineDebtsViewModel.cs" />
     <Compile Include="ViewModels\AirlineViewModel.cs" />
     <Compile Include="ViewModels\AirportViewModel.cs" />
     <Compile Include="ViewModels\CapacityViewModel.cs" />
     <Compile Include="ViewModels\GenerateJobViewModel.cs" />
     <Compile Include="ViewModels\JobItemViewModel.cs" />
+    <Compile Include="ViewModels\PaginatedAirlineJobLedgerViewModel.cs" />
     <Compile Include="ViewModels\LogbookViewModel.cs" />
     <Compile Include="ViewModels\PilotsHiredViewModel.cs" />
     <Compile Include="ViewModels\TipsDataGridViewModel.cs" />
@@ -149,6 +151,15 @@
     <Compile Include="Views\Home\ManagerJobsView.xaml.cs">
       <DependentUpon>ManagerJobsView.xaml</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Modals\AirlineDebtModal.xaml.cs">
+      <DependentUpon>AirlineDebtModal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modals\AirlineEditModal.xaml.cs">
+      <DependentUpon>AirlineEditModal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modals\AirlineJobsLedgerModal.xaml.cs">
+      <DependentUpon>AirlineJobsLedgerModal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Modals\ConfirmJobModal.xaml.cs">
       <DependentUpon>ConfirmJobModal.xaml</DependentUpon>
@@ -222,6 +233,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Home\ManagerJobsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modals\AirlineDebtModal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modals\AirlineEditModal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modals\AirlineJobsLedgerModal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -429,6 +452,213 @@
     <Resource Include="img\types\cargo.jpg" />
     <Resource Include="img\types\general-aviation.jpg" />
     <Resource Include="img\types\heavy.jpg" />
+    <Resource Include="img\background\airline-banner.jpg" />
+    <Resource Include="img\flags\Afghanistan.jpg" />
+    <Resource Include="img\flags\Albania.jpg" />
+    <Resource Include="img\flags\Algeria.jpg" />
+    <Resource Include="img\flags\Andorra.jpg" />
+    <Resource Include="img\flags\Angola.jpg" />
+    <Resource Include="img\flags\Antigua_and_Barbuda.jpg" />
+    <Resource Include="img\flags\Argentina.jpg" />
+    <Resource Include="img\flags\Armenia.jpg" />
+    <Resource Include="img\flags\Australia.jpg" />
+    <Resource Include="img\flags\Austria.jpg" />
+    <Resource Include="img\flags\Azerbaijan.jpg" />
+    <Resource Include="img\flags\Bahamas.jpg" />
+    <Resource Include="img\flags\Bahrain.jpg" />
+    <Resource Include="img\flags\Bangladesh.jpg" />
+    <Resource Include="img\flags\Barbados.jpg" />
+    <Resource Include="img\flags\Belarus.jpg" />
+    <Resource Include="img\flags\Belgium.jpg" />
+    <Resource Include="img\flags\Belize.jpg" />
+    <Resource Include="img\flags\Benin.jpg" />
+    <Resource Include="img\flags\Bermuda.jpg" />
+    <Resource Include="img\flags\Bhutan.jpg" />
+    <Resource Include="img\flags\Bolivia.jpg" />
+    <Resource Include="img\flags\Bosnia_and_Herzegovina.jpg" />
+    <Resource Include="img\flags\Botswana.jpg" />
+    <Resource Include="img\flags\Brazil.jpg" />
+    <Resource Include="img\flags\Brunei.jpg" />
+    <Resource Include="img\flags\Bulgaria.jpg" />
+    <Resource Include="img\flags\Burkina_Faso.jpg" />
+    <Resource Include="img\flags\Burundi.jpg" />
+    <Resource Include="img\flags\Cambodia.jpg" />
+    <Resource Include="img\flags\Cameroon.jpg" />
+    <Resource Include="img\flags\Canada.jpg" />
+    <Resource Include="img\flags\Cape_Verde.jpg" />
+    <Resource Include="img\flags\Cayman_Islands.jpg" />
+    <Resource Include="img\flags\Central_African_Republic.jpg" />
+    <Resource Include="img\flags\Chad.jpg" />
+    <Resource Include="img\flags\Chile.jpg" />
+    <Resource Include="img\flags\China.jpg" />
+    <Resource Include="img\flags\Colombia.jpg" />
+    <Resource Include="img\flags\Comoros.jpg" />
+    <Resource Include="img\flags\Cook_Islands.jpg" />
+    <Resource Include="img\flags\Costa_Rica.jpg" />
+    <Resource Include="img\flags\Croatia.jpg" />
+    <Resource Include="img\flags\Cuba.jpg" />
+    <Resource Include="img\flags\Cyprus.jpg" />
+    <Resource Include="img\flags\Czech_Republic.jpg" />
+    <Resource Include="img\flags\Democratic_Republic_of_the_Congo.jpg" />
+    <Resource Include="img\flags\Denmark.jpg" />
+    <Resource Include="img\flags\Djibouti.jpg" />
+    <Resource Include="img\flags\Dominica.jpg" />
+    <Resource Include="img\flags\Dominican_Republic.jpg" />
+    <Resource Include="img\flags\East_Timor.jpg" />
+    <Resource Include="img\flags\Ecuador.jpg" />
+    <Resource Include="img\flags\Egypt.jpg" />
+    <Resource Include="img\flags\El_Salvador.jpg" />
+    <Resource Include="img\flags\England.jpg" />
+    <Resource Include="img\flags\Equatorial_Guinea.jpg" />
+    <Resource Include="img\flags\Eritrea.jpg" />
+    <Resource Include="img\flags\Estonia.jpg" />
+    <Resource Include="img\flags\Ethiopia.jpg" />
+    <Resource Include="img\flags\Fiji.jpg" />
+    <Resource Include="img\flags\Finland.jpg" />
+    <Resource Include="img\flags\France.jpg" />
+    <Resource Include="img\flags\Gabon.jpg" />
+    <Resource Include="img\flags\Georgia.jpg" />
+    <Resource Include="img\flags\Germany.jpg" />
+    <Resource Include="img\flags\Ghana.jpg" />
+    <Resource Include="img\flags\Greece.jpg" />
+    <Resource Include="img\flags\Greenland.jpg" />
+    <Resource Include="img\flags\Grenada.jpg" />
+    <Resource Include="img\flags\Guatemala.jpg" />
+    <Resource Include="img\flags\Guinea_Bissau.jpg" />
+    <Resource Include="img\flags\Guinea.jpg" />
+    <Resource Include="img\flags\Guyana.jpg" />
+    <Resource Include="img\flags\Haiti.jpg" />
+    <Resource Include="img\flags\Honduras.jpg" />
+    <Resource Include="img\flags\Hong_Kong.jpg" />
+    <Resource Include="img\flags\Hungary.jpg" />
+    <Resource Include="img\flags\Iceland.jpg" />
+    <Resource Include="img\flags\India.jpg" />
+    <Resource Include="img\flags\Indonesia.jpg" />
+    <Resource Include="img\flags\Iran.jpg" />
+    <Resource Include="img\flags\Iraq.jpg" />
+    <Resource Include="img\flags\Ireland.jpg" />
+    <Resource Include="img\flags\Israel.jpg" />
+    <Resource Include="img\flags\Italy.jpg" />
+    <Resource Include="img\flags\Ivorycoast.jpg" />
+    <Resource Include="img\flags\Jamaica.jpg" />
+    <Resource Include="img\flags\Japan.jpg" />
+    <Resource Include="img\flags\Jordan.jpg" />
+    <Resource Include="img\flags\Kazakhstan.jpg" />
+    <Resource Include="img\flags\Kenya.jpg" />
+    <Resource Include="img\flags\Kiribati.jpg" />
+    <Resource Include="img\flags\Kuwait.jpg" />
+    <Resource Include="img\flags\Kyrgyzstan.jpg" />
+    <Resource Include="img\flags\Laos.jpg" />
+    <Resource Include="img\flags\Latvia.jpg" />
+    <Resource Include="img\flags\Lebanon.jpg" />
+    <Resource Include="img\flags\Lesotho.jpg" />
+    <Resource Include="img\flags\Liberia.jpg" />
+    <Resource Include="img\flags\Libya.jpg" />
+    <Resource Include="img\flags\Liechtenstein.jpg" />
+    <Resource Include="img\flags\Lithuania.jpg" />
+    <Resource Include="img\flags\Luxembourg.jpg" />
+    <Resource Include="img\flags\Macedonia.jpg" />
+    <Resource Include="img\flags\Madagascar.jpg" />
+    <Resource Include="img\flags\Malawi.jpg" />
+    <Resource Include="img\flags\Malaysia.jpg" />
+    <Resource Include="img\flags\Maldives.jpg" />
+    <Resource Include="img\flags\Mali.jpg" />
+    <Resource Include="img\flags\Malta.jpg" />
+    <Resource Include="img\flags\Mauritania.jpg" />
+    <Resource Include="img\flags\Mauritius.jpg" />
+    <Resource Include="img\flags\Mexico.jpg" />
+    <Resource Include="img\flags\Moldova.jpg" />
+    <Resource Include="img\flags\Monaco.jpg" />
+    <Resource Include="img\flags\Mongolia.jpg" />
+    <Resource Include="img\flags\Montenegro.jpg" />
+    <Resource Include="img\flags\Morocco.jpg" />
+    <Resource Include="img\flags\Mozambique.jpg" />
+    <Resource Include="img\flags\Myanmar.jpg" />
+    <Resource Include="img\flags\Namibia.jpg" />
+    <Resource Include="img\flags\Nauru.jpg" />
+    <Resource Include="img\flags\Nepal.jpg" />
+    <Resource Include="img\flags\Netherlands.jpg" />
+    <Resource Include="img\flags\New_Caledonia.jpg" />
+    <Resource Include="img\flags\New_Zealand.jpg" />
+    <Resource Include="img\flags\Nicaragua.jpg" />
+    <Resource Include="img\flags\Niger.jpg" />
+    <Resource Include="img\flags\Nigeria.jpg" />
+    <Resource Include="img\flags\North_Korea.jpg" />
+    <Resource Include="img\flags\Norway.jpg" />
+    <Resource Include="img\flags\Oman.jpg" />
+    <Resource Include="img\flags\Pakistan.jpg" />
+    <Resource Include="img\flags\Palau.jpg" />
+    <Resource Include="img\flags\Palestine.jpg" />
+    <Resource Include="img\flags\Panama.jpg" />
+    <Resource Include="img\flags\Papua_New_Guinea.jpg" />
+    <Resource Include="img\flags\Paraguay.jpg" />
+    <Resource Include="img\flags\Peru.jpg" />
+    <Resource Include="img\flags\Philippines.jpg" />
+    <Resource Include="img\flags\Poland.jpg" />
+    <Resource Include="img\flags\Portugal.jpg" />
+    <Resource Include="img\flags\Puerto_Rico.jpg" />
+    <Resource Include="img\flags\Qatar.jpg" />
+    <Resource Include="img\flags\Republic_of_the_Congo.jpg" />
+    <Resource Include="img\flags\Romania.jpg" />
+    <Resource Include="img\flags\Russia.jpg" />
+    <Resource Include="img\flags\Rwanda.jpg" />
+    <Resource Include="img\flags\Saint_Kitts_and_Nevis.jpg" />
+    <Resource Include="img\flags\Saint_Lucia.jpg" />
+    <Resource Include="img\flags\Saint_Vincent_and_the_Grenadines.jpg" />
+    <Resource Include="img\flags\Samoa.jpg" />
+    <Resource Include="img\flags\San_Marino.jpg" />
+    <Resource Include="img\flags\Sao_Tome_and_Principe.jpg" />
+    <Resource Include="img\flags\Saudi Arabia.jpg" />
+    <Resource Include="img\flags\Scotland.jpg" />
+    <Resource Include="img\flags\Senegal.jpg" />
+    <Resource Include="img\flags\Serbia.jpg" />
+    <Resource Include="img\flags\Seychelles.jpg" />
+    <Resource Include="img\flags\Sierra_Leone.jpg" />
+    <Resource Include="img\flags\Singapore.jpg" />
+    <Resource Include="img\flags\Slovakia.jpg" />
+    <Resource Include="img\flags\Slovenia.jpg" />
+    <Resource Include="img\flags\Solomon_Islands.jpg" />
+    <Resource Include="img\flags\Somalia.jpg" />
+    <Resource Include="img\flags\South_Africa.jpg" />
+    <Resource Include="img\flags\South_Korea.jpg" />
+    <Resource Include="img\flags\South_Sudan.jpg" />
+    <Resource Include="img\flags\Spain.jpg" />
+    <Resource Include="img\flags\Sri_Lanka.jpg" />
+    <Resource Include="img\flags\Sudan.jpg" />
+    <Resource Include="img\flags\Suriname.jpg" />
+    <Resource Include="img\flags\Swaziland.jpg" />
+    <Resource Include="img\flags\Sweden.jpg" />
+    <Resource Include="img\flags\Switzerland.jpg" />
+    <Resource Include="img\flags\Syria.jpg" />
+    <Resource Include="img\flags\Taiwan.jpg" />
+    <Resource Include="img\flags\Tajikistan.jpg" />
+    <Resource Include="img\flags\Tanzania.jpg" />
+    <Resource Include="img\flags\Thailand.jpg" />
+    <Resource Include="img\flags\theGambia.jpg" />
+    <Resource Include="img\flags\Togo.jpg" />
+    <Resource Include="img\flags\Tonga.jpg" />
+    <Resource Include="img\flags\Trinidad_and_Tobago.jpg" />
+    <Resource Include="img\flags\Tunisia.jpg" />
+    <Resource Include="img\flags\Turkey.jpg" />
+    <Resource Include="img\flags\Turkmenistan.jpg" />
+    <Resource Include="img\flags\Tuvalu.jpg" />
+    <Resource Include="img\flags\Uganda.jpg" />
+    <Resource Include="img\flags\Ukraine.jpg" />
+    <Resource Include="img\flags\United_Arab_Emirates.jpg" />
+    <Resource Include="img\flags\United_Kingdom.jpg" />
+    <Resource Include="img\flags\United_States.jpg" />
+    <Resource Include="img\flags\Uruguay.jpg" />
+    <Resource Include="img\flags\Uzbekistan.jpg" />
+    <Resource Include="img\flags\Vanuatu.jpg" />
+    <Resource Include="img\flags\Venezuela.jpg" />
+    <Resource Include="img\flags\Vietnam.jpg" />
+    <Resource Include="img\flags\Wales.jpg" />
+    <Resource Include="img\flags\Yemen.jpg" />
+    <Resource Include="img\flags\Zambia.jpg" />
+    <Resource Include="img\flags\Zimbabwe.jpg" />
+    <Content Include="img\LogoDefault.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="web\img\arrival.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

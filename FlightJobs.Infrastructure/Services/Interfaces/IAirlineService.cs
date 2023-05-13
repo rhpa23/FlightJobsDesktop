@@ -8,5 +8,9 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
     {
         Task<PaginatedAirlinersModel> GetByFilter(string sortOrder, string currentSort, int pageNumber, PaginatedAirlinersFilterModel filterModel);
         Task<IList<UserModel>> GetAirlinePilotsHired(int airlineId);
+        Task<bool> UpdateAirline(AirlineModel airline, string userId);
+        Task<AirlineModel> CreateAirline(AirlineModel airline, string userId);
+        Task<bool> PayAirlineDebts(int airlineId, string userId);
+        Task<PaginatedAirlineJobLedgerModel> GetAirlineLedger(int airlineId, int pageNumber, FilterJobsModel filterJob);
     }
 }

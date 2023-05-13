@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FlightJobs.Model.Models
 {
@@ -27,12 +28,14 @@ namespace FlightJobs.Model.Models
 
         public string UserId { get; set; }
 
-        //public StatisticsDbModel OwnerUserStatistics { get; set; }
+        public UserModel OwnerUser { get; set; }
+
+        public IList<UserModel> HiredPilots { get; set; } = new List<UserModel>();
 
         public long DebtValue { get; set; }
 
         public DateTime DebtMaturityDate { get; set; }
 
-        //public List<AirlineFboDbModel> HiredFBOs { get; internal set; }
+        public IList<AirlineFboDbModel> HiredFBOs { get; set; } = new List<AirlineFboDbModel>();
     }
 }

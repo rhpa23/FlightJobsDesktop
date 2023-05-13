@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enum\AviationType.cs" />
+    <Compile Include="Models\AirlineFboDbModel.cs" />
+    <Compile Include="Models\AirlineJobLedgerModel.cs" />
     <Compile Include="Models\AirlineModel.cs" />
     <Compile Include="Models\ConfirmJobModel.cs" />
     <Compile Include="Models\CustomPlaneCapacityModel.cs" />
@@ -50,6 +52,7 @@
     <Compile Include="Models\JobListItemModel.cs" />
     <Compile Include="Models\JobModel.cs" />
     <Compile Include="Models\LoginResponseModel.cs" />
+    <Compile Include="Models\PaginatedAirlineJobLedgerModel.cs" />
     <Compile Include="Models\PaginatedAirlinesModel.cs" />
     <Compile Include="Models\PaginatedJobsModel.cs" />
     <Compile Include="Models\UserRegisterModel.cs" />

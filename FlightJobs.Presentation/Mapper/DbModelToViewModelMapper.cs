@@ -15,8 +15,12 @@ namespace FlightJobsDesktop.Mapper
             if (!_isInitialized)
             {
                 MapperCfg = new MapperConfiguration(cfg => {
+                    cfg.CreateMap<PaginatedAirlineJobLedgerModel, PaginatedAirlineJobLedgerViewModel>();
+                    cfg.CreateMap<AirlineJobLedgerModel, AirlineJobLedgerViewModel>();
+                    cfg.CreateMap<AirlineModel, AirlineDebtsViewModel>();
                     cfg.CreateMap<UserModel, PilotHiredViewModel>();
                     cfg.CreateMap<AirlineModel, AirlineViewModel>()
+                          .ForMember(dest => dest.OwnerUserId, opt => opt.MapFrom(src => src.UserId))
                           .ForMember(dest => dest.MinimumScoreToHire, opt => opt.MapFrom(src => src.Score));
                     cfg.CreateMap<PaginatedAirlinersModel, AirlineFilterViewModel>();
                     cfg.CreateMap<JobModel, CurrentJobViewModel>();

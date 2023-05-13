@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="FlightJobsDesktop.Views.Modals.AirlineJobsLedgerModal"
+      xmlns:ui="http://schemas.modernwpf.com/2019"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
+      xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
+      mc:Ignorable="d" 
+      MinHeight="400" MinWidth="1180" Loaded="UserControl_Loaded">
+    <UserControl.DataContext>
+        <local:PaginatedAirlineJobLedgerViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" />
+            <RowDefinition />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        <Border x:Name="BtnFilterBorder" HorizontalAlignment="Right" Grid.Row="0"  Width="70" Height="30" Margin="0,30,10,0" Style="{DynamicResource BorderButtonYellow}">
+            <Button x:Name="BtnFilter" Content="Filter" Width="70" Height="30" >
+                <ui:FlyoutService.Flyout>
+                    <ui:Flyout x:Name="FlyoutFilterLogbook" Placement="LeftEdgeAlignedTop">
+                        <StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <TextBox Name="txtDeparture" Text="{Binding Path=Filter.DepartureICAO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ui:ControlHelper.PlaceholderText="Departure" 
+                                    ui:ControlHelper.Header="Departure" Margin="10,25,0,0" Width="250"/>
+                                <TextBox Name="txtArrival" Text="{Binding Path=Filter.ArrivalICAO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ui:ControlHelper.PlaceholderText="Arrival" 
+                                    ui:ControlHelper.Header="Arrival" Margin="10,25,0,0" Width="250"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Border x:Name="BtnApplyFilterBorder" Grid.Column="4" Width="60" Height="30" Margin="10,15,0,0" Style="{DynamicResource BorderButtonYellow}">
+                                    <Button x:Name="BtnApplyFilter" Content="Apply" Width="60" Height="30" Click="BtnApplyFilter_Click" />
+                                </Border>
+                                <Border x:Name="BtnFilterClearBorder" Grid.Column="4" Width="60" Height="30" Margin="20,15,0,0" Style="{DynamicResource BorderButtonYellow}">
+                                    <Button x:Name="BtnFilterClear" Content="Clear" Width="60" Height="30" Click="BtnFilterClear_Click"  />
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:Flyout>
+                </ui:FlyoutService.Flyout>
+            </Button>
+        </Border>
+        <Border Style="{StaticResource LightBorderBoxStyle}" Margin="5,10,5,5" Grid.Row="1" VerticalAlignment="Stretch">
+            <DataGrid ItemsSource="{Binding AirlineJobs}" AutoGenerateColumns="False" HeadersVisibility="Column" CanUserSortColumns="False" CanUserResizeColumns="True"
+                  IsReadOnly="True" CanUserAddRows="False">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="FontSize" Value="10"/>
+                        <Setter Property="FontWeight" Value="DemiBold"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Background" Value="Black"/>
+                        <Setter Property="Padding" Value="10,10,0,10"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Departure" Width="60" Binding="{Binding Job.DepartureICAO}" FontSize="10"/>
+                    <DataGridTextColumn Header="Arrival" Width="55" Binding="{Binding Job.ArrivalICAO}" FontSize="10" />
+                    <DataGridTextColumn Header="Model" Width="140" Binding="{Binding Job.ModelDescription}" FontSize="10" />
+                    <DataGridTextColumn Header="Distance" Width="55" Binding="{Binding Job.DistComplete}" FontSize="10"/>
+                    <DataGridTextColumn Header="Flight time" Width="60" Binding="{Binding Job.FlightTime}" FontSize="10"/>
+                    <DataGridTextColumn Header="Pax" Width="40" Binding="{Binding Job.Pax}" FontSize="10"/>
+                    <DataGridTextColumn Header="Payload" Width="55" Binding="{Binding Job.PayloadComplete}" FontSize="10"/>
+                    <DataGridTextColumn Header="Fuel loaded" Width="65" Binding="{Binding Job.StartFuelWeightComplete}" FontSize="10"/>
+                    <DataGridTextColumn Header="Fuel burned" Width="65" Binding="{Binding Job.UsedFuelWeightComplete}" FontSize="10"/>
+                    <DataGridTextColumn Header="Fuel price" Width="60" Binding="{Binding FuelPriceComplete}" FontSize="10"/>
+                    <DataGridTextColumn Header="Fuel cost" Width="70" Binding="{Binding FuelCostComplete}" FontSize="10" Foreground="Red"/>
+                    <DataGridTextColumn Header="Fuel cost / NM" Width="76" Binding="{Binding FuelCostPerNmComplete}" FontSize="10" />
+                    <DataGridTextColumn Header="Ground crew" Width="70" Binding="{Binding GroundCrewCostComplete}" FontSize="10" Foreground="Red"/>
+                    <DataGridTextColumn Header="Flight crew" Width="60" Binding="{Binding FlightCrewCostComplete}" FontSize="10" Foreground="Red"/>
+                    <DataGridTextColumn Header="Flight attendant" Width="85" Binding="{Binding FlightAttendantCostComplete}" FontSize="10" Foreground="Red"/>
+                    <DataGridTextColumn Header="Total crew labor" Width="85" Binding="{Binding TotalCrewCostLaborComplete}" FontSize="10" Foreground="Red"/>
+                    <DataGridTextColumn Header="Total flight" Width="75" Binding="{Binding TotalFlightCostComplete}" FontSize="10" Foreground="Red"/>
+                    <DataGridTextColumn Header="Revenue earned" Width="85" Binding="{Binding RevenueEarnedComplete}" FontSize="10"/>
+                    <DataGridTextColumn Header="Flight income" Width="80" Binding="{Binding FlightIncomeComplete}" FontSize="10" Foreground="Green"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+        <Grid Grid.Row="2" Margin="5,10,5,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="12" >
+                <Run Text="{Binding Path=PageSize}"/><Run Text=" Jobs of "/><Run Text="{Binding Path=TotalItemCount}"/>
+            </TextBlock>
+            <Button Grid.Row="1" Grid.Column="1" x:Name="BtnFirst" Width="20" Padding="0" Margin="0" IsEnabled="{Binding HasPreviousPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    HorizontalContentAlignment="Center" HorizontalAlignment="Center" Click="BtnFirst_Click">
+                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEB9E;"/>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="2" x:Name="BtnPrevious" Width="20" Padding="0" Margin="0" IsEnabled="{Binding HasPreviousPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    HorizontalContentAlignment="Center" HorizontalAlignment="Center" Click="BtnPrevious_Click">
+                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE76B;"/>
+            </Button>
+            <TextBlock Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="12" >
+                <Run Text="Page: "/><Run Text="{Binding Path=PageNumber}"/><Run Text=" of "/><Run Text="{Binding Path=PageCount}"/>
+            </TextBlock>
+            <Button Grid.Row="1" Grid.Column="4" x:Name="BtnNext" Width="20" Padding="0" Margin="0" IsEnabled="{Binding HasNextPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    HorizontalContentAlignment="Center" HorizontalAlignment="Center" Click="BtnNext_Click">
+                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE76C;"/>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="5" x:Name="BtnLast" Width="20" Padding="0" Margin="0" IsEnabled="{Binding HasNextPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    HorizontalContentAlignment="Center" HorizontalAlignment="Center" Click="BtnLast_Click">
+                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEB9D;"/>
+            </Button>
+        </Grid>
+        <notifications:NotificationArea x:Name="WindowAreaAirlineLedger" Position="BottomCenter" MaxItems="3" Grid.Row="1"  />
+        <notifications:NotificationArea x:Name="WindowAreaLoadingLedger" Position="TopCenter" MaxItems="3" Grid.Row="1"  />
+    </Grid>
+</UserControl>

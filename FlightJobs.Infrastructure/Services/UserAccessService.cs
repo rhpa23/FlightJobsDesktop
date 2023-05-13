@@ -1,6 +1,7 @@
 ﻿using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace FlightJobs.Infrastructure.Services
 {
@@ -9,6 +10,12 @@ namespace FlightJobs.Infrastructure.Services
         public async Task<UserStatisticsModel> GetUserStatistics(string userId)
         {
             var userStatisticsData = await _flightJobsConnectorClientAPI.GetUserStatistics(userId);
+            if (userStatisticsData.Airline != null)
+            {
+                userStatisticsData.Airline.HiredPilots = await new AirlineService().GetAirlinePilotsHired(userStatisticsData.Airline.Id);
+                userStatisticsData.Airline.HiredFBOs = await new AirlineService().GetAirlineFBOs(userStatisticsData.Airline.Id);
+                userStatisticsData.Airline.OwnerUser = userStatisticsData.Airline.HiredPilots.FirstOrDefault(x => x.Id == userStatisticsData.Airline.UserId);
+            }
             AppProperties.UserStatistics = userStatisticsData;
             return userStatisticsData;
         }

@@ -12,9 +12,35 @@ namespace FlightJobs.Infrastructure.Services
             return await _flightJobsConnectorClientAPI.GetAirlinePilotsHired(airlineId);
         }
 
+        public async Task<IList<AirlineFboDbModel>> GetAirlineFBOs(int airlineId)
+        {
+            return await _flightJobsConnectorClientAPI.GetAirlineFBOs(airlineId);
+        }
+
         public async Task<PaginatedAirlinersModel> GetByFilter(string sortOrder, string currentSort, int pageNumber, PaginatedAirlinersFilterModel filterModel)
         {
             return await _flightJobsConnectorClientAPI.GetAirliners(sortOrder, currentSort, pageNumber, filterModel);
+        }
+
+        public async Task<bool> UpdateAirline(AirlineModel airline, string userId)
+        {
+            return await _flightJobsConnectorClientAPI.UpdateAirline(airline, userId);
+        }
+
+        public async Task<AirlineModel> CreateAirline(AirlineModel airline, string userId)
+        {
+            return await _flightJobsConnectorClientAPI.CreateAirline(airline, userId);
+        }
+
+        public async Task<bool> PayAirlineDebts(int airlineId, string userId)
+        {
+            return await _flightJobsConnectorClientAPI.PayAirlineDebts(new AirlineModel() { Id = airlineId }, userId);
+        }
+
+        public async Task<PaginatedAirlineJobLedgerModel> GetAirlineLedger(int airlineId, int pageNumber, FilterJobsModel filterJob)
+        {
+            if (filterJob == null) filterJob = new FilterJobsModel();
+            return await _flightJobsConnectorClientAPI.GetAirlineLedger(airlineId, pageNumber, filterJob);
         }
     }
 }

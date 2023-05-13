@@ -19,7 +19,7 @@ namespace FlightJobs.Model.Models
         public IList<JobModel> Jobs { get; set; }
     }
 
-    public class PaginatedJobsFilterModel
+    public class FilterJobsModel
     {
         public string DepartureICAO { get; set; }
         public string ArrivalICAO { get; set; }

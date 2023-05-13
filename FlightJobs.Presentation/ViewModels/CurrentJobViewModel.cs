@@ -38,10 +38,12 @@ namespace FlightJobsDesktop.ViewModels
         public string ModelDescription { get; set; }
         public long StartFuelWeight { get; set; }
         public long StartFuelWeightDisplay { get; set; }
+        public string StartFuelWeightComplete { get { return $"{StartFuelWeightDisplay} {WeightUnit}"; } }
         public long FinishFuelWeight { get; set; }
         public int AviationType { get; set; }
         public long UsedFuelWeight { get; set; }
         public long UsedFuelWeightDisplay { get; set; }
+        public string UsedFuelWeightComplete { get { return $"{UsedFuelWeightDisplay} {WeightUnit}"; } }
         public string Month { get; set; }
         public string VideoUrl { get; set; }
         public string VideoDescription { get; set; }
