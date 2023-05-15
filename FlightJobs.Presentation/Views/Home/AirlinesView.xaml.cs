@@ -6,7 +6,10 @@ using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views.Modals;
 using Notification.Wpf;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -83,9 +86,11 @@ namespace FlightJobsDesktop.Views.Home
             _userAirlineView.HiredPilotsNumber = AppProperties.UserStatistics.Airline.HiredPilots.Count();
             _userAirlineView.HiredFobsNumber = AppProperties.UserStatistics.Airline.HiredFBOs.Count();
             
-            DirectoryInfo directoryInfo = new DirectoryInfo("img");
-            var imgLocalPath = $"{directoryInfo.FullName}\\{_userAirlineView.Logo}";
-            _userAirlineView.Logo = File.Exists(imgLocalPath) ? imgLocalPath : $"{directoryInfo.FullName}\\LogoDefault.png";
+            DirectoryInfo directoryImgInfo = new DirectoryInfo("img");
+            var imgLogoPath = $"{directoryImgInfo.FullName}\\{_userAirlineView.Logo}";
+            _userAirlineView.Logo = File.Exists(imgLogoPath) ? imgLogoPath : $"{directoryImgInfo.FullName}\\LogoDefault.png";
+            
+            _userAirlineView.CountryFlag = string.IsNullOrEmpty(_userAirlineView.Country) ? "" : $"/img/flags/{_userAirlineView.Country.Replace(" ", "_")}.jpg";
             DataContext = _userAirlineView;
 
             if (AppProperties.UserStatistics.Airline.OwnerUser?.Id == AppProperties.UserLogin.UserId)
@@ -171,7 +176,7 @@ namespace FlightJobsDesktop.Views.Home
             }
         }
 
-        private async void BtnLedger_Click(object sender, RoutedEventArgs e)
+        private void BtnLedger_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -189,6 +194,25 @@ namespace FlightJobsDesktop.Views.Home
         private void BtnDebtText_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             BtnDebts_Click(sender, e);
+        }
+
+        private void BtnFbo_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (AppProperties.UserStatistics.Airline != null)
+                {
+                    var airlineFBOs = new AirlineFBOs();
+                    while (ShowModal("Airline FBOs", airlineFBOs).Value)
+                    {
+                        airlineFBOs.ShowHireNotification = ShowModal("Hire FBOs", new AirlineHireFboModal()).Value;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaAirline");
+            }
         }
     }
 }

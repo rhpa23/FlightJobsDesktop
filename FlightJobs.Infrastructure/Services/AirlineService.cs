@@ -42,5 +42,15 @@ namespace FlightJobs.Infrastructure.Services
             if (filterJob == null) filterJob = new FilterJobsModel();
             return await _flightJobsConnectorClientAPI.GetAirlineLedger(airlineId, pageNumber, filterJob);
         }
+
+        public async Task<IList<AirlineFboDbModel>> GetFbos(string icao, int airlineId)
+        {
+            return await _flightJobsConnectorClientAPI.GetFbos(icao, airlineId);
+        }
+
+        public async Task<IList<AirlineFboDbModel>> HireFbo(string icao, string userId)
+        {
+            return await _flightJobsConnectorClientAPI.HireFbo(icao, userId);
+        }
     }
 }

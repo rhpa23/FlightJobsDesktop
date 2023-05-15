@@ -1,0 +1,83 @@
+﻿<UserControl xmlns:ui="http://schemas.modernwpf.com/2019"
+      x:Class="FlightJobsDesktop.Views.Modals.AirlineFBOs"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
+      xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
+      mc:Ignorable="d" 
+      MinHeight="450" MinWidth="800" Loaded="UserControl_Loaded">
+    <UserControl.DataContext>
+        <local:HiredFBOsViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+            <Label Content="Fixed-base operator (FBOs) hired by " Grid.Row="0" FontSize="16"/>
+            <Label Content="{Binding AirlineName}" Grid.Row="0" FontSize="16" FontWeight="Bold"/>
+        </StackPanel>
+        <ListBox Grid.Row="1" ItemsSource="{Binding HiredFBOs}" Margin="20,0,20,0">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <StackPanel>
+                                    <Separator/>
+                                    <ContentPresenter/>
+                                </StackPanel>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="8"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="450"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock FontWeight="DemiBold" VerticalAlignment="Center" Margin="30,0,0,0">
+                            <Run Text="{Binding Icao}"/>
+                            <Run Text=" - "/>
+                            <Run Text="{Binding Name}"/>
+                        </TextBlock>
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <TextBlock FontSize="12">
+                                <Run Text="Increased score: "/>
+                                <Run Text="{Binding ScoreIncrease}"/>
+                            </TextBlock>
+                            <TextBlock FontSize="12">
+                                <Run Text="Fuel price discount: "/>
+                                <Run Text="{Binding FuelPriceDiscount}"/>
+                            </TextBlock>
+                            <TextBlock FontSize="12" >
+                                <Run Text="Ground crew discount: "/>
+                                <Run Text="{Binding GroundCrewDiscount}"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
+            <Border x:Name="BtnShowHireFboBorder" Margin="0,0,0,0" Style="{DynamicResource BorderButtonYellow}" Width="250" Height="37">
+                <Button x:Name="BtnShowHireFbo" Content="Search and hire FBOs" Width="250" Height="37" Click="BtnShowHireFbo_Click" />
+            </Border>
+            <Border x:Name="BtnCancelBorder" Margin="30,0,0,0" Style="{DynamicResource BorderButtonYellow}" Width="80" Height="37">
+                <Button x:Name="BtnCancel" Content="Close" Width="80" Height="37" Click="BtnCancel_Click" />
+            </Border>
+        </StackPanel>
+        <notifications:NotificationArea x:Name="WindowAreaFOB" Position="BottomCenter" MaxItems="3" Grid.Row="1"  />
+    </Grid>
+</UserControl>

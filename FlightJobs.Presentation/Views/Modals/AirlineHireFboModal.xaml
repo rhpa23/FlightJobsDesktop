@@ -1,0 +1,95 @@
+﻿<UserControl xmlns:ui="http://schemas.modernwpf.com/2019"
+      x:Class="FlightJobsDesktop.Views.Modals.AirlineHireFboModal"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
+      xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
+      mc:Ignorable="d" 
+      MinHeight="450" MinWidth="950" Loaded="UserControl_Loaded" >
+    <UserControl.DataContext>
+        <local:HiredFBOsViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border x:Name="BtnFilterBorder" HorizontalAlignment="Right" Width="70" Height="30" Margin="0,20,10,0" Style="{DynamicResource BorderButtonYellow}">
+            <Button x:Name="BtnFilter" Content="Filter" Width="70" Height="30" >
+                <ui:FlyoutService.Flyout>
+                    <ui:Flyout x:Name="FlyoutFilterLogbook" Placement="LeftEdgeAlignedTop">
+                        <StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <TextBox Name="txtDeparture" Text="{Binding Path=Filter.Icao, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ui:ControlHelper.PlaceholderText="ICAO" 
+                                    ui:ControlHelper.Header="ICAO" Margin="10,25,0,0" Width="250"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Border x:Name="BtnApplyFilterBorder" Grid.Column="4" Width="60" Height="30" Margin="10,15,0,0" Style="{DynamicResource BorderButtonYellow}">
+                                    <Button x:Name="BtnApplyFilter" Content="Apply" Width="60" Height="30" Click="BtnApplyFilter_Click" />
+                                </Border>
+                                <Border x:Name="BtnFilterClearBorder" Grid.Column="4" Width="60" Height="30" Margin="20,15,0,0" Style="{DynamicResource BorderButtonYellow}">
+                                    <Button x:Name="BtnFilterClear" Content="Clear" Width="60" Height="30"  Click="BtnFilterClear_Click" />
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:Flyout>
+                </ui:FlyoutService.Flyout>
+            </Button>
+        </Border>
+        <Border Style="{StaticResource LightBorderBoxStyle}" Margin="5,10,5,5" VerticalAlignment="Stretch" Grid.Row="1">
+            <DataGrid ItemsSource="{Binding HiredFBOs}" AutoGenerateColumns="False" HeadersVisibility="Column" CanUserSortColumns="False" 
+                  IsReadOnly="True" CanUserAddRows="False" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Airport" Binding="{Binding IcaoAndName}" FontSize="12"/>
+                    <DataGridTextColumn Header="Elevation" Binding="{Binding ElevationComplete}" FontSize="12"/>
+                    <DataGridTextColumn Header="Runway size" Binding="{Binding RunwaySizeComplete}" FontSize="12"/>
+                    <DataGridTextColumn Header="Availability" Binding="{Binding Availability}" FontSize="12"/>
+                    <DataGridTextColumn Header="Score&#x0a;increase" Width="70" Binding="{Binding ScoreIncrease}" FontSize="12"/>
+                    <DataGridTextColumn Header="Fuel price&#x0a;(% discount)" Width="95" Binding="{Binding FuelPriceDiscount}" FontSize="12"/>
+                    <DataGridTextColumn Header="Ground crew&#x0a;(% discount)" Width="100" Binding="{Binding GroundCrewDiscount}" FontSize="12"/>
+                    <DataGridTextColumn Header="FOB Price" Binding="{Binding PriceComplete}" FontWeight="Bold" FontSize="12"/>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border x:Name="BtnHireBorder" Style="{DynamicResource BorderButtonYellow}" Width="47" Height="35" Margin="5,3,5,3" >
+                                    <Button Content="Hire" Name="BtnHire">
+                                        <ui:FlyoutService.Flyout>
+                                            <ui:Flyout x:Name="FlyoutConfirmHire" Placement="LeftEdgeAlignedTop" Opened="FlyoutConfirmHire_Opened">
+                                                <StackPanel>
+                                                    <StackPanel Orientation="Vertical" Margin="10">
+                                                        <Label Content="Only the owner can hire FOBs."/>
+                                                        <TextBlock>
+                                                            <Run Text="{Binding AirlineNameAux}"/>
+                                                            <Run Text=" has "/>
+                                                            <Run Text="{Binding AirlineBankBalanceAux}"/>
+                                                            <Run Text=" of bank balance to hire FBOs."/>
+                                                        </TextBlock>
+                                                        <Label Content="Do you really want to hire this FOB?" FontWeight="DemiBold" Margin="0,10,0,0"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Border x:Name="BtnConfirmHireBorder" Grid.Column="4" Width="60" Height="30" Margin="10,15,0,0" Style="{DynamicResource BorderButtonYellow}">
+                                                            <Button x:Name="BtnConfirmHire" Content="Yes" Width="60" Height="30" Click="BtnHire_Click" />
+                                                        </Border>
+                                                        <Border x:Name="BtnFilterClearBorder" Grid.Column="4" Width="60" Height="30" Margin="20,15,0,0" Style="{DynamicResource BorderButtonYellow}">
+                                                            <Button x:Name="BtnCancelHire" Content="Cancel" Width="60" Height="30" Click="BtnCancelHire_Click"   />
+                                                        </Border>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </ui:Flyout>
+                                        </ui:FlyoutService.Flyout>
+                                    </Button>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <notifications:NotificationArea x:Name="WindowAreaHireFbo" Position="BottomCenter" MaxItems="3" Grid.Row="1"  />
+        <notifications:NotificationArea x:Name="WindowAreaLoadingHireFbo" Position="BottomCenter" MaxItems="3" Grid.Row="1"  />
+    </Grid>
+</UserControl>

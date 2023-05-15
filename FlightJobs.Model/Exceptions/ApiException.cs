@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConnectorClientAPI.Exceptions
+namespace FlightJobs.Model
 {
     public class ApiException : Exception
     {

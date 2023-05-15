@@ -12,5 +12,8 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
         Task<AirlineModel> CreateAirline(AirlineModel airline, string userId);
         Task<bool> PayAirlineDebts(int airlineId, string userId);
         Task<PaginatedAirlineJobLedgerModel> GetAirlineLedger(int airlineId, int pageNumber, FilterJobsModel filterJob);
+        Task<IList<AirlineFboDbModel>> GetAirlineFBOs(int airlineId);
+        Task<IList<AirlineFboDbModel>> GetFbos(string icao, int airlineId);
+        Task<IList<AirlineFboDbModel>> HireFbo(string icao, string userId);
     }
 }

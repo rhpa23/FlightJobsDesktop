@@ -105,12 +105,14 @@
     <Compile Include="Utils\DataConversion.cs" />
     <Compile Include="ValidationRules\EmailValidationRule.cs" />
     <Compile Include="ValidationRules\MinimumCharacterRule.cs" />
+    <Compile Include="ViewModels\AirlineFboViewModel.cs" />
     <Compile Include="ViewModels\AirlineFilterViewModel.cs" />
     <Compile Include="ViewModels\AirlineDebtsViewModel.cs" />
     <Compile Include="ViewModels\AirlineViewModel.cs" />
     <Compile Include="ViewModels\AirportViewModel.cs" />
     <Compile Include="ViewModels\CapacityViewModel.cs" />
     <Compile Include="ViewModels\GenerateJobViewModel.cs" />
+    <Compile Include="ViewModels\HiredFBOsViewModel.cs" />
     <Compile Include="ViewModels\JobItemViewModel.cs" />
     <Compile Include="ViewModels\PaginatedAirlineJobLedgerViewModel.cs" />
     <Compile Include="ViewModels\LogbookViewModel.cs" />
@@ -157,6 +159,12 @@
     </Compile>
     <Compile Include="Views\Modals\AirlineEditModal.xaml.cs">
       <DependentUpon>AirlineEditModal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modals\AirlineFBOs.xaml.cs">
+      <DependentUpon>AirlineFBOs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modals\AirlineHireFboModal.xaml.cs">
+      <DependentUpon>AirlineHireFboModal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Modals\AirlineJobsLedgerModal.xaml.cs">
       <DependentUpon>AirlineJobsLedgerModal.xaml</DependentUpon>
@@ -241,6 +249,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Modals\AirlineEditModal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modals\AirlineFBOs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modals\AirlineHireFboModal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

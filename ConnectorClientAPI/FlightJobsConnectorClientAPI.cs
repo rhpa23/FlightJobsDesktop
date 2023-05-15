@@ -1,4 +1,4 @@
-﻿using ConnectorClientAPI.Exceptions;
+﻿using FlightJobs.Model;
 using FlightJobs.Model.Models;
 using Newtonsoft.Json;
 using System;
@@ -444,5 +444,45 @@ namespace ConnectorClientAPI
 
             return airlineJobsLedger;
         }
+
+        public async Task<List<AirlineFboDbModel>> GetFbos(string icao, int airlineId)
+        {
+            var url = $"{SITE_URL}api/AirlineApi/GetFOBs?icao={icao}&airlineId={airlineId}";
+
+            HttpResponseMessage response = await client.GetAsync(new Uri(url));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            string json = response.Content.ReadAsStringAsync().Result.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", "");
+            var airlineFBOs = JsonConvert.DeserializeObject<List<AirlineFboDbModel>>(json);
+
+            return airlineFBOs;
+        }
+
+        public async Task<IList<AirlineFboDbModel>> HireFbo(string icao, string userId)
+        {
+            var url = $"{SITE_URL}api/AirlineApi/HireAirlineFbo";
+
+            var body = JsonConvert.SerializeObject(new { icao = icao, userId = userId });
+
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    throw new ApiException(response.Content.ReadAsStringAsync().Result);
+                }
+
+                throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            string json = response.Content.ReadAsStringAsync().Result.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", "");
+            var airlineFbosHired = JsonConvert.DeserializeObject<IList<AirlineFboDbModel>>(json);
+
+            return airlineFbosHired;
+        }
+
     }
 }

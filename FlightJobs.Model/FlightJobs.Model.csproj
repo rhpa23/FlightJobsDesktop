@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enum\AviationType.cs" />
+    <Compile Include="Exceptions\ApiException.cs" />
     <Compile Include="Models\AirlineFboDbModel.cs" />
     <Compile Include="Models\AirlineJobLedgerModel.cs" />
     <Compile Include="Models\AirlineModel.cs" />

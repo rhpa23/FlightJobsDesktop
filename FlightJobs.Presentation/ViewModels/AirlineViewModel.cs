@@ -18,6 +18,7 @@ namespace FlightJobsDesktop.ViewModels
         public string Logo { get; set; }
         public string Description { get; set; }
         public string Country { get; set; }
+        public string CountryFlag { get; set; }
         public long AirlineScore { get; set; }
         public long BankBalance { get; set; }
         public int MinimumScoreToHire { get; set; }

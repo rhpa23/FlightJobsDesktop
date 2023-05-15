@@ -64,11 +64,14 @@ namespace FlightJobsDesktop.Views.Modals
         {
             try
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo("img");
-                if (!Directory.Exists("img")) directoryInfo = Directory.CreateDirectory("img");
+                if (File.Exists(filePath))
+                {
+                    DirectoryInfo directoryInfo = new DirectoryInfo("img");
+                    if (!Directory.Exists("img")) directoryInfo = Directory.CreateDirectory("img");
 
-                var destPath = $"{directoryInfo.FullName}\\{new FileInfo(filePath).Name}";
-                File.Copy(filePath, destPath, true);
+                    var destPath = $"{directoryInfo.FullName}\\{new FileInfo(filePath).Name}";
+                    File.Copy(filePath, destPath, true);
+                }
             }
             catch (Exception)
             {
