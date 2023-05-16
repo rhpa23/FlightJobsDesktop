@@ -64,6 +64,7 @@ namespace FlightJobsDesktop.Views
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             _userSettings = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<UserSettingsModel, UserSettingsViewModel>(AppProperties.UserSettings);
+            _userSettings.WeightUnit = _userSettings.WeightUnit == null ? "kg" : _userSettings.WeightUnit;
             DataContext = _userSettings;
         }
 

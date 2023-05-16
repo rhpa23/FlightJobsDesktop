@@ -1,9 +1,11 @@
 ﻿using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services.Interfaces;
+using FlightJobs.Model;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using ModernWpf.Controls;
+using Newtonsoft.Json.Linq;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
@@ -23,20 +25,34 @@ using System.Windows.Shapes;
 namespace FlightJobsDesktop.Views.Modals
 {
     /// <summary>
-    /// Interação lógica para JoinAirlineModal.xam
+    /// Interação lógica para AirlineJoinModal.xam
     /// </summary>
-    public partial class JoinAirlineModal : UserControl
+    public partial class AirlineJoinModal : UserControl
     {
         private IAirlineService _airlineService;
         private NotificationManager _notificationManager;
         private IInfraService _infraService;
+        private Flyout _flyoutConfirmJoin;
 
-        public JoinAirlineModal()
+        public AirlineJoinModal()
         {
             InitializeComponent();
             _airlineService = MainWindow.AirlineServiceFactory.Create();
             _notificationManager = new NotificationManager();
             _infraService = MainWindow.InfraServiceFactory.Create();
+        }
+
+        private void HideConfirmJoinPopup()
+        {
+            if (_flyoutConfirmJoin != null)
+            {
+                _flyoutConfirmJoin.Hide();
+            }
+        }
+
+        private void FlyoutConfirmJoin_Opened(object sender, object e)
+        {
+            _flyoutConfirmJoin = (Flyout)sender;
         }
 
         private async Task UpdateDataGrid(int pageNumber)
@@ -60,6 +76,9 @@ namespace FlightJobsDesktop.Views.Modals
                 var airlineViewModel = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
                     .Map<PaginatedAirlinersModel, AirlineFilterViewModel>(pagedAirlines);
 
+                airlineViewModel.AirlineName = airlinesFilter.AirlineName;
+                airlineViewModel.AirlineCountry = airlinesFilter.AirlineCountry;
+                airlineViewModel.PageSize = airlineViewModel.PageSize > airlineViewModel.TotalItemCount ? airlineViewModel.TotalItemCount : airlineViewModel.PageSize;
                 DataContext = airlineViewModel;
             }
         }
@@ -204,6 +223,88 @@ namespace FlightJobsDesktop.Views.Modals
                 var modal = new PilotsHiredModal();
                 modal.DataContext = new PilotsHiredViewModel() { PilotsHired = pilotsHiredViewModel };
                 ShowModal("List of pilot hired", modal);
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                progress.Dispose();
+            }
+        }
+
+        private async void btnJoin_Click(object sender, RoutedEventArgs e)
+        {
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            EnabledNaveagtionButtons(false);
+            try
+            {
+                var airlineId = (int)((FrameworkElement)sender).Tag;
+                if (await _airlineService.JoinAirline(airlineId, AppProperties.UserLogin.UserId))
+                {
+                    ((Window)Parent).DialogResult = true;
+                }
+            }
+            catch (ApiException ex)
+            {
+                _notificationManager.Show("Warning", ex.ErrorMessage, NotificationType.Warning, "WindowArea");
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                progress.Dispose();
+                EnabledNaveagtionButtons(true);
+                HideConfirmJoinPopup();
+            }
+        }
+
+        private void BtnJoinAirlineNo_Click(object sender, RoutedEventArgs e)
+        {
+            HideConfirmJoinPopup();
+        }
+
+        private async void BtnApplyFilter_Click(object sender, RoutedEventArgs e)
+        {
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            try
+            {
+                Flyout f = FlyoutService.GetFlyout(BtnFilter) as Flyout;
+                if (f != null)
+                {
+                    f.Hide();
+                }
+
+                await UpdateDataGrid(1);
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                progress.Dispose();
+            }
+        }
+
+        private async void BtnFilterClear_Click(object sender, RoutedEventArgs e)
+        {
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            try
+            {
+                Flyout f = FlyoutService.GetFlyout(BtnFilter) as Flyout;
+                if (f != null)
+                {
+                    f.Hide();
+                }
+
+                var joinAirlineViewModel = (AirlineFilterViewModel)DataContext;
+                joinAirlineViewModel.AirlineName = "";
+                joinAirlineViewModel.AirlineCountry = "";
+                await UpdateDataGrid(1);
             }
             catch (Exception)
             {

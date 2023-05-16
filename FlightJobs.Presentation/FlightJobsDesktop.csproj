@@ -184,8 +184,8 @@
     <Compile Include="Views\Modals\FlightTypeModal.xaml.cs">
       <DependentUpon>FlightTypeModal.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Modals\JoinAirlineModal.xaml.cs">
-      <DependentUpon>JoinAirlineModal.xaml</DependentUpon>
+    <Compile Include="Views\Modals\AirlineJoinModal.xaml.cs">
+      <DependentUpon>AirlineJoinModal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Modals\PilotsHiredModal.xaml.cs">
       <DependentUpon>PilotsHiredModal.xaml</DependentUpon>
@@ -284,7 +284,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Modals\JoinAirlineModal.xaml">
+    <Page Include="Views\Modals\AirlineJoinModal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

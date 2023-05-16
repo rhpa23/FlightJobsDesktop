@@ -35,6 +35,8 @@ namespace FlightJobsDesktop.Views.Modals
         private NotificationManager _notificationManager;
         private IAirlineService _airlineService;
 
+        public bool IsCreateAirline { get; set; }
+
         public AirlineEditModal()
         {
             InitializeComponent();
@@ -53,7 +55,7 @@ namespace FlightJobsDesktop.Views.Modals
                        .ToList();
 
             CboxAirlineCountry.ItemsSource = images;
-            if (AppProperties.UserStatistics.Airline.Country != null)
+            if (AppProperties.UserStatistics.Airline?.Country != null)
             {
                 var index = images.FindIndex(x => AppProperties.UserStatistics.Airline.Country.ToLower().Contains(x.Key.ToString().ToLower()));
                 CboxAirlineCountry.SelectedIndex = index;
@@ -99,11 +101,17 @@ namespace FlightJobsDesktop.Views.Modals
         {
             try
             {
-                
-                var airlineView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<AirlineModel, AirlineViewModel>(AppProperties.UserStatistics.Airline);
-                DataContext = airlineView;
                 LoadCountries();
-                LoadLogoImg(airlineView.Logo);
+                if (IsCreateAirline)
+                {
+                    DataContext = new AirlineViewModel();
+                }
+                else
+                {
+                    var airlineView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<AirlineModel, AirlineViewModel>(AppProperties.UserStatistics.Airline);
+                    DataContext = airlineView;
+                    LoadLogoImg(airlineView.Logo);
+                }
             }
             catch (Exception)
             {
@@ -118,14 +126,24 @@ namespace FlightJobsDesktop.Views.Modals
                 var airlineView = (AirlineViewModel)DataContext;
                 var airlineModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<AirlineViewModel, AirlineModel>(airlineView);
                 airlineModel.Country = CboxAirlineCountry.SelectedItem != null ? ((DictionaryEntry)CboxAirlineCountry.SelectedItem).Key.ToString() : "Brazil";
-                SaveLogoImg(airlineModel.Logo);
-                airlineModel.Logo = new FileInfo(airlineModel.Logo).Name;
-                var result = await _airlineService.UpdateAirline(airlineModel, AppProperties.UserLogin.UserId);
+                if (airlineModel.Logo != null)
+                {
+                    SaveLogoImg(airlineModel.Logo);
+                    airlineModel.Logo = new FileInfo(airlineModel.Logo).Name;
+                }
+                
+                if (IsCreateAirline)
+                {
+                    airlineModel = await _airlineService.CreateAirline(airlineModel, AppProperties.UserLogin.UserId);
+                }
+                else
+                {
+                    await _airlineService.UpdateAirline(airlineModel, AppProperties.UserLogin.UserId);
+                }
 
                 AppProperties.UserStatistics.Airline = airlineModel;
-                _notificationManager.Show("Saved", "Airline saved with success.", NotificationType.Success, "WindowArea");
 
-                ((Window)this.Parent).DialogResult = result;
+                ((Window)this.Parent).DialogResult = true;
             }
             catch (Exception)
             {

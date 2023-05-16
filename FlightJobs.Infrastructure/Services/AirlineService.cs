@@ -52,5 +52,15 @@ namespace FlightJobs.Infrastructure.Services
         {
             return await _flightJobsConnectorClientAPI.HireFbo(icao, userId);
         }
+
+        public async Task<bool> JoinAirline(int airlineId, string userId)
+        {
+            return await _flightJobsConnectorClientAPI.JoinAirline(new AirlineModel() { Id = airlineId }, userId);
+        }
+
+        public async Task<bool> ExitAirline(int airlineId, string userId)
+        {
+            return await _flightJobsConnectorClientAPI.ExitAirline(new AirlineModel() { Id = airlineId }, userId);
+        }
     }
 }

@@ -484,5 +484,39 @@ namespace ConnectorClientAPI
             return airlineFbosHired;
         }
 
+        public async Task<bool> JoinAirline(AirlineModel airline, string userId)
+        {
+            var url = $"{SITE_URL}api/AirlineApi/JoinAirline";
+
+            var body = JsonConvert.SerializeObject(new { userId = userId, airline });
+
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    throw new ApiException(response.Content.ReadAsStringAsync().Result.Replace("\"", ""));
+                }
+
+                throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            return true;
+        }
+
+        public async Task<bool> ExitAirline(AirlineModel airline, string userId)
+        {
+            var url = $"{SITE_URL}api/AirlineApi/ExitAirline";
+
+            var body = JsonConvert.SerializeObject(new { userId = userId, airline });
+
+            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            return true;
+        }
     }
 }
