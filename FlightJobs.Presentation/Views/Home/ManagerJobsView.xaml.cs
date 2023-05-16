@@ -180,6 +180,15 @@ namespace FlightJobsDesktop.Views.Home
             return list.Select(x => $"{x.ICAO} - {x.Name}" ).ToArray();
         }
 
+        private string GetIcao(string text)
+        {
+            if (!string.IsNullOrEmpty(text) && text?.Length > 3)
+            {
+                return text.Substring(0, 4);
+            }
+            return "";
+        }
+
         private string GetIcaoInfo(string text)
         {
             if (!string.IsNullOrEmpty(text) && text?.Length > 3)
@@ -189,8 +198,6 @@ namespace FlightJobsDesktop.Views.Home
             }
             return "";
         }
-
-        
 
         private void AutoSuggestBoxSuggestionChosen()
         {
@@ -243,12 +250,23 @@ namespace FlightJobsDesktop.Views.Home
                     MapWebView.InvokeScript("eval", new string[] { "var node = document.getElementsByTagName('body')[0]; var map = document.getElementById('mapContainer'); while (node.hasChildNodes()) { node.removeChild(node.lastChild); } node.appendChild(map);" });
                     var queryDictionary = System.Web.HttpUtility.ParseQueryString(MapWebView.Source.Query);
 
-                    txtDeparture.Text = GetIcaoInfo(queryDictionary[0].ToString());
-                    txtArrival.Text = GetIcaoInfo(queryDictionary[1].ToString());
-                    txtAlternative.Text = GetIcaoInfo(queryDictionary[2].ToString());
-                    
-                    _generateJobViewModel.Dist = AirportDatabaseFile.CalcDistance(queryDictionary[0].ToString(), queryDictionary[1].ToString());
-                    lblDistance.Content = _generateJobViewModel.DistDesc;
+                    var departureParam = GetIcaoInfo(queryDictionary[0].ToString());
+                    var arrivalParam = GetIcaoInfo(queryDictionary[1].ToString());
+                    var alternativeParam = GetIcaoInfo(queryDictionary[2].ToString());
+
+                    txtDeparture.Text = string.IsNullOrEmpty(departureParam) ? txtDeparture.Text : departureParam;
+                    txtArrival.Text = string.IsNullOrEmpty(arrivalParam) ? txtArrival.Text : arrivalParam;
+                    txtAlternative.Text = string.IsNullOrEmpty(alternativeParam) ? txtAlternative.Text : alternativeParam;
+
+                    if (string.IsNullOrEmpty(departureParam) && txtDeparture.Text.Length > 3) // To fix when select departure and set arrival in the map.
+                    {
+                        AutoSuggestBoxSuggestionChosen();
+                    }
+                    else
+                    {
+                        _generateJobViewModel.Dist = AirportDatabaseFile.CalcDistance(GetIcao(txtDeparture.Text), GetIcao(txtArrival.Text));
+                        lblDistance.Content = _generateJobViewModel.DistDesc;
+                    }
                 }
             }
             catch (Exception)

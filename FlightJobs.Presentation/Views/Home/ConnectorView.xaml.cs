@@ -50,13 +50,21 @@ namespace FlightJobsDesktop.Views.Home
 
             try
             {
-                var currentJobView = new CurrentJobViewModel() { JobSummary = "You don't have any job active. Click on Manager to generate your next job." };
+                var currentJobView = new CurrentJobViewModel();
 
                 var currentJob = AppProperties.UserJobs.FirstOrDefault(x => x.IsActivated);
                 if (currentJob != null)
                 {
+                    PanelNoJob.Visibility = Visibility.Collapsed;
+                    PanelCurrentJob.Visibility = Visibility.Visible;
+
                     currentJobView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, CurrentJobViewModel>(currentJob);
                     currentJobView.JobSummary = $"Setup departure for aircraft on {currentJobView.DepartureDesc} and the total payload to {currentJobView.PayloadComplete} then fly to {currentJobView.ArrivalDesc}.";
+                }
+                else
+                {
+                    PanelNoJob.Visibility = Visibility.Visible;
+                    PanelCurrentJob.Visibility = Visibility.Collapsed;
                 }
 
                 var lastJob = await _jobService.GetLastUserJob(AppProperties.UserLogin.UserId);
@@ -81,6 +89,11 @@ namespace FlightJobsDesktop.Views.Home
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             LoadUserJobData();
+        }
+
+        private void BtnShowAddJobs_Click(object sender, RoutedEventArgs e)
+        {
+            HomeView.TabHome.SelectedIndex = 1;
         }
     }
 }

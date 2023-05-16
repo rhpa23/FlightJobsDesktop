@@ -672,6 +672,7 @@
     <Resource Include="img\flags\Yemen.jpg" />
     <Resource Include="img\flags\Zambia.jpg" />
     <Resource Include="img\flags\Zimbabwe.jpg" />
+    <Resource Include="img\background\connector-banner.jpg" />
     <Content Include="img\LogoDefault.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

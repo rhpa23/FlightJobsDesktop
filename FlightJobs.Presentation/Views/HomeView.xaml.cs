@@ -8,9 +8,12 @@ namespace FlightJobsDesktop.Views
     /// </summary>
     public partial class HomeView : UserControl
     {
+        internal static TabControl TabHome { get; set; }
+
         public HomeView()
         {
             InitializeComponent();
+            TabHome = TabControlHome;
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
