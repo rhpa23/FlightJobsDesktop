@@ -1,5 +1,7 @@
-﻿using FlightJobsDesktop.Utils;
-using System.Collections.Generic;
+﻿using FlightJobs.Connect.MSFS.SDK.Model;
+using FlightJobsDesktop.Utils;
+using System.Windows;
+using System.Windows.Media;
 
 namespace FlightJobsDesktop.ViewModels
 {
@@ -54,5 +56,21 @@ namespace FlightJobsDesktop.ViewModels
         public int ChallengeType { get; set; }
         public string WeightUnit { get; set; }
         public LastJobViewModel LastJob { get; set; }
+        public PlaneModel PlaneSimData { get; set; }
+        public SimDataModel SimData { get; set; }
+
+        private Visibility _isConnectedVisibility;
+        public Visibility IsConnectedVisibility
+        {
+            get { return _isConnectedVisibility; }
+            set { _isConnectedVisibility = value; OnPropertyChanged("IsConnectedVisibility"); }
+        }
+
+        private SolidColorBrush _payloadLabelColor;
+        public SolidColorBrush PayloadLabelColor
+        {
+            get { return _payloadLabelColor; }
+            set { _payloadLabelColor = value; OnPropertyChanged("PayloadLabelColor"); }
+        }
     }
 }

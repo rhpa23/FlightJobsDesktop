@@ -9,6 +9,16 @@ namespace FlightJobs.Infrastructure.Services
 {
     public class JobService : ServiceBase, IJobService
     {
+        public async Task<StartJobResponseModel> StartJob(DataModel JobSimData)
+        {
+            return await _flightJobsConnectorClientAPI.StartJob(JobSimData);
+        }
+
+        public async Task<StartJobResponseModel> FinishJob(DataModel JobSimData)
+        {
+            return await _flightJobsConnectorClientAPI.FinishJob(JobSimData);
+        }
+
         public async Task<bool> CloneJob(long jobId, string userId)
         {
             return await _flightJobsConnectorClientAPI.CloneJob(jobId, userId);

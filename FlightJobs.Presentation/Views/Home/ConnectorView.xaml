@@ -37,11 +37,18 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Label Grid.Column="0" Grid.Row="0" Content="Payload:"  Margin="15,10,0,5" FontSize="14"/>
-                        <Label Grid.Column="1" Grid.Row="0" Content="0"  Margin="15,10,10,15" FontSize="14"/>
-                        <Label Grid.Column="0" Grid.Row="1" Content="Name:"  Margin="15,10,0,15" FontSize="14"/>
-                        <Label Grid.Column="1" Grid.Row="1" Content="0"  Margin="15,10,0,15" FontSize="14" />
+                        <TextBlock Grid.Column="1" Grid.Row="0" Margin="15,10,10,15" FontSize="14" Visibility="{Binding IsConnectedVisibility}">
+                            <Run Text="{Binding PlaneSimData.PayloadPoundsText}"/> <Run Text=" / "/> <Run Text="{Binding PlaneSimData.PayloadKilogramsText}"/>
+                        </TextBlock>
+                        <Label Grid.Column="0" Grid.Row="1" Content="Name:"  Margin="15,5,0,15" FontSize="14"/>
+                        <Label Content="{Binding PlaneSimData.Name}"  Grid.Column="1" Grid.Row="1" Margin="15,5,0,15" FontSize="14" />
+                        <Label Grid.Column="0" Grid.Row="2" Content="Fuel:"  Margin="15,5,0,5" FontSize="14"/>
+                        <TextBlock Grid.Column="1" Grid.Row="2" Margin="15,5,10,5" FontSize="14" Visibility="{Binding IsConnectedVisibility}">
+                            <Run Text="{Binding PlaneSimData.FuelWeightPoundsText}"/> <Run Text=" / "/> <Run Text="{Binding PlaneSimData.FuelWeightKilogramsText}"/>
+                        </TextBlock>
                     </Grid>
                 </Border>
             </StackPanel>
@@ -60,14 +67,18 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Label Grid.Column="0" Grid.Row="0" Content="Baro:" Margin="15,10,0,5" FontSize="14"/>
-                        <Label Grid.Column="1" Grid.Row="0" Content="0" Name="LblBaroValue"   Margin="15,10,0,5" FontSize="14" />
-                        <Label Grid.Column="0" Grid.Row="1" Content="Wind:" Margin="15,10,0,5" FontSize="14"/>
-                        <Label Grid.Column="1" Grid.Row="1" Content="0" Name="LblWindValue"   Margin="15,10,0,5" FontSize="14" />
-                        <Label Grid.Column="0" Grid.Row="2" Content="Temp:"  Margin="15,10,0,5" FontSize="14"/>
-                        <Label Grid.Column="1" Grid.Row="2" Content="0" Name="LblTempValue"  Margin="15,10,0,5" FontSize="14" />
-                        <Label Grid.Column="0" Grid.Row="3" Content="Visibility:"  Margin="15,10,0,5" FontSize="14"/>
-                        <Label Grid.Column="1" Grid.Row="3" Content="0" Name="LblVisibilityValue"  Margin="15,10,0,5" FontSize="14" />
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Baro:" Margin="15,10,0,5" FontSize="14"/>
+                        <TextBlock Grid.Column="1" Grid.Row="0" Margin="15,10,0,5" FontSize="14" Visibility="{Binding IsConnectedVisibility}">
+                            <Run Text="{Binding SimData.SeaLevelPressureInchesText}"/> <Run Text=" / "/> <Run Text="{Binding SimData.SeaLevelPressureMillibarsText}"/>
+                        </TextBlock>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="Wind:" Margin="15,10,0,5" FontSize="14"/>
+                        <TextBlock Grid.Column="1" Grid.Row="1" Margin="15,10,0,5" FontSize="14" Visibility="{Binding IsConnectedVisibility}" >
+                            <Run Text="{Binding SimData.WindDirectionDegreesText}"/> <Run Text=" with "/> <Run Text="{Binding SimData.WindVelocityKnotsText}"/>
+                        </TextBlock>
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="Temp:"  Margin="15,10,0,5" FontSize="14"/>
+                        <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SimData.TemperatureCelsiusText}" Margin="15,10,0,5" FontSize="14" />
+                        <TextBlock Grid.Column="0" Grid.Row="3" Text="Visibility:"  Margin="15,10,0,5" FontSize="14"/>
+                        <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding SimData.VisibilityMetersText}" Margin="15,10,0,5" FontSize="14" />
                     </Grid>
                 </Border>
             </StackPanel>
@@ -143,6 +154,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition  />
                             </Grid.RowDefinitions>
                             <Label Grid.Column="0" Grid.Row="0" Content="{Binding Path=DepartureICAO}" FontSize="24" Padding="5,0,5,0"/>
@@ -180,15 +192,16 @@
                             <Label Grid.Column="6" Grid.Row="3" Grid.ColumnSpan="2" Content="Total payload:" FontSize="18" Padding="0,0,5,0" HorizontalAlignment="Left"/>
                             <Label Grid.Column="8" Grid.Row="3" Content="{Binding Path=PayloadComplete}" FontSize="18" Padding="3,0,0,0" Name="LblCurrentTotalCargoWeight" HorizontalContentAlignment="Right"/>
                             <TextBlock Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="10" Text="{Binding Path=JobSummary}" FontSize="16" Padding="5,40,5,0" Width="600" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" TextAlignment="Center" />
-                            <StackPanel Grid.Row="5" Grid.ColumnSpan="10" Margin="0,15,0,15" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                            <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="10" Text="{Binding Path=PayloadComplete}" Foreground="{Binding PayloadLabelColor}" FontSize="16" Padding="5,5,5,0" Width="600" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" TextAlignment="Center" />
+                            <StackPanel Grid.Row="6" Grid.ColumnSpan="10" Margin="0,15,0,15" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
                                 <Border Margin="0,0,200,0" Style="{DynamicResource BorderButtonYellow}">
                                     <Button x:Name="btnRefresh" Content="Refresh" Width="100"  />
                                 </Border>
-                                <Border Margin="0,0,200,0" Style="{DynamicResource BorderButtonYellow}">
-                                    <Button x:Name="btnStart" Content="Start" Width="100" />
+                                <Border x:Name="btnStartBorder" Margin="0,0,200,0" Style="{DynamicResource BorderButtonYellow}">
+                                    <Button Content="Start" Width="100" Click="btnStart_Click" />
                                 </Border>
-                                <Border Margin="0,0,0,0" Style="{DynamicResource BorderButtonYellow}">
-                                    <Button x:Name="btnFinish" Content="Finish" Width="100" />
+                                <Border x:Name="btnFinishBorder" Margin="0,0,0,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="False">
+                                    <Button Content="Finish" Width="100" Click="btnFinish_Click" />
                                 </Border>
                             </StackPanel>
 

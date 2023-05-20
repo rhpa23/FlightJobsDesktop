@@ -31,6 +31,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -690,6 +691,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FlightJobs.Connect.MSFS.SDK\FlightJobs.Connect.MSFS.SDK.csproj">
+      <Project>{e784a587-56da-411f-a616-b6baa33c2661}</Project>
+      <Name>FlightJobs.Connect.MSFS.SDK</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FlightJobs.Infrastructure\FlightJobs.Infrastructure.csproj">
       <Project>{2ec3f861-6ab6-4b44-aca6-122394ced4d2}</Project>
       <Name>FlightJobs.Infrastructure</Name>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FlightJobs.Connect.MSFS.SDK.Model;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.ViewModels;
 
@@ -15,6 +16,7 @@ namespace FlightJobsDesktop.Mapper
             if (!_isInitialized)
             {
                 MapperCfg = new MapperConfiguration(cfg => {
+                    cfg.CreateMap<PlaneModel, DataModel>();
                     cfg.CreateMap<FilterAirlineJobLedger, FilterJobsModel>();
                     cfg.CreateMap<AirlineViewModel, AirlineModel>()
                         .ForMember(dest => dest.Score, opt => opt.MapFrom(src => src.MinimumScoreToHire));
@@ -50,7 +52,6 @@ namespace FlightJobsDesktop.Mapper
                           .ForPath(dest => dest.LocalSettings.AutoStartJob, opt => opt.MapFrom(src => src.AutoStartJob))
                           .ForPath(dest => dest.LocalSettings.ExitWithFS, opt => opt.MapFrom(src => src.ExitWithFS))
                           .ForPath(dest => dest.LocalSettings.ShowLandingData, opt => opt.MapFrom(src => src.ShowLandingData))
-                          .ForPath(dest => dest.LocalSettings.SimConnectStatus, opt => opt.MapFrom(src => src.SimConnectStatus))
                           .ForPath(dest => dest.LocalSettings.StartInSysTray, opt => opt.MapFrom(src => src.StartInSysTray))
                           .ForPath(dest => dest.LocalSettings.ThemeName, opt => opt.MapFrom(src => src.ThemeName));
                     //    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.NickName));

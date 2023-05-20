@@ -60,7 +60,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Image Source="/img/logo/FlightJobsLogo0002.png" Width="40" Margin="5,1,2,2"  />
-            <TextBlock Grid.Column="1" Text="{Binding Path=SimConnectStatus}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0"/>
+            <TextBlock x:Name="TxbSimConnectStatus" Text="{Binding CurrentSimData.IsConnectedText}" Grid.Column="1" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0"/>
 
             <!-- Horizontally centered title -->
             <TextBlock Grid.Column="1" Grid.ColumnSpan="5" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Text="FlightJobs - 1.0.5" />

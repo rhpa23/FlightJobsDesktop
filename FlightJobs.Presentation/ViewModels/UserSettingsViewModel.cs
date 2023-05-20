@@ -1,4 +1,5 @@
-﻿using FlightJobsDesktop.Utils;
+﻿using FlightJobs.Connect.MSFS.SDK.Model;
+using FlightJobsDesktop.Utils;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -51,7 +52,6 @@ namespace FlightJobsDesktop.ViewModels
         [JsonIgnoreAttribute]
         public bool IsDarkTheme { get { return ThemeName == "Dark"; } }
 
-        [JsonIgnoreAttribute]
-        public string SimConnectStatus { get; set; }
+        public SimDataModel CurrentSimData { get; set; }
     }
 }

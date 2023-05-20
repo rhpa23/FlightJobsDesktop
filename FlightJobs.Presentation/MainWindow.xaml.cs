@@ -1,4 +1,5 @@
-﻿using FlightJobs.Infrastructure;
+﻿using FlightJobs.Connect.MSFS.SDK;
+using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Factorys;
@@ -14,6 +15,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace FlightJobsDesktop
 {
@@ -22,6 +24,8 @@ namespace FlightJobsDesktop
     /// </summary>
     public partial class MainWindow : Window
     {
+        private FlightJobsConnectSim _flightJobsConnectSim = new FlightJobsConnectSim();
+
         public static IAbstractFactory<IJobService> JobServiceFactory;
         public static IAbstractFactory<IUserAccessService> UserServiceFactory;
         public static IAbstractFactory<IInfraService> InfraServiceFactory;
@@ -58,7 +62,6 @@ namespace FlightJobsDesktop
             miExit.Click += delegate (object sender, EventArgs args) { Application.Current.Shutdown(); };
             
             ni.ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[] { miShow, miExit });
-
             
         }
 
@@ -68,6 +71,9 @@ namespace FlightJobsDesktop
             nvMain.SelectedItem = HomeViewPageItem;
 
             LoadSettings();
+
+            _flightJobsConnectSim.Initialize();
+            //_timerCheckSimConnection.Start();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -95,7 +101,6 @@ namespace FlightJobsDesktop
             var path = AppDomain.CurrentDomain.BaseDirectory;
             var jsonSettings = File.ReadAllText(Path.Combine(path, "ResourceData\\Settings.json"));
             _userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
-            _userSettings.SimConnectStatus = "Waiting for sim start...";
 
             ThemeManager.Current.ApplicationTheme = _userSettings.ThemeName == "Light" ? ApplicationTheme.Light : ApplicationTheme.Dark;
             ControlzEx.Theming.ThemeManager.Current.ChangeThemeBaseColor(Application.Current, _userSettings.ThemeName);
@@ -103,6 +108,7 @@ namespace FlightJobsDesktop
             _userSettings.Username = AppProperties.UserLogin.UserName;
             _userSettings.WeightUnit = AppProperties.UserStatistics.WeightUnit;
             _userSettings.ReceiveAlertEmails = AppProperties.UserStatistics.SendAirlineBillsWarning && AppProperties.UserStatistics.SendLicenseWarning;
+            _userSettings.CurrentSimData = FlightJobsConnectSim.CommonSimData;
 
             var userSettingsModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<UserSettingsViewModel, UserSettingsModel>(_userSettings);
             userSettingsModel.UserId = AppProperties.UserLogin.UserId;
