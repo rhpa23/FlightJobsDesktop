@@ -7,7 +7,6 @@ namespace FlightJobsDesktop.ViewModels
 {
     public class CurrentJobViewModel : ObservableObject
     {
-        public string JobSummary { get; set; }
         public object User { get; set; }
         public int PaxWeight { get; set; } = 88;
         public int Id { get; set; }
@@ -71,6 +70,13 @@ namespace FlightJobsDesktop.ViewModels
         {
             get { return _payloadLabelColor; }
             set { _payloadLabelColor = value; OnPropertyChanged("PayloadLabelColor"); }
+        }
+
+        private string _jobSummary;
+        public string JobSummary
+        {
+            get { return _jobSummary; }
+            set { _jobSummary = value; OnPropertyChanged("JobSummary"); }
         }
     }
 }

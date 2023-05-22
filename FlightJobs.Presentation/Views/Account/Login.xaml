@@ -71,7 +71,7 @@
         <Border x:Name="btnSignIn" Grid.Column="1" Grid.Row="4" Margin="0,30,0,0" Width="280" Style="{DynamicResource BorderButtonYellow}">
             <Button Content="Sign in" HorizontalAlignment="Center" VerticalAlignment="Top" Width="280" FontSize="18" Click="btnSignIn_Click" IsDefault="True"/>
         </Border>
-        <notifications:NotificationArea x:Name="WindowArea" Position="TopCenter" MaxItems="3" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="4"  />
-        <notifications:NotificationArea x:Name="WindowAreaLoading" Position="TopCenter" MaxItems="3" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="4"  />
+        <notifications:NotificationArea x:Name="WindowArea" Position="TopCenter" MaxItems="3" Grid.Row="5" Grid.ColumnSpan="2" Grid.RowSpan="4"  />
+        <notifications:NotificationArea x:Name="WindowAreaLoading" Position="TopCenter" MaxItems="3" Grid.Row="5" Grid.ColumnSpan="2" Grid.RowSpan="4"  />
     </Grid>
 </Window>
