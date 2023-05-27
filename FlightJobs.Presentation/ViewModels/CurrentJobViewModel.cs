@@ -78,5 +78,12 @@ namespace FlightJobsDesktop.ViewModels
             get { return _jobSummary; }
             set { _jobSummary = value; OnPropertyChanged("JobSummary"); }
         }
+
+        private string _sliderTopTitle = "Waiting for start job..";
+        public string SliderTopTitle
+        {
+            get { return _sliderTopTitle; }
+            set { _sliderTopTitle = value; OnPropertyChanged("SliderTopTitle"); }
+        }
     }
 }

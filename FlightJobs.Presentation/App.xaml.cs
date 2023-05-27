@@ -4,6 +4,7 @@ using FlightJobsDesktop.Factorys;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.Views;
 using FlightJobsDesktop.Views.Account;
+using FlightJobsDesktop.Views.SlidersWindows;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
@@ -44,6 +45,7 @@ namespace FlightJobsDesktop
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
+//            new CurrentJobDataWindow().Show();
             var loginWindow = _serviceProvider.GetService<Login>();
             loginWindow.Show();
         }

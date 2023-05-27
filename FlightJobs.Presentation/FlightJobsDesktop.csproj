@@ -201,6 +201,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\SlidersWindows\CurrentJobDataWindow.xaml.cs">
+      <DependentUpon>CurrentJobDataWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SlidersWindows\TouchdownWindow.xaml.cs">
+      <DependentUpon>TouchdownWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -300,6 +306,14 @@
     <Page Include="Views\SettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SlidersWindows\CurrentJobDataWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SlidersWindows\TouchdownWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -674,6 +688,8 @@
     <Resource Include="img\flags\Zambia.jpg" />
     <Resource Include="img\flags\Zimbabwe.jpg" />
     <Resource Include="img\background\connector-banner.jpg" />
+    <Resource Include="img\icons\arrival.png" />
+    <Resource Include="img\icons\departing.png" />
     <Content Include="img\LogoDefault.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -63,6 +63,14 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            <Style x:Key="BorderHighlightWindow" TargetType="Window">
+                <Setter Property="Border.BorderThickness" Value="1"/>
+                <Style.Triggers>
+                    <Trigger Property="Border.IsMouseOver" Value="True">
+                        <Setter Property="Border.BorderBrush" Value="Gray" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,0 +1,23 @@
+﻿<Window x:Class="FlightJobsDesktop.Views.SlidersWindows.TouchdownWindow"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
+        mc:Ignorable="d" Cursor="Hand" MouseDown="HideIco_MouseDown" Style="{DynamicResource BorderHighlightWindow}"
+        Title="FlightJobs - Touchdown slider" Height="20" Width="2" Topmost="True" WindowStyle="None" Background="#FF121212" ResizeMode="NoResize" Left="-1" Top="0" ShowInTaskbar="False" >
+    <Window.DataContext>
+        <local:CurrentJobViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="25"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Touchdown" Foreground="White" VerticalAlignment="Center" FontSize="10" />
+        <TextBlock Text="-385fpm" Foreground="White" VerticalAlignment="Center" Grid.Column="1" Margin="3,0,0,0" />
+        <ui:FontIcon x:Name="HideIco" Height="20" FontFamily="Segoe MDL2 Assets" Glyph="&#xE8A0;" Foreground="White" Grid.Column="2" Margin="0" MouseDown="HideIco_MouseDown" />
+    </Grid>
+</Window>

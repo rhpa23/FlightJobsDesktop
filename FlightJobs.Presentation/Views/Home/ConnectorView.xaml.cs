@@ -7,11 +7,13 @@ using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.Utils;
 using FlightJobsDesktop.ViewModels;
+using FlightJobsDesktop.Views.SlidersWindows;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,9 +38,11 @@ namespace FlightJobsDesktop.Views.Home
 
         private DispatcherTimer _timerCheckSimData = new DispatcherTimer();
         private bool _isJobStarted;
-        private bool _isJobFinished;
+        private bool _stopCheckJobStart;
+        private bool _stopCheckJobFinish;
 
         private static CurrentJobViewModel _currentJobView = new CurrentJobViewModel();
+        private CurrentJobDataWindow _sliderCurrentJobWindow;
 
         public ConnectorView()
         {
@@ -62,10 +66,19 @@ namespace FlightJobsDesktop.Views.Home
             {
                 if (FlightJobsConnectSim.CommonSimData.IsConnected && FlightJobsConnectSim.PlaneSimData.OnGround)
                 {
+                    _stopCheckJobStart = true;
                     var simStatus = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<PlaneModel, DataModel>(FlightJobsConnectSim.PlaneSimData);
                     simStatus.UserId = AppProperties.UserLogin.UserId; 
                     var startJobResponseInfo = await _jobService.StartJob(simStatus);
                     _notificationManager.Show("Success", startJobResponseInfo.ResultMessage, NotificationType.Success, "WindowArea");
+                    _currentJobView.SliderTopTitle = "Job started";
+                    if (_sliderCurrentJobWindow != null)
+                    {
+                        _sliderCurrentJobWindow.StartedIcon.Visibility = Visibility.Visible;
+                        _sliderCurrentJobWindow.GridLanding.Visibility = Visibility.Collapsed;
+                        _sliderCurrentJobWindow.GridResults.Visibility = Visibility.Collapsed;
+                        _sliderCurrentJobWindow.ToggleSlider(true, 8);
+                    }
                     btnFinishBorder.IsEnabled = true;
                     _isJobStarted = true;
                     return true;
@@ -102,15 +115,29 @@ namespace FlightJobsDesktop.Views.Home
             {
                 if (FlightJobsConnectSim.CommonSimData.IsConnected && FlightJobsConnectSim.PlaneSimData.OnGround)
                 {
+                    _stopCheckJobFinish = true;
                     var simStatus = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<PlaneModel, DataModel>(FlightJobsConnectSim.PlaneSimData);
                     simStatus.UserId = AppProperties.UserLogin.UserId;
                     var finishJobResponseInfo = await _jobService.FinishJob(simStatus);
                     _notificationManager.Show("Success", finishJobResponseInfo.ResultMessage, NotificationType.Success, "WindowArea");
+                    _currentJobView.SliderTopTitle = "Job finished";
+                    if (_sliderCurrentJobWindow != null)
+                    {
+                        _sliderCurrentJobWindow.StartedIcon.Visibility = Visibility.Hidden;
+                        _sliderCurrentJobWindow.GridSimData.Visibility = Visibility.Collapsed;
+                        _sliderCurrentJobWindow.GridLanding.Visibility = Visibility.Visible;
+                        _sliderCurrentJobWindow.GridResults.Visibility = Visibility.Visible;
+                        if (AppProperties.UserSettings.LocalSettings.ShowLandingData)
+                            _sliderCurrentJobWindow.ToggleSlider(true, 10);
+                    }
                     SetFinishJobInfo();
-                    LoadUserJobData();
+                    var currentJob = AppProperties.UserJobs.FirstOrDefault(x => x.IsActivated);
+                    AppProperties.UserJobs.Remove(currentJob);
+                    await LoadUserJobData();
                     // TODO Verify: await LoadJobListDataGrid();
-                    _isJobFinished = true;
                     _isJobStarted = false;
+                    _stopCheckJobFinish = false;
+                    _stopCheckJobStart = false;
                     return true;
                 }
                 else
@@ -142,7 +169,7 @@ namespace FlightJobsDesktop.Views.Home
 
         private async void CheckForStartJob()
         {
-            if (!_isJobStarted)
+            if (!_isJobStarted && !_stopCheckJobStart && _currentJobView != null)
             {
                 var departureAirportInfo = AirportDatabaseFile.FindAirportInfo(_currentJobView.DepartureICAO);
                 bool isCloseToDeparture = AirportDatabaseFile.CheckClosestLocation(FlightJobsConnectSim.PlaneSimData.Latitude,
@@ -165,23 +192,20 @@ namespace FlightJobsDesktop.Views.Home
 
         private async void CheckForFinishJob()
         {
-            if (_isJobStarted && AppProperties.UserSettings.LocalSettings.AutoFinishJob && !FlightJobsConnectSim.PlaneSimData.EngOneRunning)
+            if (_isJobStarted && !_stopCheckJobFinish && AppProperties.UserSettings.LocalSettings.AutoFinishJob && !FlightJobsConnectSim.PlaneSimData.EngOneRunning)
             {
                 var arrivalAirportInfo = AirportDatabaseFile.FindAirportInfo(_currentJobView.ArrivalICAO);
                 bool isCloseToArrivel = AirportDatabaseFile.CheckClosestLocation(FlightJobsConnectSim.PlaneSimData.Latitude,
-                                                                                 FlightJobsConnectSim.PlaneSimData.Latitude,
+                                                                                 FlightJobsConnectSim.PlaneSimData.Longitude,
                                                                                  arrivalAirportInfo.Latitude, arrivalAirportInfo.Longitude);
                 if (isCloseToArrivel)
                 {
-                    if (!_isJobFinished)
+                    if (!await FinishJob())
                     {
-                        if (!await FinishJob())
-                        {
-                            // TODO
-                            // IN CASE OF FINISH FAIL
-                            Application.Current.MainWindow.WindowState = WindowState.Minimized;
-                            Application.Current.MainWindow.WindowState = WindowState.Normal;
-                        }
+                        // TODO
+                        // IN CASE OF FINISH FAIL
+                        Application.Current.MainWindow.WindowState = WindowState.Minimized;
+                        Application.Current.MainWindow.WindowState = WindowState.Normal;
                     }
                 }
             }
@@ -229,7 +253,7 @@ namespace FlightJobsDesktop.Views.Home
             ((TabItem)HomeView.TabHome.Items[1]).IsEnabled = !_isJobStarted;
         }
 
-        internal async void LoadUserJobData()
+        internal async Task LoadUserJobData()
         {
             var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
 
@@ -245,6 +269,9 @@ namespace FlightJobsDesktop.Views.Home
 
                     _currentJobView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, CurrentJobViewModel>(currentJob);
                     _currentJobView.JobSummary = $"Setup aircraft departure on {_currentJobView.DepartureDesc} then fly to {_currentJobView.ArrivalDesc} with this total payload";
+                    if (_sliderCurrentJobWindow != null) _sliderCurrentJobWindow.Close();
+                    _sliderCurrentJobWindow = new CurrentJobDataWindow(_currentJobView);
+                    _sliderCurrentJobWindow.Show();
                 }
                 else
                 {
@@ -273,9 +300,9 @@ namespace FlightJobsDesktop.Views.Home
             }
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadUserJobData();
+            await LoadUserJobData();
         }
 
         private void BtnShowAddJobs_Click(object sender, RoutedEventArgs e)
