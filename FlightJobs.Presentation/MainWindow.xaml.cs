@@ -1,4 +1,5 @@
 ﻿using FlightJobs.Connect.MSFS.SDK;
+using FlightJobs.Domain.Navdata.Interface;
 using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
@@ -7,6 +8,7 @@ using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views;
 using FlightJobsDesktop.Views.Account;
+using log4net;
 using ModernWpf;
 using ModernWpf.Controls;
 using Newtonsoft.Json;
@@ -25,18 +27,22 @@ namespace FlightJobsDesktop
     public partial class MainWindow : Window
     {
         private FlightJobsConnectSim _flightJobsConnectSim = new FlightJobsConnectSim();
+        
+        private static readonly ILog _log = LogManager.GetLogger(typeof(MainWindow));
 
         public static IAbstractFactory<IJobService> JobServiceFactory;
         public static IAbstractFactory<IUserAccessService> UserServiceFactory;
         public static IAbstractFactory<IInfraService> InfraServiceFactory;
         public static IAbstractFactory<IAirlineService> AirlineServiceFactory;
+        public static IAbstractFactory<ISqLiteDbContext> SqLiteContextFactory;
 
         private UserSettingsViewModel _userSettings;
 
         public MainWindow(IAbstractFactory<IInfraService> factoryInfra,
                           IAbstractFactory<IJobService> factoryJob, 
                           IAbstractFactory<IUserAccessService> factoryUser,
-                          IAbstractFactory<IAirlineService> factoryAirline)
+                          IAbstractFactory<IAirlineService> factoryAirline,
+                          IAbstractFactory<ISqLiteDbContext> factorySqLiteContext)
         {
             InitializeComponent();
 
@@ -44,6 +50,7 @@ namespace FlightJobsDesktop
             UserServiceFactory = factoryUser;
             InfraServiceFactory = factoryInfra;
             AirlineServiceFactory = factoryAirline;
+            SqLiteContextFactory = factorySqLiteContext;
 
             ResizeMode = ResizeMode.CanResizeWithGrip;
             
@@ -62,7 +69,7 @@ namespace FlightJobsDesktop
             miExit.Click += delegate (object sender, EventArgs args) { Application.Current.Shutdown(); };
             
             ni.ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[] { miShow, miExit });
-            
+            _log.Info("Initialized");
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -141,7 +148,7 @@ namespace FlightJobsDesktop
             var loginWindow = new Login(InfraServiceFactory, 
                                         JobServiceFactory, 
                                         UserServiceFactory, 
-                                        new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, AirlineServiceFactory));
+                                        new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, AirlineServiceFactory, SqLiteContextFactory));
 
             loginWindow.AutoSingIn = false;
             loginWindow.Show();

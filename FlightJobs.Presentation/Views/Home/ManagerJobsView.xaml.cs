@@ -1,23 +1,20 @@
-﻿using FlightJobsDesktop.Utils;
+﻿using FlightJobs.Domain.Navdata.Interface;
+using FlightJobs.Domain.Navdata.Utils;
+using FlightJobs.Infrastructure;
+using FlightJobs.Infrastructure.Services.Interfaces;
+using FlightJobs.Model.Models;
+using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views.Modals;
 using ModernWpf.Controls;
+using Notification.Wpf;
 using System;
 using System.Collections;
-using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Linq;
-using System.Device.Location;
-using Notification.Wpf;
-using FlightJobsDesktop.Mapper;
-using System.Collections.Generic;
-using FlightJobs.Infrastructure;
-using FlightJobs.Infrastructure.Services;
-using FlightJobs.Model.Models;
-using System.Windows.Input;
-using FlightJobs.Infrastructure.Services.Interfaces;
 
 namespace FlightJobsDesktop.Views.Home
 {
@@ -29,6 +26,7 @@ namespace FlightJobsDesktop.Views.Home
         private NotificationManager _notificationManager;
         private IJobService _jobService;
         private IInfraService _infraService;
+        private ISqLiteDbContext _sqLiteDbContext;
 
         private GenerateJobViewModel _generateJobViewModel;
 
@@ -45,6 +43,7 @@ namespace FlightJobsDesktop.Views.Home
             _notificationManager = new NotificationManager();
             _jobService = MainWindow.JobServiceFactory.Create();
             _infraService = MainWindow.InfraServiceFactory.Create();
+            _sqLiteDbContext = MainWindow.SqLiteContextFactory.Create();
 
             _mapUrl = $"{_infraService.GetApiUrl()}Maps/GenerateJobsMap";
             _mapUrlQuery =  "?departure={0}&arrival={1}&alternative={2}&username={3}";
@@ -176,8 +175,8 @@ namespace FlightJobsDesktop.Views.Home
 
         private IEnumerable GetIcaoSugestions(string text)
         {
-            var list = AirportDatabaseFile.FindAirportInfoByTerm(text);
-            return list.Select(x => $"{x.ICAO} - {x.Name}" ).ToArray();
+            var list = _sqLiteDbContext.GetAirportsByIcaoAndName(text);
+            return list.Select(x => $"{x.Ident} - {x.Name}" ).ToArray();
         }
 
         private string GetIcao(string text)
@@ -193,8 +192,8 @@ namespace FlightJobsDesktop.Views.Home
         {
             if (!string.IsNullOrEmpty(text) && text?.Length > 3)
             {
-                var info = AirportDatabaseFile.FindAirportInfo(text.Substring(0,4));
-                return $"{info?.ICAO} - {info?.Name}";
+                var info = _sqLiteDbContext.GetAirportByIcao(text.Substring(0,4));
+                return $"{info?.Ident} - {info?.Name}";
             }
             return "";
         }
@@ -213,7 +212,7 @@ namespace FlightJobsDesktop.Views.Home
                     string url = _mapUrl + string.Format(_mapUrlQuery, departure, arrival, alternative, user);
                     MapWebView.Navigate(url);
 
-                    _generateJobViewModel.Dist = AirportDatabaseFile.CalcDistance(departure, arrival);
+                    _generateJobViewModel.Dist = GeoCalculationsUtil.CalcDistance(departure, arrival);
                     lblDistance.Content = _generateJobViewModel.DistDesc;
                 }
             }
@@ -264,7 +263,7 @@ namespace FlightJobsDesktop.Views.Home
                     }
                     else
                     {
-                        _generateJobViewModel.Dist = AirportDatabaseFile.CalcDistance(GetIcao(txtDeparture.Text), GetIcao(txtArrival.Text));
+                        _generateJobViewModel.Dist = GeoCalculationsUtil.CalcDistance(GetIcao(txtDeparture.Text), GetIcao(txtArrival.Text));
                         lblDistance.Content = _generateJobViewModel.DistDesc;
                     }
                 }

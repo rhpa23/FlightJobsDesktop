@@ -1,5 +1,7 @@
-﻿using FlightJobsDesktop.Views.Home;
+﻿using FlightJobs.Infrastructure;
+using FlightJobsDesktop.Views.Home;
 using System.Windows.Controls;
+using System.Windows.Shapes;
 
 namespace FlightJobsDesktop.Views
 {
@@ -9,11 +11,13 @@ namespace FlightJobsDesktop.Views
     public partial class HomeView : UserControl
     {
         internal static TabControl TabHome { get; set; }
+        internal static Ellipse DebtAirlineEllipse { get; set; }
 
         public HomeView()
         {
             InitializeComponent();
             TabHome = TabControlHome;
+            DebtAirlineEllipse = EllipseAirlines;
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -23,6 +27,16 @@ namespace FlightJobsDesktop.Views
                 var managerView = (ManagerJobsView) ((TabControl)e.Source).SelectedContent;
                 managerView.LoadManagerView();
             }
+        }
+
+        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SetEllipseAirlinesVIsibility();
+        }
+
+        internal static void SetEllipseAirlinesVIsibility()
+        {
+            DebtAirlineEllipse.Visibility = AppProperties.UserStatistics.Airline?.DebtValue == 0 ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
         }
     }
 }

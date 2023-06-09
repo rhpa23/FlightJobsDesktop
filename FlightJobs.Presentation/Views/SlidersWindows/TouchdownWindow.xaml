@@ -17,7 +17,9 @@
             <ColumnDefinition Width="25"/>
         </Grid.ColumnDefinitions>
         <TextBlock Text="Touchdown" Foreground="White" VerticalAlignment="Center" FontSize="10" />
-        <TextBlock Text="-385fpm" Foreground="White" VerticalAlignment="Center" Grid.Column="1" Margin="3,0,0,0" />
+        <TextBlock Foreground="White" VerticalAlignment="Center" Grid.Column="1" Margin="3,0,0,0" >
+            <Run Text="{Binding PlaneSimData.TouchdownFpm}"/> <Run Text="fpm"/>
+        </TextBlock>
         <ui:FontIcon x:Name="HideIco" Height="20" FontFamily="Segoe MDL2 Assets" Glyph="&#xE8A0;" Foreground="White" Grid.Column="2" Margin="0" MouseDown="HideIco_MouseDown" />
     </Grid>
 </Window>

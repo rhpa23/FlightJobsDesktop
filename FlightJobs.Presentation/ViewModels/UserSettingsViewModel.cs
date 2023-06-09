@@ -1,7 +1,5 @@
 ﻿using FlightJobs.Connect.MSFS.SDK.Model;
-using FlightJobsDesktop.Utils;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace FlightJobsDesktop.ViewModels
 {

@@ -1,10 +1,5 @@
-﻿using FlightJobsDesktop.Utils;
-using System;
+﻿using FlightJobs.Model.Enum;
 using System.Collections.Generic;
-using FlightJobs.Model.Enum;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
 
 namespace FlightJobsDesktop.ViewModels

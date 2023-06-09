@@ -1,5 +1,4 @@
 ﻿using FlightJobs.Connect.MSFS.SDK.Model;
-using FlightJobsDesktop.Utils;
 using System.Windows;
 using System.Windows.Media;
 
@@ -12,8 +11,6 @@ namespace FlightJobsDesktop.ViewModels
         public int Id { get; set; }
         public string DepartureICAO { get; set; }
         public string ArrivalICAO { get; set; }
-        public string DepartureDesc { get { return $"{DepartureICAO} - {AirportDatabaseFile.FindAirportInfo(DepartureICAO).Name}"; } }
-        public string ArrivalDesc { get { return $"{ArrivalICAO} - {AirportDatabaseFile.FindAirportInfo(ArrivalICAO).Name}"; } }
         public string AlternativeICAO { get; set; }
         public long Dist { get; set; }
         public string DistComplete { get { return Dist + " NM"; } }
@@ -54,9 +51,25 @@ namespace FlightJobsDesktop.ViewModels
         public string ChallengeExpirationDate { get; set; }
         public int ChallengeType { get; set; }
         public string WeightUnit { get; set; }
+        private string _sliderMessage { get; set; }
+        public string SliderMessage
+        {
+            get { return _sliderMessage; }
+            set { _sliderMessage = value; OnPropertyChanged("SliderMessage"); }
+        }
+
+        private long _score { get; set; }
+        public long Score
+        {
+            get { return _score; }
+            set { _score = value; OnPropertyChanged("Score"); }
+        }
+
         public LastJobViewModel LastJob { get; set; }
         public PlaneModel PlaneSimData { get; set; }
         public SimDataModel SimData { get; set; }
+
+        public FlightResultsViewModel FlightResults { get; set; } = new FlightResultsViewModel();
 
         private Visibility _isConnectedVisibility;
         public Visibility IsConnectedVisibility

@@ -1,4 +1,5 @@
-﻿using FlightJobs.Infrastructure;
+﻿using FlightJobs.Domain.Navdata.Interface;
+using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;

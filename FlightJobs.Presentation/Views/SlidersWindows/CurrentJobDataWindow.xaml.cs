@@ -3,6 +3,7 @@ using FlightJobs.Infrastructure;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
+using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,6 +91,15 @@ namespace FlightJobsDesktop.Views.SlidersWindows
                 DataContext = _currentJobViewModel;
             }
 
+        }
+
+        private void BtnCloseResults_Click(object sender, RoutedEventArgs e)
+        {
+            Flyout f = FlyoutService.GetFlyout(BtnShowFlightResults) as Flyout;
+            if (f != null)
+            {
+                f.Hide();
+            }
         }
     }
 }

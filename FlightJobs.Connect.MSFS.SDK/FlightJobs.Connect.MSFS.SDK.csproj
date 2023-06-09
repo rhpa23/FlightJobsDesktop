@@ -36,6 +36,9 @@
     <Reference Include="CTrue.FsConnect, Version=1.3.3.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\CTrue.FsConnect.1.3.3\lib\net45\CTrue.FsConnect.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.FlightSimulator.SimConnect, Version=11.0.62651.3, Culture=neutral, PublicKeyToken=baf445ffb3a06b5c, processorArchitecture=AMD64">
       <HintPath>..\packages\CTrue.FsConnect.1.3.3\lib\net45\Microsoft.FlightSimulator.SimConnect.dll</HintPath>
     </Reference>
@@ -43,7 +46,9 @@
       <HintPath>..\packages\Serilog.2.10.0\lib\net46\Serilog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,8 +60,21 @@
   <ItemGroup>
     <Compile Include="Enum\RequestDefinitionEnum.cs" />
     <Compile Include="FlightJobsConnectSim.cs" />
+    <Compile Include="Model\Results\AltimeterResult.cs" />
+    <Compile Include="Model\Results\NavigationLightsResult.cs" />
+    <Compile Include="Model\Results\BounceResult.cs" />
+    <Compile Include="Model\Results\CenterDerivationResult.cs" />
+    <Compile Include="Model\Results\LandDistanceResult.cs" />
+    <Compile Include="Model\Results\BeaconLightsResult.cs" />
+    <Compile Include="Model\Results\LandingLightsResult.cs" />
+    <Compile Include="Model\Results\ResultBase.cs" />
+    <Compile Include="Model\Results\TouchdownResult.cs" />
+    <Compile Include="Model\Results\GForceResult.cs" />
     <Compile Include="Model\ObservableObject.cs" />
     <Compile Include="Model\PlaneModel.cs" />
+    <Compile Include="Model\Results\ResultEnum.cs" />
+    <Compile Include="Model\Results\WindAngleResult.cs" />
+    <Compile Include="Model\Results\WindSpeedResult.cs" />
     <Compile Include="Model\SimDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitsConverterUtil.cs" />

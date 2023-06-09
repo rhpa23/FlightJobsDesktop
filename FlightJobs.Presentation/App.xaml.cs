@@ -7,6 +7,11 @@ using FlightJobsDesktop.Views.Account;
 using FlightJobsDesktop.Views.SlidersWindows;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using System.Linq;
+using FlightJobs.Domain.Navdata.Interface;
+using FlightJobs.Domain.Navdata;
+using log4net.Config;
+using FlightJobs.Domain.Navdata.Utils;
 
 namespace FlightJobsDesktop
 {
@@ -22,6 +27,7 @@ namespace FlightJobsDesktop
             ServiceCollection services = new ServiceCollection();
             ConfigureServices(services);
             _serviceProvider = services.BuildServiceProvider();
+            XmlConfigurator.Configure();
         }
 
         private void ConfigureServices(ServiceCollection services)
@@ -35,6 +41,8 @@ namespace FlightJobsDesktop
             services.AddAbstractFactory<IUserAccessService, UserAccessService>();
             services.AddAbstractFactory<IInfraService, InfraService>();
             services.AddAbstractFactory<IAirlineService, AirlineService>();
+            
+            services.AddAbstractFactory<ISqLiteDbContext, SqLiteDbContext>();
 
             services.AddSingleton<MainWindow>();
             services.AddSingleton<Login>();
@@ -45,7 +53,7 @@ namespace FlightJobsDesktop
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
-//            new CurrentJobDataWindow().Show();
+            //            new CurrentJobDataWindow().Show();
             var loginWindow = _serviceProvider.GetService<Login>();
             loginWindow.Show();
         }

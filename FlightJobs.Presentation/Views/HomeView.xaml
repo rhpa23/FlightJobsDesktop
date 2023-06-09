@@ -5,30 +5,58 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:FlightJobsDesktop.Views.Home"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             mc:Ignorable="d">
+             mc:Ignorable="d" Loaded="UserControl_Loaded">
     <Grid>
         <TabControl x:Name="TabControlHome" SelectionChanged="TabControl_SelectionChanged"
-                    Style="{StaticResource TabControlPivotStyle}"
+                    Style="{DynamicResource TabControlPivotStyle}"
                     MinHeight="400" MinWidth="1000">
-            <TabItem Header="Connector">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Connector" FontSize="22" Style="{DynamicResource CustomTabItem}" />
+                    </StackPanel>
+                </TabItem.Header>
                 <views:ConnectorView />
             </TabItem>
-            <TabItem Header="Manager">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Manager" FontSize="22" Style="{DynamicResource CustomTabItem}" />
+                    </StackPanel>
+                </TabItem.Header>
                 <views:ManagerJobsView  />
             </TabItem>
-            <TabItem Header="Logbook">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Logbook" FontSize="22" Style="{DynamicResource CustomTabItem}" />
+                    </StackPanel>
+                </TabItem.Header>
                 <views:LogbookView/>
             </TabItem>
-            <TabItem Header="Airlines">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Airlines" FontSize="22" Style="{DynamicResource CustomTabItem}" />
+                        <Ellipse x:Name="EllipseAirlines" Width="7" Height="7" Fill="Red" Margin="2,5,2,0" />
+                    </StackPanel>
+                </TabItem.Header>
                 <views:AirlinesView/>
             </TabItem>
-            <TabItem Header="Map">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Map" FontSize="22" Style="{DynamicResource CustomTabItem}" />
+                    </StackPanel>
+                </TabItem.Header>
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
-            <TabItem Header="Analysis">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="Faq">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Analysis" FontSize="22" Style="{DynamicResource CustomTabItem}" />
+                    </StackPanel>
+                </TabItem.Header>
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>

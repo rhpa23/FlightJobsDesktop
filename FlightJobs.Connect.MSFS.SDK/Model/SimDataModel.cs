@@ -23,7 +23,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         {
             get { return _seaLevelPressureMillibars; }
             set { _seaLevelPressureMillibars = value; 
-                SeaLevelPressureMillibarsText = $"{Math.Round(value, 0)} mbar";
+                SeaLevelPressureMillibarsText = $"{Math.Round(value, 0)} hPa";
                 SeaLevelPressureInchesText = $"{(Math.Round(value, 0) * 0.02953).ToString("0.00")} inHg";
                 NotifyPropertyChanged("SeaLevelPressureMillibarsText");
                 NotifyPropertyChanged("SeaLevelPressureInchesText");

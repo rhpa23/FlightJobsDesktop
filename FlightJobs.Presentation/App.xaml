@@ -71,6 +71,16 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            <Style x:Key="CustomTabItem" TargetType="Label">
+                <Setter Property="Foreground" Value="#BFBFBF" />
+                <!-- This won't work -->
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="Gray" />
+                        <!--This won't work-->
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

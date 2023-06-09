@@ -50,12 +50,16 @@ namespace FlightJobsDesktop.Views.SlidersWindows
             _hideTimer.Interval = new TimeSpan(0, 0, SECONDS_TO_CLOSE);
         }
 
-        private void ToggleSlider(bool toShow)
+        internal void ToggleSlider(bool toShow, int secondsToClose = SECONDS_TO_CLOSE)
         {
             var widthValue = toShow ? TARGET_WIDTH : 2;
             DoubleAnimation sliderAnimation = new DoubleAnimation(widthValue, new Duration(TimeSpan.FromSeconds(0.3)));
             this.BeginAnimation(WidthProperty, sliderAnimation);
-            if (toShow) _hideTimer.Start();
+            if (toShow)
+            {
+                _hideTimer.Interval = new TimeSpan(0, 0, secondsToClose);
+                _hideTimer.Start();
+            }
         }
 
         private void HideTimer_Tick(object sender, EventArgs e)

@@ -91,13 +91,17 @@
             </Grid>
             <Grid x:Name="GridLanding" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="85"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition Height="10"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="20"/>
@@ -105,32 +109,66 @@
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="10"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Landing" Foreground="White" Background="SlateGray" TextAlignment="Center" Margin="0,10,0,0" Padding="3"
-                           HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.ColumnSpan="3"/>
-                <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="2" Margin="20,0,0,0"  />
+                <TextBlock Foreground="White" Background="SlateGray" TextAlignment="Center" Margin="0,10,0,0" Padding="3"
+                           HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.ColumnSpan="3">
+                    <Run Text="Landing  "/><Run Text="{Binding PlaneSimData.TouchdownRunwayDesignator}"/>
+                </TextBlock>
+                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultTouchdownFpm}" Canvas.Left="10" Canvas.Top="25" Grid.Row="2" Margin="0"  />
                 <TextBlock Text="Touchdown:" Foreground="White" Grid.Row="2" Grid.Column="1" />
-                <TextBlock Text="-125fpm" Foreground="White" Grid.Row="2" Grid.Column="2" />
+                <TextBlock Foreground="White" Grid.Row="2" Grid.Column="2" >
+                    <Run Text="{Binding PlaneSimData.TouchdownFpm}"/> <Run Text="fpm"/>
+                </TextBlock>
 
-                <Ellipse Width="10" Height="10" Fill="Orange" Canvas.Left="10" Canvas.Top="25" Grid.Row="3" Margin="20,0,0,0" />
+                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultGForce}" Canvas.Left="10" Canvas.Top="25" Grid.Row="3" Margin="0" />
                 <TextBlock Text="GForce:" Foreground="White" Grid.Row="3" Grid.Column="1" />
-                <TextBlock Text="1.22G" Foreground="White" Grid.Row="3" Grid.Column="2" />
+                <TextBlock Text="{Binding PlaneSimData.TouchdownGForceText}" Foreground="White" Grid.Row="3" Grid.Column="2" />
 
-                <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="4" Margin="20,0,0,0" />
+                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultTouchdownWindSpeed}" Canvas.Left="10" Canvas.Top="25" Grid.Row="4" Margin="0" />
                 <TextBlock Text="Wind:" Foreground="White" Grid.Row="4" Grid.Column="1" />
-                <TextBlock Text="170º 6Kt" Foreground="White" Grid.Row="4" Grid.Column="2" />
 
-                <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="5" Margin="20,0,0,0" />
+                <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="2">
+                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF0AD;" Foreground="{Binding PlaneSimData.ColorResultTouchdownWindAngle}" Margin="0" FontSize="11" RenderTransformOrigin="0.5,0.5" > 
+                        <ui:FontIcon.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="{Binding PlaneSimData.TouchdownWindAngle}"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </ui:FontIcon.RenderTransform>
+                    </ui:FontIcon>
+                    <TextBlock Text="{Binding PlaneSimData.TouchdownWindSpeedText}" Foreground="White" Margin="8,0,0,0"  />
+                </StackPanel>
+
+                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultBounceCount}" Canvas.Left="10" Canvas.Top="25" Grid.Row="5" Margin="0" />
                 <TextBlock Text="Bounces:" Foreground="White" Grid.Row="5" Grid.Column="1" />
-                <TextBlock Text="0" Foreground="White" Grid.Row="5" Grid.Column="2" />
+                <TextBlock Text="{Binding PlaneSimData.TouchdownBounceCount}" Foreground="White" Grid.Row="5" Grid.Column="2" />
 
-                <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="6" Margin="20,0,0,0" />
-                <TextBlock Text="Slideslip:" Foreground="White" Grid.Row="6" Grid.Column="1" />
-                <TextBlock Text="1.45º left" Foreground="White" Grid.Row="6" Grid.Column="2" />
+                <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="6" Margin="0" />
+                <TextBlock Text="Air speed:" Foreground="White" Grid.Row="6" Grid.Column="1" />
+                <TextBlock Text="{Binding PlaneSimData.TouchdownAirspeedText}" Foreground="White" Grid.Row="6" Grid.Column="2" />
+                
+                <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="7" Margin="0" />
+                <TextBlock Text="Ground speed:" Foreground="White" Grid.Row="7" Grid.Column="1" />
+                <TextBlock Text="{Binding PlaneSimData.TouchdownGroundspeedText}" Foreground="White" Grid.Row="7" Grid.Column="2" />
+
+                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultCenterDerivation}" Canvas.Left="10" Canvas.Top="25" Grid.Row="8" Margin="0" />
+                <TextBlock Text="Center line:" Foreground="White" Grid.Row="8" Grid.Column="1" ToolTip="Center line derivation" />
+                <TextBlock Foreground="White" Grid.Row="8" Grid.Column="2" >
+                    <Run Text="{Binding PlaneSimData.TouchdownCenterDerivation}"/> <Run Text="m"/>
+                </TextBlock>
+
+                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultLandDistance}" Canvas.Left="10" Canvas.Top="25" Grid.Row="9" Margin="0" />
+                <TextBlock Text="Distance:" Foreground="White" Grid.Row="9" Grid.Column="1" ToolTip="Threshold distance" />
+                <TextBlock Foreground="White" Grid.Row="9" Grid.Column="2" >
+                    <Run Text="{Binding PlaneSimData.TouchdownThresholdDistance}"/> <Run Text="m"/>
+                </TextBlock>
+                
             </Grid>
             <Grid x:Name="GridResults" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="125"/>
+                    <ColumnDefinition Width="85"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -139,31 +177,121 @@
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition Height="10"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Results" Foreground="White" Background="SlateGray" TextAlignment="Center" Margin="0,10,0,0" Padding="3"
                            HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.ColumnSpan="3"/>
                 <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="2" Margin="2,0,0,0"  />
                 <TextBlock Text="Pilot Payment:" Foreground="White" Grid.Row="2" Grid.Column="1" />
-                <TextBlock Text="F$2.589" Foreground="White" Grid.Row="2" Grid.Column="2" />
+                <TextBlock Text="{Binding PayComplete}" Foreground="White" Grid.Row="2" Grid.Column="2" />
 
                 <Ellipse Width="10" Height="10" Fill="Orange" Canvas.Left="10" Canvas.Top="25" Grid.Row="3" Margin="2,0,0,0" />
                 <TextBlock Text="Flight time:" Foreground="White" Grid.Row="3" Grid.Column="1" />
-                <TextBlock Text="06:35" Foreground="White" Grid.Row="3" Grid.Column="2" />
+                <TextBlock Text="{Binding LastJob.FlightTime}" Foreground="White" Grid.Row="3" Grid.Column="2" />
 
-                <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="4" Margin="2,0,0,0" />
-                <TextBlock Text="Increase score:" Foreground="White" Grid.Row="4" Grid.Column="1" />
-                <TextBlock Text="150" Foreground="White" Grid.Row="4" Grid.Column="2" />
+                <Border Width="115" Grid.Row="5" Grid.ColumnSpan="3" Height="25" Style="{DynamicResource BorderButtonYellow}">
+                    <Button x:Name="BtnShowFlightResults" Width="115" Height="35">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71D;" Foreground="White" HorizontalAlignment="Left" FontSize="12" Margin="0,0,5,0" />
+                            <TextBlock Foreground="White" FontSize="12">
+                                <Run Text="Score"/> <Run Text="{Binding Score}" />
+                            </TextBlock>
+                        </StackPanel>
+                        <ui:FlyoutService.Flyout>
+                            <ui:Flyout x:Name="FlyoutScoreResults" Placement="RightEdgeAlignedBottom">
+                                <ui:Flyout.FlyoutPresenterStyle>
+                                    <Style TargetType="ui:FlyoutPresenter">
+                                        <Setter Property="MinWidth" Value="600"></Setter>
+                                    </Style>
+                                </ui:Flyout.FlyoutPresenterStyle>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Flight results" FontWeight="Bold" HorizontalAlignment="Center" />
+                                    <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,15,0,0" >
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="SlateGray"/>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <TextBlock Margin="0,10,5,0">
+                                        <Run Text="Touchdown ("/><Run Text="{Binding PlaneSimData.TouchdownFpm}"/><Run Text="fpm)."/>
+                                        <Run Text="Smooth landings results in a better score: "/>
+                                        <Run Text="{Binding PlaneSimData.ScoreTouchdown, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTouchdownFpm}"/>
+                                    </TextBlock>
+                                    <TextBlock Margin="0,10,5,0" >
+                                        <Run Text="GForce ("/><Run Text="{Binding PlaneSimData.TouchdownGForce}"/><Run Text=")."/>
+                                        <Run Text="G-Force closer to 1 results in a better score: "/>
+                                        <Run Text="{Binding PlaneSimData.ScoreGForce, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultGForce}"/>
+                                    </TextBlock>
+                                    <TextBlock Margin="0,10,5,0" >
+                                        <Run Text="Bounces ("/><Run Text="{Binding PlaneSimData.TouchdownBounceCount}"/><Run Text=")."/>
+                                        <Run Text="Landings without bounces result in a better score: "/>
+                                        <Run Text="{Binding PlaneSimData.ScoreBounce, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultBounceCount}"/>
+                                    </TextBlock>
+                                    <TextBlock Margin="0,10,5,0" >
+                                        <Run Text="Center derivation ("/><Run Text="{Binding PlaneSimData.TouchdownCenterDerivation}"/><Run Text="m)."/>
+                                        <Run Text="Landing closer to the runway centerline results in a better score: "/>
+                                        <Run Text="{Binding PlaneSimData.ScoreCenterDerivation, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultCenterDerivation}"/>
+                                    </TextBlock>
+                                    <TextBlock Margin="0,10,5,0" >
+                                        <Run Text="Landing distance ("/><Run Text="{Binding PlaneSimData.TouchdownThresholdDistance}"/><Run Text="m)."/>
+                                        <Run Text="Small distance from runway threshold results in a better score: "/>
+                                        <Run Text="{Binding PlaneSimData.ScoreLandDistance, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultLandDistance}"/>
+                                    </TextBlock>
+                                    <TextBlock Margin="0,10,5,0" >
+                                        <Run Text="Upwind landings result in a better score: "/>
+                                        <Run Text="{Binding PlaneSimData.ScoreWindAngle, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTouchdownWindAngle}"/>
+                                    </TextBlock>
 
-                <Ellipse Width="10" Height="10" Fill="Red" Canvas.Left="10" Canvas.Top="25" Grid.Row="5" Margin="2,0,0,0" />
-                <TextBlock Text="Center line derivation:" Foreground="White" Grid.Row="5" Grid.Column="1" />
-                <TextBlock Text="8.59m" Foreground="White" Grid.Row="5" Grid.Column="2" />
-                
-                <Ellipse Width="10" Height="10" Fill="Red" Canvas.Left="10" Canvas.Top="25" Grid.Row="6" Margin="2,0,0,0" />
-                <TextBlock Text="Threshold distance:" Foreground="White" Grid.Row="6" Grid.Column="1" />
-                <TextBlock Text="760m" Foreground="White" Grid.Row="6" Grid.Column="2" />
+                                    <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultBeaconLightVisibility}">
+                                        <Run Text="Beacon lights must be on while the engine(s) is running: "/>
+                                        <Run Text="{Binding PlaneSimData.ScoreLightBeaconOn}" FontWeight="Bold" Foreground="Orange"/>
+                                    </TextBlock>
+                                    <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultLandingLightVisibility}">
+                                        <Run Text="Landing lights must be on below FL100: "/>
+                                        <Run Text="{Binding PlaneSimData.ScoreLightLandingOn}" FontWeight="Bold" Foreground="Orange"/>
+                                    </TextBlock>
+                                    <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultNavigationLightVisibility}">
+                                        <Run Text="Navegation lights must be on while the engine(s) is running: "/>
+                                        <Run Text="{Binding PlaneSimData.ScoreLightNavigationOn}" FontWeight="Bold" Foreground="Orange"/>
+                                    </TextBlock>
+                                    <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultAltimeterSettingVisibility}">
+                                        <Run Text="Altimeter should be set to Standard(1013mb/29.92Hg) when above the transition level: "/>
+                                        <Run Text="{Binding PlaneSimData.ScoreAltimeterSettings}" FontWeight="Bold" Foreground="Orange"/>
+                                    </TextBlock>
+                                    
+                                    <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,15,0,0" >
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="SlateGray"/>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    
+                                    <TextBlock Margin="0,5,5,0">
+                                        <Run Text="The distance of the flight and the results define the total score: " FontWeight="Bold"/>
+                                        <Run Text="{Binding Score}" FontWeight="Bold" Foreground="GreenYellow"/>
+                                    </TextBlock>
+
+                                    <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,5,0,0" >
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="SlateGray"/>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+
+                                    <Button x:Name="BtnCloseResults" Content="Close" Margin="0,10,0,0" HorizontalAlignment="Right" Click="BtnCloseResults_Click"/>
+
+                                </StackPanel>
+                            </ui:Flyout>
+                        </ui:FlyoutService.Flyout>
+                    </Button>
+                </Border>
+            </Grid>
+            <Grid x:Name="GridMessage" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF473;" VerticalAlignment="Top" Margin="0,3,0,0"
+                         Foreground="Yellow" Grid.Column="0" />
+                <TextBlock Text="{Binding SliderMessage}" Grid.Column="1" Foreground="Yellow" TextWrapping="Wrap" Margin="0,10,0,0"/>
             </Grid>
         </StackPanel>
     </Grid>

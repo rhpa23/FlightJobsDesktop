@@ -1,8 +1,8 @@
-﻿using FlightJobs.Infrastructure;
+﻿using FlightJobs.Domain.Navdata.Interface;
+using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
-using FlightJobsDesktop.Utils;
 using FlightJobsDesktop.ViewModels;
 using ModernWpf.Controls;
 using Notification.Wpf;
@@ -22,18 +22,20 @@ namespace FlightJobsDesktop.Views.Home
     {
         private NotificationManager _notificationManager;
         private IJobService _jobService;
+        private ISqLiteDbContext _sqLiteDbContext;
 
         public LogbookView()
         {
             InitializeComponent();
             _notificationManager = new NotificationManager();
             _jobService = MainWindow.JobServiceFactory.Create();
+            _sqLiteDbContext = MainWindow.SqLiteContextFactory.Create();
         }
 
         private IEnumerable GetIcaoSugestions(string text)
         {
-            var list = AirportDatabaseFile.FindAirportInfoByTerm(text);
-            return list.Select(x => $"{x.ICAO} - {x.Name}").ToArray();
+            var list = _sqLiteDbContext.GetAirportsByIcaoAndName(text);
+            return list.Select(x => $"{x.Ident} - {x.Name}").ToArray();
         }
 
         private async Task UpdateDataGrid(int pageNumber)
