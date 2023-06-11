@@ -22,8 +22,6 @@ namespace FlightJobsDesktop.ViewModels
         public long Payload { get; set; }
         public string PayloadComplete { get { return $"{Payload} {WeightUnit}"; } }
         public long PayloadDisplay { get; set; }
-        public string FlightTime { get; set; }
-        public int FlightTimeHours { get; set; }
         public long Pay { get; set; }
         public string PayComplete { get { return string.Format("F{0:C}", Pay); } }
         public bool FirstClass { get; set; }
@@ -58,6 +56,14 @@ namespace FlightJobsDesktop.ViewModels
             set { _sliderMessage = value; OnPropertyChanged("SliderMessage"); }
         }
 
+        private string _flightTime { get; set; }
+        public string FlightTime
+        {
+            get { return _flightTime; }
+            set { _flightTime = value; OnPropertyChanged("FlightTime"); }
+        }
+        public int FlightTimeHours { get; set; }
+
         private long _score { get; set; }
         public long Score
         {
@@ -75,7 +81,7 @@ namespace FlightJobsDesktop.ViewModels
         public Visibility IsConnectedVisibility
         {
             get { return _isConnectedVisibility; }
-            set { _isConnectedVisibility = value; OnPropertyChanged("IsConnectedVisibility"); }
+            set { _isConnectedVisibility = value; OnPropertyChanged(); }
         }
 
         private SolidColorBrush _payloadLabelColor;
@@ -98,5 +104,7 @@ namespace FlightJobsDesktop.ViewModels
             get { return _sliderTopTitle; }
             set { _sliderTopTitle = value; OnPropertyChanged("SliderTopTitle"); }
         }
+
+        public MessagesResultViewModel MsgResults { get; set; } = new MessagesResultViewModel();
     }
 }

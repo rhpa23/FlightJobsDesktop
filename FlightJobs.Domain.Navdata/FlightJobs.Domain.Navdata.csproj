@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Entities\AirportEntity.cs" />
     <Compile Include="Entities\RunwayEntity.cs" />
+    <Compile Include="Helpers\TakeoffHelper.cs" />
     <Compile Include="Helpers\LandingHelper.cs" />
     <Compile Include="Interface\ISqLiteDbContext.cs" />
     <Compile Include="Mapper\EntityDbMapper.cs" />

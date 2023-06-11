@@ -94,6 +94,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Const\MessagesConst.cs" />
     <Compile Include="core\SelectedItemToContentConverter.cs" />
     <Compile Include="Factorys\AbstractFactory.cs" />
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="ViewModels\GenerateJobViewModel.cs" />
     <Compile Include="ViewModels\HiredFBOsViewModel.cs" />
     <Compile Include="ViewModels\JobItemViewModel.cs" />
+    <Compile Include="ViewModels\MessagesResultViewModel.cs" />
     <Compile Include="ViewModels\PaginatedAirlineJobLedgerViewModel.cs" />
     <Compile Include="ViewModels\LogbookViewModel.cs" />
     <Compile Include="ViewModels\PilotsHiredViewModel.cs" />

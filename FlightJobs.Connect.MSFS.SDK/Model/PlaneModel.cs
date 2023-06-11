@@ -84,7 +84,8 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         public int TouchdownFpm
         {
             get { return _touchdownFpm; }
-            set { _touchdownFpm = value; NotifyPropertyChanged("TouchdownFpm"); NotifyPropertyChanged("ColorResultTouchdownFpm"); }
+            set { _touchdownFpm = value; 
+                NotifyPropertysChanged("TouchdownFpm", "ColorResultTouchdownFpm"); }
         }
 
         private int _touchdownBounceCount;
@@ -207,13 +208,13 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
             }
         }
 
-        private double _touchdownHeadingTrue;
-        public double TouchdownHeadingTrue
+        private double _headingTrue;
+        public double HeadingTrue
         {
-            get { return _touchdownHeadingTrue; }
+            get { return _headingTrue; }
             set
             {
-                _touchdownHeadingTrue = value; NotifyPropertyChanged("TouchdownHeadingTrue");
+                _headingTrue = value; NotifyPropertyChanged("HeadingTrue");
             }
         }
 
@@ -228,6 +229,44 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         }
 
         public double TouchdownRunwayLength { get; set; }
+
+
+        private double _takeoffLatitude;
+        public double TakeoffLatitude
+        {
+            get { return _takeoffLatitude; }
+            set
+            {
+                _takeoffLatitude = value; NotifyPropertyChanged("TakeoffLatitude");
+            }
+        }
+
+        private double _takeoffLongitude;
+        public double TakeoffLongitude
+        {
+            get { return _takeoffLongitude; }
+            set
+            {
+                _takeoffLongitude = value; NotifyPropertyChanged("TakeoffLongitude");
+            }
+        }
+
+        private double _centerLineTakeoffDerivation;
+        public double TakeoffCenterDerivation
+        {
+            get { return _centerLineTakeoffDerivation; }
+            set
+            {
+                _centerLineTakeoffDerivation = value;
+                NotifyPropertyChanged("TakeoffCenterDerivation");
+                NotifyPropertyChanged("ColorResultTakeoffCenterDerivation");
+            }
+        }
+
+        public string ColorResultTakeoffCenterDerivation
+        {
+            get { return CenterDerivationResult.GetColor(TakeoffCenterDerivation, 0); }
+        }
 
         public string ColorResultGForce
         { 
@@ -288,7 +327,10 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         {
             get { return CenterDerivationResult.GetScore(TouchdownCenterDerivation, TouchdownWindSpeed); }
         }
-
+        public int ScoreTakeoffCenterDerivation
+        {
+            get { return CenterDerivationResult.GetScore(TakeoffCenterDerivation, 0); }
+        }
         public string ColorResultLandDistance
         {
             get { return LandDistanceResult.GetColor(TouchdownThresholdDistance, TouchdownRunwayLength); }

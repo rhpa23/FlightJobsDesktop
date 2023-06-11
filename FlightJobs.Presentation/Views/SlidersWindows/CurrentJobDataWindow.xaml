@@ -188,7 +188,7 @@
 
                 <Ellipse Width="10" Height="10" Fill="Orange" Canvas.Left="10" Canvas.Top="25" Grid.Row="3" Margin="2,0,0,0" />
                 <TextBlock Text="Flight time:" Foreground="White" Grid.Row="3" Grid.Column="1" />
-                <TextBlock Text="{Binding LastJob.FlightTime}" Foreground="White" Grid.Row="3" Grid.Column="2" />
+                <TextBlock Text="{Binding FlightTime}" Foreground="White" Grid.Row="3" Grid.Column="2" />
 
                 <Border Width="115" Grid.Row="5" Grid.ColumnSpan="3" Height="25" Style="{DynamicResource BorderButtonYellow}">
                     <Button x:Name="BtnShowFlightResults" Width="115" Height="35">
@@ -212,50 +212,48 @@
                                             <SolidColorBrush Color="SlateGray"/>
                                         </Rectangle.Fill>
                                     </Rectangle>
-                                    <TextBlock Margin="0,10,5,0">
-                                        <Run Text="Touchdown ("/><Run Text="{Binding PlaneSimData.TouchdownFpm}"/><Run Text="fpm)."/>
-                                        <Run Text="Smooth landings results in a better score: "/>
+                                    <TextBlock Margin="0,10,5,0" >
+                                        <Run Text="{Binding MsgResults.TouchdownScore}"/>
                                         <Run Text="{Binding PlaneSimData.ScoreTouchdown, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTouchdownFpm}"/>
                                     </TextBlock>
                                     <TextBlock Margin="0,10,5,0" >
-                                        <Run Text="GForce ("/><Run Text="{Binding PlaneSimData.TouchdownGForce}"/><Run Text=")."/>
-                                        <Run Text="G-Force closer to 1 results in a better score: "/>
+                                        <Run Text="{Binding MsgResults.GForceScore}"/>
                                         <Run Text="{Binding PlaneSimData.ScoreGForce, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultGForce}"/>
                                     </TextBlock>
                                     <TextBlock Margin="0,10,5,0" >
-                                        <Run Text="Bounces ("/><Run Text="{Binding PlaneSimData.TouchdownBounceCount}"/><Run Text=")."/>
-                                        <Run Text="Landings without bounces result in a better score: "/>
+                                        <Run Text="{Binding MsgResults.BounceScore}"/>
                                         <Run Text="{Binding PlaneSimData.ScoreBounce, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultBounceCount}"/>
                                     </TextBlock>
                                     <TextBlock Margin="0,10,5,0" >
-                                        <Run Text="Center derivation ("/><Run Text="{Binding PlaneSimData.TouchdownCenterDerivation}"/><Run Text="m)."/>
-                                        <Run Text="Landing closer to the runway centerline results in a better score: "/>
+                                        <Run Text="{Binding MsgResults.LandingDerivationScore}"/>
                                         <Run Text="{Binding PlaneSimData.ScoreCenterDerivation, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultCenterDerivation}"/>
                                     </TextBlock>
                                     <TextBlock Margin="0,10,5,0" >
-                                        <Run Text="Landing distance ("/><Run Text="{Binding PlaneSimData.TouchdownThresholdDistance}"/><Run Text="m)."/>
-                                        <Run Text="Small distance from runway threshold results in a better score: "/>
+                                        <Run Text="{Binding MsgResults.LandingDistanceScore}"/>
                                         <Run Text="{Binding PlaneSimData.ScoreLandDistance, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultLandDistance}"/>
                                     </TextBlock>
                                     <TextBlock Margin="0,10,5,0" >
-                                        <Run Text="Upwind landings result in a better score: "/>
+                                        <Run Text="{Binding MsgResults.UpwindLandingScore}"/>
                                         <Run Text="{Binding PlaneSimData.ScoreWindAngle, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTouchdownWindAngle}"/>
                                     </TextBlock>
-
+                                    <TextBlock Margin="0,10,5,0" >
+                                        <Run Text="{Binding MsgResults.TakeoffDerivationScore}"/>
+                                        <Run Text="{Binding PlaneSimData.ScoreTakeoffCenterDerivation, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTakeoffCenterDerivation}"/>
+                                    </TextBlock>
                                     <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultBeaconLightVisibility}">
-                                        <Run Text="Beacon lights must be on while the engine(s) is running: "/>
+                                        <Run Text="{Binding MsgResults.BeaconLightsScore}"/>
                                         <Run Text="{Binding PlaneSimData.ScoreLightBeaconOn}" FontWeight="Bold" Foreground="Orange"/>
                                     </TextBlock>
                                     <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultLandingLightVisibility}">
-                                        <Run Text="Landing lights must be on below FL100: "/>
+                                        <Run Text="{Binding MsgResults.LandingLightsScore}"/>
                                         <Run Text="{Binding PlaneSimData.ScoreLightLandingOn}" FontWeight="Bold" Foreground="Orange"/>
                                     </TextBlock>
                                     <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultNavigationLightVisibility}">
-                                        <Run Text="Navegation lights must be on while the engine(s) is running: "/>
+                                        <Run Text="{Binding MsgResults.NavegationLightsScore}"/>
                                         <Run Text="{Binding PlaneSimData.ScoreLightNavigationOn}" FontWeight="Bold" Foreground="Orange"/>
                                     </TextBlock>
                                     <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultAltimeterSettingVisibility}">
-                                        <Run Text="Altimeter should be set to Standard(1013mb/29.92Hg) when above the transition level: "/>
+                                        <Run Text="{Binding MsgResults.AltimeterScore}"/>
                                         <Run Text="{Binding PlaneSimData.ScoreAltimeterSettings}" FontWeight="Bold" Foreground="Orange"/>
                                     </TextBlock>
                                     
@@ -266,7 +264,7 @@
                                     </Rectangle>
                                     
                                     <TextBlock Margin="0,5,5,0">
-                                        <Run Text="The distance of the flight and the results define the total score: " FontWeight="Bold"/>
+                                        <Run Text="{Binding MsgResults.TotalScore}" FontWeight="Bold"/>
                                         <Run Text="{Binding Score}" FontWeight="Bold" Foreground="GreenYellow"/>
                                     </TextBlock>
 

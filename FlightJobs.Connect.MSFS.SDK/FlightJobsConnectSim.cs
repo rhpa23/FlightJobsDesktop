@@ -28,7 +28,7 @@ namespace FlightJobs.Connect.MSFS.SDK
         public double LandingRate;
         public double PlaneTouchdownLatitude;
         public double PlaneTouchdownLongitude;
-        public double PlaneTouchdownHeadingTrue;
+        public double PlaneHeadingTrue;
         public double PlaneLatitude;
         public double PlaneLongitude;
         public double PlaneFuelWeightPounds;
@@ -78,7 +78,9 @@ namespace FlightJobs.Connect.MSFS.SDK
         public static SimDataModel CommonSimData { get; set; } = new SimDataModel();
         public static PlaneModel PlaneSimData { get; set; } = new PlaneModel();
         public static bool ShowLanding { get; set; }
+        public static bool ShowTakeoff { get; set; }
         public static bool LandingDataCaptured { get; set; }
+        public static bool TakeoffDataCaptured { get; set; }
 
         private static FsConnect _fsConnect = new FsConnect();
         private static List<SimVar> _planeDataDefinitionList = new List<SimVar>();
@@ -143,6 +145,20 @@ namespace FlightJobs.Connect.MSFS.SDK
             _timerSimConnection.Start();
         }
 
+        private void SetTakeoffInfo()
+        {
+            try
+            {
+                PlaneSimData.TakeoffLatitude = _inAir.Last().PlaneLatitude;
+                PlaneSimData.TakeoffLongitude = _inAir.Last().PlaneLongitude;
+                PlaneSimData.HeadingTrue = _inAir.Last().PlaneHeadingTrue;
+                TakeoffDataCaptured = true;
+
+                ShowTakeoff = false;
+            }
+            catch (Exception ex) { /* ignore */ _log.Error(ex); }
+        }
+
         private void SetTouchdownInfo()
         {
             try
@@ -160,7 +176,7 @@ namespace FlightJobs.Connect.MSFS.SDK
                     PlaneSimData.TouchdownGForce = Math.Round(_onGround.Max(x => x.Gforce), 2);
                     PlaneSimData.TouchdownLatitude = _onGround.Last().PlaneTouchdownLatitude;
                     PlaneSimData.TouchdownLongitude = _onGround.Last().PlaneTouchdownLongitude;
-                    PlaneSimData.TouchdownHeadingTrue = _onGround.Last().PlaneTouchdownHeadingTrue;
+                    PlaneSimData.HeadingTrue = _onGround.Last().PlaneHeadingTrue;
 
                     LandingDataCaptured = true;
 
@@ -197,6 +213,11 @@ namespace FlightJobs.Connect.MSFS.SDK
                 SetTouchdownInfo();
                 _timerTouchdownBounces.Interval = new TimeSpan(0, 0, 0, 5, 0);
                 _timerTouchdownBounces.Start();
+            }
+
+            if (ShowTakeoff)
+            {
+                SetTakeoffInfo();
             }
         }
 
@@ -321,6 +342,12 @@ namespace FlightJobs.Connect.MSFS.SDK
                             {
                                 _inAir.RemoveAt(0);
                             }
+
+                            if (!ShowTakeoff)
+                            {
+                                ShowTakeoff = _onGround.Count > 0;
+                            }
+
                             _onGround.Clear();
                         }
                         //if (_inAir.Count > BUFFER_SIZE || _onGround.Count > BUFFER_SIZE) //maximum 1 for race condition

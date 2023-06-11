@@ -15,5 +15,13 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public void NotifyPropertysChanged(params string[] propertyNames)
+        {
+            foreach (var pName in propertyNames)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(pName));
+            }
+        }
     }
 }
