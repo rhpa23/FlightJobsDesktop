@@ -15,9 +15,9 @@ namespace ConnectorClientAPI
     public class FlightJobsConnectorClientAPI
     {
         //public static string SITE_URL = "http://localhost:5646/";
-        //public static string SITE_URL = "https://flightjobs.bsite.net/";
-        public static string SITE_URL = "https://flightjobs.somee.com/";
-        static HttpClient client;
+        public static string SITE_URL = "https://flightjobs.bsite.net/";
+        //public static string SITE_URL = "https://flightjobs.somee.com/";
+        static HttpClient _client;
 
         public FlightJobsConnectorClientAPI()
         {
@@ -26,20 +26,20 @@ namespace ConnectorClientAPI
                 AllowAutoRedirect = false
             };
             
-            client = new HttpClient(handler);
-            client.BaseAddress = new Uri(SITE_URL);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _client = new HttpClient(handler);
+            _client.BaseAddress = new Uri(SITE_URL);
+            _client.DefaultRequestHeaders.Accept.Clear();
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
         public async Task<LoginResponseModel> Login(string email, string password)
         {
             try
             {
                 var url = $"{SITE_URL}api/AuthenticationApi/Login";
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Add("Email", email);
-                client.DefaultRequestHeaders.Add("Password", password);
-                HttpResponseMessage response = await client.GetAsync(new Uri(url));
+                _client.DefaultRequestHeaders.Clear();
+                _client.DefaultRequestHeaders.Add("Email", email);
+                _client.DefaultRequestHeaders.Add("Password", password);
+                HttpResponseMessage response = await _client.GetAsync(new Uri(url));
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -67,7 +67,7 @@ namespace ConnectorClientAPI
 
             var body = JsonConvert.SerializeObject(userModel);
 
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.Content.ReadAsStringAsync().Result);
@@ -78,7 +78,7 @@ namespace ConnectorClientAPI
         {
             var url = $"{SITE_URL}api/SearchApi/ConfirmJobs";
             var body = JsonConvert.SerializeObject(confirmJobModel);
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApiException(response.Content.ReadAsStringAsync().Result);
@@ -89,7 +89,7 @@ namespace ConnectorClientAPI
         {
             var url = $"{SITE_URL}api/JobApi/RemoveJob?jobId={jobId}";
             var body = JsonConvert.SerializeObject(new { id = userId });
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApiException(response.Content.ReadAsStringAsync().Result);
@@ -100,7 +100,7 @@ namespace ConnectorClientAPI
         {
             var url = $"{SITE_URL}api/SearchApi/GenerateConfirmJobs";
             var body = JsonConvert.SerializeObject(generateJobData);
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (response.IsSuccessStatusCode)
             {
                 string json = response.Content.ReadAsStringAsync().Result;
@@ -116,7 +116,7 @@ namespace ConnectorClientAPI
         {
             var url = $"{SITE_URL}api/SearchApi/RemoveCapacity";
             var body = JsonConvert.SerializeObject(capacityModel);
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApiException(response.Content.ReadAsStringAsync().Result);
@@ -127,7 +127,7 @@ namespace ConnectorClientAPI
         {
             var url = $"{SITE_URL}api/SearchApi/SaveCapacity";
             var body = JsonConvert.SerializeObject(capacityModel);
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApiException(response.Content.ReadAsStringAsync().Result);
@@ -137,16 +137,16 @@ namespace ConnectorClientAPI
         public async Task<StartJobResponseModel> StartJob(DataModel data)
         {
             var url = $"{SITE_URL}api/JobApi/StartJobMSFS";
-            client.DefaultRequestHeaders.Clear();
+            _client.DefaultRequestHeaders.Clear();
 
-            client.DefaultRequestHeaders.Add("UserId", data.UserId);
-            client.DefaultRequestHeaders.Add("PlaneDescription", data.Title);
-            client.DefaultRequestHeaders.Add("Latitude", data.Latitude.ToString());
-            client.DefaultRequestHeaders.Add("Longitude", data.Longitude.ToString());
-            client.DefaultRequestHeaders.Add("Payload", data.PayloadKilograms.ToString());
-            client.DefaultRequestHeaders.Add("FuelWeight", data.FuelWeightKilograms.ToString());
+            _client.DefaultRequestHeaders.Add("UserId", data.UserId);
+            _client.DefaultRequestHeaders.Add("PlaneDescription", data.Title);
+            _client.DefaultRequestHeaders.Add("Latitude", data.Latitude.ToString());
+            _client.DefaultRequestHeaders.Add("Longitude", data.Longitude.ToString());
+            _client.DefaultRequestHeaders.Add("Payload", data.PayloadKilograms.ToString());
+            _client.DefaultRequestHeaders.Add("FuelWeight", data.FuelWeightKilograms.ToString());
 
-            HttpResponseMessage response = await client.GetAsync(new Uri(url));
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
@@ -159,38 +159,31 @@ namespace ConnectorClientAPI
             };
         }
 
-        public async Task<StartJobResponseModel> FinishJob(DataModel data)
+        public async Task<FinishJobResponseModel> FinishJob(DataModel data)
         {
-            var url = $"{SITE_URL}api/JobApi/FinishJobMSFS";
-            client.DefaultRequestHeaders.Clear();
+            var url = $"{SITE_URL}api/JobApi/FinishJobMsfsPost";
+            var body = JsonConvert.SerializeObject(data);
 
-            client.DefaultRequestHeaders.Add("UserId", data.UserId);
-            client.DefaultRequestHeaders.Add("PlaneDescription", data.Title);
-            client.DefaultRequestHeaders.Add("Latitude", data.Latitude.ToString());
-            client.DefaultRequestHeaders.Add("Longitude", data.Longitude.ToString());
-            client.DefaultRequestHeaders.Add("Payload", data.PayloadKilograms.ToString());
-            client.DefaultRequestHeaders.Add("FuelWeight", data.FuelWeightKilograms.ToString());
-
-            HttpResponseMessage response = await client.GetAsync(new Uri(url));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
             }
 
-            return new StartJobResponseModel()
-            {
-                ResultMessage = response.Content.ReadAsStringAsync().Result
-            };
+            string json = response.Content.ReadAsStringAsync().Result.Replace("\"{", "{").Replace("}\"", "}").Replace("\\", "");
+            var finishedJob = JsonConvert.DeserializeObject<FinishJobResponseModel>(json);
+
+            return finishedJob;
         }
 
         public async Task<IList<JobModel>> GetUserJobs(string userId)
         {
             var url = $"{SITE_URL}api/JobApi/GetUserJobs";
-            client.DefaultRequestHeaders.Clear();
+            _client.DefaultRequestHeaders.Clear();
 
-            client.DefaultRequestHeaders.Add("UserId", userId);
+            _client.DefaultRequestHeaders.Add("UserId", userId);
 
-            HttpResponseMessage response = await client.GetAsync(new Uri(url));
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
@@ -207,7 +200,7 @@ namespace ConnectorClientAPI
             var url = $"{SITE_URL}api/JobApi/GetUserJobsPaged?sortOrder={sortOrder}&currentSort={currentSort}&pageNumber={pageNumber}";
             var body = JsonConvert.SerializeObject(filterModel);
 
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
@@ -223,7 +216,7 @@ namespace ConnectorClientAPI
         {
             var url = $"{SITE_URL}api/JobApi/GetLastUserJob";
             var body = JsonConvert.SerializeObject(new { id = userId });
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 return null;
@@ -236,12 +229,12 @@ namespace ConnectorClientAPI
         public async Task<bool> ActivateUserJob(string userId, long jobId)
         {
             var url = $"{SITE_URL}api/JobApi/ActivateUserJob";
-            client.DefaultRequestHeaders.Clear();
+            _client.DefaultRequestHeaders.Clear();
 
-            client.DefaultRequestHeaders.Add("UserId", userId);
-            client.DefaultRequestHeaders.Add("JobId", jobId.ToString());
+            _client.DefaultRequestHeaders.Add("UserId", userId);
+            _client.DefaultRequestHeaders.Add("JobId", jobId.ToString());
 
-            HttpResponseMessage response = await client.GetAsync(new Uri(url));
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             return response.IsSuccessStatusCode;
         }
 
@@ -251,7 +244,7 @@ namespace ConnectorClientAPI
 
             var body = JsonConvert.SerializeObject(new { id = userId });
 
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             string json = response.Content.ReadAsStringAsync().Result;
             return JsonConvert.DeserializeObject<UserStatisticsModel>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
         }
@@ -262,7 +255,7 @@ namespace ConnectorClientAPI
 
             var body = JsonConvert.SerializeObject(userSettings);
 
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (response.IsSuccessStatusCode)
             {
                 string json = response.Content.ReadAsStringAsync().Result;
@@ -278,7 +271,7 @@ namespace ConnectorClientAPI
         {
             var url = $"{SITE_URL}api/SearchApi/GetArrivalTips?departure={departure}";
             var body = JsonConvert.SerializeObject(new { id = userId });
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (response.IsSuccessStatusCode)
             {
                 string json = response.Content.ReadAsStringAsync().Result;
@@ -293,7 +286,7 @@ namespace ConnectorClientAPI
         public async Task<IList<SearchJobTipsModel>> GetAlternativeTips(string arrival, int range)
         {
             var url = $"{SITE_URL}api/SearchApi/GetAlternativeTips?arrival={arrival}&range={range}";
-            HttpResponseMessage response = await client.GetAsync(new Uri(url));
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (response.IsSuccessStatusCode)
             {
                 string json = response.Content.ReadAsStringAsync().Result;
@@ -309,7 +302,7 @@ namespace ConnectorClientAPI
         {
             var url = $"{SITE_URL}api/SearchApi/CloneJob?jobId={jobId}";
             var body = JsonConvert.SerializeObject(new { id = userId });
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApiException(response.Content.ReadAsStringAsync().Result);
@@ -321,11 +314,11 @@ namespace ConnectorClientAPI
         {
             var url = $"{SITE_URL}api/JobApi/GetUserPlaneCapacities";
             var body = JsonConvert.SerializeObject(new { id = userId });
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (response.IsSuccessStatusCode)
             {
                 string json = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<IList<CustomPlaneCapacityModel>>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
+                return JsonConvert.DeserializeObject<IList<CustomPlaneCapacityModel>>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", "")); 
             }
             else
             {
@@ -338,7 +331,7 @@ namespace ConnectorClientAPI
             var url = $"{SITE_URL}api/AirlineApi/GetAirliners?sortOrder={sortOrder}&currentSort={currentSort}&pageNumber={pageNumber}";
             var body = JsonConvert.SerializeObject(filterModel);
 
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
@@ -355,7 +348,7 @@ namespace ConnectorClientAPI
             var url = $"{SITE_URL}api/AirlineApi/CreateAirline";
             var body = JsonConvert.SerializeObject(new { userId = userId, airline = airline });
 
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
@@ -372,7 +365,7 @@ namespace ConnectorClientAPI
             var url = $"{SITE_URL}api/AirlineApi/UpdateAirline";
             var body = JsonConvert.SerializeObject(new { userId = userId, airline = airline });
 
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
@@ -385,7 +378,7 @@ namespace ConnectorClientAPI
         {
             var url = $"{SITE_URL}api/AirlineApi/GetPilotsHired?id={airlineId}";
 
-            HttpResponseMessage response = await client.GetAsync(new Uri(url));
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
@@ -401,7 +394,7 @@ namespace ConnectorClientAPI
         {
             var url = $"{SITE_URL}api/AirlineApi/GetAirlineFBOs?id={airlineId}";
 
-            HttpResponseMessage response = await client.GetAsync(new Uri(url));
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
@@ -418,7 +411,7 @@ namespace ConnectorClientAPI
             var url = $"{SITE_URL}api/AirlineApi/PayAirlineDebts";
             var body = JsonConvert.SerializeObject(new { userId = userId, airline });
 
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
@@ -433,7 +426,7 @@ namespace ConnectorClientAPI
 
             var body = JsonConvert.SerializeObject(filterJob);
 
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
@@ -449,7 +442,7 @@ namespace ConnectorClientAPI
         {
             var url = $"{SITE_URL}api/AirlineApi/GetFOBs?icao={icao}&airlineId={airlineId}";
 
-            HttpResponseMessage response = await client.GetAsync(new Uri(url));
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
@@ -467,7 +460,7 @@ namespace ConnectorClientAPI
 
             var body = JsonConvert.SerializeObject(new { icao = icao, userId = userId });
 
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -490,7 +483,7 @@ namespace ConnectorClientAPI
 
             var body = JsonConvert.SerializeObject(new { userId = userId, airline });
 
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
@@ -510,7 +503,7 @@ namespace ConnectorClientAPI
 
             var body = JsonConvert.SerializeObject(new { userId = userId, airline });
 
-            HttpResponseMessage response = await client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));

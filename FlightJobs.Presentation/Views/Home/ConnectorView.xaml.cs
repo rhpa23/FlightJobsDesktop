@@ -16,12 +16,15 @@ using log4net;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace FlightJobsDesktop.Views.Home
@@ -40,11 +43,13 @@ namespace FlightJobsDesktop.Views.Home
 
         private DispatcherTimer _timerCheckSimData = new DispatcherTimer();
         private bool _isJobStarted;
-        private bool _stopCheckJobStart;
-        private bool _stopCheckJobFinish;
+        private static bool _stopCheckJobStart;
+        private static bool _stopCheckJobFinish;
+        private static DateTime _jumpCheckStartTime = DateTime.Now.AddSeconds(3);
+        private static DateTime _jumpCheckFinishTime = DateTime.Now.AddSeconds(3);
 
         private static CurrentJobViewModel _currentJob = new CurrentJobViewModel();
-        private static CurrentJobDataWindow _sideJobWindow; // TODO test remove static
+        private static CurrentJobDataWindow _siderJobWindow;
         private TouchdownWindow _sliderTouchdownWindow;
         private IList<string> _resultMessages;
 
@@ -73,22 +78,23 @@ namespace FlightJobsDesktop.Views.Home
                 if (FlightJobsConnectSim.CommonSimData.IsConnected && FlightJobsConnectSim.PlaneSimData.OnGround)
                 {
                     _stopCheckJobStart = true;
-                    var simStatus = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<PlaneModel, DataModel>(FlightJobsConnectSim.PlaneSimData);
+                    var simStatus = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<PlaneModel, DataModel>(_currentJob.PlaneSimData);
                     simStatus.UserId = AppProperties.UserLogin.UserId; 
                     var startJobResponseInfo = await _jobService.StartJob(simStatus);
                     _notificationManager.Show("Success", startJobResponseInfo.ResultMessage, NotificationType.Success, "WindowArea");
                     _currentJob.SliderTopTitle = "Job started";
-                    if (_sideJobWindow != null)
+                    if (_siderJobWindow != null)
                     {
-                        _sideJobWindow.StartedIcon.Visibility = Visibility.Visible;
-                        _sideJobWindow.GridLanding.Visibility = Visibility.Collapsed;
-                        _sideJobWindow.GridResults.Visibility = Visibility.Collapsed;
-                        _sideJobWindow.GridMessage.Visibility = Visibility.Collapsed;
+                        _siderJobWindow.StartedIcon.Visibility = Visibility.Visible;
+                        _siderJobWindow.GridLanding.Visibility = Visibility.Collapsed;
+                        _siderJobWindow.GridResults.Visibility = Visibility.Collapsed;
+                        _siderJobWindow.GridMessage.Visibility = Visibility.Collapsed;
                         if (AppProperties.UserSettings.LocalSettings.ShowLandingData)
-                            _sideJobWindow.ToggleSlider(true, 8);
+                            _siderJobWindow.ToggleSlider(true, 8);
                     }
                     btnFinishBorder.IsEnabled = true;
                     _isJobStarted = true;
+                    ((TabItem)HomeView.TabHome.Items[1]).IsEnabled = true;
                     _log.Info("Job started");
                     return true;
                 }
@@ -106,7 +112,7 @@ namespace FlightJobsDesktop.Views.Home
                 btnFinishBorder.IsEnabled = false;
                 _notificationManager.Show("Error", ex.Message.Replace("\"", ""), NotificationType.Error, "WindowArea");
                 _currentJob.SliderMessage = ex.Message.Replace("\"", "");
-                if (_sideJobWindow != null) _sideJobWindow.GridMessage.Visibility = Visibility.Visible;
+                if (_siderJobWindow != null) _siderJobWindow.GridMessage.Visibility = Visibility.Visible;
             }
             finally
             {
@@ -128,30 +134,30 @@ namespace FlightJobsDesktop.Views.Home
                 if (FlightJobsConnectSim.CommonSimData.IsConnected && FlightJobsConnectSim.PlaneSimData.OnGround)
                 {
                     _stopCheckJobFinish = true;
-                    var simStatus = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<PlaneModel, DataModel>(FlightJobsConnectSim.PlaneSimData);
+                    var simStatus = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<PlaneModel, DataModel>(_currentJob.PlaneSimData);
                     simStatus.UserId = AppProperties.UserLogin.UserId;
+                    simStatus.ResultMessages = _resultMessages;
+                    simStatus.ResultScore = _currentJob.Score;
                     var finishJobResponseInfo = await _jobService.FinishJob(simStatus);
                     _notificationManager.Show("Success", finishJobResponseInfo.ResultMessage, NotificationType.Success, "WindowArea");
                     _currentJob.SliderTopTitle = "Job finished";
-                    if (_sideJobWindow != null)
+                    if (_siderJobWindow != null)
                     {
-                        _sideJobWindow.StartedIcon.Visibility = Visibility.Hidden;
-                        _sideJobWindow.GridSimData.Visibility = Visibility.Collapsed;
-                        _sideJobWindow.GridMessage.Visibility = Visibility.Collapsed;
-                        _sideJobWindow.GridLanding.Visibility = Visibility.Visible;
-                        _sideJobWindow.GridResults.Visibility = Visibility.Visible;
+                        _siderJobWindow.StartedIcon.Visibility = Visibility.Hidden;
+                        _siderJobWindow.GridSimData.Visibility = Visibility.Collapsed;
+                        _siderJobWindow.GridMessage.Visibility = Visibility.Collapsed;
+                        _siderJobWindow.GridLanding.Visibility = Visibility.Visible;
+                        _siderJobWindow.GridResults.Visibility = Visibility.Visible;
 
                         if (AppProperties.UserSettings.LocalSettings.ShowLandingData)
-                            _sideJobWindow.ToggleSlider(true, 10);
+                            _siderJobWindow.ToggleSlider(true, 10);
                     }
                     SetFinishJobInfo();
                     var currentJob = AppProperties.UserJobs.FirstOrDefault(x => x.IsActivated);
                     AppProperties.UserJobs.Remove(currentJob);
                     await LoadUserJobData();
                     _isJobStarted = false;
-                    _stopCheckJobFinish = false;
-                    _stopCheckJobStart = false;
-//TODO return FlightTime                    _currentJobView.FlightTime = finishJobResponseInfo.FlightTime
+                    ((TabItem)HomeView.TabHome.Items[1]).IsEnabled = false;
                     _log.Info("Job finished");
                     return true;
                 }
@@ -169,7 +175,7 @@ namespace FlightJobsDesktop.Views.Home
                 btnFinishBorder.IsEnabled = true;
                 _notificationManager.Show("Error", ex.Message.Replace("\"", ""), NotificationType.Error, "WindowArea");
                 _currentJob.SliderMessage = ex.Message.Replace("\"", "");
-                _sideJobWindow.GridMessage.Visibility = Visibility.Visible;
+                _siderJobWindow.GridMessage.Visibility = Visibility.Visible;
             }
             finally
             {
@@ -188,24 +194,23 @@ namespace FlightJobsDesktop.Views.Home
         {
             try
             {
-                if (FlightJobsConnectSim.TakeoffDataCaptured &&
-                    _currentJob != null && _currentJob.PlaneSimData != null)
+                if (FlightJobsConnectSim.TakeoffDataCaptured)
                 {
-                    var takeoffHelper = new TakeoffHelper(_currentJob.PlaneSimData.HeadingTrue,
+                    var takeoffHelper = new RunwayHelper(_currentJob.PlaneSimData.HeadingTrue,
                                                               _currentJob.PlaneSimData.TakeoffLatitude,
                                                               _currentJob.PlaneSimData.TakeoffLongitude);
 
-                    var takeoffAirport = takeoffHelper.GetTakeoffJobAirport(_sqLiteDbContext, _currentJob.DepartureICAO);
+                    var takeoffAirport = takeoffHelper.GetJobAirport(_sqLiteDbContext, _currentJob.DepartureICAO, null);
                     if (takeoffAirport != null)
                     {
-                        var rwy = takeoffHelper.GetTakeoffRwy(takeoffAirport.Runways);
+                        var rwy = takeoffHelper.GetRunway(takeoffAirport.Runways);
 
-                        _currentJob.PlaneSimData.TakeoffCenterDerivation = takeoffHelper.GetTakeoffCenterLineDistance(rwy);
+                        _currentJob.PlaneSimData.TakeoffCenterDerivation = takeoffHelper.GetCenterLineDistance(rwy);
                     }
                     else
                     {
                         _currentJob.SliderMessage = "Wrong departure airport!!!";
-                        _sideJobWindow.GridMessage.Visibility = Visibility.Visible;
+                        _siderJobWindow.GridMessage.Visibility = Visibility.Visible;
                     }
 
                     FlightJobsConnectSim.TakeoffDataCaptured = false;
@@ -222,8 +227,7 @@ namespace FlightJobsDesktop.Views.Home
         {
             try
             {
-                if (FlightJobsConnectSim.LandingDataCaptured && AppProperties.UserSettings.LocalSettings.ShowLandingData &&
-                    _currentJob != null && _currentJob.PlaneSimData != null)
+                if (FlightJobsConnectSim.LandingDataCaptured && AppProperties.UserSettings.LocalSettings.ShowLandingData)
                 {
 
                     if (_sliderTouchdownWindow == null)
@@ -231,17 +235,17 @@ namespace FlightJobsDesktop.Views.Home
                         _sliderTouchdownWindow = new TouchdownWindow();
                         _sliderTouchdownWindow.Show();
                     }
-                    var landingHelper = new LandingHelper(_currentJob.PlaneSimData.HeadingTrue,
+                    var landingHelper = new RunwayHelper(_currentJob.PlaneSimData.HeadingTrue,
                                                               _currentJob.PlaneSimData.TouchdownLatitude,
                                                               _currentJob.PlaneSimData.TouchdownLongitude);
 
-                    var landAirport = landingHelper.GetLandingJobAirport(_sqLiteDbContext, _currentJob.ArrivalICAO, _currentJob.AlternativeICAO);
+                    var landAirport = landingHelper.GetJobAirport(_sqLiteDbContext, _currentJob.ArrivalICAO, _currentJob.AlternativeICAO);
                     if (landAirport != null)
                     {
-                        var rwy = landingHelper.GetLandingRwy(landAirport.Runways);
+                        var rwy = landingHelper.GetRunway(landAirport.Runways);
 
-                        _currentJob.PlaneSimData.TouchdownRunwayLength = landingHelper.GetTouchdownRunwayLength(rwy);
-                        _currentJob.PlaneSimData.TouchdownCenterDerivation = landingHelper.GetTouchdownCenterLineDistance(rwy);
+                        _currentJob.PlaneSimData.TouchdownRunwayLength = landingHelper.GetRunwayLength(rwy);
+                        _currentJob.PlaneSimData.TouchdownCenterDerivation = landingHelper.GetCenterLineDistance(rwy);
                         _currentJob.PlaneSimData.TouchdownThresholdDistance = landingHelper.GetTouchdownThresholdDistance(rwy);
                         _currentJob.PlaneSimData.TouchdownRunwayDesignator = rwy.Name;
                         _currentJob.PlaneSimData.ColorResultTouchdownWindAngle = WindAngleResult.GetColor(_currentJob.PlaneSimData.TouchdownWindAngle);
@@ -254,7 +258,7 @@ namespace FlightJobsDesktop.Views.Home
                     else
                     {
                         _currentJob.SliderMessage = "Wrong airport to land!!!";
-                        _sideJobWindow.GridMessage.Visibility = Visibility.Visible;
+                        _siderJobWindow.GridMessage.Visibility = Visibility.Visible;
                     }
 
                     FlightJobsConnectSim.LandingDataCaptured = false;
@@ -332,7 +336,7 @@ namespace FlightJobsDesktop.Views.Home
         {
             try
             {
-                if (!_isJobStarted && !_stopCheckJobStart && _currentJob != null && 
+                if (!_isJobStarted && !_stopCheckJobStart && 
                     _currentJob.DepartureICAO != null && _currentJob.ArrivalICAO != null)
                 {
                     var departureAirportInfo = _sqLiteDbContext.GetAirportByIcao(_currentJob.DepartureICAO);
@@ -365,7 +369,7 @@ namespace FlightJobsDesktop.Views.Home
             try
             {
                 if (_isJobStarted && !_stopCheckJobFinish && AppProperties.UserSettings.LocalSettings.AutoFinishJob && 
-                    !FlightJobsConnectSim.PlaneSimData.EngOneRunning && _currentJob != null &&
+                    !FlightJobsConnectSim.PlaneSimData.EngOneRunning && 
                     _currentJob.DepartureICAO != null && _currentJob.ArrivalICAO != null)
                 {
                     var arrivalAirportInfo = _sqLiteDbContext.GetAirportByIcao(_currentJob.ArrivalICAO);
@@ -443,8 +447,18 @@ namespace FlightJobsDesktop.Views.Home
             {
                 if (FlightJobsConnectSim.PlaneSimData.OnGround)
                 {
-                    CheckForStartJob();
-                    CheckForFinishJob();
+                    if (DateTime.Now > _jumpCheckStartTime) // wait 3 seconds to check again
+                    {
+                        _jumpCheckStartTime = DateTime.Now.AddSeconds(3);
+                        CheckForStartJob();
+                    }
+
+                    if (DateTime.Now > _jumpCheckFinishTime) // wait 3 seconds to check again
+                    {
+                        _jumpCheckFinishTime = DateTime.Now.AddSeconds(3);
+                        CheckForFinishJob();
+                    }
+
                     CheckShowLanding();
                 }
                 else
@@ -453,11 +467,53 @@ namespace FlightJobsDesktop.Views.Home
                 }
 
                 SetCurrentPayloadColor();
-                SetIsConnectedVisibility();
                 ValidateLightsResults();
                 ValidateAltimeterResults();
+            }
 
-                ((TabItem)HomeView.TabHome.Items[1]).IsEnabled = !_isJobStarted;
+            SetIsConnectedVisibility();
+
+            //#if DEBUG
+            //FlightJobsConnectSim.CommonSimData.IsConnected = true;
+            //_currentJob.PlaneSimData.OnGround = true;
+            //_currentJob.PlaneSimData.Latitude = 33.54566;
+            //_currentJob.PlaneSimData.Longitude = 25.9463;
+            //_currentJob.PlaneSimData.Name = "Test de payload";
+            //_currentJob.PlaneSimData.PayloadKilograms = 11650;
+            //_currentJob.PlaneSimData.FuelWeightKilograms = 5350;
+            //_currentJob.Score = 85;
+            //_resultMessages = new List<string>();
+            //_resultMessages.Add(MessagesConst.MSG_TOUCHDOWN);
+
+            //FinishJob();
+            //#endif
+
+
+        }
+        private void LoadThumbImg(string filename)
+        {
+            try
+            {
+                if (_siderJobWindow == null) return;
+
+                if (filename != null)
+                {
+                    filename = new FileInfo(filename).Name;
+                    DirectoryInfo directoryInfo = new DirectoryInfo("img");
+
+                    var imgLocalPath = $"{directoryInfo.FullName}\\{filename}";
+                    _siderJobWindow.TxbCapacityName.Text = AppProperties.UserStatistics.CustomPlaneCapacity.CustomNameCapacity;
+                    _siderJobWindow.ImgCapacity.Source = new BitmapImage(new Uri(imgLocalPath)); 
+                }
+                else
+                {
+                    _siderJobWindow.ImgCapacity.Source = new BitmapImage(new Uri("/img/background/default_thumb-capacity.jpg", UriKind.Relative));
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                throw;
             }
         }
 
@@ -467,26 +523,28 @@ namespace FlightJobsDesktop.Views.Home
 
             try
             {
-                _currentJob = new CurrentJobViewModel();
-
-                var currentJob = AppProperties.UserJobs.FirstOrDefault(x => x.IsActivated);
-                if (currentJob != null)
+                var activeJob = AppProperties.UserJobs.FirstOrDefault(x => x.IsActivated);
+                if (activeJob != null)
                 {
                     PanelNoJob.Visibility = Visibility.Collapsed;
                     PanelCurrentJob.Visibility = Visibility.Visible;
 
-                    _currentJob = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, CurrentJobViewModel>(currentJob);
+                    _currentJob = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, CurrentJobViewModel>(activeJob);
                     _currentJob.JobSummary = $"Setup aircraft departure on {_currentJob.DepartureICAO} then fly to {_currentJob.ArrivalICAO} with this total payload";
-                    if (_sideJobWindow == null)
+                    if (_siderJobWindow == null)
                     {
-                        _sideJobWindow = new CurrentJobDataWindow(_currentJob);
-                        _sideJobWindow.Show();
+                        _siderJobWindow = new CurrentJobDataWindow(_currentJob);
+                        _siderJobWindow.Show();
                     }
-                    _sideJobWindow.GridSimData.Visibility = FlightJobsConnectSim.CommonSimData.IsConnected ? Visibility.Visible : Visibility.Collapsed;
-                    _sideJobWindow.StartedIcon.Visibility = Visibility.Hidden;
-                    _sideJobWindow.GridMessage.Visibility = Visibility.Collapsed;
-                    _sideJobWindow.GridLanding.Visibility = Visibility.Collapsed;
-                    _sideJobWindow.GridResults.Visibility = Visibility.Collapsed;
+                    _siderJobWindow.GridSimData.Visibility = Visibility.Visible;// FlightJobsConnectSim.CommonSimData.IsConnected ? Visibility.Visible : Visibility.Collapsed;
+                    _siderJobWindow.StartedIcon.Visibility = Visibility.Hidden;
+                    _siderJobWindow.GridMessage.Visibility = Visibility.Collapsed;
+                    _siderJobWindow.GridLanding.Visibility = Visibility.Collapsed;
+                    _siderJobWindow.GridResults.Visibility = Visibility.Collapsed;
+                    _stopCheckJobFinish = false;
+                    _stopCheckJobStart = false;
+                    btnStartBorder.IsEnabled = !_isJobStarted;
+                    _log.Info("CurrentJob was set");
                 }
                 else
                 {
@@ -497,10 +555,17 @@ namespace FlightJobsDesktop.Views.Home
                 var lastJob = await _jobService.GetLastUserJob(AppProperties.UserLogin.UserId);
                 if (lastJob != null)
                 {
+                    _log.Info("LastJob was found and set");
                     var lastJobView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, LastJobViewModel>(lastJob);
-                    _currentJob.LastJob = lastJobView;
-                    _currentJob.FlightTime = _currentJob.LastJob.FlightTime;
+                    _currentJob.LastJob.DepartureICAO = lastJobView.DepartureICAO;
+                    _currentJob.LastJob.ArrivalICAO = lastJobView.ArrivalICAO;
+                    _currentJob.LastJob.Dist = lastJobView.Dist;
+                    _currentJob.LastJob.FlightTime = lastJobView.FlightTime;
+                    _currentJob.LastJob.ModelDescription = lastJobView.ModelDescription;
+                    _currentJob.LastJob.EndTime = lastJobView.EndTime;
                 }
+
+                LoadThumbImg(AppProperties.UserStatistics.CustomPlaneCapacity.ImagePath);
 
                 // Reload Airline data
                 await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
@@ -509,6 +574,8 @@ namespace FlightJobsDesktop.Views.Home
                 _currentJob.PlaneSimData = FlightJobsConnectSim.PlaneSimData;
                 _currentJob.SimData = FlightJobsConnectSim.CommonSimData;
                 DataContext = _currentJob;
+                if (_siderJobWindow != null) 
+                    _siderJobWindow.DataContext = _currentJob;
             }
             catch (Exception ex)
             {

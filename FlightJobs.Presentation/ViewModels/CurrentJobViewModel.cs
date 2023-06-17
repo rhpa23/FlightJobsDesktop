@@ -71,7 +71,7 @@ namespace FlightJobsDesktop.ViewModels
             set { _score = value; OnPropertyChanged("Score"); }
         }
 
-        public LastJobViewModel LastJob { get; set; }
+        public LastJobViewModel LastJob { get; set; } = new LastJobViewModel();
         public PlaneModel PlaneSimData { get; set; }
         public SimDataModel SimData { get; set; }
 
@@ -106,5 +106,6 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         public MessagesResultViewModel MsgResults { get; set; } = new MessagesResultViewModel();
+       
     }
 }

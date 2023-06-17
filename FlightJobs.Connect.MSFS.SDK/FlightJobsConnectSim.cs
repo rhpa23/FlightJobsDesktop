@@ -113,7 +113,7 @@ namespace FlightJobs.Connect.MSFS.SDK
             _planeDataDefinitionList.Add(new SimVar() { Name = "PLANE TOUCHDOWN NORMAL VELOCITY", Unit = "Feet per second", DataType = SIMCONNECT_DATATYPE.FLOAT64 });
             _planeDataDefinitionList.Add(new SimVar() { Name = "PLANE TOUCHDOWN LATITUDE", Unit = "degree", DataType = SIMCONNECT_DATATYPE.FLOAT64 });
             _planeDataDefinitionList.Add(new SimVar() { Name = "PLANE TOUCHDOWN LONGITUDE", Unit = "degree", DataType = SIMCONNECT_DATATYPE.FLOAT64 });
-            _planeDataDefinitionList.Add(new SimVar() { Name = "PLANE HEADING DEGREES TRUE", Unit = "degree", DataType = SIMCONNECT_DATATYPE.FLOAT64 });
+            _planeDataDefinitionList.Add(new SimVar() { Name = "PLANE HEADING DEGREES MAGNETIC", Unit = "degree", DataType = SIMCONNECT_DATATYPE.FLOAT64 });
             _planeDataDefinitionList.Add(new SimVar() { Name = "PLANE LATITUDE", Unit = "degree", DataType = SIMCONNECT_DATATYPE.FLOAT64 });
             _planeDataDefinitionList.Add(new SimVar() { Name = "PLANE LONGITUDE", Unit = "degree", DataType = SIMCONNECT_DATATYPE.FLOAT64 });
             _planeDataDefinitionList.Add(new SimVar() { Name = "FUEL TOTAL QUANTITY WEIGHT", Unit = "pounds", DataType = SIMCONNECT_DATATYPE.FLOAT64 });

@@ -46,7 +46,7 @@ namespace FlightJobs.Domain.Navdata
             DataTable dt = new DataTable();
             using (var cmd = _sqliteConnection.CreateCommand())
             {
-                cmd.CommandText = $"SELECT * FROM airport WHERE ident = '{icao}'";
+                cmd.CommandText = $"SELECT * FROM airport WHERE UPPER(ident) = '{icao?.ToUpper()}'";
                 var da = new SQLiteDataAdapter(cmd.CommandText, _sqliteConnection);
                 da.Fill(dt);
 

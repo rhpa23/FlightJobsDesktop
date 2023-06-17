@@ -22,7 +22,11 @@ namespace FlightJobs.Connect.MSFS.SDK.Model.Results
 
         public static string GetColor(int windAngle)
         {
-            return GetResultColor(Validade(windAngle));
+            if (Validade(windAngle) == ResultEnum.Bad)
+            {
+                return "Red";
+            }
+            return "Green";
         }
 
         public static int GetScore(int windAngle)

@@ -15,7 +15,7 @@ namespace FlightJobsDesktop.ViewModels
         /// Notify a property change
         /// </summary>
         /// <param name="propertyName">Name of property to update</param>
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

@@ -14,7 +14,7 @@ namespace FlightJobs.Infrastructure.Services
             return await _flightJobsConnectorClientAPI.StartJob(JobSimData);
         }
 
-        public async Task<StartJobResponseModel> FinishJob(DataModel JobSimData)
+        public async Task<FinishJobResponseModel> FinishJob(DataModel JobSimData)
         {
             return await _flightJobsConnectorClientAPI.FinishJob(JobSimData);
         }

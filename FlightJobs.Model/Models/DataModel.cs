@@ -1,4 +1,6 @@
-﻿namespace FlightJobs.Model.Models
+﻿using System.Collections.Generic;
+
+namespace FlightJobs.Model.Models
 {
     public class DataModel
     {
@@ -18,5 +20,7 @@
         public bool ParkingBrakeOn { get; set; }
         public bool EngOneRunning { get; set; }
         public bool OnGround { get; set; }
+        public IList<string> ResultMessages { get; set; }
+        public long ResultScore { get; set; }
     }
 }

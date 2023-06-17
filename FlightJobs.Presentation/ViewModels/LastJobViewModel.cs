@@ -4,12 +4,12 @@ namespace FlightJobsDesktop.ViewModels
 {
     public class LastJobViewModel : ObservableObject
     {
-        private string _departureICAO = "NA";
-        private string _arrivalICAO = "NA";
-        private long _dist = 0;
-        private string _modelDescription = "NA";
-        private string _endTime = "NA";
-        private string _flightTime = "NA";
+        private string _departureICAO;
+        private string _arrivalICAO;
+        private long _dist;
+        private string _modelDescription;
+        private string _endTime;
+        private string _flightTime;
 
         public string DepartureICAO
         {

@@ -7,7 +7,7 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
     public interface IJobService
     {
         Task<StartJobResponseModel> StartJob(DataModel JobSimData);
-        Task<StartJobResponseModel> FinishJob(DataModel JobSimData);
+        Task<FinishJobResponseModel> FinishJob(DataModel JobSimData);
         Task<IList<JobModel>> GetAllUserJobs(string userId);
         Task<JobModel> GetLastUserJob(string userId);
         Task<IList<SearchJobTipsModel>> GetAlternativeTips(string arrival, int range);

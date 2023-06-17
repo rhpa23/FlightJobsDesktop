@@ -453,7 +453,6 @@
     <Resource Include="img\graduation\16.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Properties\GlobalAirportDatabase.txt" />
     <Content Include="favicon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -700,6 +699,7 @@
     <Resource Include="img\background\connector-banner.jpg" />
     <Resource Include="img\icons\arrival.png" />
     <Resource Include="img\icons\departing.png" />
+    <Resource Include="img\background\default_thumb-capacity.jpg" />
     <Content Include="img\LogoDefault.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

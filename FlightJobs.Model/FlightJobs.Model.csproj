@@ -56,6 +56,7 @@
     <Compile Include="Models\PaginatedAirlineJobLedgerModel.cs" />
     <Compile Include="Models\PaginatedAirlinesModel.cs" />
     <Compile Include="Models\PaginatedJobsModel.cs" />
+    <Compile Include="Models\FinishJobResponseModel.cs" />
     <Compile Include="Models\UserRegisterModel.cs" />
     <Compile Include="Models\SearchJobTipsModel.cs" />
     <Compile Include="Models\StartJobResponseModel.cs" />
