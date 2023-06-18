@@ -12,6 +12,12 @@ namespace FlightJobsDesktop.ViewModels
         public string DepartureICAO { get; set; }
         public string ArrivalICAO { get; set; }
         public string AlternativeICAO { get; set; }
+        public double DepartureLatitude { get; set; }
+        public double DepartureLongitude { get; set; }
+        public double ArrivalLatitude { get; set; }
+        public double ArrivalLongitude { get; set; }
+        public double AlternativeLatitude { get; set; }
+        public double AlternativeLongitude { get; set; }
         public long Dist { get; set; }
         public string DistComplete { get { return Dist + " NM"; } }
         public long Pax { get; set; }
@@ -77,13 +83,6 @@ namespace FlightJobsDesktop.ViewModels
 
         public FlightResultsViewModel FlightResults { get; set; } = new FlightResultsViewModel();
 
-        private Visibility _isConnectedVisibility;
-        public Visibility IsConnectedVisibility
-        {
-            get { return _isConnectedVisibility; }
-            set { _isConnectedVisibility = value; OnPropertyChanged(); }
-        }
-
         private SolidColorBrush _payloadLabelColor;
         public SolidColorBrush PayloadLabelColor
         {
@@ -106,6 +105,25 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         public MessagesResultViewModel MsgResults { get; set; } = new MessagesResultViewModel();
-       
+
+        public SolidColorBrush IsConnectedColor
+        {
+            get { return SimData != null && SimData.IsConnected ? Brushes.White : null; }
+            set { OnPropertyChanged(); }
+        }
+
+        private bool _startIsEnable { get; set; } = true;
+        public bool StartIsEnable
+        {
+            get { return _startIsEnable; }
+            set { _startIsEnable = value; OnPropertyChanged(); }
+        }
+
+        private bool _finishIsEnable { get; set; } = false;
+        public bool FinishIsEnable
+        {
+            get { return _finishIsEnable; }
+            set { _finishIsEnable = value; OnPropertyChanged(); }
+        }
     }
 }

@@ -165,13 +165,13 @@ namespace ConnectorClientAPI
             var body = JsonConvert.SerializeObject(data);
 
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
-            }
-
             string json = response.Content.ReadAsStringAsync().Result.Replace("\"{", "{").Replace("}\"", "}").Replace("\\", "");
             var finishedJob = JsonConvert.DeserializeObject<FinishJobResponseModel>(json);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(finishedJob.ResultMessage, new Exception($"Error status code: {response.StatusCode}"));
+            }
 
             return finishedJob;
         }

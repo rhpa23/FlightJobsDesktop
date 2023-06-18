@@ -26,6 +26,8 @@ namespace FlightJobsDesktop
     /// </summary>
     public partial class MainWindow : Window
     {
+        internal static NavigationView NavigationBar { get; set; }
+
         private FlightJobsConnectSim _flightJobsConnectSim = new FlightJobsConnectSim();
         
         private static readonly ILog _log = LogManager.GetLogger(typeof(MainWindow));
@@ -53,7 +55,8 @@ namespace FlightJobsDesktop
             SqLiteContextFactory = factorySqLiteContext;
 
             ResizeMode = ResizeMode.CanResizeWithGrip;
-            
+
+            NavigationBar = nvMain;
 
             System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
             ni.Icon = new System.Drawing.Icon("favicon.ico");

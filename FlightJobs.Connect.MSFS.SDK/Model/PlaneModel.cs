@@ -52,23 +52,30 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         public double PayloadPounds
         {
             get { return _payloadPounds; }
-            set { _payloadPounds = value; PayloadPoundsText = $"{string.Format("{0:N0}", value)} Lb"; NotifyPropertyChanged("PayloadPoundsText"); }
+            set { _payloadPounds = value; PayloadPoundsText = $"{string.Format("{0:N0}", value)} Lb";
+                NotifyPropertysChanged("PayloadPoundsText", "PayloadPoundsAndKilogramsText"); }
         }
         public string PayloadPoundsText { get; set; }
+        public string PayloadPoundsAndKilogramsText { 
+            get { return string.IsNullOrEmpty(PayloadPoundsText) || string.IsNullOrEmpty(PayloadKilogramsText) ? "" : $"{PayloadPoundsText} / {PayloadKilogramsText}"; }  }
 
         private double _fuelWeightPounds;
         public double FuelWeightPounds
         {
             get { return _fuelWeightPounds; }
-            set { _fuelWeightPounds = value; FuelWeightPoundsText = $"{string.Format("{0:N0}", value)} Lb"; NotifyPropertyChanged("FuelWeightPoundsText"); }
+            set { _fuelWeightPounds = value; FuelWeightPoundsText = $"{string.Format("{0:N0}", value)} Lb"; 
+                NotifyPropertysChanged("FuelWeightPoundsText", "FuelWeightPoundsAndKilogramsText"); }
         }
+        public string FuelWeightPoundsAndKilogramsText { 
+            get { return string.IsNullOrEmpty(FuelWeightPoundsText) || string.IsNullOrEmpty(FuelWeightKilogramsText) ? "" : $"{FuelWeightPoundsText} / {FuelWeightKilogramsText}"; } }
         public string FuelWeightPoundsText { get; set; }
 
         private double _payloadKilograms;
         public double PayloadKilograms
         {
             get { return _payloadKilograms; }
-            set { _payloadKilograms = value; PayloadKilogramsText = $"{string.Format("{0:N0}", value)} Kg"; NotifyPropertyChanged("PayloadKilogramsText"); }
+            set { _payloadKilograms = value; PayloadKilogramsText = $"{string.Format("{0:N0}", value)} Kg"; 
+                NotifyPropertysChanged("PayloadKilogramsText", "PayloadPoundsAndKilogramsText"); }
         }
         public string PayloadKilogramsText { get; set; }
 
@@ -76,7 +83,8 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         public double FuelWeightKilograms
         {
             get { return _fuelWeightKilograms; }
-            set { _fuelWeightKilograms = value; FuelWeightKilogramsText = $"{string.Format("{0:N0}", value)} Kg"; NotifyPropertyChanged("FuelWeightKilogramsText"); }
+            set { _fuelWeightKilograms = value; FuelWeightKilogramsText = $"{string.Format("{0:N0}", value)} Kg"; 
+                NotifyPropertysChanged("FuelWeightKilogramsText", "FuelWeightPoundsAndKilogramsText"); }
         }
         public string FuelWeightKilogramsText { get; set; }
 

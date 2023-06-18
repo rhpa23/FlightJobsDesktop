@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
         mc:Ignorable="d" Cursor="Hand" MouseDown="HideIco_MouseDown" Style="{DynamicResource BorderHighlightWindow}"
-        Title="FlightJobs - Touchdown slider" Height="20" Width="2" Topmost="True" WindowStyle="None" Background="#FF121212" ResizeMode="NoResize" Left="-1" Top="0" ShowInTaskbar="False" >
+        Title="FlightJobs - Touchdown slider" Height="22" Width="2" Topmost="True" WindowStyle="None" Background="#FF121212" ResizeMode="NoResize" Left="-1" Top="0" ShowInTaskbar="False" >
     <Window.DataContext>
         <local:CurrentJobViewModel/>
     </Window.DataContext>
@@ -16,8 +16,8 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="25"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="Touchdown" Foreground="White" VerticalAlignment="Center" FontSize="10" />
-        <TextBlock Foreground="White" VerticalAlignment="Center" Grid.Column="1" Margin="3,0,0,0" >
+        <TextBlock Text="Touchdown" Foreground="White" VerticalAlignment="Center" FontSize="12" />
+        <TextBlock Foreground="White" VerticalAlignment="Center" Grid.Column="1" Margin="3,0,0,0" FontSize="14">
             <Run Text="{Binding PlaneSimData.TouchdownFpm}"/> <Run Text="fpm"/>
         </TextBlock>
         <ui:FontIcon x:Name="HideIco" Height="20" FontFamily="Segoe MDL2 Assets" Glyph="&#xE8A0;" Foreground="White" Grid.Column="2" Margin="0" MouseDown="HideIco_MouseDown" />

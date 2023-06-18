@@ -40,15 +40,11 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Label Grid.Column="0" Grid.Row="0" Content="Payload:"  Margin="15,10,0,5" FontSize="14"/>
-                        <TextBlock Grid.Column="1" Grid.Row="0" Margin="15,10,10,15" FontSize="14" Visibility="{Binding IsConnectedVisibility}">
-                            <Run Text="{Binding PlaneSimData.PayloadPoundsText}"/> <Run Text=" / "/> <Run Text="{Binding PlaneSimData.PayloadKilogramsText}"/>
-                        </TextBlock>
+                        <TextBlock Grid.Column="1" Grid.Row="0" Margin="15,10,10,15" FontSize="14" Text="{Binding PlaneSimData.PayloadPoundsAndKilogramsText}"/>
                         <Label Grid.Column="0" Grid.Row="1" Content="Name:"  Margin="15,5,0,15" FontSize="14"/>
                         <Label Content="{Binding PlaneSimData.Name}"  Grid.Column="1" Grid.Row="1" Margin="15,5,0,15" FontSize="14" />
                         <Label Grid.Column="0" Grid.Row="2" Content="Fuel:"  Margin="15,5,0,5" FontSize="14"/>
-                        <TextBlock Grid.Column="1" Grid.Row="2" Margin="15,5,10,5" FontSize="14" Visibility="{Binding IsConnectedVisibility}">
-                            <Run Text="{Binding PlaneSimData.FuelWeightPoundsText}"/> <Run Text=" / "/> <Run Text="{Binding PlaneSimData.FuelWeightKilogramsText}"/>
-                        </TextBlock>
+                        <TextBlock Grid.Column="1" Grid.Row="2" Margin="15,5,10,5" FontSize="14" Text="{Binding PlaneSimData.FuelWeightPoundsAndKilogramsText}"/>
                     </Grid>
                 </Border>
             </StackPanel>
@@ -68,13 +64,9 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Column="0" Grid.Row="0" Text="Baro:" Margin="15,10,0,5" FontSize="14"/>
-                        <TextBlock Grid.Column="1" Grid.Row="0" Margin="15,10,0,5" FontSize="14" Visibility="{Binding IsConnectedVisibility}">
-                            <Run Text="{Binding SimData.SeaLevelPressureInchesText}"/> <Run Text=" / "/> <Run Text="{Binding SimData.SeaLevelPressureMillibarsText}"/>
-                        </TextBlock>
+                        <TextBlock Grid.Column="1" Grid.Row="0" Margin="15,10,0,5" FontSize="14" Text="{Binding SimData.SeaLevelPressureText}"/>
                         <TextBlock Grid.Column="0" Grid.Row="1" Text="Wind:" Margin="15,10,0,5" FontSize="14"/>
-                        <TextBlock Grid.Column="1" Grid.Row="1" Margin="15,10,0,5" FontSize="14" Visibility="{Binding IsConnectedVisibility}" >
-                            <Run Text="{Binding SimData.WindDirectionDegreesText}"/> <Run Text=" with "/> <Run Text="{Binding SimData.WindVelocityKnotsText}"/>
-                        </TextBlock>
+                        <TextBlock Grid.Column="1" Grid.Row="1" Margin="15,10,0,5" FontSize="14" Text="{Binding SimData.WindDirectionAndSpeedText}"/>
                         <TextBlock Grid.Column="0" Grid.Row="2" Text="Temp:"  Margin="15,10,0,5" FontSize="14"/>
                         <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SimData.TemperatureCelsiusText}" Margin="15,10,0,5" FontSize="14" />
                         <TextBlock Grid.Column="0" Grid.Row="3" Text="Visibility:"  Margin="15,10,0,5" FontSize="14"/>
@@ -197,10 +189,10 @@
                                 <Border Margin="0,0,200,0" Style="{DynamicResource BorderButtonYellow}">
                                     <Button x:Name="btnRefresh" Content="Refresh" Width="100"  />
                                 </Border>
-                                <Border x:Name="btnStartBorder" Margin="0,0,200,0" Style="{DynamicResource BorderButtonYellow}">
+                                <Border x:Name="btnStartBorder" Margin="0,0,200,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="{Binding StartIsEnable}">
                                     <Button Content="Start" Width="100" Click="btnStart_Click" />
                                 </Border>
-                                <Border x:Name="btnFinishBorder" Margin="0,0,0,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="True">
+                                <Border x:Name="btnFinishBorder" Margin="0,0,0,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="{Binding FinishIsEnable}">
                                     <Button Content="Finish" Width="100" Click="btnFinish_Click" />
                                 </Border>
                             </StackPanel>

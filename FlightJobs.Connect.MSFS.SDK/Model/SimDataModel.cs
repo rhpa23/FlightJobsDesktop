@@ -23,30 +23,30 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         {
             get { return _seaLevelPressureMillibars; }
             set { _seaLevelPressureMillibars = value; 
-                SeaLevelPressureMillibarsText = $"{Math.Round(value, 0)} hPa";
-                SeaLevelPressureInchesText = $"{(Math.Round(value, 0) * 0.02953).ToString("0.00")} inHg";
-                NotifyPropertyChanged("SeaLevelPressureMillibarsText");
-                NotifyPropertyChanged("SeaLevelPressureInchesText");
+                SeaLevelPressureText = $"{Math.Round(value, 0)} hPa /  {(Math.Round(value, 0) * 0.02953).ToString("0.00")} inHg";
+                NotifyPropertyChanged("SeaLevelPressureText");
             }
         }
-        public string SeaLevelPressureMillibarsText { get; set; }
-        public string SeaLevelPressureInchesText { get; set; }
+        public string SeaLevelPressureText { get; set; }
 
         private double _windDirectionDegrees;
         public double WindDirectionDegrees
         {
             get { return _windDirectionDegrees; }
-            set { _windDirectionDegrees = value; WindDirectionDegreesText = $"{Math.Round(value, 0)}º"; NotifyPropertyChanged("WindDirectionDegreesText"); }
+            set { _windDirectionDegrees = value;
+                WindDirectionAndSpeedText = $"{Math.Round(value, 0)}º / {Math.Round(WindVelocityKnots, 0)} Kts"; 
+                NotifyPropertyChanged("WindDirectionAndSpeedText"); }
         }
-        public string WindDirectionDegreesText { get; set; }
+        public string WindDirectionAndSpeedText { get; set; }
 
         private double _windVelocityKnots;
         public double WindVelocityKnots
         {
             get { return _windVelocityKnots; }
-            set { _windVelocityKnots = value; WindVelocityKnotsText = $"{Math.Round(value, 0)} Kts"; NotifyPropertyChanged("WindVelocityKnotsText"); }
+            set { _windVelocityKnots = value;
+                WindDirectionAndSpeedText = $"{Math.Round(WindDirectionDegrees, 0)}º / {Math.Round(value, 0)} Kts";
+                NotifyPropertyChanged("WindDirectionAndSpeedText"); }
         }
-        public string WindVelocityKnotsText { get; set; }
 
         private double _temperatureCelsius;
         public double TemperatureCelsius

@@ -40,7 +40,7 @@ namespace FlightJobsDesktop.Views.SlidersWindows
         #endregion
 
         DispatcherTimer _hideTimer = new DispatcherTimer();
-        private const double TARGET_WIDTH = 140;
+        private const double TARGET_WIDTH = 155;
         private const int SECONDS_TO_CLOSE = 10;
 
         public TouchdownWindow()
