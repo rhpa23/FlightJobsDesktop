@@ -3,8 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d"
-             >
+             xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
+             xmlns:wf="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
+             mc:Ignorable="d" Loaded="UserControl_Loaded">
+    <UserControl.DataContext>
+        <local:UserStatisticsFlightsViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="185"/>
@@ -28,28 +32,37 @@
                 <Image x:Name="ImgAvatar" Height="193" Width="167" Source="/img/avatar/default.jpg" Stretch="Fill" Cursor="Hand" MouseDown="Avatar_MouseDown" />
             </Border>
             <DockPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Margin="10,20,0,0">
-                <Label Content="Flight time: " />
-                <Label Content="1035h 47m" x:Name="LblFlightTime" />
+                <TextBlock>
+                    <Run Text="Flight time: "/>
+                    <Run Text="{Binding FlightTimeTotal}"/>
+                </TextBlock>
             </DockPanel>
             <DockPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Margin="10,0,0,0">
-                <Label Content="Nº of flights: " />
-                <Label Content="903" x:Name="LblNumberFlight" />
+                <TextBlock>
+                    <Run Text="Nº of flights: "/>
+                    <Run Text="{Binding NumberFlights}"/>
+                </TextBlock>
              </DockPanel>
             <DockPanel Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" Margin="10,0,0,0">
-                <Label Content="Bank Balance: " />
-                <Label Content="$100,065.00" x:Name="LblBankBalance" />
+                <TextBlock>
+                    <Run Text="Bank Balance: "/>
+                    <Run Text="{Binding BankBalanceCurrency, Mode=OneTime}"/>
+                </TextBlock>
             </DockPanel>
             <DockPanel Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" Margin="10,0,0,0">
-                <Label Content="Score: " />
-                <Label Content="14143 point(s)" x:Name="LblScore" />
+                <TextBlock>
+                    <Run Text="Score: "/>
+                    <Run Text="{Binding PilotScore}"/>
+                </TextBlock>
             </DockPanel>
-            <Label Grid.Row="5" Content="License is up to date" x:Name="LblLicenseStatus" HorizontalAlignment="Center" />
+            <Label x:Name="LblLicenseStatus" Grid.Row="5" Content="{Binding LicenseStatus}" Foreground="{Binding LicenseStatusColor}" HorizontalAlignment="Center" />
             <Button Grid.Row="6" Margin="0, 40, 0, 10" Content="License" Width="85" x:Name="BtnLicense" />
             <Button Grid.Row="7" Margin="0, 10, 0, 10" Content="Transfer" Width="85" x:Name="BtnTransfer" />
         </Grid>
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="70"/>
+                <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -60,28 +73,72 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Image Grid.Column="0" Grid.RowSpan="4" x:Name="ImgGraduation" Height="100" Width="45" Source="/img/graduation/10.png" Stretch="Fill" Cursor="Hand" MouseDown="ImgGraduation_MouseDown" Margin="10,10,0,0" VerticalAlignment="Top" />
+            <Image Grid.Column="0" Grid.RowSpan="4" x:Name="ImgGraduation" Height="100" Width="45" Source="{Binding GraduationAdaptPath}" Stretch="Fill" Cursor="Hand" MouseDown="ImgGraduation_MouseDown" Margin="10,10,0,0" VerticalAlignment="Top" />
             <DockPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Top">
                 <Label Content="Graduation: "  HorizontalAlignment="Left" Margin="0,5,0,0" />
-                <Label Grid.Row="1" Grid.Column="2" Content="Commercial Senior Commander" x:Name="LblGraduation" Margin="0,5,0,0" />
+                <Label Grid.Row="1" Grid.Column="2" Content="{Binding GraduationDesc}" x:Name="LblGraduation" Margin="0,5,0,0" />
             </DockPanel>
             <DockPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Top">
-                <Label Content="Last flight: "  HorizontalAlignment="Left" Margin="0,2,0,0" />
-                <Label Grid.Row="1" Grid.Column="2" Content="01/15/2022" x:Name="LblLastFlight" Margin="0,2,0,0" />
+                <TextBlock>
+                    <Run Text="Last flight: "/>
+                    <Run Text="{Binding LastFlightShortDate, Mode=OneTime}"/>
+                </TextBlock>
             </DockPanel>
             <DockPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Top">
-                <Label Content="Last aircraft: "  HorizontalAlignment="Left" Margin="0,2,0,0" />
-                <Label Grid.Row="1" Grid.Column="2" Content="Airbus A320 Neo Alitalia (A32NX Converted)" x:Name="LblLastAircraft" Margin="0,2,0,0" />
+                <TextBlock>
+                    <Run Text="Last aircraft: "/>
+                    <Run Text="{Binding LastAircraft}"/>
+                </TextBlock>
             </DockPanel>
             <DockPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Top">
-                <Label Content="Favorite airplane: "  HorizontalAlignment="Left" Margin="0,2,0,0" />
-                <Label Grid.Row="1" Grid.Column="2" Content="FlightFactor Airbus A320-214 CFM56-5B4 ultimate" x:Name="LblFavoriteAirplane" Margin="0,2,0,0" />
+                <TextBlock>
+                    <Run Text="Favorite airplane: "/>
+                    <Run Text="{Binding FavoriteAirplane}"/>
+                </TextBlock>
             </DockPanel>
-            <Border Grid.Row="4" BorderBrush="#FF919191" Grid.ColumnSpan="2" BorderThickness="1" CornerRadius="5" Padding="0, 5, 0, 5" Margin="20, 10, 10, 0">
-                <!--<WpfPlot Name="WpfPlot1" Height="270" Margin="0" Padding="0"  />-->
+            <Border Grid.Row="4" BorderBrush="#FF919191" Grid.ColumnSpan="3" BorderThickness="1" CornerRadius="5" Margin="20, 10, 10, 0">
+                <StackPanel Orientation="Vertical">
+                    <WindowsFormsHost Margin="5">
+                        <wf:Chart x:Name="ChartBankBalanceMonth">
+                            <wf:Chart.Series>
+                                <wf:Series ChartType="Spline" IsValueShownAsLabel="True" MarkerSize="10" MarkerColor="LightGreen" 
+                                           MarkerStyle="Circle" BorderWidth="5" LabelBackColor="White" />
+                            </wf:Chart.Series>
+                            <wf:Chart.ChartAreas>
+                                <wf:ChartArea />
+                            </wf:Chart.ChartAreas>
+                        </wf:Chart>
+                    </WindowsFormsHost>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Margin="0,10,0,10" FontWeight="Bold">
+                            <Run Text="Total of 6 months: "/><Run Text="{Binding ChartModel.PayamentTotalCurrency, Mode=OneTime}"/>
+                        </TextBlock>
+                        <TextBlock Margin="100,10,0,10" FontWeight="Bold">
+                            <Run Text="Month goal: "/><Run Text="{Binding ChartModel.PayamentMonthGoalCurrency, Mode=OneTime}"/>
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
             </Border>
-            <DataGrid Grid.Row="5" Grid.Column="0" Margin="10,0,10,0" x:Name="GrdMostUsedAirportsDeparture"  />
-            <DataGrid Grid.Row="5" Grid.Column="1" Margin="10,0,10,0" x:Name="GrdMostUsedAirportsArrive" />
+            <Border Grid.Row="5" BorderBrush="#FF919191" Grid.ColumnSpan="2" BorderThickness="1" CornerRadius="5" Margin="20,10,10,10" Width="370">
+                <ListView ItemsSource="{Binding DepartureRanking}" Height="200">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="10 most used airports to departure" Width="250" DisplayMemberBinding="{Binding Key, Mode=OneTime}"/>
+                            <GridViewColumn Header="Jobs count" Width="100" DisplayMemberBinding="{Binding Value, Mode=OneTime}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Border>
+            <Border Grid.Row="5" BorderBrush="#FF919191" Grid.Column="2" BorderThickness="1" CornerRadius="5" Margin="20,10,10,10" Width="370">
+                <ListView ItemsSource="{Binding DestinationRanking}" Height="200">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="10 most used airports to arrive" Width="250" DisplayMemberBinding="{Binding Key, Mode=OneTime}"/>
+                            <GridViewColumn Header="Jobs count" Width="100" DisplayMemberBinding="{Binding Value, Mode=OneTime}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Border>
         </Grid>
 
     </Grid>

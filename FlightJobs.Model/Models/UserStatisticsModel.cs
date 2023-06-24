@@ -45,11 +45,13 @@ namespace FlightJobs.Model.Models
 
         public string GraduationDesc { get; set; }
 
-        //public ChartViewModel ChartModel { get; set; }
+        public ChartUserBankBalanceModel ChartModel { get; set; }
 
         public Dictionary<string, long> DepartureRanking { get; set; }
 
         public Dictionary<string, long> DestinationRanking { get; set; }
         public string WeightUnit { get; set; }
+
+        public IList<PilotLicenseExpensesUserModel> LicensesOverdue { get; set; }
     }
 }

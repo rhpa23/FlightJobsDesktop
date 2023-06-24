@@ -168,7 +168,7 @@
                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Label Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Content="Payment:" FontSize="18" Margin="0,10,0,10" HorizontalAlignment="Right"/>
+                            <Label Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Content="Payment:  " FontSize="18" Margin="0,10,0,10" HorizontalAlignment="Right"/>
                             <Label Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="3" Content="{Binding Path=PayComplete}" FontSize="18" FontWeight="Bold" Margin="0,10,5,10" Name="LblCurrentPayment"/>
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE902;" Grid.Column="6" Grid.Row="0"/>
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE821;" Grid.Column="6" Grid.Row="1"/>

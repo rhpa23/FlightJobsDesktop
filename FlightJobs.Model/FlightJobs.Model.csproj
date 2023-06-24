@@ -46,6 +46,7 @@
     <Compile Include="Models\AirlineFboDbModel.cs" />
     <Compile Include="Models\AirlineJobLedgerModel.cs" />
     <Compile Include="Models\AirlineModel.cs" />
+    <Compile Include="Models\ChartUserBankBalanceModel.cs" />
     <Compile Include="Models\ConfirmJobModel.cs" />
     <Compile Include="Models\CustomPlaneCapacityModel.cs" />
     <Compile Include="Models\DataModel.cs" />
@@ -57,6 +58,8 @@
     <Compile Include="Models\PaginatedAirlinesModel.cs" />
     <Compile Include="Models\PaginatedJobsModel.cs" />
     <Compile Include="Models\FinishJobResponseModel.cs" />
+    <Compile Include="Models\PilotLicenseExpensesModel.cs" />
+    <Compile Include="Models\PilotLicenseExpensesUserModel.cs" />
     <Compile Include="Models\UserRegisterModel.cs" />
     <Compile Include="Models\SearchJobTipsModel.cs" />
     <Compile Include="Models\StartJobResponseModel.cs" />

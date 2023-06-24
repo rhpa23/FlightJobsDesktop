@@ -249,6 +249,17 @@ namespace ConnectorClientAPI
             return JsonConvert.DeserializeObject<UserStatisticsModel>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
         }
 
+        public async Task<UserStatisticsModel> GetUserStatisticsFlightsInfo(string userId)
+        {
+            var url = $"{SITE_URL}api/UserApi/GetUserFlightsInfo";
+
+            var body = JsonConvert.SerializeObject(new { id = userId });
+
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            string json = response.Content.ReadAsStringAsync().Result;
+            return JsonConvert.DeserializeObject<UserStatisticsModel>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
+        }
+
         public async Task<UserStatisticsModel> UpdateUserSettings(UserSettingsModel userSettings)
         {
             var url = $"{SITE_URL}api/UserApi/UpdateUserSettings";

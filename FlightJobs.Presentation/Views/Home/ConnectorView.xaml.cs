@@ -55,7 +55,7 @@ namespace FlightJobsDesktop.Views.Home
         private static CurrentJobViewModel _currentJob = new CurrentJobViewModel();
         private static CurrentJobDataWindow _siderJobWindow;
         private static TouchdownWindow _sliderTouchdownWindow = new TouchdownWindow();
-        private IList<string> _resultMessages;
+        private static IList<string> _resultMessages;
 
         public ConnectorView()
         {
@@ -485,6 +485,8 @@ namespace FlightJobsDesktop.Views.Home
         {
             if (FlightJobsConnectSim.PlaneSimData.OnGround)
             {
+                CheckShowLanding();
+
                 if (DateTime.Now > _jumpCheckStartTime) // wait 3 seconds to check again
                 {
                     _jumpCheckStartTime = DateTime.Now.AddSeconds(3);
@@ -503,8 +505,6 @@ namespace FlightJobsDesktop.Views.Home
                     ValidateLightsResults();
                     ValidateAltimeterResults();
                 }
-
-                CheckShowLanding();
             }
             else
             {

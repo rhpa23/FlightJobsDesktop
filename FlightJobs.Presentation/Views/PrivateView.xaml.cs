@@ -1,10 +1,19 @@
-﻿using Microsoft.Win32;
+﻿using FlightJobs.Infrastructure;
+using FlightJobs.Infrastructure.Services.Interfaces;
+using FlightJobs.Model.Models;
+using FlightJobsDesktop.Mapper;
+using FlightJobsDesktop.ViewModels;
+using log4net;
+using Microsoft.Win32;
+using ModernWpf;
+using Notification.Wpf;
 using ScottPlot;
 using System;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Controls;
+using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Media.Imaging;
 
 namespace FlightJobsDesktop.Views
@@ -14,11 +23,45 @@ namespace FlightJobsDesktop.Views
     /// </summary>
     public partial class PrivateView : UserControl
     {
+        private static readonly ILog _log = LogManager.GetLogger(typeof(PrivateView));
+        private NotificationManager _notificationManager;
+
+        private UserStatisticsFlightsViewModel _statisticsView = new UserStatisticsFlightsViewModel();
+
+        private IUserAccessService _userAccessService;
+
         public PrivateView()
         {
             InitializeComponent();
+            _notificationManager = new NotificationManager();
+            _userAccessService = MainWindow.UserServiceFactory.Create();
 
-            //LoadChart();
+            var chartFont = new Font("Segoe UI", 10);
+            ChartBankBalanceMonth.Series[0].Font = chartFont;
+            ChartBankBalanceMonth.Series[0].LabelFormat = "F{0:C}";
+
+            ChartBankBalanceMonth.ChartAreas[0].AxisX.LabelStyle.Font = chartFont;
+            ChartBankBalanceMonth.ChartAreas[0].AxisY.LabelStyle.Font = chartFont;
+
+            if (ThemeManager.Current.ApplicationTheme == ApplicationTheme.Dark)
+            {
+                ChartBankBalanceMonth.BackColor = ColorTranslator.FromHtml("#FF2B2B2B");
+                ChartBankBalanceMonth.ChartAreas[0].AxisX.LabelStyle.ForeColor = Color.White;
+                ChartBankBalanceMonth.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.White;
+                ChartBankBalanceMonth.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.White;
+                ChartBankBalanceMonth.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.White;
+                ChartBankBalanceMonth.ChartAreas[0].BackColor = Color.Black;
+            }
+        }
+
+        private void UpdateChartBankBalanceMonthData()
+        {
+            ChartBankBalanceMonth.Series[0].Points.Clear();
+
+            foreach (var point in _statisticsView.ChartModel.Data)
+            {
+                ChartBankBalanceMonth.Series[0].Points.Add(point.Value).AxisLabel = point.Key;
+            }
         }
 
         private void Avatar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -37,34 +80,29 @@ namespace FlightJobsDesktop.Views
 
         }
 
-        private void LoadChart()
+        private async void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            /*
-            var plt = WpfPlot1.Plot;
-            plt.Title("Total in 6 months: $ 129,946      Month goal: $ 31,306", true, Color.Black, 16); //TODO:  
-            plt.Style(ScottPlot.Style.Monospace);
-            var culture = System.Globalization.CultureInfo.CreateSpecificCulture("en"); 
-            plt.SetCulture(culture);
-
-            // generate 6 Months of data
-            int pointCount = 6;
-            double[] values = DataGen.RandomWalk(null, pointCount);
-            double[] days = new double[pointCount];
-            DateTime day1 = DateTime.Now.AddDays(-DateTime.Now.Day).AddMonths(-6);
-            for (int i = 0; i < days.Length; i++)
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            try
             {
-                days[i] = day1.AddMonths(1).AddMonths(i).ToOADate();
+                var userStatisticsModel = await _userAccessService.GetUserStatisticsFlightsInfo(AppProperties.UserLogin.UserId);
+                _statisticsView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
+                            .Map<UserStatisticsModel, UserStatisticsFlightsViewModel>(userStatisticsModel);
 
-                plt.AddText(string.Format(CultureInfo.GetCultureInfo("en-US"), "{0:C}", values[i]), x: days[i], y: values[i], size: 14, color: Color.Black);
+                _statisticsView.LicenseStatus = _statisticsView.LicensesOverdue?.Count > 0 ? "License is expired" : "License is up to date";
+
+                UpdateChartBankBalanceMonthData();
+                DataContext = _statisticsView;
             }
-
-            plt.AddScatter(days, values);
-            plt.XAxis.TickLabelFormat("yyyy\\/MMM", dateTimeFormat: true);
-            // define tick spacing as 1 Month (every Month will be shown)
-            plt.XAxis.ManualTickSpacing(1, ScottPlot.Ticks.DateTimeUnit.Month);
-            WpfPlot1.Refresh();
-
-            */
+            catch (Exception ex)
+            {
+                _log.Error(ex.Message);
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                progress.Dispose();
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ using FlightJobs.Domain.Navdata.Interface;
 using FlightJobs.Domain.Navdata;
 using log4net.Config;
 using FlightJobs.Domain.Navdata.Utils;
+using FlightJobsDesktop.Views.POC;
 
 namespace FlightJobsDesktop
 {
@@ -54,6 +55,7 @@ namespace FlightJobsDesktop
         private void OnStartup(object sender, StartupEventArgs e)
         {
             //            new CurrentJobDataWindow().Show();
+            //new ChartsPoC().Show();
             var loginWindow = _serviceProvider.GetService<Login>();
             loginWindow.Show();
         }
