@@ -10,8 +10,6 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
 
         Task<UserStatisticsModel> GetUserStatistics(string userId);
 
-        Task<UserStatisticsModel> GetUserStatisticsFlightsInfo(string userId);
-
         Task<UserStatisticsModel> UpdateUserSettings(UserSettingsModel userSettings);
         Task UserRegister(UserRegisterModel userModel);
     }

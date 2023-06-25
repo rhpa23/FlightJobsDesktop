@@ -192,6 +192,9 @@
     <Compile Include="Views\Modals\AirlineJoinModal.xaml.cs">
       <DependentUpon>AirlineJoinModal.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Modals\LicenseExpensesModal.xaml.cs">
+      <DependentUpon>LicenseExpensesModal.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Modals\PilotsHiredModal.xaml.cs">
       <DependentUpon>PilotsHiredModal.xaml</DependentUpon>
     </Compile>
@@ -299,6 +302,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Modals\AirlineJoinModal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modals\LicenseExpensesModal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -713,6 +720,23 @@
     <Content Include="img\LogoDefault.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="img\PilotExpenses\AdvancedAvionicsHandbookX.jpg" />
+    <Resource Include="img\PilotExpenses\AerodynamicsExamX.jpg" />
+    <Resource Include="img\PilotExpenses\AerodynamicsTechnicalManualX.jpg" />
+    <Resource Include="img\PilotExpenses\AeronauticalInformationManualX.jpg" />
+    <Resource Include="img\PilotExpenses\AircraftOperationalKnowledgeX.jpg" />
+    <Resource Include="img\PilotExpenses\AirplaneFlyingHandbookX.jpg" />
+    <Resource Include="img\PilotExpenses\AuthorizedAviationMedicalExamX.jpg" />
+    <Resource Include="img\PilotExpenses\CommercialPilotPracticalTestX.jpg" />
+    <Resource Include="img\PilotExpenses\FederalAviationRegulationsX.jpg" />
+    <Resource Include="img\PilotExpenses\FlightNavigatorHandbookX.jpg" />
+    <Resource Include="img\PilotExpenses\FlyingSkillsPraticalExamX.jpg" />
+    <Resource Include="img\PilotExpenses\GroundSchoolExamX.jpg" />
+    <Resource Include="img\PilotExpenses\JetPilotExamX.jpg" />
+    <Resource Include="img\PilotExpenses\JetTransitionCourseX.jpg" />
+    <Resource Include="img\PilotExpenses\PilotCourseTrainingX.jpg" />
+    <Resource Include="img\PilotExpenses\SimulatorTrainingX.jpg" />
+    <Resource Include="img\PilotExpenses\WeatherExamX.jpg" />
     <Content Include="web\img\arrival.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

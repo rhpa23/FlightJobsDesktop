@@ -15,6 +15,9 @@ namespace FlightJobsDesktop.Mapper
             if (!_isInitialized)
             {
                 MapperCfg = new MapperConfiguration(cfg => {
+
+                    cfg.CreateMap<PilotLicenseItemModel, PilotLicenseItemViewModel>();
+                    cfg.CreateMap<LicenseItemModel, LicenseItemViewModel>();
                     cfg.CreateMap<PilotLicenseExpensesUserModel, PilotLicenseExpensesUserViewModel>();
                     cfg.CreateMap<PilotLicenseExpensesModel, PilotLicenseExpensesViewModel>();
                     cfg.CreateMap<ChartUserBankBalanceModel, ChartUserBankBalanceViewModel>();

@@ -46,11 +46,24 @@ namespace FlightJobsDesktop.ViewModels
     {
         public long Id { get; set; }
 
-        public PilotLicenseExpensesViewModel PilotLicenseExpense { get; set; }
+        public PilotLicenseExpensesViewModel PilotLicenseExpense { get; set; } = new PilotLicenseExpensesViewModel();
 
         public DateTime MaturityDate { get; set; }
+        public string MaturityDateShort { get { return MaturityDate.ToShortDateString(); } }
 
         public bool OverdueProcessed { get; set; }
+
+        public long PackagePrice { get; set; }
+        public string PackagePriceCurrency { get { return string.Format("F{0:C}", PackagePrice); } }
+
+        public IList<LicenseItemViewModel> LicenseItems { get; set; } = new List<LicenseItemViewModel>();
+    }
+
+    public class LicenseItemViewModel
+    {
+        public long Id { get; set; }
+        public PilotLicenseItemViewModel PilotLicenseItem { get; set; }
+        public bool IsBought { get; set; }
     }
 
     public class PilotLicenseExpensesViewModel
@@ -62,5 +75,58 @@ namespace FlightJobsDesktop.ViewModels
         public int DaysMaturity { get; set; }
 
         public bool Mandatory { get; set; }
+    }
+
+    public class PilotLicenseItemViewModel
+    {
+        public long Id { get; set; }
+
+        public string Name { get; set; }
+
+        public long Price { get; set; }
+        public string PriceCurrency { get { return string.Format("F{0:C}", Price); } }
+
+        public string Image { get; set; }
+
+        public string ImageAdaptPath
+        {
+            get { return !string.IsNullOrEmpty(Image) && Image.Contains("Content") ? Image.Replace("/Content", "") : Image; }
+        }
+
+    }
+
+    public class LicenseExpensesViewModel : ObservableObject
+    {
+        public long _bankBalance { get; set; }
+        public long BankBalance
+        {
+            get { return _bankBalance; }
+            set { _bankBalance = value; OnPropertyChanged(); OnPropertyChanged("BankBalanceCurrency"); }
+        }
+        public string BankBalanceCurrency { get { return string.Format("F{0:C}", BankBalance); } }
+
+
+        public long _bankBalanceProjection;
+        public long BankBalanceProjection
+        {
+            get { return _bankBalanceProjection; }
+            set { _bankBalanceProjection = value; OnPropertyChanged(); OnPropertyChanged("BankBalanceProjectionCurrency"); }
+        }
+        public string BankBalanceProjectionCurrency { get { return string.Format("F{0:C}", BankBalanceProjection); } }
+
+
+        public PilotLicenseExpensesUserViewModel _selectedLicense = new PilotLicenseExpensesUserViewModel();
+        public PilotLicenseExpensesUserViewModel SelectedLicense
+        {
+            get { return _selectedLicense; }
+            set { _selectedLicense = value; OnPropertyChanged(); }
+        }
+        
+        public IList<PilotLicenseExpensesUserViewModel> _overdueLicenses = new List<PilotLicenseExpensesUserViewModel>();
+        public IList<PilotLicenseExpensesUserViewModel> OverdueLicenses
+        {
+            get { return _overdueLicenses; }
+            set { _overdueLicenses = value; OnPropertyChanged(); }
+        }
     }
 }

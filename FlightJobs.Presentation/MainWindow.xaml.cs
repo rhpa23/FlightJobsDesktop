@@ -37,12 +37,14 @@ namespace FlightJobsDesktop
         public static IAbstractFactory<IInfraService> InfraServiceFactory;
         public static IAbstractFactory<IAirlineService> AirlineServiceFactory;
         public static IAbstractFactory<ISqLiteDbContext> SqLiteContextFactory;
+        public static IAbstractFactory<IPilotService> PilotServiceFactory;
 
         private UserSettingsViewModel _userSettings;
 
         public MainWindow(IAbstractFactory<IInfraService> factoryInfra,
                           IAbstractFactory<IJobService> factoryJob, 
                           IAbstractFactory<IUserAccessService> factoryUser,
+                          IAbstractFactory<IPilotService> factoryPilot,
                           IAbstractFactory<IAirlineService> factoryAirline,
                           IAbstractFactory<ISqLiteDbContext> factorySqLiteContext)
         {
@@ -50,6 +52,7 @@ namespace FlightJobsDesktop
 
             JobServiceFactory = factoryJob;
             UserServiceFactory = factoryUser;
+            PilotServiceFactory = factoryPilot;
             InfraServiceFactory = factoryInfra;
             AirlineServiceFactory = factoryAirline;
             SqLiteContextFactory = factorySqLiteContext;
@@ -151,7 +154,8 @@ namespace FlightJobsDesktop
             var loginWindow = new Login(InfraServiceFactory, 
                                         JobServiceFactory, 
                                         UserServiceFactory, 
-                                        new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, AirlineServiceFactory, SqLiteContextFactory));
+                                        new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, PilotServiceFactory, 
+                                                       AirlineServiceFactory, SqLiteContextFactory));
 
             loginWindow.AutoSingIn = false;
             loginWindow.Show();

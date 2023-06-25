@@ -3,6 +3,7 @@ using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
+using FlightJobsDesktop.Views.Modals;
 using log4net;
 using Microsoft.Win32;
 using ModernWpf;
@@ -12,9 +13,12 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Media.Imaging;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FlightJobsDesktop.Views
 {
@@ -28,13 +32,13 @@ namespace FlightJobsDesktop.Views
 
         private UserStatisticsFlightsViewModel _statisticsView = new UserStatisticsFlightsViewModel();
 
-        private IUserAccessService _userAccessService;
+        private IPilotService _pilotService;
 
         public PrivateView()
         {
             InitializeComponent();
             _notificationManager = new NotificationManager();
-            _userAccessService = MainWindow.UserServiceFactory.Create();
+            _pilotService = MainWindow.PilotServiceFactory.Create();
 
             var chartFont = new Font("Segoe UI", 10);
             ChartBankBalanceMonth.Series[0].Font = chartFont;
@@ -54,13 +58,68 @@ namespace FlightJobsDesktop.Views
             }
         }
 
+        private async Task LoadPilotData()
+        {
+            BtnLicenseBorder.IsEnabled = false;
+            BtnTransferBorder.IsEnabled = false;
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            try
+            {
+                var userStatisticsModel = await _pilotService.GetUserStatisticsFlightsInfo(AppProperties.UserLogin.UserId);
+                _statisticsView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
+                            .Map<UserStatisticsModel, UserStatisticsFlightsViewModel>(userStatisticsModel);
+
+                _statisticsView.LicenseStatus = _statisticsView.LicensesOverdue?.Count > 0 ? "License is expired" : "License is up to date";
+
+                foreach (var licOverdue in _statisticsView.LicensesOverdue)
+                {
+                    licOverdue.PackagePrice = licOverdue.LicenseItems.Sum(x => x.PilotLicenseItem.Price);
+                }
+
+                UpdateChartBankBalanceMonthData();
+                DataContext = _statisticsView;
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.Message);
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                BtnLicenseBorder.IsEnabled = true;
+                BtnTransferBorder.IsEnabled = true;
+                progress.Dispose();
+            }
+        }
+
+        private void ShowModal(string title, object content)
+        {
+
+            Window window = new Window
+            {
+                Title = title,
+                Content = content,
+                Width = ((UserControl)content).MinWidth,
+                Height = ((UserControl)content).MinHeight + 40,
+                //SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.CanResize,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ShowInTaskbar = true,
+                WindowStyle = WindowStyle.ToolWindow
+            };
+
+            window.ShowDialog();
+        }
+
         private void UpdateChartBankBalanceMonthData()
         {
             ChartBankBalanceMonth.Series[0].Points.Clear();
-
-            foreach (var point in _statisticsView.ChartModel.Data)
+            if (_statisticsView.ChartModel != null && _statisticsView.ChartModel.Data != null)
             {
-                ChartBankBalanceMonth.Series[0].Points.Add(point.Value).AxisLabel = point.Key;
+                foreach (var point in _statisticsView.ChartModel.Data)
+                {
+                    ChartBankBalanceMonth.Series[0].Points.Add(point.Value).AxisLabel = point.Key;
+                }
             }
         }
 
@@ -82,26 +141,30 @@ namespace FlightJobsDesktop.Views
 
         private async void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            await LoadPilotData();
+        }
+
+        private async void BtnLicense_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
             try
             {
-                var userStatisticsModel = await _userAccessService.GetUserStatisticsFlightsInfo(AppProperties.UserLogin.UserId);
-                _statisticsView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
-                            .Map<UserStatisticsModel, UserStatisticsFlightsViewModel>(userStatisticsModel);
-
-                _statisticsView.LicenseStatus = _statisticsView.LicensesOverdue?.Count > 0 ? "License is expired" : "License is up to date";
-
-                UpdateChartBankBalanceMonthData();
-                DataContext = _statisticsView;
+                var modal = new LicenseExpensesModal(_statisticsView);
+                ShowModal("License Expenses", modal);
+                if (modal.IsChanged)
+                {
+                    await LoadPilotData();
+                }
+                
+                //if (modal.SelectedJobTip != null)
+                //{
+                //    txtAlternative.Text = GetIcaoInfo(modal.SelectedJobTip.AirportICAO);
+                //    AutoSuggestBoxSuggestionChosen();
+                //}
             }
             catch (Exception ex)
             {
                 _log.Error(ex.Message);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
-            }
-            finally
-            {
-                progress.Dispose();
             }
         }
     }

@@ -56,8 +56,12 @@
                 </TextBlock>
             </DockPanel>
             <Label x:Name="LblLicenseStatus" Grid.Row="5" Content="{Binding LicenseStatus}" Foreground="{Binding LicenseStatusColor}" HorizontalAlignment="Center" />
-            <Button Grid.Row="6" Margin="0, 40, 0, 10" Content="License" Width="85" x:Name="BtnLicense" />
-            <Button Grid.Row="7" Margin="0, 10, 0, 10" Content="Transfer" Width="85" x:Name="BtnTransfer" />
+            <Border x:Name="BtnLicenseBorder" Grid.Row="6" Margin="0, 40, 0, 10" Style="{DynamicResource BorderButtonYellow}" Width="85" >
+                <Button Content="License" Width="85" x:Name="BtnLicense" Click="BtnLicense_Click" />
+            </Border>
+            <Border x:Name="BtnTransferBorder" Grid.Row="7" Margin="0, 10, 0, 10" Style="{DynamicResource BorderButtonYellow}" Width="85" >
+                <Button Content="Transfer" Width="85" x:Name="BtnTransfer" />
+            </Border>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>

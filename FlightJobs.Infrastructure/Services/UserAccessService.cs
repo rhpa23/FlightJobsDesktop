@@ -20,11 +20,6 @@ namespace FlightJobs.Infrastructure.Services
             return userStatisticsData;
         }
 
-        public async Task<UserStatisticsModel> GetUserStatisticsFlightsInfo(string userId)
-        {
-            return await _flightJobsConnectorClientAPI.GetUserStatisticsFlightsInfo(userId);
-        }
-
         public async Task<LoginResponseModel> Login(string email, string password)
         {
             var loginData = await _flightJobsConnectorClientAPI.Login(email, password);

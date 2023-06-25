@@ -54,6 +54,7 @@
     <Compile Include="Services\Interfaces\IAirlineService.cs" />
     <Compile Include="Services\Interfaces\IInfraService.cs" />
     <Compile Include="Services\Interfaces\IJobService.cs" />
+    <Compile Include="Services\Interfaces\IPilotService.cs" />
     <Compile Include="Services\Interfaces\IUserAccessService.cs" />
     <Compile Include="Services\JobService.cs" />
     <Compile Include="Services\PilotService.cs" />

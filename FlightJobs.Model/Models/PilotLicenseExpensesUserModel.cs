@@ -15,5 +15,7 @@ namespace FlightJobs.Model.Models
         public DateTime MaturityDate { get; set; }
 
         public bool OverdueProcessed { get; set; }
+
+        public IList<LicenseItemModel> LicenseItems { get; set; } = new List<LicenseItemModel>();
     }
 }

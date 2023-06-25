@@ -42,7 +42,8 @@ namespace FlightJobsDesktop
             services.AddAbstractFactory<IUserAccessService, UserAccessService>();
             services.AddAbstractFactory<IInfraService, InfraService>();
             services.AddAbstractFactory<IAirlineService, AirlineService>();
-            
+            services.AddAbstractFactory<IPilotService, PilotService>();
+
             services.AddAbstractFactory<ISqLiteDbContext, SqLiteDbContext>();
 
             services.AddSingleton<MainWindow>();

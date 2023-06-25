@@ -53,6 +53,7 @@
     <Compile Include="Models\GenerateJobModel.cs" />
     <Compile Include="Models\JobListItemModel.cs" />
     <Compile Include="Models\JobModel.cs" />
+    <Compile Include="Models\LicenseItemModel.cs" />
     <Compile Include="Models\LoginResponseModel.cs" />
     <Compile Include="Models\PaginatedAirlineJobLedgerModel.cs" />
     <Compile Include="Models\PaginatedAirlinesModel.cs" />
