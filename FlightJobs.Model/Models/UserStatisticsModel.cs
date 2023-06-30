@@ -52,6 +52,6 @@ namespace FlightJobs.Model.Models
         public Dictionary<string, long> DestinationRanking { get; set; }
         public string WeightUnit { get; set; }
 
-        public IList<PilotLicenseExpensesUserModel> LicensesOverdue { get; set; }
+        public IList<PilotLicenseExpensesUserModel> LicensesOverdue { get; set; } = new List<PilotLicenseExpensesUserModel>();
     }
 }

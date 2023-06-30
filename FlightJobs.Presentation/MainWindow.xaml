@@ -109,10 +109,14 @@
                         <ui:SymbolIcon Symbol="Home"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem Content="{Binding Path=Username}" Tag="PrivateView" x:Name="PrivateViewPageItem" Width="150" HorizontalAlignment="Left" Padding="0" Margin="0">
+                <ui:NavigationViewItem Tag="PrivateView" x:Name="PrivateViewPageItem" Width="150" HorizontalAlignment="Left" Padding="0" Margin="0">
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="OtherUser"/>
                     </ui:NavigationViewItem.Icon>
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse x:Name="EllipseLicense" Width="7" Height="7" Fill="Red" Margin="-10,0,0,0" />
+                        <Label Content="{Binding Username}"/>
+                    </StackPanel>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem Content="Settings" Tag="SettingsView" x:Name="SettingsViewPageItem"  Width="150" HorizontalAlignment="Left">
                     <ui:NavigationViewItem.Icon>

@@ -15,6 +15,7 @@ namespace FlightJobs.Infrastructure.Services
                 userStatisticsData.Airline.HiredPilots = await new AirlineService().GetAirlinePilotsHired(userStatisticsData.Airline.Id);
                 userStatisticsData.Airline.HiredFBOs = await new AirlineService().GetAirlineFBOs(userStatisticsData.Airline.Id);
                 userStatisticsData.Airline.OwnerUser = userStatisticsData.Airline.HiredPilots.FirstOrDefault(x => x.Id == userStatisticsData.Airline.UserId);
+                userStatisticsData.LicensesOverdue = await new PilotService().GetUserLicensesOverdue(userId);
             }
             AppProperties.UserStatistics = userStatisticsData;
             return userStatisticsData;

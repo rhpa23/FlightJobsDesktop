@@ -32,6 +32,7 @@ namespace FlightJobsDesktop.Views
         private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             SetEllipseAirlinesVIsibility();
+            MainWindow.SetLicenseOverdueEllipseVisibility();
         }
 
         internal static void SetEllipseAirlinesVIsibility()

@@ -14,8 +14,8 @@ namespace ConnectorClientAPI
 {
     public class FlightJobsConnectorClientAPI
     {
-        public static string SITE_URL = "http://localhost:5646/";
-        //public static string SITE_URL = "https://flightjobs.bsite.net/";
+        //public static string SITE_URL = "http://localhost:5646/";
+        public static string SITE_URL = "https://flightjobs.bsite.net/";
         //public static string SITE_URL = "https://flightjobs.somee.com/";
         static HttpClient _client;
 
@@ -258,6 +258,17 @@ namespace ConnectorClientAPI
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             string json = response.Content.ReadAsStringAsync().Result;
             return JsonConvert.DeserializeObject<UserStatisticsModel>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
+        }
+
+        public async Task<IList<PilotLicenseExpensesUserModel>> GetUserLicensesOverdue(string userId)
+        {
+            var url = $"{SITE_URL}api/UserApi/GetUserLicensesOverdue";
+
+            var body = JsonConvert.SerializeObject(new { id = userId });
+
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            string json = response.Content.ReadAsStringAsync().Result;
+            return JsonConvert.DeserializeObject<IList<PilotLicenseExpensesUserModel>>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
         }
 
         public async Task<UserStatisticsModel> BuyLicencePackage(string userId, long licenseExpenseId) 

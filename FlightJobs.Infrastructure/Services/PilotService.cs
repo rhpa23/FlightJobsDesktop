@@ -19,5 +19,10 @@ namespace FlightJobs.Infrastructure.Services
         {
             return await _flightJobsConnectorClientAPI.GetUserStatisticsFlightsInfo(userId);
         }
+
+        public async Task<IList<PilotLicenseExpensesUserModel>> GetUserLicensesOverdue(string userId)
+        {
+            return await _flightJobsConnectorClientAPI.GetUserLicensesOverdue(userId);
+        }
     }
 }

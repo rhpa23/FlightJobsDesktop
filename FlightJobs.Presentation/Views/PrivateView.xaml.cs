@@ -71,6 +71,10 @@ namespace FlightJobsDesktop.Views
 
                 _statisticsView.LicenseStatus = _statisticsView.LicensesOverdue?.Count > 0 ? "License is expired" : "License is up to date";
 
+                AppProperties.UserStatistics.LicensesOverdue.Clear();
+                AppProperties.UserStatistics.LicensesOverdue = userStatisticsModel.LicensesOverdue.ToList();
+                MainWindow.SetLicenseOverdueEllipseVisibility();
+
                 foreach (var licOverdue in _statisticsView.LicensesOverdue)
                 {
                     licOverdue.PackagePrice = licOverdue.LicenseItems.Sum(x => x.PilotLicenseItem.Price);

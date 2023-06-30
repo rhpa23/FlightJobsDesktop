@@ -717,6 +717,7 @@
     <Resource Include="img\icons\arrival.png" />
     <Resource Include="img\icons\departing.png" />
     <Resource Include="img\background\default_thumb-capacity.jpg" />
+    <Resource Include="img\icons\license-001.png" />
     <Content Include="img\LogoDefault.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

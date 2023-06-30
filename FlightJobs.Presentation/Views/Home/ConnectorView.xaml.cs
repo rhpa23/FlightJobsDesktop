@@ -169,6 +169,8 @@ namespace FlightJobsDesktop.Views.Home
                     EnableDisableNavegation(true);
                     _currentJob.StartIsEnable = !_isJobStarted;
                     _currentJob.FinishIsEnable = _isJobStarted;
+                    // Reload Airline data
+                    await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
                     _log.Info("Job finished");
                     return true;
                 }
@@ -603,8 +605,7 @@ namespace FlightJobsDesktop.Views.Home
 
                 LoadThumbImg(AppProperties.UserStatistics.CustomPlaneCapacity.ImagePath);
 
-                // Reload Airline data
-                await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
+                // Moved to FinishJob                await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
                 HomeView.SetEllipseAirlinesVIsibility();
 
                 _currentJob.PlaneSimData = FlightJobsConnectSim.PlaneSimData;

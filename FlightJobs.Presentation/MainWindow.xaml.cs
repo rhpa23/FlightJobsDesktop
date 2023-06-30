@@ -17,6 +17,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace FlightJobsDesktop
@@ -27,6 +28,7 @@ namespace FlightJobsDesktop
     public partial class MainWindow : Window
     {
         internal static NavigationView NavigationBar { get; set; }
+        internal static Ellipse LicenseOverdueEllipse { get; set; }
 
         private FlightJobsConnectSim _flightJobsConnectSim = new FlightJobsConnectSim();
         
@@ -60,6 +62,7 @@ namespace FlightJobsDesktop
             ResizeMode = ResizeMode.CanResizeWithGrip;
 
             NavigationBar = nvMain;
+            LicenseOverdueEllipse = EllipseLicense;
 
             System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
             ni.Icon = new System.Drawing.Icon("favicon.ico");
@@ -112,7 +115,7 @@ namespace FlightJobsDesktop
         private void LoadSettings()
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
-            var jsonSettings = File.ReadAllText(Path.Combine(path, "ResourceData\\Settings.json"));
+            var jsonSettings = File.ReadAllText(System.IO.Path.Combine(path, "ResourceData\\Settings.json"));
             _userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
 
             ThemeManager.Current.ApplicationTheme = _userSettings.ThemeName == "Light" ? ApplicationTheme.Light : ApplicationTheme.Dark;
@@ -172,6 +175,12 @@ namespace FlightJobsDesktop
         private void ExitApp_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        internal static void SetLicenseOverdueEllipseVisibility()
+        {
+            LicenseOverdueEllipse.Visibility = AppProperties.UserStatistics.LicensesOverdue == null ||
+                                               AppProperties.UserStatistics.LicensesOverdue.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
         }
 
 
