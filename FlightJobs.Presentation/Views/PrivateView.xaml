@@ -1,4 +1,5 @@
 ﻿<UserControl x:Class="FlightJobsDesktop.Views.PrivateView"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -22,7 +23,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Border BorderBrush="#FF919191" BorderThickness="1" CornerRadius="5" Padding="0, 5, 0, 5" Margin="20,20,0,0">
-                <Image x:Name="ImgAvatar" Height="173" Width="147" Source="/img/avatar/default.jpg" Stretch="Fill" Cursor="Hand" MouseDown="Avatar_MouseDown" />
+                <Image x:Name="ImgAvatar" Height="173" Width="147" Source="{Binding Logo}" Cursor="Hand" MouseDown="Avatar_MouseDown" />
             </Border>
             <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" Margin="20,20,0,0">
                 <TextBlock>
@@ -62,7 +63,68 @@
                 </Border>
                 <Label Content="Your current graduation based on flight hours" Margin="0,60,0,0" />
                 <Border x:Name="BtnGraduationBorder" Margin="0,20,0,0" Style="{DynamicResource BorderButtonYellow}" Width="305" HorizontalAlignment="Left" >
-                    <Button Content="{Binding GraduationDesc}" Width="305" x:Name="BtnGraduation" />
+                    <Button Content="{Binding GraduationDesc}" Width="305" x:Name="BtnGraduation" >
+                        <ui:FlyoutService.Flyout>
+                            <ui:Flyout x:Name="FlyoutScoreResults" Placement="Bottom">
+                                <ui:Flyout.FlyoutPresenterStyle>
+                                    <Style TargetType="ui:FlyoutPresenter">
+                                        <Setter Property="MinWidth" Value="390"></Setter>
+                                    </Style>
+                                </ui:Flyout.FlyoutPresenterStyle>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Pilot Graduation" FontSize="18" FontWeight="Bold"/>
+                                    <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,5,0,0" >
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="SlateGray"/>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="240"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
+                                            <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
+                                            <RowDefinition/><RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="Graduation" FontSize="16" FontWeight="Bold" Margin="0,10,0,10"/>
+                                        <TextBlock Text="Flight hours" FontSize="16" FontWeight="Bold" Grid.Column="1" Margin="0,10,0,10"/>
+                                        <TextBlock Text="ATP Senior Commander" FontWeight="Bold" Grid.Column="0" Grid.Row="1"/>
+                                        <TextBlock Text="5000+" Grid.Column="1" Grid.Row="1"/>
+                                        <TextBlock Text="ATP Commander" FontWeight="Bold" Grid.Column="0" Grid.Row="2"/>
+                                        <TextBlock Text="4000 - 4999" Grid.Column="1" Grid.Row="2"/>
+                                        <TextBlock Text="ATP Senior Captain" FontWeight="Bold" Grid.Column="0" Grid.Row="3"/>
+                                        <TextBlock Text="3000 - 3999" Grid.Column="1" Grid.Row="3"/>
+                                        <TextBlock Text="ATP Captain" FontWeight="Bold" Grid.Column="0" Grid.Row="4"/>
+                                        <TextBlock Text="2000 - 2999" Grid.Column="1" Grid.Row="4"/>
+                                        <TextBlock Text="ATP First Officer" FontWeight="Bold" Grid.Column="0" Grid.Row="5"/>
+                                        <TextBlock Text="1500 - 1999" Grid.Column="1" Grid.Row="5"/>
+                                        <TextBlock Text="Commercial Senior Commander" FontWeight="Bold" Grid.Column="0" Grid.Row="6"/>
+                                        <TextBlock Text="1000 - 1499" Grid.Column="1" Grid.Row="6"/>
+                                        <TextBlock Text="Commercial Commander" FontWeight="Bold" Grid.Column="0" Grid.Row="7"/>
+                                        <TextBlock Text="750 - 999" Grid.Column="1" Grid.Row="7"/>
+                                        <TextBlock Text="Commercial Senior Captain" FontWeight="Bold" Grid.Column="0" Grid.Row="8"/>
+                                        <TextBlock Text="540 - 749" Grid.Column="1" Grid.Row="8"/>
+                                        <TextBlock Text="Commercial Captain" FontWeight="Bold" Grid.Column="0" Grid.Row="9"/>
+                                        <TextBlock Text="430 - 539" Grid.Column="1" Grid.Row="9"/>
+                                        <TextBlock Text="Commercial First Officer" FontWeight="Bold" Grid.Column="0" Grid.Row="10"/>
+                                        <TextBlock Text="360 - 429" Grid.Column="1" Grid.Row="10"/>
+                                        <TextBlock Text="Senior Captain" FontWeight="Bold" Grid.Column="0" Grid.Row="11"/>
+                                        <TextBlock Text="250 - 359" Grid.Column="1" Grid.Row="11"/>
+                                        <TextBlock Text="Captain" FontWeight="Bold" Grid.Column="0" Grid.Row="12"/>
+                                        <TextBlock Text="160 - 249" Grid.Column="1" Grid.Row="12"/>
+                                        <TextBlock Text="First Officer" FontWeight="Bold" Grid.Column="0" Grid.Row="13"/>
+                                        <TextBlock Text="80 - 159" Grid.Column="1" Grid.Row="13"/>
+                                        <TextBlock Text="Flight Officer" FontWeight="Bold" Grid.Column="0" Grid.Row="14"/>
+                                        <TextBlock Text="40 - 79" Grid.Column="1" Grid.Row="14"/>
+                                        <TextBlock Text="Junior Flight Officer" FontWeight="Bold" Grid.Column="0" Grid.Row="15"/>
+                                        <TextBlock Text="0 - 39" Grid.Column="1" Grid.Row="15"/>
+                                    </Grid>
+                                </StackPanel>
+                            </ui:Flyout>
+                        </ui:FlyoutService.Flyout>
+                    </Button>
                 </Border>
             </StackPanel>
         </Grid>

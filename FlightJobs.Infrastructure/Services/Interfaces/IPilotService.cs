@@ -12,6 +12,7 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
         Task<UserStatisticsModel> GetUserStatisticsFlightsInfo(string userId);
 
         Task<IList<PilotLicenseExpensesUserModel>> GetUserLicensesOverdue(string userId);
+        Task SaveAvatar(string userId, string fileName);
 
         Task<UserStatisticsModel> BuyLicencePackage(string userId, long licenseExpenseId);
     }

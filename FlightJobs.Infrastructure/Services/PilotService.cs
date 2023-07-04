@@ -24,5 +24,10 @@ namespace FlightJobs.Infrastructure.Services
         {
             return await _flightJobsConnectorClientAPI.GetUserLicensesOverdue(userId);
         }
+
+        public async Task SaveAvatar(string userId, string fileName)
+        {
+            await _flightJobsConnectorClientAPI.SaveAvatar(userId, fileName);
+        }
     }
 }

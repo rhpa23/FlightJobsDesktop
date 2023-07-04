@@ -58,6 +58,42 @@ namespace FlightJobsDesktop.Views
             }
         }
 
+        private void SaveLogoImg(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    DirectoryInfo directoryInfo = new DirectoryInfo("img\\avatar");
+                    if (!Directory.Exists("img")) directoryInfo = Directory.CreateDirectory("img");
+
+                    var destPath = $"{directoryInfo.FullName}\\{new FileInfo(filePath).Name}";
+                    File.Copy(filePath, destPath, true);
+                }
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Avatar image could not be saved. Please run as administrator.", NotificationType.Error, "WindowArea");
+            }
+        }
+
+        private void LoadLogoImg(string filename)
+        {
+            try
+            {
+                filename = new FileInfo(filename).Name;
+                DirectoryInfo directoryInfo = new DirectoryInfo("img\\avatar");
+                var imgLocalPath = $"{directoryInfo.FullName}\\{filename}";
+
+                ImgAvatar.Source = File.Exists(imgLocalPath) ? new BitmapImage(new Uri(imgLocalPath)) : new BitmapImage(new Uri($"{directoryInfo.FullName}\\default.jpg"));
+
+            }
+            catch (Exception)
+            {
+                //empty
+            }
+        }
+
         private async Task LoadPilotData()
         {
             BtnLicenseBorder.IsEnabled = false;
@@ -79,6 +115,12 @@ namespace FlightJobsDesktop.Views
                 {
                     licOverdue.PackagePrice = licOverdue.LicenseItems.Sum(x => x.PilotLicenseItem.Price);
                 }
+
+                //DirectoryInfo directoryImgInfo = new DirectoryInfo("img");
+                //var imgLogoPath = $"{directoryImgInfo.FullName}\\{_statisticsView.Logo}";
+                //_statisticsView.Logo = File.Exists(imgLogoPath) ? imgLogoPath : $"{directoryImgInfo.FullName}\\avatar\\default.jpg";
+
+                LoadLogoImg(_statisticsView.Logo);
 
                 UpdateChartBankBalanceMonthData();
                 DataContext = _statisticsView;
@@ -127,15 +169,24 @@ namespace FlightJobsDesktop.Views
             }
         }
 
-        private void Avatar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private async void Avatar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            OpenFileDialog file = new OpenFileDialog();
-            bool? result = file.ShowDialog();
-
-            if (result.Value && File.Exists(file.FileName))
+            try
             {
-                ImgAvatar.Source = new BitmapImage(new Uri(file.FileName, UriKind.Absolute));
+                var fileDialog = new OpenFileDialog() { Title = "Avatar", Filter = "Image Files|*.jpg;*.jpeg;*.png;..." };
+
+                if (fileDialog.ShowDialog((Window)Parent).Value)
+                {
+                    SaveLogoImg(fileDialog.FileName);
+                    LoadLogoImg(fileDialog.FileName);
+                    await _pilotService.SaveAvatar(AppProperties.UserLogin.UserId, new FileInfo(fileDialog.FileName).Name);
+                }
             }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Avatar image could not be saved. Please run as administrator.", NotificationType.Error, "WindowArea");
+            }
+            
         }
 
         private void ImgGraduation_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

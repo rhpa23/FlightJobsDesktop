@@ -8,6 +8,7 @@ namespace FlightJobsDesktop.ViewModels
 {
     public class UserStatisticsFlightsViewModel
     {
+        public string Logo { get; set; }
         public long BankBalance { get; set; }
         public string BankBalanceCurrency { get { return string.Format("F{0:C}", BankBalance); } }
         public long PilotScore { get; set; }

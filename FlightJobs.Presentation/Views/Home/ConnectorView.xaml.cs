@@ -524,10 +524,13 @@ namespace FlightJobsDesktop.Views.Home
                 {
                     filename = new FileInfo(filename).Name;
                     DirectoryInfo directoryInfo = new DirectoryInfo("img");
+                    _siderJobWindow.TxbCapacityName.Text = AppProperties.UserStatistics.CustomPlaneCapacity.CustomNameCapacity;
 
                     var imgLocalPath = $"{directoryInfo.FullName}\\{filename}";
-                    _siderJobWindow.TxbCapacityName.Text = AppProperties.UserStatistics.CustomPlaneCapacity.CustomNameCapacity;
-                    _siderJobWindow.ImgCapacity.Source = new BitmapImage(new Uri(imgLocalPath)); 
+                    if (File.Exists(imgLocalPath))
+                    {
+                        _siderJobWindow.ImgCapacity.Source = new BitmapImage(new Uri(imgLocalPath));
+                    }
                 }
                 else
                 {

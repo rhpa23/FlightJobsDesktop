@@ -31,6 +31,20 @@ namespace ConnectorClientAPI
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
+
+        public async Task SaveAvatar(string userId, string fileName)
+        {
+            var url = $"{SITE_URL}api/UserApi/SaveAvatar?fileName={fileName}";
+
+            var body = JsonConvert.SerializeObject(new { id = userId });
+
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+
         public async Task<LoginResponseModel> Login(string email, string password)
         {
             try
