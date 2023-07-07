@@ -69,26 +69,9 @@ namespace FlightJobsDesktop.Views.Home
             logbook.HasPreviousPage = logbook.HasNextPage = isEnabled;
         }
 
-        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
-            try
-            {
-                await UpdateDataGrid(1);
-            }
-            catch (Exception)
-            {
-                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
-            }
-            finally
-            {
-                progress.Dispose();
-            }
-        }
-
         private async void BtnNext_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
             EnabledNaveagtionButtons(false);
             try
             {
@@ -102,14 +85,14 @@ namespace FlightJobsDesktop.Views.Home
             }
             finally
             {
-                progress.Dispose();
+                MainWindow.HideLoading();
                 EnabledNaveagtionButtons(true);
             }
         }
 
         private async void BtnPrevious_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
             EnabledNaveagtionButtons(false);
             try
             {
@@ -123,14 +106,14 @@ namespace FlightJobsDesktop.Views.Home
             }
             finally
             {
-                progress.Dispose();
+                MainWindow.HideLoading();
                 EnabledNaveagtionButtons(true);
             }
         }
 
         private async void BtnFirst_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
             EnabledNaveagtionButtons(false);
             try
             {
@@ -144,14 +127,14 @@ namespace FlightJobsDesktop.Views.Home
             }
             finally
             {
-                progress.Dispose();
+                MainWindow.HideLoading();
                 EnabledNaveagtionButtons(true);
             }
         }
 
         private async void BtnLast_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
             EnabledNaveagtionButtons(false);
             try
             {
@@ -165,7 +148,7 @@ namespace FlightJobsDesktop.Views.Home
             }
             finally
             {
-                progress.Dispose();
+                MainWindow.HideLoading();
                 EnabledNaveagtionButtons(true);
             }
         }
@@ -194,7 +177,7 @@ namespace FlightJobsDesktop.Views.Home
 
         private async void BtnApplyFilter_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
             try
             {
                 await UpdateDataGrid(1);
@@ -212,13 +195,13 @@ namespace FlightJobsDesktop.Views.Home
             }
             finally
             {
-                progress.Dispose();
+                MainWindow.HideLoading();
             }
         }
 
         private async void BtnFilterClear_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
             try
             {
                 var logbook = (LogbookViewModel)DataContext;
@@ -238,7 +221,24 @@ namespace FlightJobsDesktop.Views.Home
             }
             finally
             {
-                progress.Dispose();
+                MainWindow.HideLoading();
+            }
+        }
+
+        private async void UserControl_GotFocus(object sender, RoutedEventArgs e)
+        {
+            MainWindow.ShowLoading();
+            try
+            {
+                await UpdateDataGrid(1);
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                MainWindow.HideLoading();
             }
         }
     }

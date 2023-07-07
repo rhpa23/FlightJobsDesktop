@@ -8,7 +8,8 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
     {
         Task<LoginResponseModel> Login(string email, string password);
 
-        Task<UserStatisticsModel> GetUserStatistics(string userId);
+        Task LoadUserStatisticsProperties(string userId);
+        Task LoadUserAirlineProperties();
 
         Task<UserStatisticsModel> UpdateUserSettings(UserSettingsModel userSettings);
         Task UserRegister(UserRegisterModel userModel);

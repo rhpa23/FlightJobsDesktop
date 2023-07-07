@@ -7,18 +7,23 @@ namespace FlightJobs.Infrastructure.Services
 {
     public class UserAccessService : ServiceBase, IUserAccessService
     {
-        public async Task<UserStatisticsModel> GetUserStatistics(string userId)
+        public async Task LoadUserStatisticsProperties(string userId)
         {
             var userStatisticsData = await _flightJobsConnectorClientAPI.GetUserStatistics(userId);
-            if (userStatisticsData.Airline != null)
-            {
-                userStatisticsData.Airline.HiredPilots = await new AirlineService().GetAirlinePilotsHired(userStatisticsData.Airline.Id);
-                userStatisticsData.Airline.HiredFBOs = await new AirlineService().GetAirlineFBOs(userStatisticsData.Airline.Id);
-                userStatisticsData.Airline.OwnerUser = userStatisticsData.Airline.HiredPilots.FirstOrDefault(x => x.Id == userStatisticsData.Airline.UserId);
-                userStatisticsData.LicensesOverdue = await new PilotService().GetUserLicensesOverdue(userId);
-            }
+            userStatisticsData.LicensesOverdue = await new PilotService().GetUserLicensesOverdue(userId);
+
             AppProperties.UserStatistics = userStatisticsData;
-            return userStatisticsData;
+        }
+
+        public async Task LoadUserAirlineProperties()
+        {
+            var statistics = AppProperties.UserStatistics;
+            if (statistics?.Airline != null)
+            {
+                statistics.Airline.HiredPilots = await new AirlineService().GetAirlinePilotsHired(statistics.Airline.Id);
+                statistics.Airline.HiredFBOs = await new AirlineService().GetAirlineFBOs(statistics.Airline.Id);
+                statistics.Airline.OwnerUser = statistics.Airline.HiredPilots.FirstOrDefault(x => x.Id == statistics.Airline.UserId);
+            }
         }
 
         public async Task<LoginResponseModel> Login(string email, string password)

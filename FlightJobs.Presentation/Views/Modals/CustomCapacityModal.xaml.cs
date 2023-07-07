@@ -68,7 +68,8 @@ namespace FlightJobsDesktop.Views.Modals
                     DirectoryInfo directoryInfo = new DirectoryInfo("img");
 
                     var imgLocalPath = $"{directoryInfo.FullName}\\{filename}";
-                    ImgPreview.Source = new BitmapImage(new Uri(imgLocalPath));
+                    if (File.Exists(imgLocalPath))
+                        ImgPreview.Source = new BitmapImage(new Uri(imgLocalPath));
                 }
                 else
                 {

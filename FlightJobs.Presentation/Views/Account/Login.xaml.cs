@@ -27,6 +27,7 @@ namespace FlightJobsDesktop.Views.Account
         private NotificationManager _notificationManager;
         private LoginResponseModel _loginData;
         private MainWindow _mainWindow;
+        private int _loadingCount;
 
         private IAbstractFactory<IUserAccessService> _factoryUser;
 
@@ -98,7 +99,7 @@ namespace FlightJobsDesktop.Views.Account
 
         private async Task<bool> SignIn(AspnetUserViewModel userViewModel, bool discreteLogin)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            ShowLoading();
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
@@ -106,13 +107,15 @@ namespace FlightJobsDesktop.Views.Account
                 _loginData = await _userAccessService.Login(userViewModel.Email, userViewModel.Password);
                 if (_loginData != null)
                 {
-                    await _userAccessService.GetUserStatistics(_loginData.UserId);
+                    await _userAccessService.LoadUserStatisticsProperties(_loginData.UserId);
 
                     if (!discreteLogin)
                     {
                         _notificationManager.Show("Success", $"Welcome capitan {_loginData.UserName}", NotificationType.Success, "WindowArea");
                         await Task.Delay(TimeSpan.FromSeconds(3));
-                        SaveLoginData();
+                        userViewModel.Id = _loginData.UserId;
+                        userViewModel.NickName = _loginData.UserName;
+                        SaveLoginData(userViewModel);
                     }
                     await LoadUserJobList(_loginData.UserId);
                     return true;
@@ -124,7 +127,7 @@ namespace FlightJobsDesktop.Views.Account
             }
             finally
             {
-                progress.Dispose();
+                HideLoading();
                 Mouse.OverrideCursor = Cursors.Arrow;
                 EnableControls(true);
             }
@@ -132,20 +135,25 @@ namespace FlightJobsDesktop.Views.Account
             return false;
         }
 
-        private bool LoadLoginData()
+        public bool LoadLoginData()
         {
-            bool loaded = false;
             try
             {
                 var path = AppDomain.CurrentDomain.BaseDirectory;
                 var lines = File.ReadLines(System.IO.Path.Combine(path, "ResourceData\\LoginSavedData.ini"));
                 var line = lines?.FirstOrDefault();
                 var info = line?.Split('|');
-                if (info?.Length == 2)
+                if (info?.Length == 4)
                 {
-                    txbEmail.Text = info[0];
-                    txbPassword.Password = info[1];
-                    loaded = EmailValidationRule.IsValidEmail(txbEmail.Text) && !string.IsNullOrEmpty(txbPassword.Password);
+                    AppProperties.UserLogin = new LoginResponseModel() 
+                    {
+                        UserId = info[3],
+                        UserName = info[2]
+                    };
+                    return true;
+                    //txbEmail.Text = info[0];
+                    //txbPassword.Password = info[1];
+                    //loaded = EmailValidationRule.IsValidEmail(txbEmail.Text) && !string.IsNullOrEmpty(txbPassword.Password);
                 }
             }
             catch (Exception ex)
@@ -153,16 +161,33 @@ namespace FlightJobsDesktop.Views.Account
                 _notificationManager.Show("Error", "Cannot load the login data.", NotificationType.Error, "WindowArea");
                 //log.Error($"LoadLoginData failed.", ex);
             }
-            return loaded;
+            return false;
         }
 
-        private void SaveLoginData()
+        public void ShowLoading()
+        {
+            LoadingPanel.Visibility = Visibility.Visible;
+            _loadingCount++;
+        }
+
+        public void HideLoading()
+        {
+            _loadingCount--;
+
+            if (_loadingCount <= 0)
+            {
+                LoadingPanel.Visibility = Visibility.Collapsed;
+                _loadingCount = 0;
+            }
+        }
+
+        private void SaveLoginData(AspnetUserViewModel userViewModel)
         {
             try
             {
-                var path = System.AppDomain.CurrentDomain.BaseDirectory;
-                path = System.IO.Path.Combine(path, "ResourceData/LoginSavedData.ini");
-                string createText = $"{txbEmail.Text}|{txbPassword.Password}";
+                var path = AppDomain.CurrentDomain.BaseDirectory;
+                path = Path.Combine(path, "ResourceData/LoginSavedData.ini");
+                string createText = $"{userViewModel.Email}|{userViewModel.Password}|{userViewModel.NickName}|{userViewModel.Id}";
                 File.WriteAllText(path, createText);
             }
             catch (Exception)
@@ -176,7 +201,7 @@ namespace FlightJobsDesktop.Views.Account
         {
             try
             {
-                await _jobService.GetAllUserJobs(_loginData.UserId);
+                await _jobService.GetAllUserJobs(userId);
             }
             catch
             {
@@ -188,19 +213,21 @@ namespace FlightJobsDesktop.Views.Account
         {
             ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
 
-            if (LoadLoginData())
-            {
-                var userViewModel = (AspnetUserViewModel)DataContext;
+            //if (LoadLoginData())
+            //{
+            //    //var userViewModel = (AspnetUserViewModel)DataContext;
 
-                if (AutoSingIn)
-                {
-                    if (await SignIn(userViewModel, true))
-                    {
-                        this.Hide();
-                        _mainWindow.Show();
-                    }
-                }
-            }
+            //    if (AutoSingIn)
+            //    {
+            //        //await LoadUserJobList(AppProperties.UserLogin.UserId);
+            //        //await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
+            //        //if (await SignIn(userViewModel, true))
+            //        //{
+            //        _mainWindow.Show();
+            //        this.Hide();
+            //        //}
+            //    }
+            //}
         }
 
         private void TextChanged(object sender, EventArgs e)

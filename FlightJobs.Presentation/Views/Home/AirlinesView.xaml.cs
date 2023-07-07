@@ -4,6 +4,7 @@ using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views.Modals;
+using log4net;
 using ModernWpf.Controls;
 using Notification.Wpf;
 using System;
@@ -15,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace FlightJobsDesktop.Views.Home
 {
@@ -29,6 +31,7 @@ namespace FlightJobsDesktop.Views.Home
         private NotificationManager _notificationManager;
         private Flyout _flyoutConfirmExit;
         private Flyout _flyoutActions;
+        private static readonly ILog _log = LogManager.GetLogger(typeof(ConnectorView));
 
         public AirlinesView()
         {
@@ -87,7 +90,8 @@ namespace FlightJobsDesktop.Views.Home
             var modal = new AirlineJoinModal();
             if (ShowModal("Search airline to join", modal).Value)
             {
-                AppProperties.UserStatistics = await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
+                await _userAccessService.LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
+                await _userAccessService.LoadUserAirlineProperties();
                 LoadAirlineData();
                 _notificationManager.Show("Success", $"Congratulations, you signed contract with {AppProperties.UserStatistics.Airline.Name} airline.", NotificationType.Success, "WindowAreaAirline");
             }
@@ -100,24 +104,13 @@ namespace FlightJobsDesktop.Views.Home
                 var createAirlineModal = new AirlineEditModal() { IsCreateAirline = true };
                 if (ShowModal("Create Airline", createAirlineModal).Value)
                 {
-                    AppProperties.UserStatistics = await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
+                    await _userAccessService.LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
                     LoadAirlineData();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _notificationManager.Show("Error", "Airline data could not be loaded. Please try again later.", NotificationType.Error, "WindowAreaAirline");
-            }
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                LoadAirlineData();
-            }
-            catch (Exception)
-            {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Airline data could not be loaded. Please try again later.", NotificationType.Error, "WindowAreaAirline");
             }
         }
@@ -133,6 +126,7 @@ namespace FlightJobsDesktop.Views.Home
             }
             else
             {
+                
                 BtnActionsBorder.Visibility = Visibility.Visible;
                 PanelAirlineInfo.Visibility = Visibility.Visible;
                 PanelNoAirline.Visibility = Visibility.Collapsed;
@@ -176,14 +170,15 @@ namespace FlightJobsDesktop.Views.Home
                 {
                     if (ShowModal("Edit airline", new AirlineEditModal()).Value)
                     {
-                        AppProperties.UserStatistics = await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
+                        await _userAccessService.LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
                         LoadAirlineData();
                         _notificationManager.Show("Saved", "Airline saved with success.", NotificationType.Success, "WindowAreaAirline");
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Airline data could not be loaded. Please try again later.", NotificationType.Error, "WindowAreaAirline");
             }
         }
@@ -206,33 +201,35 @@ namespace FlightJobsDesktop.Views.Home
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Airline data could not be loaded. Please try again later.", NotificationType.Error, "WindowAreaAirline");
             }
         }
 
         private async void BtnPilotsHired_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
             try
             {
                 var pilotsHired = await _airlineService.GetAirlinePilotsHired(AppProperties.UserStatistics.Airline.Id);
                 var pilotsHiredViewModel = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
                     .Map<IList<UserModel>, IList<PilotHiredViewModel>>(pilotsHired);
 
-                progress.Dispose();
+                MainWindow.HideLoading();
                 var modal = new PilotsHiredModal();
                 modal.DataContext = new PilotsHiredViewModel() { PilotsHired = pilotsHiredViewModel };
                 ShowModal("List of pilot hired", modal);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaAirline");
             }
             finally
             {
-                progress.Dispose();
+                MainWindow.HideLoading();
             }
         }
 
@@ -245,8 +242,9 @@ namespace FlightJobsDesktop.Views.Home
                     ShowModal("Airline Ledger", new AirlineJobsLedgerModal(), true);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaAirline");
             }
         }
@@ -269,32 +267,35 @@ namespace FlightJobsDesktop.Views.Home
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaAirline");
             }
         }
 
         private async void BtnExit_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
             try
             {
                 var exit = await _airlineService.ExitAirline(AppProperties.UserStatistics.Airline.Id, AppProperties.UserLogin.UserId);
                 if (exit)
                 {
-                    AppProperties.UserStatistics = await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
+                    await _userAccessService.LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
+                    await _userAccessService.LoadUserAirlineProperties();
                     LoadAirlineData();
                     _notificationManager.Show("Success", "You left the airline", NotificationType.Success, "WindowAreaAirline");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaAirline");
             }
             finally
             {
-                progress.Dispose();
+                MainWindow.HideLoading();
                 HideConfirmExitPopup();
                 HideActionsPopup();
             }
@@ -304,6 +305,28 @@ namespace FlightJobsDesktop.Views.Home
         {
             HideConfirmExitPopup();
             HideActionsPopup();
+        }
+
+        private async void UserControl_GotFocus(object sender, RoutedEventArgs e)
+        {
+            MainWindow.ShowLoading();
+            Mouse.OverrideCursor = Cursors.Wait;
+
+            try
+            {
+                await _userAccessService.LoadUserAirlineProperties();
+                LoadAirlineData();
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                _notificationManager.Show("Error", "Airline data could not be loaded. Please try again later.", NotificationType.Error, "WindowAreaAirline");
+            }
+            finally
+            {
+                Mouse.OverrideCursor = Cursors.Arrow;
+                MainWindow.HideLoading();
+            }
         }
     }
 }

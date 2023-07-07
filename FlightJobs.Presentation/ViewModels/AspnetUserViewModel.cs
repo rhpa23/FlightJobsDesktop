@@ -5,6 +5,7 @@ namespace FlightJobsDesktop.ViewModels
 {
     public class AspnetUserViewModel : ObservableObject
     {
+        public string Id { get; set; }
         public Dictionary<string, string> ErrorCollection { get; private set; } = new Dictionary<string, string>();
         public Dictionary<string, string> InfoCollection { get; private set; } = new Dictionary<string, string>();
 

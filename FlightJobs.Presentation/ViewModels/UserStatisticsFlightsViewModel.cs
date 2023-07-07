@@ -11,6 +11,7 @@ namespace FlightJobsDesktop.ViewModels
         public string Logo { get; set; }
         public long BankBalance { get; set; }
         public string BankBalanceCurrency { get { return string.Format("F{0:C}", BankBalance); } }
+        public TransferToAirline Transfer { get; set; }
         public long PilotScore { get; set; }
         public string GraduationPath { get; set; }
         public string GraduationAdaptPath 
@@ -129,5 +130,35 @@ namespace FlightJobsDesktop.ViewModels
             get { return _overdueLicenses; }
             set { _overdueLicenses = value; OnPropertyChanged(); }
         }
+    }
+
+    public class TransferToAirline : ObservableObject
+    {
+        private long _bankBalance { get; set; }
+        public long BankBalance
+        {
+            get { return _bankBalance; }
+            set { _bankBalance = value; OnPropertyChanged(); OnPropertyChanged("BankBalanceCurrency"); }
+        }
+
+        public long BankBalanceAirline { get; set; }
+
+        public string BankBalanceCurrency { get { return string.Format("F{0:C}", BankBalance); } }
+
+        public decimal BankTaxForTransfer  {  get { return (decimal)(BankBalance * 0.15); }   }
+        public string BankTaxForTransferCurrency  {  get { return string.Format("F{0:C}", BankTaxForTransfer); } }
+
+        private int _transferPercent { get; set; }
+        public int TransferPercent
+        {
+            get { return _transferPercent; }
+            set { _transferPercent = value; OnPropertyChanged(); OnPropertyChanged("BankBalanceProjectionCurrency"); OnPropertyChanged("BankBalanceAirlineProjectionCurrency"); }
+        }
+
+        public decimal BankBalanceProjection { get { return BankBalance - BankTaxForTransfer - (BankBalance * (decimal.Divide(TransferPercent, 100))); } }
+        public string BankBalanceProjectionCurrency { get { return string.Format("F{0:C}", BankBalanceProjection); } set { }  }
+        public decimal BankBalanceAirlineProjection { get { return BankBalance * (decimal.Divide(TransferPercent, 100)) + BankBalanceAirline; } }
+        public string BankBalanceAirlineProjectionCurrency { get { return string.Format("F{0:C}", BankBalanceAirlineProjection); } set { } }
+
     }
 }

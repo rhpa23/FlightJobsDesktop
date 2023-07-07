@@ -14,9 +14,11 @@ using ModernWpf.Controls;
 using Newtonsoft.Json;
 using Notification.Wpf;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -27,7 +29,10 @@ namespace FlightJobsDesktop
     /// </summary>
     public partial class MainWindow : Window
     {
+        private NotificationManager _notificationManager;
         internal static NavigationView NavigationBar { get; set; }
+        internal static DockPanel _loadingPanel;
+        private static int _loadingCount;
         internal static Ellipse LicenseOverdueEllipse { get; set; }
 
         private FlightJobsConnectSim _flightJobsConnectSim = new FlightJobsConnectSim();
@@ -51,6 +56,7 @@ namespace FlightJobsDesktop
                           IAbstractFactory<ISqLiteDbContext> factorySqLiteContext)
         {
             InitializeComponent();
+            _notificationManager = new NotificationManager();
 
             JobServiceFactory = factoryJob;
             UserServiceFactory = factoryUser;
@@ -63,6 +69,7 @@ namespace FlightJobsDesktop
 
             NavigationBar = nvMain;
             LicenseOverdueEllipse = EllipseLicense;
+            _loadingPanel = LoadingPanel;
 
             System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
             ni.Icon = new System.Drawing.Icon("favicon.ico");
@@ -81,15 +88,31 @@ namespace FlightJobsDesktop
             _log.Info("Initialized");
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            contentFrame.Navigate(typeof(HomeView));
-            nvMain.SelectedItem = HomeViewPageItem;
+            ShowLoading();
+            try
+            {
+                await JobServiceFactory.Create().GetAllUserJobs(AppProperties.UserLogin.UserId);
+                await UserServiceFactory.Create().LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
 
-            LoadSettings();
+                contentFrame.Navigate(typeof(HomeView));
+                nvMain.SelectedItem = HomeViewPageItem;
 
-            _flightJobsConnectSim.Initialize();
-            //_timerCheckSimConnection.Start();
+                LoadSettings();
+
+                _flightJobsConnectSim.Initialize();
+                //_timerCheckSimConnection.Start();
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                HideLoading();
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -104,6 +127,23 @@ namespace FlightJobsDesktop
             Show();
             WindowState = WindowState.Normal;
             ShowInTaskbar = true;
+        }
+
+        public static void ShowLoading()
+        {
+            _loadingPanel.Visibility = Visibility.Visible;
+            _loadingCount++;
+        }
+
+        public static void HideLoading()
+        {
+            _loadingCount--;
+
+            if (_loadingCount <= 0)
+            {
+                _loadingPanel.Visibility = Visibility.Collapsed;
+                _loadingCount = 0;
+            }
         }
 
         private void NavigateToPageControl(string pageName)

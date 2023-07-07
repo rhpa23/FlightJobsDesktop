@@ -71,7 +71,8 @@ namespace FlightJobsDesktop.Views.Modals
                 if (result)
                 {
                     // Reload Airline data
-                    await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
+                    await _userAccessService.LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
+                    await _userAccessService.LoadUserAirlineProperties();
                     _notificationManager.Show("Paid", "Airline bills were paid with success.", NotificationType.Success, "WindowArea");
                     HomeView.SetEllipseAirlinesVIsibility();
                     ((Window)this.Parent).DialogResult = result;

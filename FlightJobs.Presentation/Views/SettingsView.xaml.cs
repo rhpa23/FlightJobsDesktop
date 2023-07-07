@@ -75,7 +75,7 @@ namespace FlightJobsDesktop.Views
 
         private async void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Saving...", false, true, "WindowArea");
+            MainWindow.ShowLoading();
             try
             {
                 var userSettingsModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<UserSettingsViewModel, UserSettingsModel>(_userSettings);
@@ -90,7 +90,7 @@ namespace FlightJobsDesktop.Views
             }
             finally
             {
-                progress.Dispose();
+                MainWindow.HideLoading();
             }
         }
 

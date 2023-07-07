@@ -17,6 +17,12 @@
             <RowDefinition/>
             <RowDefinition Height="55"/>
         </Grid.RowDefinitions>
+        <DockPanel x:Name="LoadingPanel" Visibility="Collapsed" Grid.RowSpan="2" Grid.ColumnSpan="2" Background="{StaticResource TransparentWhite}" Panel.ZIndex="5000">
+            <StackPanel Orientation="Vertical" Width="400" Height="70" Background="Black">
+                <TextBlock Text="Loading..." Foreground="White" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                <ProgressBar Height="5" Width="300" Grid.Row="1" IsIndeterminate="True" Margin="0,10,0,10"/>
+            </StackPanel>
+        </DockPanel>
         <ui:NavigationView x:Name="nvGenerate" Grid.Row="0"
                                         SelectionChanged="NavigationView_SelectionChanged"
                                         HorizontalAlignment="Stretch"

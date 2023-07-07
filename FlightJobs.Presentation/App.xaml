@@ -81,6 +81,7 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            <SolidColorBrush x:Key="TransparentWhite" Color="WhiteSmoke" Opacity="0.5" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

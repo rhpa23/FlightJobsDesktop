@@ -276,7 +276,7 @@ namespace FlightJobsDesktop.Views.Home
 
         internal void LoadManagerView()
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
             try
             {
                 string url = _mapUrl + string.Format(_mapUrlQuery, "", "", "", AppProperties.UserLogin.UserName);
@@ -296,7 +296,7 @@ namespace FlightJobsDesktop.Views.Home
             }
             finally
             {
-                progress.Dispose();
+                MainWindow.HideLoading();
             }
         }
 
@@ -312,7 +312,7 @@ namespace FlightJobsDesktop.Views.Home
 
         private async void lsvPendingJobs_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
             try
             {
                 var selected = (CurrentJobViewModel)lsvPendingJobs.SelectedValue;
@@ -328,7 +328,7 @@ namespace FlightJobsDesktop.Views.Home
             }
             finally
             {
-                progress.Dispose();
+                MainWindow.HideLoading();
             }
         }
 

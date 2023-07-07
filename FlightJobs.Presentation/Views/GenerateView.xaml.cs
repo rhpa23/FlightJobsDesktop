@@ -23,6 +23,8 @@ namespace FlightJobsDesktop.Views
         private GenerateJobViewModel _generateJobViewModel;
         private IJobService _jobService;
 
+        private int _loadingCount;
+
         public GenerateView()
         {
             InitializeComponent();
@@ -74,6 +76,23 @@ namespace FlightJobsDesktop.Views
             UpdateFrameDataContext();
         }
 
+        public void ShowLoading()
+        {
+            LoadingPanel.Visibility = Visibility.Visible;
+            _loadingCount++;
+        }
+
+        public void HideLoading()
+        {
+            _loadingCount--;
+
+            if (_loadingCount <= 0)
+            {
+                LoadingPanel.Visibility = Visibility.Collapsed;
+                _loadingCount = 0;
+            }
+        }
+
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -118,7 +137,7 @@ namespace FlightJobsDesktop.Views
 
         private async void BtnConfirm_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            ShowLoading();
             BtnConfirm.IsEnabled = false;
             try
             {
@@ -132,7 +151,7 @@ namespace FlightJobsDesktop.Views
 
                     await _jobService.ConfirmJob(confirmJobModel);
                     _notificationManager.Show("Success", "Confirmed with success.", NotificationType.Success, "WindowAreaGenerateJob");
-                    progress.Dispose();
+                    HideLoading();
                     await Task.Delay(3000);
                     DialogResult = true;
                 }
@@ -148,7 +167,7 @@ namespace FlightJobsDesktop.Views
             finally
             {
                 BtnConfirm.IsEnabled = true;
-                progress.Dispose();
+                HideLoading();
             }
 
         }

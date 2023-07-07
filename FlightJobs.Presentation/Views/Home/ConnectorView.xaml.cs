@@ -75,7 +75,7 @@ namespace FlightJobsDesktop.Views.Home
 
         private async Task<bool> StartJob()
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             _currentJob.StartIsEnable = false;
             _currentJob.FinishIsEnable = false;
@@ -125,14 +125,14 @@ namespace FlightJobsDesktop.Views.Home
             finally
             {
                 Mouse.OverrideCursor = Cursors.Arrow;
-                progress.Dispose();
+                MainWindow.HideLoading();
             }
             return false;
         }
 
         private async Task<bool> FinishJob()
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
             Mouse.OverrideCursor = Cursors.Wait;
             _currentJob.StartIsEnable = false;
             _currentJob.FinishIsEnable = false;
@@ -170,7 +170,8 @@ namespace FlightJobsDesktop.Views.Home
                     _currentJob.StartIsEnable = !_isJobStarted;
                     _currentJob.FinishIsEnable = _isJobStarted;
                     // Reload Airline data
-                    await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
+                    await _userAccessService.LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
+                    await _userAccessService.LoadUserAirlineProperties();
                     _log.Info("Job finished");
                     return true;
                 }
@@ -193,7 +194,7 @@ namespace FlightJobsDesktop.Views.Home
             finally
             {
                 Mouse.OverrideCursor = Cursors.Arrow;
-                progress.Dispose();
+                MainWindow.HideLoading();
             }
             return false;
         }
@@ -546,8 +547,7 @@ namespace FlightJobsDesktop.Views.Home
 
         internal async Task LoadUserJobData()
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
-
+            MainWindow.ShowLoading();
             try
             {
                 var activeJob = AppProperties.UserJobs.FirstOrDefault(x => x.IsActivated);
@@ -624,7 +624,7 @@ namespace FlightJobsDesktop.Views.Home
             }
             finally
             {
-                progress.Dispose();
+                MainWindow.HideLoading();
             }
         }
 

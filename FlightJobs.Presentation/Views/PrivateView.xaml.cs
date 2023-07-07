@@ -73,7 +73,7 @@ namespace FlightJobsDesktop.Views
             }
             catch (Exception)
             {
-                _notificationManager.Show("Error", "Avatar image could not be saved. Please run as administrator.", NotificationType.Error, "WindowArea");
+                _notificationManager.Show("Error", "Avatar image could not be saved. Please run as administrator.", NotificationType.Error, "WindowAreaPrivate");
             }
         }
 
@@ -98,7 +98,8 @@ namespace FlightJobsDesktop.Views
         {
             BtnLicenseBorder.IsEnabled = false;
             BtnTransferBorder.IsEnabled = false;
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            MainWindow.ShowLoading();
+            WindowsChartArea.Visibility = Visibility.Hidden;
             try
             {
                 var userStatisticsModel = await _pilotService.GetUserStatisticsFlightsInfo(AppProperties.UserLogin.UserId);
@@ -128,13 +129,14 @@ namespace FlightJobsDesktop.Views
             catch (Exception ex)
             {
                 _log.Error(ex.Message);
-                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaPrivate");
             }
             finally
             {
                 BtnLicenseBorder.IsEnabled = true;
                 BtnTransferBorder.IsEnabled = true;
-                progress.Dispose();
+                MainWindow.HideLoading();
+                WindowsChartArea.Visibility = Visibility.Visible;
             }
         }
 
@@ -166,7 +168,27 @@ namespace FlightJobsDesktop.Views
                 {
                     ChartBankBalanceMonth.Series[0].Points.Add(point.Value).AxisLabel = point.Key;
                 }
+                AddGoalStripLine();
             }
+        }
+
+        private void AddGoalStripLine()
+        {
+            StripLine stripLineGoal = new StripLine();
+
+            // Set threshold line so that it is only shown once  
+            stripLineGoal.Interval = 0;
+            stripLineGoal.IntervalOffset = _statisticsView.ChartModel.PayamentMonthGoal;
+
+            stripLineGoal.BackColor = Color.Green;
+            stripLineGoal.StripWidth = 3;
+
+            // Set text properties for the threshold line  
+            stripLineGoal.Text = $" {_statisticsView.ChartModel.PayamentMonthGoalCurrency} ";
+            stripLineGoal.ForeColor = Color.Green;
+            stripLineGoal.BackColor = Color.Green;
+
+            ChartBankBalanceMonth.ChartAreas[0].AxisY.StripLines.Add(stripLineGoal);
         }
 
         private async void Avatar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -184,14 +206,9 @@ namespace FlightJobsDesktop.Views
             }
             catch (Exception)
             {
-                _notificationManager.Show("Error", "Avatar image could not be saved. Please run as administrator.", NotificationType.Error, "WindowArea");
+                _notificationManager.Show("Error", "Avatar image could not be saved. Please run as administrator.", NotificationType.Error, "WindowAreaPrivate");
             }
             
-        }
-
-        private void ImgGraduation_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
         }
 
         private async void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -209,17 +226,29 @@ namespace FlightJobsDesktop.Views
                 {
                     await LoadPilotData();
                 }
-                
-                //if (modal.SelectedJobTip != null)
-                //{
-                //    txtAlternative.Text = GetIcaoInfo(modal.SelectedJobTip.AirportICAO);
-                //    AutoSuggestBoxSuggestionChosen();
-                //}
             }
             catch (Exception ex)
             {
                 _log.Error(ex.Message);
-                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaPrivate");
+            }
+        }
+
+        private async void BtnTransfer_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var modal = new TransferPilotMoneyToAirlineModal(_statisticsView);
+                ShowModal("Transfer your bank balance to airline", modal);
+                if (modal.IsChanged)
+                {
+                    await LoadPilotData();
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.Message);
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaPrivate");
             }
         }
     }
