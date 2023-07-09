@@ -15,6 +15,7 @@ namespace FlightJobsDesktop.ViewModels
         public bool FirstClass { get; set; }
         public bool IsCargo { get; set; }
         public string AviationType { get; set; }
+        public long PilotScore { get; set; }
         public string PayloadIcon
         {
             get

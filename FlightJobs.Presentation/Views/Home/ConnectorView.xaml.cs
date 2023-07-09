@@ -598,12 +598,7 @@ namespace FlightJobsDesktop.Views.Home
                 {
                     _log.Info("LastJob was found and set");
                     var lastJobView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, LastJobViewModel>(lastJob);
-                    _currentJob.LastJob.DepartureICAO = lastJobView.DepartureICAO;
-                    _currentJob.LastJob.ArrivalICAO = lastJobView.ArrivalICAO;
-                    _currentJob.LastJob.Dist = lastJobView.Dist;
-                    _currentJob.LastJob.FlightTime = lastJobView.FlightTime;
-                    _currentJob.LastJob.ModelDescription = lastJobView.ModelDescription;
-                    _currentJob.LastJob.EndTime = lastJobView.EndTime;
+                    _currentJob.LastJob = lastJobView;
                 }
 
                 LoadThumbImg(AppProperties.UserStatistics.CustomPlaneCapacity.ImagePath);

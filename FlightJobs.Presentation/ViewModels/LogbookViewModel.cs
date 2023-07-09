@@ -70,6 +70,7 @@ namespace FlightJobsDesktop.ViewModels
         public long Pay { get; set; }
         public string FlightTime { get; set; }
         public long UsedFuelWeightDisplay { get; set; }
+        public long PilotScore { get; set; }
 
     }
 }

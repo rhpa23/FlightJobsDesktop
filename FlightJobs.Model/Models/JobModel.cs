@@ -41,5 +41,6 @@
         public string ChallengeExpirationDate { get; set; }
         public int ChallengeType { get; set; }
         public string WeightUnit { get; set; }
+        public long PilotScore { get; set; }
     }
 }

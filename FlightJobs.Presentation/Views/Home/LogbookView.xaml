@@ -50,16 +50,26 @@
             <DataGrid ItemsSource="{Binding Jobs}" AutoGenerateColumns="False" HeadersVisibility="Column" CanUserSortColumns="False" 
                   IsReadOnly="True" CanUserAddRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Date" Width="90" Binding="{Binding DateDisplayFormat}" />
+                    <DataGridTextColumn Header="Score" Width="55" Binding="{Binding PilotScore}" >
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Width" Value="50"/>
+                                <Setter Property="Background" Value="Green"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="TextAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style></DataGridTextColumn.ElementStyle></DataGridTextColumn>
+                    <DataGridTextColumn Header="Date" Width="85" Binding="{Binding DateDisplayFormat}" />
                     <DataGridTextColumn Header="Departure/Time" Width="110" Binding="{Binding DepartureDisplayFormat}" />
                     <DataGridTextColumn Header="Arrival/Time" Width="100" Binding="{Binding ArrivalDisplayFormat}" />
-                    <DataGridTextColumn Header="Model/Registration" Width="240" Binding="{Binding ModelDisplayFormat}" />
+                    <DataGridTextColumn Header="Model/Registration" Width="205" Binding="{Binding ModelDisplayFormat}" />
                     <DataGridTextColumn Header="Distance" Width="75" Binding="{Binding DistDisplayFormat}" />
                     <DataGridTextColumn Header="Pax" Width="50" Binding="{Binding Pax}" />
                     <DataGridTextColumn Header="Cargo" Width="70" Binding="{Binding CargoDisplayFormat}" />
                     <DataGridTextColumn Header="Payload" Width="80" Binding="{Binding PayloadDisplayFormat}" />
                     <DataGridTextColumn Header="Pay" Width="80" Binding="{Binding PayDisplayFormat}" />
-                    <DataGridTextColumn Header="Flight time" Width="90" Binding="{Binding FlightTime}" />
+                    <DataGridTextColumn Header="Flight time" Width="85" Binding="{Binding FlightTime}" />
                     <DataGridTextColumn Header="Burned fuel" Width="90" Binding="{Binding BurnedFuelDisplayFormat}" />
                 </DataGrid.Columns>
             </DataGrid>

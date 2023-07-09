@@ -46,5 +46,7 @@ namespace FlightJobsDesktop.ViewModels
             set { _flightTime = value; OnPropertyChanged("FlightTime"); }
         }
 
+        public long PilotScore { get; set; }
+
     }
 }
