@@ -242,6 +242,7 @@ namespace FlightJobsDesktop.Views
                 ShowModal("Transfer your bank balance to airline", modal);
                 if (modal.IsChanged)
                 {
+                    _notificationManager.Show("Success", $"Transfer percentage successfully sent to {AppProperties.UserStatistics.Airline.Name}.", NotificationType.Success, "WindowAreaPrivate");
                     await LoadPilotData();
                 }
             }

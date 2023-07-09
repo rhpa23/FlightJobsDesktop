@@ -183,6 +183,6 @@
                 </ListView>
             </Border>
         </Grid>
-        <notifications:NotificationArea x:Name="WindowAreaPrivate" Position="TopCenter" MaxItems="3" Grid.Row="1" Grid.ColumnSpan="2" />
+        <notifications:NotificationArea x:Name="WindowAreaPrivate" Position="TopCenter" MaxItems="3" Grid.Row="0" Grid.ColumnSpan="2" />
     </Grid>
 </UserControl>

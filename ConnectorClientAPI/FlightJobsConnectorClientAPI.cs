@@ -14,8 +14,8 @@ namespace ConnectorClientAPI
 {
     public class FlightJobsConnectorClientAPI
     {
-        //public static string SITE_URL = "http://localhost:5646/";
-        public static string SITE_URL = "https://flightjobs.bsite.net/";
+        public static string SITE_URL = "http://localhost:5646/";
+        //public static string SITE_URL = "https://flightjobs.bsite.net/";
         //public static string SITE_URL = "https://flightjobs.somee.com/";
         static HttpClient _client;
 
@@ -35,6 +35,19 @@ namespace ConnectorClientAPI
         public async Task SaveAvatar(string userId, string fileName)
         {
             var url = $"{SITE_URL}api/UserApi/SaveAvatar?fileName={fileName}";
+
+            var body = JsonConvert.SerializeObject(new { id = userId });
+
+            HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+
+        public async Task TranfersMoneyToAirline(string userId, int percent)
+        {
+            var url = $"{SITE_URL}api/UserApi/TransferMoneyToAirline?percent={percent}";
 
             var body = JsonConvert.SerializeObject(new { id = userId });
 

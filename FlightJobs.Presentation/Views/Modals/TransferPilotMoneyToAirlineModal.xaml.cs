@@ -1,5 +1,8 @@
 ﻿using FlightJobs.Infrastructure;
+using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobsDesktop.ViewModels;
+using log4net;
+using Notification.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +26,9 @@ namespace FlightJobsDesktop.Views.Modals
     public partial class TransferPilotMoneyToAirlineModal : UserControl
     {
         public bool IsChanged { get; set; }
+        private static readonly ILog _log = LogManager.GetLogger(typeof(PrivateView));
+        private NotificationManager _notificationManager;
+        private IPilotService _pilotService;
         public TransferPilotMoneyToAirlineModal()
         {
             InitializeComponent();
@@ -31,6 +37,8 @@ namespace FlightJobsDesktop.Views.Modals
         public TransferPilotMoneyToAirlineModal(UserStatisticsFlightsViewModel userStatisticsFlightsViewModel)
         {
             InitializeComponent();
+            _pilotService = MainWindow.PilotServiceFactory.Create();
+            _notificationManager = new NotificationManager();
 
             userStatisticsFlightsViewModel.Transfer = new TransferToAirline() 
             { 
@@ -42,9 +50,27 @@ namespace FlightJobsDesktop.Views.Modals
             DataContext = userStatisticsFlightsViewModel;
         }
 
-        private void BtnTranfer_Click(object sender, RoutedEventArgs e)
+        private async void BtnTranfer_Click(object sender, RoutedEventArgs e)
         {
-
+            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaTransferLoading");
+            BtnTranferBorder.IsEnabled = false;
+            try
+            {
+                var userStatisticsFlightsView = (UserStatisticsFlightsViewModel)DataContext;
+                await _pilotService.TranfersMoneyToAirline(AppProperties.UserLogin.UserId, userStatisticsFlightsView.Transfer.TransferPercent);
+                IsChanged = true;
+                ((Window)Parent).Close();
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.Message);
+                _notificationManager.Show("Error", ex.Message, NotificationType.Success, "WindowAreaTransfer");
+                BtnTranferBorder.IsEnabled = true;
+            }
+            finally
+            {
+                progress.Dispose();
+            }
         }
     }
 }

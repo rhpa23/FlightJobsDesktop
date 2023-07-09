@@ -29,5 +29,10 @@ namespace FlightJobs.Infrastructure.Services
         {
             await _flightJobsConnectorClientAPI.SaveAvatar(userId, fileName);
         }
+
+        public async Task TranfersMoneyToAirline(string userId, int percent)
+        {
+            await _flightJobsConnectorClientAPI.TranfersMoneyToAirline(userId, percent);
+        }
     }
 }

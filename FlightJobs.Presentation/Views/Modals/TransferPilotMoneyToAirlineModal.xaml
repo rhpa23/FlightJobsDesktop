@@ -49,7 +49,7 @@
         </StackPanel>
         <Border x:Name="BtnTranferBorder" Style="{DynamicResource BorderButtonYellow}" HorizontalAlignment="Right" Margin="0,0,15,0"
                 Height="30" Width="90" Grid.Row="3" Grid.RowSpan="3" Grid.Column="1">
-            <Button x:Name="BtnTranfer" Content="Transfer" Width="90" Height="30"  />
+            <Button x:Name="BtnTranfer" Content="Transfer" Width="90" Height="30" Click="BtnTranfer_Click"  />
         </Border>
 
         <notifications:NotificationArea x:Name="WindowAreaTransfer" Position="TopCenter" MaxItems="3" Grid.Row="1" Grid.ColumnSpan="2" />

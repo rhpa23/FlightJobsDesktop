@@ -84,12 +84,13 @@ namespace FlightJobsDesktop.Views.Modals
 
                 IsChanged = true;
 
-                _notificationManager.Show("Error", "License expense paid successfully.", NotificationType.Success, "WindowAreaLicenseExpenses");
+                _notificationManager.Show("Success", "License expense paid successfully.", NotificationType.Success, "WindowAreaLicenseExpenses");
             }
             catch (Exception ex)
             {
                 _log.Error(ex.Message);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaLicenseExpenses");
+                BtnBuyBorder.IsEnabled = true;
             }
             finally
             {
