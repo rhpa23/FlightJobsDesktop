@@ -111,7 +111,7 @@
                 <StackPanel>
                     <StackPanel x:Name="PanelNoJob" Orientation="Vertical" Margin="20,15,10,0" Visibility="Collapsed">
                         <TextBlock Text="Welcome to FlightJobs" FontSize="28" HorizontalAlignment="Center"/>
-                        <TextBlock Text="This application only works for MS Flight Simulator with the objective to improve the simulation experience from the point of view of the Pilots." FontSize="16" TextWrapping="WrapWithOverflow" Width="600" HorizontalAlignment="Center" TextAlignment="Center"/>
+                        <TextBlock Text="This application only works for MS Flight Simulator with the objective to improve the simulation experience from the point of view of the Pilots Career." FontSize="16" TextWrapping="WrapWithOverflow" Width="600" HorizontalAlignment="Center" TextAlignment="Center"/>
                         <Rectangle Grid.Row="2" Grid.ColumnSpan="3" Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,40,0,0" >
                             <Rectangle.Fill>
                                 <SolidColorBrush Color="LightGray"/>

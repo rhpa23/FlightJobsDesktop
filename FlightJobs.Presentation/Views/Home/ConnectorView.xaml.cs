@@ -165,13 +165,13 @@ namespace FlightJobsDesktop.Views.Home
                     _isJobStarted = false;
                     var currentJob = AppProperties.UserJobs.FirstOrDefault(x => x.IsActivated);
                     AppProperties.UserJobs.Remove(currentJob);
+                    // Reload Airline data
+                    await _userAccessService.LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
+                    await _userAccessService.LoadUserAirlineProperties();
                     await LoadUserJobData();
                     EnableDisableNavegation(true);
                     _currentJob.StartIsEnable = !_isJobStarted;
                     _currentJob.FinishIsEnable = _isJobStarted;
-                    // Reload Airline data
-                    await _userAccessService.LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
-                    await _userAccessService.LoadUserAirlineProperties();
                     _log.Info("Job finished");
                     return true;
                 }
@@ -598,13 +598,19 @@ namespace FlightJobsDesktop.Views.Home
                 {
                     _log.Info("LastJob was found and set");
                     var lastJobView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, LastJobViewModel>(lastJob);
-                    _currentJob.LastJob = lastJobView;
+                    _currentJob.LastJob.DepartureICAO = lastJobView.DepartureICAO;
+                    _currentJob.LastJob.ArrivalICAO = lastJobView.ArrivalICAO;
+                    _currentJob.LastJob.Dist = lastJobView.Dist;
+                    _currentJob.LastJob.FlightTime = lastJobView.FlightTime;
+                    _currentJob.LastJob.ModelDescription = lastJobView.ModelDescription;
+                    _currentJob.LastJob.EndTime = lastJobView.EndTime;
+                    _currentJob.LastJob.PilotScore = lastJobView.PilotScore;
                 }
 
                 LoadThumbImg(AppProperties.UserStatistics.CustomPlaneCapacity.ImagePath);
 
                 // Moved to FinishJob                await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
-                HomeView.SetEllipseAirlinesVIsibility();
+                HomeView.SetEllipseAirlinesVisibility();
 
                 _currentJob.PlaneSimData = FlightJobsConnectSim.PlaneSimData;
                 _currentJob.SimData = FlightJobsConnectSim.CommonSimData;

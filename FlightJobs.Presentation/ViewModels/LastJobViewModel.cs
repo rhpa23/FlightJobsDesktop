@@ -10,6 +10,7 @@ namespace FlightJobsDesktop.ViewModels
         private string _modelDescription;
         private string _endTime;
         private string _flightTime;
+        private long _pilotScore;
 
         public string DepartureICAO
         {
@@ -46,7 +47,11 @@ namespace FlightJobsDesktop.ViewModels
             set { _flightTime = value; OnPropertyChanged("FlightTime"); }
         }
 
-        public long PilotScore { get; set; }
+        public long PilotScore
+        {
+            get { return _pilotScore; }
+            set { _pilotScore = value; OnPropertyChanged(); }
+        }
 
     }
 }

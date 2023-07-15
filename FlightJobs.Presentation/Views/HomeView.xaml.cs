@@ -31,11 +31,11 @@ namespace FlightJobsDesktop.Views
 
         private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            SetEllipseAirlinesVIsibility();
+            SetEllipseAirlinesVisibility();
             MainWindow.SetLicenseOverdueEllipseVisibility();
         }
 
-        internal static void SetEllipseAirlinesVIsibility()
+        internal static void SetEllipseAirlinesVisibility()
         {
             DebtAirlineEllipse.Visibility = AppProperties.UserStatistics.Airline?.DebtValue == 0 ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
         }
