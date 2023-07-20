@@ -1,11 +1,17 @@
 ﻿using FlightJobs.Connect.MSFS.SDK;
+using FlightJobs.Connect.MSFS.SDK.Model;
 using FlightJobs.Infrastructure;
 using FlightJobs.Model.Models;
+using FlightJobsDesktop.Common;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
+using log4net;
 using ModernWpf.Controls;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -14,6 +20,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -21,6 +28,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Color = System.Drawing.Color;
 
 namespace FlightJobsDesktop.Views.SlidersWindows
 {
@@ -46,9 +54,12 @@ namespace FlightJobsDesktop.Views.SlidersWindows
         #endregion
 
         DispatcherTimer _hideTimer = new DispatcherTimer();
+        private bool _isResultsOpen = false;
         private const double TARGET_WIDTH = 190;
+        private const double TARGET_RESULTS_WIDTH = 820;
         private const int SECONDS_TO_CLOSE = 180;
-        private CurrentJobViewModel _currentJobViewModel; 
+        private CurrentJobViewModel _currentJobViewModel;
+        private static readonly ILog _log = LogManager.GetLogger(typeof(CurrentJobDataWindow));
 
         public CurrentJobDataWindow(CurrentJobViewModel currentJobView)
         {
@@ -56,13 +67,27 @@ namespace FlightJobsDesktop.Views.SlidersWindows
             _hideTimer.Tick += HideTimer_Tick;
             _hideTimer.Interval = new TimeSpan(0, 0, SECONDS_TO_CLOSE);
             _currentJobViewModel = currentJobView;
+
+            var chartFont = new Font("Segoe UI", 10);
+            //ChartFlightRecorder.Series[0].Font = chartFont;
+
+            ChartFlightRecorder.ChartAreas[0].AxisX.LabelStyle.Font = chartFont;
+            ChartFlightRecorder.ChartAreas[0].AxisY.LabelStyle.Font = chartFont;
+            ChartFlightRecorder.BackColor = ColorTranslator.FromHtml("#FF2B2B2B");
+            ChartFlightRecorder.ChartAreas[0].AxisX.LabelStyle.ForeColor = Color.White;
+            ChartFlightRecorder.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.White;
+            ChartFlightRecorder.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.White;
+            ChartFlightRecorder.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.White;
+            ChartFlightRecorder.ChartAreas[0].BackColor = Color.Black;
+            ChartFlightRecorder.ChartAreas[0].AxisX.TitleForeColor = Color.White;
+            ChartFlightRecorder.ChartAreas[0].AxisY.TitleForeColor = Color.White;
         }
 
         internal void ToggleSlider(bool toShow, int secondsToClose = SECONDS_TO_CLOSE)
         {
             var widthValue = toShow ? TARGET_WIDTH : 2;
             DoubleAnimation sliderAnimation = new DoubleAnimation(widthValue, new Duration(TimeSpan.FromSeconds(0.3)));
-            this.BeginAnimation(WidthProperty, sliderAnimation);
+            BeginAnimation(WidthProperty, sliderAnimation);
             if (toShow)
             {
                 _hideTimer.Interval = new TimeSpan(0, 0, secondsToClose);
@@ -70,15 +95,28 @@ namespace FlightJobsDesktop.Views.SlidersWindows
             }
         }
 
+        internal void ToggleResultsSlider(bool toShow)
+        {
+            var widthValue = toShow ? TARGET_RESULTS_WIDTH : TARGET_WIDTH;
+            DoubleAnimation sliderAnimation = new DoubleAnimation(widthValue, new Duration(TimeSpan.FromSeconds(0.3)));
+            BeginAnimation(WidthProperty, sliderAnimation);
+            _isResultsOpen = toShow;
+            ResultAreaBorder.Visibility = toShow ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         private void HideTimer_Tick(object sender, EventArgs e)
         {
             ToggleSlider(false);
             _hideTimer.Stop();
+            _isResultsOpen = false;
         }
 
         private void HideIco_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ToggleSlider(this.Width < 10);
+            if (!_isResultsOpen)
+            {
+                ToggleSlider(this.Width < 10);
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -91,14 +129,46 @@ namespace FlightJobsDesktop.Views.SlidersWindows
                 DataContext = _currentJobViewModel;
             }
 
+//#if DEBUG
+//            FlightJobsConnectSim.FlightRecorderList = 
+//                FlightRecorderUtil.LoadFlightRecorderFile(new CurrentJobViewModel() { Id = 71606, DepartureICAO = "LIMJ", ArrivalICAO = "LIRF" });
+//#endif
         }
 
+        private void BtnShowFlightResults_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleResultsSlider(this.Width <= TARGET_WIDTH);
+        }
         private void BtnCloseResults_Click(object sender, RoutedEventArgs e)
         {
-            Flyout f = FlyoutService.GetFlyout(BtnShowFlightResults) as Flyout;
-            if (f != null)
+            ToggleResultsSlider(false);
+        }
+
+        private void TabControlResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RadioAltitude.IsChecked = true;
+        }
+
+        private void ChartTypeRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (_isResultsOpen)
             {
-                f.Hide();
+                var radioButton = sender as RadioButton;
+                if (radioButton == null)
+                    return;
+
+                if (radioButton.Name == RadioAltitude.Name)
+                {
+                    FlightRecorderUtil.UpdateChartVerticalProfile(ChartFlightRecorder);
+                }
+                else if (radioButton.Name == RadioSpeed.Name)
+                {
+                    FlightRecorderUtil.UpdateChartSpeed(ChartFlightRecorder);
+                }
+                else if (radioButton.Name == RadioFuel.Name)
+                {
+                    FlightRecorderUtil.UpdateChartFuel(ChartFlightRecorder);
+                }
             }
         }
     }

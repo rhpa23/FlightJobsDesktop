@@ -46,6 +46,7 @@ namespace FlightJobsDesktop.ViewModels
 
     public class LogbookUserJobViewModel
     {
+        public int Id { get; set; }
         public string DateDisplayFormat { get { return EndTime.ToString("yyyy/MM/dd"); } }
         public string DepartureDisplayFormat { get { return $"{DepartureICAO} {StartTime.ToString("(HH:mm)")}"; } }
         public string ArrivalDisplayFormat { get { return $"{ArrivalICAO} {EndTime.ToString("(HH:mm)")}"; } }

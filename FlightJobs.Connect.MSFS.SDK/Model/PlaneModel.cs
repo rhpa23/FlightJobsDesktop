@@ -93,14 +93,14 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         {
             get { return _touchdownFpm; }
             set { _touchdownFpm = value; 
-                NotifyPropertysChanged("TouchdownFpm", "ColorResultTouchdownFpm"); }
+                NotifyPropertysChanged("TouchdownFpm", "ScoreTouchdown", "ColorResultTouchdownFpm"); }
         }
 
         private int _touchdownBounceCount;
         public int TouchdownBounceCount
         {
             get { return _touchdownBounceCount; }
-            set { _touchdownBounceCount = value; NotifyPropertyChanged("TouchdownBounceCount"); NotifyPropertyChanged("ColorResultBounceCount"); }
+            set { _touchdownBounceCount = value; NotifyPropertysChanged("TouchdownBounceCount", "ScoreBounce", "ColorResultBounceCount"); }
         }
 
         private double _touchdownAirspeed;
@@ -138,7 +138,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         {
             get { return _touchdownCrosswind; }
             set { _touchdownCrosswind = value;  
-                NotifyPropertyChanged("TouchdownCrosswindText"); 
+                NotifyPropertysChanged("TouchdownCrosswindText", "ScoreWindAngle", "ColorResultTouchdownWindAngle"); 
             }
         }
 
@@ -147,8 +147,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         {
             get { return _touchdownHeadwind; }
             set { _touchdownHeadwind = value; TouchdownHeadwindText = $"{Math.Abs(_touchdownHeadwind)} kts"; 
-                NotifyPropertyChanged("TouchdownHeadwindText"); 
-                NotifyPropertyChanged("TouchdownWindAngle");
+                NotifyPropertysChanged("TouchdownHeadwindText", "TouchdownWindAngle");
             }
         }
         public string TouchdownHeadwindText { get; set; }
@@ -167,7 +166,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         {
             get { return _touchdownGForce; }
             set { _touchdownGForce = value; TouchdownGForceText = $"{_touchdownGForce}G"; 
-                NotifyPropertyChanged("TouchdownGForceText"); NotifyPropertyChanged("ColorResultGForce"); }
+                NotifyPropertysChanged("TouchdownGForceText", "ScoreGForce", "ColorResultGForce"); }
         }
         public string TouchdownGForceText { get; set; }
 
@@ -199,8 +198,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
             set
             {
                 _centerLineDerivation = value; 
-                NotifyPropertyChanged("TouchdownCenterDerivation");
-                NotifyPropertyChanged("ColorResultCenterDerivation");
+                NotifyPropertysChanged("TouchdownCenterDerivation", "ScoreCenterDerivation", "ColorResultCenterDerivation");
             }
         }
 
@@ -211,8 +209,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
             set
             {
                 _thresholdDistance = value; 
-                NotifyPropertyChanged("TouchdownThresholdDistance");
-                NotifyPropertyChanged("ColorResultLandDistance");
+                NotifyPropertysChanged("TouchdownThresholdDistance", "ScoreLandDistance", "ColorResultLandDistance");
             }
         }
 
@@ -266,8 +263,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
             set
             {
                 _centerLineTakeoffDerivation = value;
-                NotifyPropertyChanged("TakeoffCenterDerivation");
-                NotifyPropertyChanged("ColorResultTakeoffCenterDerivation");
+                NotifyPropertysChanged("TakeoffCenterDerivation", "ScoreTakeoffCenterDerivation", "ColorResultTakeoffCenterDerivation");
             }
         }
 

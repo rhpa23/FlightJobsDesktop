@@ -1,9 +1,12 @@
-﻿using FlightJobs.Domain.Navdata.Interface;
+﻿using FlightJobs.Connect.MSFS.SDK;
+using FlightJobs.Domain.Navdata.Interface;
 using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
+using FlightJobsDesktop.Common;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
+using FlightJobsDesktop.Views.Modals;
 using ModernWpf.Controls;
 using Notification.Wpf;
 using System;
@@ -30,6 +33,25 @@ namespace FlightJobsDesktop.Views.Home
             _notificationManager = new NotificationManager();
             _jobService = MainWindow.JobServiceFactory.Create();
             _sqLiteDbContext = MainWindow.SqLiteContextFactory.Create();
+        }
+
+        private bool? ShowModal(string title, object content, bool canMaximize = false)
+        {
+
+            Window window = new Window
+            {
+                Title = title,
+                Content = content,
+                Width = ((UserControl)content).MinWidth,
+                Height = ((UserControl)content).MinHeight + 40,
+                //SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.CanResizeWithGrip,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ShowInTaskbar = true,
+                WindowStyle = canMaximize ? WindowStyle.None : WindowStyle.ToolWindow
+            };
+
+            return window.ShowDialog();
         }
 
         private IEnumerable GetIcaoSugestions(string text)
@@ -225,7 +247,38 @@ namespace FlightJobsDesktop.Views.Home
             }
         }
 
-        private async void UserControl_GotFocus(object sender, RoutedEventArgs e)
+        private void BtnDetails_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var data = (LogbookViewModel)DataContext;
+                var id = ((Button)sender).Tag;
+                var job = data.Jobs.FirstOrDefault(x => x.Id == (int)id);
+                if (job != null)
+                {
+                    CurrentJobViewModel currentJob = new CurrentJobViewModel() 
+                    { 
+                        Id = job.Id, ArrivalICAO = job.ArrivalICAO, DepartureICAO = job.DepartureICAO 
+                    };
+                    FlightJobsConnectSim.FlightRecorderList.Clear();
+                    FlightJobsConnectSim.FlightRecorderList = FlightRecorderUtil.LoadFlightRecorderFile(currentJob);
+                    if (FlightJobsConnectSim.FlightRecorderList.Count == 0)
+                    {
+                        _notificationManager.Show("Warning", "No data was found for this Job.", NotificationType.Warning, "WindowArea");
+                    }
+                    else
+                    {
+                        ShowModal("Job Detail", new JobDetailModal());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Error when try to access local file data.", NotificationType.Error, "WindowArea");
+            }
+        }
+
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             MainWindow.ShowLoading();
             try

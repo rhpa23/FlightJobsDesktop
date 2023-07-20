@@ -96,8 +96,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\FlightRecorderUtil.cs" />
     <Compile Include="Const\MessagesConst.cs" />
-    <Compile Include="core\SelectedItemToContentConverter.cs" />
     <Compile Include="Factorys\AbstractFactory.cs" />
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -191,6 +191,9 @@
     </Compile>
     <Compile Include="Views\Modals\AirlineJoinModal.xaml.cs">
       <DependentUpon>AirlineJoinModal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modals\JobDetailModal.xaml.cs">
+      <DependentUpon>JobDetailModal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Modals\LicenseExpensesModal.xaml.cs">
       <DependentUpon>LicenseExpensesModal.xaml</DependentUpon>
@@ -305,6 +308,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Modals\AirlineJoinModal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modals\JobDetailModal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -776,7 +783,9 @@
       <Name>FlightJobs.Model</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ResourceData\FlightData\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Microsoft.Toolkit.Win32.UI.SDK.6.1.2\build\Microsoft.Toolkit.Win32.UI.SDK.targets" Condition="Exists('packages\Microsoft.Toolkit.Win32.UI.SDK.6.1.2\build\Microsoft.Toolkit.Win32.UI.SDK.targets')" />
   <Import Project="packages\Microsoft.Toolkit.Win32.UI.XamlApplication.6.1.2\build\Microsoft.Toolkit.Win32.UI.XamlApplication.targets" Condition="Exists('packages\Microsoft.Toolkit.Win32.UI.XamlApplication.6.1.2\build\Microsoft.Toolkit.Win32.UI.XamlApplication.targets')" />

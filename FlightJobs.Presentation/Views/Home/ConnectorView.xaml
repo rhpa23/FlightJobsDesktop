@@ -195,7 +195,7 @@
                                 <Border x:Name="btnStartBorder" Margin="0,0,200,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="{Binding StartIsEnable}">
                                     <Button Content="Start" Width="100" Click="btnStart_Click" />
                                 </Border>
-                                <Border x:Name="btnFinishBorder" Margin="0,0,0,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="{Binding FinishIsEnable}">
+                                <Border x:Name="btnFinishBorder" Margin="0,0,0,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="True">
                                     <Button Content="Finish" Width="100" Click="btnFinish_Click" />
                                 </Border>
                             </StackPanel>

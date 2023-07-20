@@ -8,12 +8,14 @@ using FlightJobs.Domain.Navdata.Utils;
 using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
+using FlightJobsDesktop.Common;
 using FlightJobsDesktop.Const;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views.SlidersWindows;
 using log4net;
 using ModernWpf.Controls;
+using Newtonsoft.Json;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
@@ -51,6 +53,7 @@ namespace FlightJobsDesktop.Views.Home
         private static DateTime _jumpCheckStartTime = DateTime.Now.AddSeconds(5);
         private static DateTime _jumpCheckFinishTime = DateTime.Now.AddSeconds(5);
         private static DateTime _jumpValidationsTime = DateTime.Now.AddSeconds(5);
+        private static DateTime _jumpFlightDataTime = DateTime.Now.AddSeconds(10);
 
         private static CurrentJobViewModel _currentJob = new CurrentJobViewModel();
         private static CurrentJobDataWindow _siderJobWindow;
@@ -103,6 +106,7 @@ namespace FlightJobsDesktop.Views.Home
                     EnableDisableNavegation(false);
                     _currentJob.StartIsEnable = !_isJobStarted;
                     _currentJob.FinishIsEnable = _isJobStarted;
+                    FlightJobsConnectSim.FlightRecorderList.Clear();
                     _log.Info("Job started");
                     return true;
                 }
@@ -172,6 +176,7 @@ namespace FlightJobsDesktop.Views.Home
                     EnableDisableNavegation(true);
                     _currentJob.StartIsEnable = !_isJobStarted;
                     _currentJob.FinishIsEnable = _isJobStarted;
+                    FlightRecorderUtil.SaveFlightRecorderFile(_currentJob);
                     _log.Info("Job finished");
                     return true;
                 }
@@ -512,6 +517,14 @@ namespace FlightJobsDesktop.Views.Home
             else
             {
                 ChecktakeoffData();
+            }
+
+            if (DateTime.Now > _jumpFlightDataTime && _isJobStarted)
+            {
+                _jumpFlightDataTime = DateTime.Now.AddSeconds(10);
+                var fRecorder = new FlightRecorderModel(FlightJobsConnectSim.PlaneSimData);
+                fRecorder.TimeUtc = DateTime.UtcNow;
+                FlightJobsConnectSim.FlightRecorderList.Add(fRecorder);
             }
         }
 

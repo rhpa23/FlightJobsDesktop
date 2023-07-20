@@ -6,12 +6,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
         mc:Ignorable="d" MouseDown="HideIco_MouseDown"
+        xmlns:wf="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         Title="Flight Jobs - Job data Slider" Cursor="Hand" Style="{DynamicResource BorderHighlightWindow}" Loaded="Window_Loaded"
         SizeToContent="Height" Width="2" Topmost="True" WindowStyle="None" Background="#FF121212" ResizeMode="NoResize" Left="-1" Top="30" ShowInTaskbar="False">
     <Window.DataContext>
         <local:CurrentJobViewModel/>
     </Window.DataContext>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="190"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" Height="Auto" Margin="0,0,0,15">
             <Grid x:Name="GridTitle" Background="SlateGray">
                 <Grid.ColumnDefinitions>
@@ -178,7 +183,7 @@
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="30"/>
-                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Results" Foreground="White" Background="SlateGray" TextAlignment="Center" Margin="0,10,0,0" Padding="3"
                            HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.ColumnSpan="3"/>
@@ -189,96 +194,14 @@
                 <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="3" Margin="2,0,0,0" />
                 <TextBlock Text="Flight time:" Foreground="White" Grid.Row="3" Grid.Column="1" />
                 <TextBlock Text="{Binding Path=LastJob.FlightTime, Mode=TwoWay}" Foreground="White" Grid.Row="3" Grid.Column="2" />
-
-                <Border Width="115" Grid.Row="5" Grid.ColumnSpan="3" Height="25" Style="{DynamicResource BorderButtonYellow}">
-                    <Button x:Name="BtnShowFlightResults" Width="115" Height="35">
+                <Border Width="115" Grid.Row="6" Grid.ColumnSpan="3" Height="25" Style="{DynamicResource BorderButtonYellow}">
+                    <Button x:Name="BtnShowFlightResults" Width="115" Height="35" Click="BtnShowFlightResults_Click">
                         <StackPanel Orientation="Horizontal">
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71D;" Foreground="White" HorizontalAlignment="Left" FontSize="12" Margin="0,0,5,0" />
                             <TextBlock Foreground="White" FontSize="12">
                                 <Run Text="Score"/> <Run Text="{Binding Score}" />
                             </TextBlock>
                         </StackPanel>
-                        <ui:FlyoutService.Flyout>
-                            <ui:Flyout x:Name="FlyoutScoreResults" Placement="RightEdgeAlignedBottom">
-                                <ui:Flyout.FlyoutPresenterStyle>
-                                    <Style TargetType="ui:FlyoutPresenter">
-                                        <Setter Property="MinWidth" Value="600"></Setter>
-                                    </Style>
-                                </ui:Flyout.FlyoutPresenterStyle>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="Flight results" FontWeight="Bold" HorizontalAlignment="Center" />
-                                    <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,15,0,0" >
-                                        <Rectangle.Fill>
-                                            <SolidColorBrush Color="SlateGray"/>
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                    <TextBlock Margin="0,10,5,0" >
-                                        <Run Text="{Binding MsgResults.TouchdownScore}"/>
-                                        <Run Text="{Binding PlaneSimData.ScoreTouchdown, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTouchdownFpm}"/>
-                                    </TextBlock>
-                                    <TextBlock Margin="0,10,5,0" >
-                                        <Run Text="{Binding MsgResults.GForceScore}"/>
-                                        <Run Text="{Binding PlaneSimData.ScoreGForce, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultGForce}"/>
-                                    </TextBlock>
-                                    <TextBlock Margin="0,10,5,0" >
-                                        <Run Text="{Binding MsgResults.BounceScore}"/>
-                                        <Run Text="{Binding PlaneSimData.ScoreBounce, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultBounceCount}"/>
-                                    </TextBlock>
-                                    <TextBlock Margin="0,10,5,0" >
-                                        <Run Text="{Binding MsgResults.LandingDerivationScore}"/>
-                                        <Run Text="{Binding PlaneSimData.ScoreCenterDerivation, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultCenterDerivation}"/>
-                                    </TextBlock>
-                                    <TextBlock Margin="0,10,5,0" >
-                                        <Run Text="{Binding MsgResults.LandingDistanceScore}"/>
-                                        <Run Text="{Binding PlaneSimData.ScoreLandDistance, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultLandDistance}"/>
-                                    </TextBlock>
-                                    <TextBlock Margin="0,10,5,0" >
-                                        <Run Text="{Binding MsgResults.UpwindLandingScore}"/>
-                                        <Run Text="{Binding PlaneSimData.ScoreWindAngle, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTouchdownWindAngle}"/>
-                                    </TextBlock>
-                                    <TextBlock Margin="0,10,5,0" >
-                                        <Run Text="{Binding MsgResults.TakeoffDerivationScore}"/>
-                                        <Run Text="{Binding PlaneSimData.ScoreTakeoffCenterDerivation, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTakeoffCenterDerivation}"/>
-                                    </TextBlock>
-                                    <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultBeaconLightVisibility}">
-                                        <Run Text="{Binding MsgResults.BeaconLightsScore}"/>
-                                        <Run Text="{Binding PlaneSimData.ScoreLightBeaconOn}" FontWeight="Bold" Foreground="Orange"/>
-                                    </TextBlock>
-                                    <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultLandingLightVisibility}">
-                                        <Run Text="{Binding MsgResults.LandingLightsScore}"/>
-                                        <Run Text="{Binding PlaneSimData.ScoreLightLandingOn}" FontWeight="Bold" Foreground="Orange"/>
-                                    </TextBlock>
-                                    <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultNavigationLightVisibility}">
-                                        <Run Text="{Binding MsgResults.NavegationLightsScore}"/>
-                                        <Run Text="{Binding PlaneSimData.ScoreLightNavigationOn}" FontWeight="Bold" Foreground="Orange"/>
-                                    </TextBlock>
-                                    <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultAltimeterSettingVisibility}">
-                                        <Run Text="{Binding MsgResults.AltimeterScore}"/>
-                                        <Run Text="{Binding PlaneSimData.ScoreAltimeterSettings}" FontWeight="Bold" Foreground="Orange"/>
-                                    </TextBlock>
-                                    
-                                    <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,15,0,0" >
-                                        <Rectangle.Fill>
-                                            <SolidColorBrush Color="SlateGray"/>
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                    
-                                    <TextBlock Margin="0,5,5,0">
-                                        <Run Text="{Binding MsgResults.TotalScore}" FontWeight="Bold"/>
-                                        <Run Text="{Binding Score}" FontWeight="Bold" Foreground="GreenYellow"/>
-                                    </TextBlock>
-
-                                    <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,5,0,0" >
-                                        <Rectangle.Fill>
-                                            <SolidColorBrush Color="SlateGray"/>
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-
-                                    <Button x:Name="BtnCloseResults" Content="Close" Margin="0,10,0,0" HorizontalAlignment="Right" Click="BtnCloseResults_Click"/>
-
-                                </StackPanel>
-                            </ui:Flyout>
-                        </ui:FlyoutService.Flyout>
                     </Button>
                 </Border>
             </Grid>
@@ -292,5 +215,118 @@
                 <TextBlock Text="{Binding SliderMessage}" Grid.Column="1" Foreground="Yellow" TextWrapping="Wrap" Margin="0,10,0,0"/>
             </Grid>
         </StackPanel>
+        <Border x:Name="ResultAreaBorder" BorderThickness="1" BorderBrush="SlateGray" Grid.Column="1" Visibility="Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Border Style="{DynamicResource BorderButtonYellow}" Grid.Column="1" Margin="0,10,10,0" Panel.ZIndex="500"
+                    HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <Button x:Name="BtnCloseResults"  Click="BtnCloseResults_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8A0;" Foreground="White" Margin="0" />
+                        </StackPanel>
+                    </Button>
+                </Border>
+                <TabControl x:Name="TabControlResults" Margin="8,5,0,0" Grid.ColumnSpan="2" SelectionChanged="TabControlResults_SelectionChanged"
+                    Style="{DynamicResource TabControlPivotStyle}">
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Flight results" FontSize="16" Style="{DynamicResource CustomTabItem}" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Margin="0,10,5,0" >
+                            <Run Text="{Binding MsgResults.TouchdownScore}" Foreground="White" />
+                            <Run Text="{Binding PlaneSimData.ScoreTouchdown, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTouchdownFpm}"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,10,5,0" >
+                            <Run Text="{Binding MsgResults.GForceScore}" Foreground="White" />
+                            <Run Text="{Binding PlaneSimData.ScoreGForce, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultGForce}"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,10,5,0" >
+                            <Run Text="{Binding MsgResults.BounceScore}" Foreground="White"/>
+                            <Run Text="{Binding PlaneSimData.ScoreBounce, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultBounceCount}"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,10,5,0" >
+                            <Run Text="{Binding MsgResults.LandingDerivationScore}" Foreground="White"/>
+                            <Run Text="{Binding PlaneSimData.ScoreCenterDerivation, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultCenterDerivation}"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,10,5,0" >
+                            <Run Text="{Binding MsgResults.LandingDistanceScore}" Foreground="White"/>
+                            <Run Text="{Binding PlaneSimData.ScoreLandDistance, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultLandDistance}"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,10,5,0" >
+                            <Run Text="{Binding MsgResults.UpwindLandingScore}" Foreground="White"/>
+                            <Run Text="{Binding PlaneSimData.ScoreWindAngle, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTouchdownWindAngle}"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,10,5,0" >
+                            <Run Text="{Binding MsgResults.TakeoffDerivationScore}" Foreground="White"/>
+                            <Run Text="{Binding PlaneSimData.ScoreTakeoffCenterDerivation, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTakeoffCenterDerivation}"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultBeaconLightVisibility}">
+                            <Run Text="{Binding MsgResults.BeaconLightsScore}" Foreground="White"/>
+                            <Run Text="{Binding PlaneSimData.ScoreLightBeaconOn}" FontWeight="Bold" Foreground="Orange"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultLandingLightVisibility}">
+                            <Run Text="{Binding MsgResults.LandingLightsScore}" Foreground="White"/>
+                            <Run Text="{Binding PlaneSimData.ScoreLightLandingOn}" FontWeight="Bold" Foreground="Orange"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultNavigationLightVisibility}">
+                            <Run Text="{Binding MsgResults.NavegationLightsScore}" Foreground="White"/>
+                            <Run Text="{Binding PlaneSimData.ScoreLightNavigationOn}" FontWeight="Bold" Foreground="Orange"/>
+                            </TextBlock>
+                            <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultAltimeterSettingVisibility}">
+                            <Run Text="{Binding MsgResults.AltimeterScore}" Foreground="White"/>
+                            <Run Text="{Binding PlaneSimData.ScoreAltimeterSettings}" FontWeight="Bold" Foreground="Orange"/>
+                            </TextBlock>
+
+                            <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,15,0,0" >
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="SlateGray"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+
+                            <TextBlock Margin="0,5,5,15">
+                                <Run Text="{Binding MsgResults.TotalScore}" Foreground="White" FontWeight="Bold"/>
+                                <Run Text="{Binding Score}" FontWeight="Bold" Foreground="GreenYellow"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Flight recorder" FontSize="16" Style="{DynamicResource CustomTabItem}" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <StackPanel Orientation="Vertical">
+                            <WindowsFormsHost x:Name="WindowsChartArea" Margin="0,10,0,0" Height="300">
+                                <wf:Chart x:Name="ChartFlightRecorder">
+                                    <wf:Chart.Series>
+                                        <wf:Series ChartType="Spline" IsValueShownAsLabel="False" IsVisibleInLegend="True" MarkerSize="0" MarkerStyle="Circle" MarkerColor="LightGreen" 
+                                                           BorderWidth="2" LabelBackColor="White" />
+                                    </wf:Chart.Series>
+                                    <wf:Chart.ChartAreas>
+                                        <wf:ChartArea />
+                                    </wf:Chart.ChartAreas>
+                                </wf:Chart>
+                            </WindowsFormsHost>
+                            <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,15,0,15" >
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="SlateGray"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <RadioButton x:Name="RadioAltitude" Content="Altitude" Foreground="White" IsChecked="True" Checked="ChartTypeRadioButton_Checked"/>
+                                <RadioButton x:Name="RadioSpeed" Content="Speed" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
+                                <RadioButton x:Name="RadioFuel" Content="Fuel" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Border>
     </Grid>
 </Window>
