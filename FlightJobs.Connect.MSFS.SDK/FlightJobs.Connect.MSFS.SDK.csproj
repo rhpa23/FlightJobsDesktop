@@ -60,7 +60,6 @@
   <ItemGroup>
     <Compile Include="Enum\RequestDefinitionEnum.cs" />
     <Compile Include="FlightJobsConnectSim.cs" />
-    <Compile Include="Model\FlightRecorderModel.cs" />
     <Compile Include="Model\Results\AltimeterResult.cs" />
     <Compile Include="Model\Results\NavigationLightsResult.cs" />
     <Compile Include="Model\Results\BounceResult.cs" />

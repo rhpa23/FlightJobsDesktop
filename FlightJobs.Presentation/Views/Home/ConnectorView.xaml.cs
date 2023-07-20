@@ -106,7 +106,7 @@ namespace FlightJobsDesktop.Views.Home
                     EnableDisableNavegation(false);
                     _currentJob.StartIsEnable = !_isJobStarted;
                     _currentJob.FinishIsEnable = _isJobStarted;
-                    FlightJobsConnectSim.FlightRecorderList.Clear();
+                    FlightRecorderUtil.FlightRecorderList.Clear();
                     _log.Info("Job started");
                     return true;
                 }
@@ -522,9 +522,9 @@ namespace FlightJobsDesktop.Views.Home
             if (DateTime.Now > _jumpFlightDataTime && _isJobStarted)
             {
                 _jumpFlightDataTime = DateTime.Now.AddSeconds(10);
-                var fRecorder = new FlightRecorderModel(FlightJobsConnectSim.PlaneSimData);
+                var fRecorder = new FlightRecorderViewModel(FlightJobsConnectSim.PlaneSimData);
                 fRecorder.TimeUtc = DateTime.UtcNow;
-                FlightJobsConnectSim.FlightRecorderList.Add(fRecorder);
+                FlightRecorderUtil.FlightRecorderList.Add(fRecorder);
             }
         }
 

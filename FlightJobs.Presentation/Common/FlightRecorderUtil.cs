@@ -17,6 +17,7 @@ namespace FlightJobsDesktop.Common
     public class FlightRecorderUtil
     {
         private static readonly ILog _log = LogManager.GetLogger(typeof(FlightRecorderUtil));
+        public static IList<FlightRecorderViewModel> FlightRecorderList { get; set; } = new List<FlightRecorderViewModel>();
 
         private static void SetupFlightRecorderCharts(Chart chart, SeriesChartType chartType, string title, string titleAxisY)
         {
@@ -27,7 +28,7 @@ namespace FlightJobsDesktop.Common
             chart.Series[0].Points.Clear();
         }
 
-        internal static IList<FlightRecorderModel> LoadFlightRecorderFile(CurrentJobViewModel currentJob)
+        internal static IList<FlightRecorderViewModel> LoadFlightRecorderFile(CurrentJobViewModel currentJob)
         {
             try
             {
@@ -36,20 +37,20 @@ namespace FlightJobsDesktop.Common
                 path = Path.Combine(dirInfo.FullName, $"{currentJob.DepartureICAO}-{currentJob.ArrivalICAO}.json");
                 var lines = File.ReadAllLines(path);
                 var line = lines?.FirstOrDefault();
-                return JsonConvert.DeserializeObject<IList<FlightRecorderModel>>(line);
+                return JsonConvert.DeserializeObject<IList<FlightRecorderViewModel>>(line);
             }
             catch (Exception ex)
             {
                 _log.Error(ex);
             }
-            return new List<FlightRecorderModel>();
+            return new List<FlightRecorderViewModel>();
         }
 
         internal static void SaveFlightRecorderFile(CurrentJobViewModel currentJob)
         {
             try
             {
-                string jsonFlRec = JsonConvert.SerializeObject(FlightJobsConnectSim.FlightRecorderList);
+                string jsonFlRec = JsonConvert.SerializeObject(FlightRecorderList);
                 var path = AppDomain.CurrentDomain.BaseDirectory;
                 var dirInfo = Directory.CreateDirectory(Path.Combine(path, $"ResourceData/FlightData/{currentJob.Id}"));
                 path = Path.Combine(dirInfo.FullName, $"{currentJob.DepartureICAO}-{currentJob.ArrivalICAO}.json");
@@ -63,13 +64,13 @@ namespace FlightJobsDesktop.Common
 
         internal static void UpdateChartVerticalProfile(Chart chart)
         {
-            if (FlightJobsConnectSim.FlightRecorderList.Count <= 0) return;
+            if (FlightRecorderList.Count <= 0) return;
 
             SetupFlightRecorderCharts(chart, SeriesChartType.Spline, "Vertical profile", "ALT");
 
-            bool isLightLandingOn = FlightJobsConnectSim.FlightRecorderList.First(x => x != null && !x.OnGround).LightLandingOn;
+            bool isLightLandingOn = FlightRecorderList.First(x => x != null && !x.OnGround).LightLandingOn;
 
-            foreach (var flightRecorder in FlightJobsConnectSim.FlightRecorderList.Where(x => x != null && !x.OnGround))
+            foreach (var flightRecorder in FlightRecorderList.Where(x => x != null && !x.OnGround))
             {
                 var dataPoint = chart.Series[0].Points.Add(flightRecorder.Altitude);
                 dataPoint.AxisLabel = flightRecorder.TimeUtc.ToShortTimeString();
@@ -90,11 +91,11 @@ namespace FlightJobsDesktop.Common
 
         internal static void UpdateChartSpeed(Chart chart)
         {
-            if (FlightJobsConnectSim.FlightRecorderList.Count <= 0) return;
+            if (FlightRecorderList.Count <= 0) return;
 
             SetupFlightRecorderCharts(chart, SeriesChartType.Spline, "Speed variation", "SPEED");
 
-            foreach (var flightRecorder in FlightJobsConnectSim.FlightRecorderList.Where(x => x != null && !x.OnGround))
+            foreach (var flightRecorder in FlightRecorderList.Where(x => x != null && !x.OnGround))
             {
                 var dataPoint = chart.Series[0].Points.Add(flightRecorder.Speed);
                 dataPoint.AxisLabel = flightRecorder.TimeUtc.ToShortTimeString();
@@ -112,11 +113,11 @@ namespace FlightJobsDesktop.Common
 
         internal static void UpdateChartFuel(Chart chart)
         {
-            if (FlightJobsConnectSim.FlightRecorderList.Count <= 0) return;
+            if (FlightRecorderList.Count <= 0) return;
 
             SetupFlightRecorderCharts(chart, SeriesChartType.StepLine, "Fuel flow variation", "FUEL FLOW");
 
-            var recList = FlightJobsConnectSim.FlightRecorderList.Where(x => x != null && !x.OnGround).ToArray();
+            var recList = FlightRecorderList.Where(x => x != null && !x.OnGround).ToArray();
             double previewsFuelWeightKg = recList.Length > 0 ? recList[0].FuelWeightKilograms : 0;
             for (int i = 1; i < recList.Length; i = i + 12)
             {
@@ -126,6 +127,25 @@ namespace FlightJobsDesktop.Common
 
                 previewsFuelWeightKg = currentFuelWeightKg;
             }
+        }
+
+        internal static double GetAverageFuelConsumption(long distance)
+        {
+            if (FlightRecorderList.Count <= 0) return 0;
+
+            var startFuelWeight = FlightRecorderList.First().FuelWeightKilograms;
+            var finishFuelWeight = FlightRecorderList.Last().FuelWeightKilograms;
+
+            return (startFuelWeight - finishFuelWeight) / distance;
+        }
+
+        internal static double GetAverageSpeed()
+        {
+            if (FlightRecorderList.Count <= 0) return 0;
+
+            var sunAllSpeeds = FlightRecorderList.Sum(x => x.Speed);
+
+            return sunAllSpeeds / FlightRecorderList.Count;
         }
     }
 }

@@ -83,6 +83,8 @@ namespace FlightJobsDesktop.ViewModels
 
         public FlightResultsViewModel FlightResults { get; set; } = new FlightResultsViewModel();
 
+        public FlightRecorderAnaliseViewModel FlightRecorderAnalise { get; set; } = new FlightRecorderAnaliseViewModel();
+
         private SolidColorBrush _payloadLabelColor;
         public SolidColorBrush PayloadLabelColor
         {

@@ -260,9 +260,9 @@ namespace FlightJobsDesktop.Views.Home
                     { 
                         Id = job.Id, ArrivalICAO = job.ArrivalICAO, DepartureICAO = job.DepartureICAO 
                     };
-                    FlightJobsConnectSim.FlightRecorderList.Clear();
-                    FlightJobsConnectSim.FlightRecorderList = FlightRecorderUtil.LoadFlightRecorderFile(currentJob);
-                    if (FlightJobsConnectSim.FlightRecorderList.Count == 0)
+                    FlightRecorderUtil.FlightRecorderList.Clear();
+                    FlightRecorderUtil.FlightRecorderList = FlightRecorderUtil.LoadFlightRecorderFile(currentJob);
+                    if (FlightRecorderUtil.FlightRecorderList.Count == 0)
                     {
                         _notificationManager.Show("Warning", "No data was found for this Job.", NotificationType.Warning, "WindowArea");
                     }

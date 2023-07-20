@@ -77,7 +77,6 @@ namespace FlightJobs.Connect.MSFS.SDK
         private static readonly ILog _log = LogManager.GetLogger(typeof(FlightJobsConnectSim));
         public static SimDataModel CommonSimData { get; set; } = new SimDataModel();
         public static PlaneModel PlaneSimData { get; set; } = new PlaneModel();
-        public static IList<FlightRecorderModel> FlightRecorderList { get; set; } = new List<FlightRecorderModel>();
         public static bool ShowLanding { get; set; }
         public static bool ShowTakeoff { get; set; }
         public static bool LandingDataCaptured { get; set; }

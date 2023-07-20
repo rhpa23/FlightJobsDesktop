@@ -160,6 +160,11 @@ namespace FlightJobsDesktop.Views.SlidersWindows
                 if (radioButton.Name == RadioAltitude.Name)
                 {
                     FlightRecorderUtil.UpdateChartVerticalProfile(ChartFlightRecorder);
+
+                    _currentJobViewModel.FlightRecorderAnalise.AverageFuelConsumption = 
+                        FlightRecorderUtil.GetAverageFuelConsumption(_currentJobViewModel.Dist);
+                    
+                    _currentJobViewModel.FlightRecorderAnalise.AveragePlaneSpeed = FlightRecorderUtil.GetAverageSpeed();
                 }
                 else if (radioButton.Name == RadioSpeed.Name)
                 {

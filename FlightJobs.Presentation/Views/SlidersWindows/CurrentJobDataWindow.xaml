@@ -313,7 +313,7 @@
                                     </wf:Chart.ChartAreas>
                                 </wf:Chart>
                             </WindowsFormsHost>
-                            <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,15,0,15" >
+                            <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,15,0,10" >
                                 <Rectangle.Fill>
                                     <SolidColorBrush Color="SlateGray"/>
                                 </Rectangle.Fill>
@@ -322,6 +322,18 @@
                                 <RadioButton x:Name="RadioAltitude" Content="Altitude" Foreground="White" IsChecked="True" Checked="ChartTypeRadioButton_Checked"/>
                                 <RadioButton x:Name="RadioSpeed" Content="Speed" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
                                 <RadioButton x:Name="RadioFuel" Content="Fuel" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="#FF2B2B2B" Margin="0,10,0,0" >
+                                <TextBlock Margin="40,5,0,5" Foreground="White" FontSize="18">
+                                    <Run Text="Average fuel consumption: "/>
+                                    <Run FontWeight="Bold" Text="{Binding FlightRecorderAnalise.AverageFuelConsumption}"/>
+                                    <Run Text="/NM"/>
+                                </TextBlock>
+                                <TextBlock Margin="100,5,0,5" Foreground="White" FontSize="18">
+                                    <Run Text="Average speed: "/>
+                                    <Run FontWeight="Bold"  Text="{Binding FlightRecorderAnalise.AveragePlaneSpeed}"/>
+                                    <Run Text="kts"/>
+                                </TextBlock>
                             </StackPanel>
                         </StackPanel>
                     </TabItem>

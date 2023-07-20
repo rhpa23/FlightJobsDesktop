@@ -1,11 +1,12 @@
-﻿using System;
+﻿using FlightJobs.Connect.MSFS.SDK.Model;
+using System;
 
-namespace FlightJobs.Connect.MSFS.SDK.Model
+namespace FlightJobsDesktop.ViewModels
 {
-    public class FlightRecorderModel : ObservableObject
+    public class FlightRecorderViewModel : ObservableObject
     {
-        public FlightRecorderModel() { }
-        public FlightRecorderModel(PlaneModel planeModel)
+        public FlightRecorderViewModel() { }
+        public FlightRecorderViewModel(PlaneModel planeModel)
         {
             Altitude = planeModel.CurrentAltitude;
             Speed = planeModel.GroundSpeed;
@@ -32,7 +33,22 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         public double Heading { get; set; }
         public DateTime TimeUtc { get; set; }
         public int FPS { get; set; }
+    }
 
+    public class FlightRecorderAnaliseViewModel : ObservableObject
+    {
+        private double _averageFuelConsumption;
+        public double AverageFuelConsumption
+        {
+            get { return _averageFuelConsumption; }
+            set { _averageFuelConsumption = value; OnPropertyChanged(); }
+        }
 
+        private double _averagePlaneSpeed;
+        public double AveragePlaneSpeed
+        {
+            get { return _averagePlaneSpeed; }
+            set { _averagePlaneSpeed = value; OnPropertyChanged(); }
+        }
     }
 }

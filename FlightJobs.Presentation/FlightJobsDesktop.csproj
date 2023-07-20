@@ -113,6 +113,7 @@
     <Compile Include="ViewModels\AirlineViewModel.cs" />
     <Compile Include="ViewModels\AirportViewModel.cs" />
     <Compile Include="ViewModels\CapacityViewModel.cs" />
+    <Compile Include="ViewModels\FlightRecorderViewModel.cs" />
     <Compile Include="ViewModels\FlightResultsViewModel.cs" />
     <Compile Include="ViewModels\GenerateJobViewModel.cs" />
     <Compile Include="ViewModels\HiredFBOsViewModel.cs" />
