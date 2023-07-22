@@ -41,14 +41,24 @@ namespace FlightJobsDesktop.ViewModels
         public double AverageFuelConsumption
         {
             get { return _averageFuelConsumption; }
-            set { _averageFuelConsumption = value; OnPropertyChanged(); }
+            set { _averageFuelConsumption = value; OnPropertyChanged(); OnPropertyChanged("AverageFuelConsumptioText"); }
+        }
+
+        public string AverageFuelConsumptioText 
+        {
+            get { return $"{string.Format("{0:N0}", AverageFuelConsumption)} Kg/NM"; }
         }
 
         private double _averagePlaneSpeed;
         public double AveragePlaneSpeed
         {
             get { return _averagePlaneSpeed; }
-            set { _averagePlaneSpeed = value; OnPropertyChanged(); }
+            set { _averagePlaneSpeed = value; OnPropertyChanged();  OnPropertyChanged("AveragePlaneSpeedText"); }
+        }
+
+        public string AveragePlaneSpeedText
+        {
+            get { return $"{string.Format("{0:N0}", AveragePlaneSpeed)} Kts"; }
         }
     }
 }

@@ -37,7 +37,6 @@ namespace FlightJobsDesktop.Views.Home
 
         private bool? ShowModal(string title, object content, bool canMaximize = false)
         {
-
             Window window = new Window
             {
                 Title = title,
@@ -47,7 +46,7 @@ namespace FlightJobsDesktop.Views.Home
                 //SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.CanResizeWithGrip,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                ShowInTaskbar = true,
+                ShowInTaskbar = false,
                 WindowStyle = canMaximize ? WindowStyle.None : WindowStyle.ToolWindow
             };
 
@@ -258,7 +257,7 @@ namespace FlightJobsDesktop.Views.Home
                 {
                     CurrentJobViewModel currentJob = new CurrentJobViewModel() 
                     { 
-                        Id = job.Id, ArrivalICAO = job.ArrivalICAO, DepartureICAO = job.DepartureICAO 
+                        Id = job.Id, ArrivalICAO = job.ArrivalICAO, DepartureICAO = job.DepartureICAO
                     };
                     FlightRecorderUtil.FlightRecorderList.Clear();
                     FlightRecorderUtil.FlightRecorderList = FlightRecorderUtil.LoadFlightRecorderFile(currentJob);
@@ -268,7 +267,9 @@ namespace FlightJobsDesktop.Views.Home
                     }
                     else
                     {
-                        ShowModal("Job Detail", new JobDetailModal());
+                        MainWindow.ShowLoading(true);
+                        ShowModal("Job Detail", new JobDetailModal(job));
+                        MainWindow.HideLoading();
                     }
                 }
             }

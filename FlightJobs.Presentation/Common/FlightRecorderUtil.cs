@@ -143,7 +143,7 @@ namespace FlightJobsDesktop.Common
         {
             if (FlightRecorderList.Count <= 0) return 0;
 
-            var sunAllSpeeds = FlightRecorderList.Sum(x => x.Speed);
+            var sunAllSpeeds = FlightRecorderList.Where(x => x != null && !x.OnGround).Sum(x => x.Speed);
 
             return sunAllSpeeds / FlightRecorderList.Count;
         }

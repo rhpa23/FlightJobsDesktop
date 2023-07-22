@@ -29,8 +29,11 @@ namespace FlightJobsDesktop.Views.Modals
     /// </summary>
     public partial class AirlineJoinModal : UserControl
     {
-        private IAirlineService _airlineService;
+        internal static DockPanel _loadingPanel;
+        internal static StackPanel _loadingProgressPanel;
+        private static int _loadingCount;
         private NotificationManager _notificationManager;
+        private IAirlineService _airlineService;
         private IInfraService _infraService;
         private Flyout _flyoutConfirmJoin;
 
@@ -38,8 +41,28 @@ namespace FlightJobsDesktop.Views.Modals
         {
             InitializeComponent();
             _airlineService = MainWindow.AirlineServiceFactory.Create();
-            _notificationManager = new NotificationManager();
             _infraService = MainWindow.InfraServiceFactory.Create();
+            _loadingPanel = LoadingPanel;
+            _loadingProgressPanel = LoadingProgressPanel;
+            _notificationManager = new NotificationManager();
+        }
+
+        public static void ShowLoading(bool hideProgressPanel = false)
+        {
+            _loadingPanel.Visibility = Visibility.Visible;
+            _loadingProgressPanel.Visibility = hideProgressPanel ? Visibility.Collapsed : Visibility.Visible;
+            _loadingCount++;
+        }
+
+        public static void HideLoading()
+        {
+            _loadingCount--;
+
+            if (_loadingCount <= 0)
+            {
+                _loadingPanel.Visibility = Visibility.Collapsed;
+                _loadingCount = 0;
+            }
         }
 
         private void HideConfirmJoinPopup()
@@ -110,7 +133,7 @@ namespace FlightJobsDesktop.Views.Modals
 
         private async void BtnNext_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            ShowLoading();
             EnabledNaveagtionButtons(false);
             try
             {
@@ -124,14 +147,14 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                progress.Dispose();
+                HideLoading();
                 EnabledNaveagtionButtons(true);
             }
         }
 
         private async void BtnPrevious_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            ShowLoading();
             EnabledNaveagtionButtons(false);
             try
             {
@@ -145,14 +168,14 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                progress.Dispose();
+                HideLoading();
                 EnabledNaveagtionButtons(true);
             }
         }
 
         private async void BtnFirst_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            ShowLoading();
             EnabledNaveagtionButtons(false);
             try
             {
@@ -166,14 +189,14 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                progress.Dispose();
+                HideLoading();
                 EnabledNaveagtionButtons(true);
             }
         }
 
         private async void BtnLast_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            ShowLoading();
             EnabledNaveagtionButtons(false);
             try
             {
@@ -187,14 +210,14 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                progress.Dispose();
+                HideLoading();
                 EnabledNaveagtionButtons(true);
             }
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            ShowLoading();
             try
             {
                 await UpdateDataGrid(1);
@@ -205,13 +228,13 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                progress.Dispose();
+                HideLoading();
             }
         }
 
         private async void btnViewHiredPilots_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            ShowLoading();
             try
             {
                 var id = ((AppBarButton)sender).Tag;
@@ -219,7 +242,7 @@ namespace FlightJobsDesktop.Views.Modals
                 var pilotsHiredViewModel = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
                     .Map<IList<UserModel>, IList<PilotHiredViewModel>>(pilotsHired);
                 
-                progress.Dispose();
+                HideLoading();
                 var modal = new PilotsHiredModal();
                 modal.DataContext = new PilotsHiredViewModel() { PilotsHired = pilotsHiredViewModel };
                 ShowModal("List of pilot hired", modal);
@@ -230,13 +253,13 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                progress.Dispose();
+                HideLoading();
             }
         }
 
         private async void btnJoin_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            ShowLoading();
             EnabledNaveagtionButtons(false);
             try
             {
@@ -256,7 +279,7 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                progress.Dispose();
+                HideLoading();
                 EnabledNaveagtionButtons(true);
                 HideConfirmJoinPopup();
             }
@@ -269,7 +292,7 @@ namespace FlightJobsDesktop.Views.Modals
 
         private async void BtnApplyFilter_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            ShowLoading();
             try
             {
                 Flyout f = FlyoutService.GetFlyout(BtnFilter) as Flyout;
@@ -286,13 +309,13 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                progress.Dispose();
+                HideLoading();
             }
         }
 
         private async void BtnFilterClear_Click(object sender, RoutedEventArgs e)
         {
-            var progress = _notificationManager.ShowProgressBar("Loading...", false, true, "WindowAreaLoading");
+            ShowLoading();
             try
             {
                 Flyout f = FlyoutService.GetFlyout(BtnFilter) as Flyout;
@@ -312,7 +335,7 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                progress.Dispose();
+                HideLoading();
             }
         }
     }

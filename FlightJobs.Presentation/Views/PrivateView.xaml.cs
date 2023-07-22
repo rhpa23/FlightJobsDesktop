@@ -195,6 +195,7 @@ namespace FlightJobsDesktop.Views
         {
             try
             {
+                MainWindow.ShowLoading(true);
                 var fileDialog = new OpenFileDialog() { Title = "Avatar", Filter = "Image Files|*.jpg;*.jpeg;*.png;..." };
 
                 if (fileDialog.ShowDialog((Window)Parent).Value)
@@ -208,7 +209,10 @@ namespace FlightJobsDesktop.Views
             {
                 _notificationManager.Show("Error", "Avatar image could not be saved. Please run as administrator.", NotificationType.Error, "WindowAreaPrivate");
             }
-            
+            finally
+            {
+                MainWindow.HideLoading();
+            }
         }
 
         private async void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -220,6 +224,7 @@ namespace FlightJobsDesktop.Views
         {
             try
             {
+                MainWindow.ShowLoading(true);
                 var modal = new LicenseExpensesModal(_statisticsView);
                 ShowModal("License Expenses", modal);
                 if (modal.IsChanged)
@@ -232,12 +237,17 @@ namespace FlightJobsDesktop.Views
                 _log.Error(ex.Message);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaPrivate");
             }
+            finally
+            {
+                MainWindow.HideLoading();
+            }
         }
 
         private async void BtnTransfer_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                MainWindow.ShowLoading(true);
                 var modal = new TransferPilotMoneyToAirlineModal(_statisticsView);
                 ShowModal("Transfer your bank balance to airline", modal);
                 if (modal.IsChanged)
@@ -250,6 +260,10 @@ namespace FlightJobsDesktop.Views
             {
                 _log.Error(ex.Message);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaPrivate");
+            }
+            finally
+            {
+                MainWindow.HideLoading();
             }
         }
     }

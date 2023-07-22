@@ -87,6 +87,7 @@ namespace FlightJobsDesktop.Views.Home
 
         private async void BtnJoinAirliner_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow.ShowLoading(true);
             var modal = new AirlineJoinModal();
             if (ShowModal("Search airline to join", modal).Value)
             {
@@ -95,12 +96,14 @@ namespace FlightJobsDesktop.Views.Home
                 LoadAirlineData();
                 _notificationManager.Show("Success", $"Congratulations, you signed contract with {AppProperties.UserStatistics.Airline.Name} airline.", NotificationType.Success, "WindowAreaAirline");
             }
+            MainWindow.HideLoading();
         }
 
         private async void BtnBuyAirline_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                MainWindow.ShowLoading(true);
                 var createAirlineModal = new AirlineEditModal() { IsCreateAirline = true };
                 if (ShowModal("Create Airline", createAirlineModal).Value)
                 {
@@ -112,6 +115,10 @@ namespace FlightJobsDesktop.Views.Home
             {
                 _log.Error(ex);
                 _notificationManager.Show("Error", "Airline data could not be loaded. Please try again later.", NotificationType.Error, "WindowAreaAirline");
+            }
+            finally
+            {
+                MainWindow.HideLoading();
             }
         }
 
@@ -166,6 +173,7 @@ namespace FlightJobsDesktop.Views.Home
         {
             try
             {
+                MainWindow.ShowLoading(true);
                 if (AppProperties.UserStatistics.Airline != null)
                 {
                     if (ShowModal("Edit airline", new AirlineEditModal()).Value)
@@ -181,12 +189,17 @@ namespace FlightJobsDesktop.Views.Home
                 _log.Error(ex);
                 _notificationManager.Show("Error", "Airline data could not be loaded. Please try again later.", NotificationType.Error, "WindowAreaAirline");
             }
+            finally
+            {
+                MainWindow.HideLoading();
+            }
         }
 
         private void BtnDebts_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                MainWindow.ShowLoading(true);
                 if (AppProperties.UserStatistics.Airline != null)
                 {
                     if (AppProperties.UserStatistics.Airline.DebtValue <= 0)
@@ -206,6 +219,10 @@ namespace FlightJobsDesktop.Views.Home
                 _log.Error(ex);
                 _notificationManager.Show("Error", "Airline data could not be loaded. Please try again later.", NotificationType.Error, "WindowAreaAirline");
             }
+            finally
+            {
+                MainWindow.HideLoading();
+            }
         }
 
         private async void BtnPilotsHired_Click(object sender, RoutedEventArgs e)
@@ -220,6 +237,7 @@ namespace FlightJobsDesktop.Views.Home
                 MainWindow.HideLoading();
                 var modal = new PilotsHiredModal();
                 modal.DataContext = new PilotsHiredViewModel() { PilotsHired = pilotsHiredViewModel };
+                MainWindow.ShowLoading(true);
                 ShowModal("List of pilot hired", modal);
             }
             catch (Exception ex)
@@ -237,6 +255,7 @@ namespace FlightJobsDesktop.Views.Home
         {
             try
             {
+                MainWindow.ShowLoading(true);
                 if (AppProperties.UserStatistics.Airline != null)
                 {
                     ShowModal("Airline Ledger", new AirlineJobsLedgerModal(), true);
@@ -247,6 +266,10 @@ namespace FlightJobsDesktop.Views.Home
                 _log.Error(ex);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaAirline");
             }
+            finally
+            {
+                MainWindow.HideLoading();
+            }
         }
 
         private void BtnDebtText_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -254,16 +277,20 @@ namespace FlightJobsDesktop.Views.Home
             BtnDebts_Click(sender, e);
         }
 
-        private void BtnFbo_Click(object sender, RoutedEventArgs e)
+        private async void BtnFbo_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (AppProperties.UserStatistics.Airline != null)
                 {
+                    MainWindow.ShowLoading(true);
                     var airlineFBOs = new AirlineFBOs();
                     while (ShowModal("Airline FBOs", airlineFBOs).Value)
                     {
                         airlineFBOs.ShowHireNotification = ShowModal("Hire FBOs", new AirlineHireFboModal()).Value;
+                        await _userAccessService.LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
+                        await _userAccessService.LoadUserAirlineProperties();
+                        LoadAirlineData();
                     }
                 }
             }
@@ -271,6 +298,10 @@ namespace FlightJobsDesktop.Views.Home
             {
                 _log.Error(ex);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowAreaAirline");
+            }
+            finally
+            {
+                MainWindow.HideLoading();
             }
         }
 
@@ -307,7 +338,7 @@ namespace FlightJobsDesktop.Views.Home
             HideActionsPopup();
         }
 
-        private async void UserControl_GotFocus(object sender, RoutedEventArgs e)
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             MainWindow.ShowLoading();
             Mouse.OverrideCursor = Cursors.Wait;

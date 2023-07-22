@@ -1,4 +1,5 @@
 ﻿using FlightJobsDesktop.Common;
+using FlightJobsDesktop.ViewModels;
 using ModernWpf;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,12 @@ namespace FlightJobsDesktop.Views.Modals
     /// </summary>
     public partial class JobDetailModal : UserControl
     {
-        public JobDetailModal()
+        private LogbookUserJobViewModel _logbookUserJob;
+
+        public JobDetailModal(LogbookUserJobViewModel logbookUserJob)
         {
+            _logbookUserJob = logbookUserJob;
+
             InitializeComponent();
 
             var chartFont = new Font("Segoe UI", 10);
@@ -56,6 +61,11 @@ namespace FlightJobsDesktop.Views.Modals
             if (radioButton.Name == RadioAltitude.Name)
             {
                 FlightRecorderUtil.UpdateChartVerticalProfile(ChartFlightRecorder);
+                DataContext = new FlightRecorderAnaliseViewModel()
+                {
+                    AverageFuelConsumption = FlightRecorderUtil.GetAverageFuelConsumption(_logbookUserJob.Dist),
+                    AveragePlaneSpeed = FlightRecorderUtil.GetAverageSpeed()
+                };
             }
             else if (radioButton.Name == RadioSpeed.Name)
             {

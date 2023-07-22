@@ -32,6 +32,7 @@ namespace FlightJobsDesktop
         private NotificationManager _notificationManager;
         internal static NavigationView NavigationBar { get; set; }
         internal static DockPanel _loadingPanel;
+        internal static StackPanel _loadingProgressPanel;
         private static int _loadingCount;
         internal static Ellipse LicenseOverdueEllipse { get; set; }
 
@@ -70,6 +71,7 @@ namespace FlightJobsDesktop
             NavigationBar = nvMain;
             LicenseOverdueEllipse = EllipseLicense;
             _loadingPanel = LoadingPanel;
+            _loadingProgressPanel = LoadingProgressPanel;
 
             System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
             ni.Icon = new System.Drawing.Icon("favicon.ico");
@@ -129,9 +131,10 @@ namespace FlightJobsDesktop
             ShowInTaskbar = true;
         }
 
-        public static void ShowLoading()
+        public static void ShowLoading(bool hideProgressPanel = false)
         {
             _loadingPanel.Visibility = Visibility.Visible;
+            _loadingProgressPanel.Visibility = hideProgressPanel ? Visibility.Collapsed : Visibility.Visible;
             _loadingCount++;
         }
 

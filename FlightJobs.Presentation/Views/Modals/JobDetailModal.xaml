@@ -4,9 +4,12 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:wf="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
-      xmlns:local="clr-namespace:FlightJobsDesktop.Views.Modals"
+      xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
       mc:Ignorable="d" 
-      MinHeight="460" MinWidth="800">
+      MinHeight="510" MinWidth="800">
+    <UserControl.DataContext>
+        <local:FlightRecorderAnaliseViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <StackPanel Orientation="Vertical">
             <WindowsFormsHost x:Name="WindowsChartArea" Margin="10" Height="370">
@@ -26,9 +29,19 @@
                 </Rectangle.Fill>
             </Rectangle>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <RadioButton x:Name="RadioAltitude" Content="Altitude" IsChecked="True" Checked="ChartTypeRadioButton_Checked"/>
+                <RadioButton x:Name="RadioAltitude" Content="Altitude" Checked="ChartTypeRadioButton_Checked" IsChecked="True"/>
                 <RadioButton x:Name="RadioSpeed" Content="Speed" Checked="ChartTypeRadioButton_Checked"/>
                 <RadioButton x:Name="RadioFuel" Content="Fuel" Checked="ChartTypeRadioButton_Checked"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="#FF2B2B2B" Margin="0,25,0,0" >
+                <TextBlock Margin="120,15,0,15" Foreground="White" FontSize="16">
+                                    <Run Text="Average fuel consumption: "/>
+                                    <Run FontWeight="Bold" Text="{Binding AverageFuelConsumptioText, Mode=OneWay}"/>
+                </TextBlock>
+                <TextBlock Margin="60,15,0,15" Foreground="White" FontSize="16">
+                                    <Run Text="Average speed: "/>
+                                    <Run FontWeight="Bold"  Text="{Binding AveragePlaneSpeedText, Mode=OneWay}"/>
+                </TextBlock>
             </StackPanel>
         </StackPanel>
     </Grid>

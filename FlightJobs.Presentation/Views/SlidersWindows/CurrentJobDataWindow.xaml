@@ -319,20 +319,18 @@
                                 </Rectangle.Fill>
                             </Rectangle>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <RadioButton x:Name="RadioAltitude" Content="Altitude" Foreground="White" IsChecked="True" Checked="ChartTypeRadioButton_Checked"/>
+                                <RadioButton x:Name="RadioAltitude" Content="Altitude" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
                                 <RadioButton x:Name="RadioSpeed" Content="Speed" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
                                 <RadioButton x:Name="RadioFuel" Content="Fuel" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="#FF2B2B2B" Margin="0,10,0,0" >
-                                <TextBlock Margin="40,5,0,5" Foreground="White" FontSize="18">
+                                <TextBlock Margin="10,5,0,5" Foreground="White" FontSize="16">
                                     <Run Text="Average fuel consumption: "/>
-                                    <Run FontWeight="Bold" Text="{Binding FlightRecorderAnalise.AverageFuelConsumption}"/>
-                                    <Run Text="/NM"/>
+                                    <Run FontWeight="Bold" Text="{Binding FlightRecorderAnalise.AverageFuelConsumptioText, Mode=OneWay}"/>
                                 </TextBlock>
-                                <TextBlock Margin="100,5,0,5" Foreground="White" FontSize="18">
+                                <TextBlock Margin="60,5,0,5" Foreground="White" FontSize="16">
                                     <Run Text="Average speed: "/>
-                                    <Run FontWeight="Bold"  Text="{Binding FlightRecorderAnalise.AveragePlaneSpeed}"/>
-                                    <Run Text="kts"/>
+                                    <Run FontWeight="Bold"  Text="{Binding FlightRecorderAnalise.AveragePlaneSpeedText, Mode=OneWay}"/>
                                 </TextBlock>
                             </StackPanel>
                         </StackPanel>

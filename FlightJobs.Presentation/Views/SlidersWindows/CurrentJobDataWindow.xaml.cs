@@ -129,10 +129,10 @@ namespace FlightJobsDesktop.Views.SlidersWindows
                 DataContext = _currentJobViewModel;
             }
 
-//#if DEBUG
-//            FlightJobsConnectSim.FlightRecorderList = 
-//                FlightRecorderUtil.LoadFlightRecorderFile(new CurrentJobViewModel() { Id = 71606, DepartureICAO = "LIMJ", ArrivalICAO = "LIRF" });
-//#endif
+#if DEBUG
+            FlightRecorderUtil.FlightRecorderList =
+                FlightRecorderUtil.LoadFlightRecorderFile(new CurrentJobViewModel() { Id = 71606, DepartureICAO = "LIMJ", ArrivalICAO = "LIRF" });
+#endif
         }
 
         private void BtnShowFlightResults_Click(object sender, RoutedEventArgs e)

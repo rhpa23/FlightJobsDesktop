@@ -147,7 +147,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         {
             get { return _touchdownHeadwind; }
             set { _touchdownHeadwind = value; TouchdownHeadwindText = $"{Math.Abs(_touchdownHeadwind)} kts"; 
-                NotifyPropertysChanged("TouchdownHeadwindText", "TouchdownWindAngle");
+                NotifyPropertysChanged("TouchdownHeadwindText", "ScoreWindAngle", "TouchdownWindAngle");
             }
         }
         public string TouchdownHeadwindText { get; set; }

@@ -72,6 +72,7 @@ namespace FlightJobsDesktop.Views.Home
 
         private void BtnDestinationTips_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow.ShowLoading(true);
             var modal = new DestinationTipsModal(_generateJobViewModel.DepartureICAO);
             ShowModal("Arrival Tips", modal);
             if (modal.CloneEvent)
@@ -89,10 +90,12 @@ namespace FlightJobsDesktop.Views.Home
                     AutoSuggestBoxSuggestionChosen();
                 }
             }
+            MainWindow.HideLoading();
         }
 
         private void BtnAlternativeTips_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow.ShowLoading(true);
             var modal = new AlternativeTipsModal(_generateJobViewModel.ArrivalICAO);
             ShowModal("Alternative Tips", modal);
             if (modal.SelectedJobTip != null)
@@ -100,6 +103,7 @@ namespace FlightJobsDesktop.Views.Home
                 txtAlternative.Text = GetIcaoInfo(modal.SelectedJobTip.AirportICAO);
                 AutoSuggestBoxSuggestionChosen();
             }
+            MainWindow.HideLoading();
         }
 
         private async void BtnGenerate_Click(object sender, RoutedEventArgs e)
