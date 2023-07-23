@@ -13,5 +13,8 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
 
         Task<UserStatisticsModel> UpdateUserSettings(UserSettingsModel userSettings);
         Task UserRegister(UserRegisterModel userModel);
+
+        Task<SimBriefModel> GetSimBriefData(string simbriefUserName);
+        Task<RandomFlightModel> GetRandomFlight(string departure, string destination);
     }
 }

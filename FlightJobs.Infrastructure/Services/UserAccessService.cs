@@ -46,5 +46,15 @@ namespace FlightJobs.Infrastructure.Services
         {
             await _flightJobsConnectorClientAPI.UserRegister(userModel);
         }
+
+        public async Task<SimBriefModel> GetSimBriefData(string simbriefUserName)
+        {
+            return await _flightJobsConnectorClientAPI.GetSimBriefData(simbriefUserName);
+        }
+
+        public async Task<RandomFlightModel> GetRandomFlight(string departure, string destination)
+        {
+            return await _flightJobsConnectorClientAPI.GetRandomFlight(departure, destination);
+        }
     }
 }

@@ -61,10 +61,10 @@
 
                     <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,15,0,15" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right">
                         <Border Margin="0,0,0,0" Style="{DynamicResource BorderButtonYellow}">
-                            <Button x:Name="BtnRandom" Content="Random" Width="70" Height="37" />
+                            <Button x:Name="BtnRandom" Content="Random" Width="70" Height="37" Click="BtnRandom_Click" />
                         </Border>
                         <Border Margin="20,0,0,0" Style="{DynamicResource BorderButtonYellow}">
-                            <Button x:Name="BtnSimbrief" Content="Simbrief" Width="70" Height="37"  />
+                            <Button x:Name="BtnSimbrief" Content="Simbrief" Width="70" Height="37" Click="BtnSimbrief_Click"  />
                         </Border>
                         <ui:AppBarSeparator />
                         <Border x:Name="BtnGenerateBorder" Margin="0,0,5,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="False">

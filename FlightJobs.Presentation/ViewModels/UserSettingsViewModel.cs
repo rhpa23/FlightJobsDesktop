@@ -51,5 +51,12 @@ namespace FlightJobsDesktop.ViewModels
         public bool IsDarkTheme { get { return ThemeName == "Dark"; } }
 
         public SimDataModel CurrentSimData { get; set; }
+
+        private string _simbriefUsername { get; set; }
+        public string SimbriefUsername
+        {
+            get { return _simbriefUsername; }
+            set { _simbriefUsername = value; OnPropertyChanged(); }
+        }
     }
 }

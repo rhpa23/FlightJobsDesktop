@@ -14,6 +14,7 @@ using log4net.Config;
 using FlightJobs.Domain.Navdata.Utils;
 using FlightJobsDesktop.Views.POC;
 using ModernWpf;
+using System.Diagnostics;
 
 namespace FlightJobsDesktop
 {
@@ -59,6 +60,8 @@ namespace FlightJobsDesktop
             //            new CurrentJobDataWindow().Show();
             //new ChartsPoC().Show();
 
+            SingleInstanceCheck();
+
             ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
             var loginWindow = _serviceProvider.GetService<Login>();
             if (loginWindow.LoadLoginData())
@@ -69,6 +72,19 @@ namespace FlightJobsDesktop
             else
             {
                 loginWindow.Show();
+            }
+        }
+
+        private void SingleInstanceCheck()
+        {
+            Process proc = Process.GetCurrentProcess();
+            int count = Process.GetProcesses().Where(p =>
+                p.ProcessName == proc.ProcessName).Count();
+
+            if (count > 1) // Single Instance check
+            {
+                MessageBox.Show($"You already have an instance of {proc.ProcessName} running.", "FlightJobs Desktop", MessageBoxButton.OK, MessageBoxImage.Warning);
+                App.Current.Shutdown();
             }
         }
     }

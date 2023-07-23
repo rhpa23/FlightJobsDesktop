@@ -70,7 +70,15 @@ namespace FlightJobsDesktop.Views
 
         private void btnUpdateApp_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                SaveSettings();
+                _notificationManager.Show("Success", "Application settings saved!", NotificationType.Success, "WindowArea");
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Error when try to save FlightJobs settings. Please your administrator rights.", NotificationType.Error, "WindowArea");
+            }
         }
 
         private async void btnUpdate_Click(object sender, RoutedEventArgs e)

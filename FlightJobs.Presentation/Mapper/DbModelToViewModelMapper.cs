@@ -52,6 +52,7 @@ namespace FlightJobsDesktop.Mapper
                           .ForPath(dest => dest.ExitWithFS, opt => opt.MapFrom(src => src.LocalSettings.ExitWithFS))
                           .ForPath(dest => dest.ShowLandingData, opt => opt.MapFrom(src => src.LocalSettings.ShowLandingData))
                           .ForPath(dest => dest.StartInSysTray, opt => opt.MapFrom(src => src.LocalSettings.StartInSysTray))
+                          .ForPath(dest => dest.SimbriefUsername, opt => opt.MapFrom(src => src.LocalSettings.SimbriefUsername))
                           .ForPath(dest => dest.ThemeName, opt => opt.MapFrom(src => src.LocalSettings.ThemeName));
                     //    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.NickName));
                 });

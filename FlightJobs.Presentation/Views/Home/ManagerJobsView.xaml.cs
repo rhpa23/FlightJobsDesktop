@@ -27,6 +27,7 @@ namespace FlightJobsDesktop.Views.Home
         private IJobService _jobService;
         private IInfraService _infraService;
         private ISqLiteDbContext _sqLiteDbContext;
+        private IUserAccessService _userAccessService;
 
         private GenerateJobViewModel _generateJobViewModel;
 
@@ -43,6 +44,7 @@ namespace FlightJobsDesktop.Views.Home
             _notificationManager = new NotificationManager();
             _jobService = MainWindow.JobServiceFactory.Create();
             _infraService = MainWindow.InfraServiceFactory.Create();
+            _userAccessService = MainWindow.UserServiceFactory.Create();
             _sqLiteDbContext = MainWindow.SqLiteContextFactory.Create();
 
             _mapUrl = $"{_infraService.GetApiUrl()}Maps/GenerateJobsMap";
@@ -369,6 +371,55 @@ namespace FlightJobsDesktop.Views.Home
         private void BtnRemoveJobNo_Click(object sender, RoutedEventArgs e)
         {
             HideConfirmRemovePopup();
+        }
+
+        private async void BtnSimbrief_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MainWindow.ShowLoading();
+                if (string.IsNullOrEmpty(AppProperties.UserSettings.LocalSettings?.SimbriefUsername))
+                {
+                    _notificationManager.Show("Warning", "Please update your Simbrief Username in the Settings page.", NotificationType.Warning, "WindowArea");
+                }
+                else
+                {
+                    var simBriefData = await _userAccessService.GetSimBriefData(AppProperties.UserSettings.LocalSettings.SimbriefUsername);
+                    txtDeparture.Text = GetIcaoInfo(simBriefData.DepartureICAO.IcaoCode);
+                    txtArrival.Text = GetIcaoInfo(simBriefData.ArrivalICAO.IcaoCode);
+                    txtAlternative.Text = GetIcaoInfo(simBriefData.AlternativeICAO.IcaoCode);
+                    AutoSuggestBoxSuggestionChosen();
+                }
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Error when try to access SimBrief data. Please check your Simbrief Username in the Settings page or try again later.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                MainWindow.HideLoading();
+            }
+        }
+
+        private async void BtnRandom_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MainWindow.ShowLoading();
+                var simBriefData = await _userAccessService.GetRandomFlight(_generateJobViewModel.DepartureICAO, _generateJobViewModel.AlternativeICAO);
+                txtDeparture.Text = GetIcaoInfo(simBriefData.DepartureICAO);
+                txtArrival.Text = GetIcaoInfo(simBriefData.ArrivalICAO);
+                txtAlternative.Text = GetIcaoInfo(simBriefData.AlternativeICAO);
+                AutoSuggestBoxSuggestionChosen();
+            }
+            catch (Exception)
+            {
+                _notificationManager.Show("Error", "Error when try to access FlightJobs random data. Please try again later.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                MainWindow.HideLoading();
+            }
         }
     }
 }

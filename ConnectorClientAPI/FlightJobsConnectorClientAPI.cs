@@ -316,6 +316,37 @@ namespace ConnectorClientAPI
             }
         }
 
+        public async Task<SimBriefModel> GetSimBriefData(string simbriefUserName)
+        {
+            var url = $"{SITE_URL}api/SearchApi/GetSimBriefData?simbriefUserName={simbriefUserName}";
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+            if (response.IsSuccessStatusCode)
+            {
+                string json = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<SimBriefModel>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
+            }
+            else
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+        public async Task<RandomFlightModel> GetRandomFlight(string departure, string destination)
+        {
+            var url = $"{SITE_URL}api/SearchApi/GetRandomFlight?departure={departure}&destination={destination}";
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+            if (response.IsSuccessStatusCode)
+            {
+                string json = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<RandomFlightModel>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
+            }
+            else
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+
         public async Task<UserStatisticsModel> UpdateUserSettings(UserSettingsModel userSettings)
         {
             var url = $"{SITE_URL}api/UserApi/UpdateUserSettings";

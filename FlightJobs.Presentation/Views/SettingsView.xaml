@@ -10,181 +10,192 @@
     <UserControl.DataContext>
         <local:UserSettingsViewModel/>
     </UserControl.DataContext>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-    <DockPanel Grid.Row="0"
+    <ScrollViewer IsTabStop="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0"
         HorizontalAlignment="Stretch"
-        Width="Auto"
-               Height="240"
         Margin="30,20,30,20"
         LastChildFill="True">
 
-        <TextBlock Text="FlightJobs Settings" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
-        <Border Style="{StaticResource LightBorderBoxStyle}">
-            <Grid Margin="15,10,15,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <TextBlock Text="FlightJobs Settings" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
+                <Border Style="{StaticResource LightBorderBoxStyle}">
+                    <Grid Margin="15,10,15,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="360"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Weight unit" Margin="5,10,0,10" FontSize="18"/>
-                        <ItemsControl Grid.Column="1" VerticalAlignment="Top" Margin="0,10,0,0" >
-                            <StackPanel Orientation="Horizontal">
-                                <RadioButton x:Name="rdbKilograms" Content="Kilograms" IsChecked="{Binding Path=IsWeightUnitKg}" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                                <RadioButton x:Name="rdbPounds" Content="Pounds" IsChecked="{Binding Path=IsWeightUnitPounds}" HorizontalAlignment="Left" Margin="20,0,0,0"/>
-                            </StackPanel>
-                        </ItemsControl>
-                    </Grid>
-                </Border>
-                <Border Grid.Row="1" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="360"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Nickname" Margin="5,10,0,10" FontSize="18"/>
-                        <TextBox Grid.Column="1" Margin="10,10,5,5" Width="350" HorizontalAlignment="Left" 
+                        <Border Grid.Row="0" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="360"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="Weight unit" Margin="5,10,0,10" FontSize="18"/>
+                                <ItemsControl Grid.Column="1" VerticalAlignment="Top" Margin="0,10,0,0" >
+                                    <StackPanel Orientation="Horizontal">
+                                        <RadioButton x:Name="rdbKilograms" Content="Kilograms" IsChecked="{Binding Path=IsWeightUnitKg}" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                                        <RadioButton x:Name="rdbPounds" Content="Pounds" IsChecked="{Binding Path=IsWeightUnitPounds}" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+                                    </StackPanel>
+                                </ItemsControl>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="1" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="360"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="Nickname" Margin="5,10,0,10" FontSize="18"/>
+                                <TextBox Grid.Column="1" Margin="10,10,5,5" Width="350" HorizontalAlignment="Left" 
                                      ui:ControlHelper.PlaceholderText="Change your nickname" Text="{Binding Path=Username}" />
-                    </Grid>
-                </Border>
-                <Border Grid.Row="2" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="360"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Password" Margin="5,10,0,10" FontSize="18"/>
-                        <PasswordBox Grid.Column="1" Margin="10,10,5,5" Width="350" HorizontalAlignment="Left" 
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="2" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="360"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="Password" Margin="5,10,0,10" FontSize="18"/>
+                                <PasswordBox Grid.Column="1" Margin="10,10,5,5" Width="350" HorizontalAlignment="Left" 
                                      ui:ControlHelper.PlaceholderText="Change your password" helpers:PasswordBoxHelper.BindPassword="True" >
-                            <helpers:PasswordBoxHelper.BoundPassword>
-                                <Binding Path="Password" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" />
-                            </helpers:PasswordBoxHelper.BoundPassword>
-                        </PasswordBox>
-                    </Grid>
-                </Border>
+                                    <helpers:PasswordBoxHelper.BoundPassword>
+                                        <Binding Path="Password" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" />
+                                    </helpers:PasswordBoxHelper.BoundPassword>
+                                </PasswordBox>
+                            </Grid>
+                        </Border>
 
-                <Border Grid.Row="3" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="360"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Receive alert emails" Margin="5,10,0,10" FontSize="18"/>
-                        <CheckBox Grid.Column="1" x:Name="ckbReceiveAlertEmails" Content="" IsChecked="{Binding Path=ReceiveAlertEmails}" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+                        <Border Grid.Row="3" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="360"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="Receive alert emails" Margin="5,10,0,10" FontSize="18"/>
+                                <CheckBox Grid.Column="1" x:Name="ckbReceiveAlertEmails" Content="" IsChecked="{Binding Path=ReceiveAlertEmails}" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+                            </Grid>
+                        </Border>
+                        <StackPanel Grid.RowSpan="4" Grid.Column="1" Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
+                            <ui:AppBarButton x:Name="btnUpdate" Label="Update" Icon="Save" Click="btnUpdate_Click"  />
+                        </StackPanel>
                     </Grid>
                 </Border>
-                <StackPanel Grid.RowSpan="4" Grid.Column="1" Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
-                    <ui:AppBarButton x:Name="btnUpdate" Label="Update" Icon="Save" Click="btnUpdate_Click"  />
-                </StackPanel>
-            </Grid>
-        </Border>
-    </DockPanel>
-    <DockPanel Grid.Row="1"
-        VerticalAlignment="Stretch" 
+            </DockPanel>
+            <DockPanel Grid.Row="1"
+        
         HorizontalAlignment="Stretch"
         Width="Auto"
         Margin="30,0,30,20"
         LastChildFill="True">
-
-        <TextBlock Text="Application Settings" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
-        <Border Style="{StaticResource LightBorderBoxStyle}">
-            <Grid Margin="15,10,15,5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Border Grid.Row="0" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                    <Grid>
+                <TextBlock Text="Application Settings" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
+                <Border Style="{StaticResource LightBorderBoxStyle}">
+                    <Grid Margin="15,10,15,5">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="360"/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="UI Theme" Margin="5,10,0,10" FontSize="18"/>
-                        <ui:ToggleSwitch Grid.Column="1" Name="ThemeSwitch" IsOn="{Binding Path=IsDarkTheme, Mode=OneWay}" Toggled="ThemeSwitch_Toggled" Header="" HorizontalAlignment="Left" Height="30" Margin="10,10,0,0" VerticalAlignment="Top" Width="90" MinWidth="90" OffContent="Light" OnContent="Dark"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Border CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="360"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="SimBrief username" Margin="5,10,0,10" FontSize="18"/>
+                                <TextBox Grid.Column="1" Margin="10,10,5,5" Width="350" HorizontalAlignment="Left" 
+                                     ui:ControlHelper.PlaceholderText="Change your SimBrief username" Text="{Binding SimbriefUsername}" />
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="1" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="360"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="UI Theme" Margin="5,10,0,10" FontSize="18"/>
+                                <ui:ToggleSwitch Grid.Column="1" Name="ThemeSwitch" IsOn="{Binding Path=IsDarkTheme, Mode=OneWay}" Toggled="ThemeSwitch_Toggled" Header="" HorizontalAlignment="Left" Height="30" Margin="10,10,0,0" VerticalAlignment="Top" Width="90" MinWidth="90" OffContent="Light" OnContent="Dark"/>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="2" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="360"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="Start in system tray" Margin="5,10,0,10" FontSize="18"/>
+                                <CheckBox Grid.Column="1" x:Name="ckbSysTray" Content="" IsChecked="{Binding Path=StartInSysTray}" HorizontalAlignment="Left" Margin="20,0,0,0" Click="ckbBase_Click"/>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="3" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="360"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="Exit on MSFS shutdown" Margin="5,10,0,10" FontSize="18"/>
+                                <CheckBox Grid.Column="1" x:Name="ckbExitWithFS" Content="" IsChecked="{Binding Path=ExitWithFS}" HorizontalAlignment="Left" Margin="20,0,0,0" Click="ckbBase_Click"/>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="4" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="360"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="Auto start job when Engine 1 is started" Margin="5,10,0,10" FontSize="18"/>
+                                <CheckBox Grid.Column="1" x:Name="ckbAutoStart" Content="" IsChecked="{Binding Path=AutoStartJob}" HorizontalAlignment="Left" Margin="21,6,0,6" Click="ckbBase_Click"/>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="5" Name="ClearButtonBorder" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="360"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="Auto finish job when Engine 1 shutdown" Margin="5,10,0,10" FontSize="18"/>
+                                <CheckBox Grid.Column="1" x:Name="ckbAutoFinish" Content="" IsChecked="{Binding Path=AutoFinishJob}" HorizontalAlignment="Left" Margin="20,0,0,0" Click="ckbBase_Click"/>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="6" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="360"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="Show landing data" Margin="5,10,0,10" FontSize="18"/>
+                                <CheckBox Grid.Column="1" x:Name="ckbShowLandingData" Content="" IsChecked="{Binding Path=ShowLandingData}" HorizontalAlignment="Left" Margin="20,0,0,0" Click="ckbBase_Click"/>
+                            </Grid>
+                        </Border>
+                        <StackPanel Grid.RowSpan="9" Grid.Column="1" Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
+                            <ui:AppBarButton x:Name="btnUpdateApp" Label="Update App" Margin="0,50,0,0" Click="btnUpdateApp_Click" >
+                                <ui:AppBarButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE896;" />
+                                </ui:AppBarButton.Icon>
+                            </ui:AppBarButton>
+                        </StackPanel>
                     </Grid>
                 </Border>
-                <Border Grid.Row="1" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="360"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Start in system tray" Margin="5,10,0,10" FontSize="18"/>
-                        <CheckBox Grid.Column="1" x:Name="ckbSysTray" Content="" IsChecked="{Binding Path=StartInSysTray}" HorizontalAlignment="Left" Margin="20,0,0,0" Click="ckbBase_Click"/>
-                    </Grid>
-                </Border>
-                <Border Grid.Row="2" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="360"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Exit on MSFS shutdown" Margin="5,10,0,10" FontSize="18"/>
-                        <CheckBox Grid.Column="1" x:Name="ckbExitWithFS" Content="" IsChecked="{Binding Path=ExitWithFS}" HorizontalAlignment="Left" Margin="20,0,0,0" Click="ckbBase_Click"/>
-                    </Grid>
-                </Border>
-                <Border Grid.Row="3" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="360"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Auto start job when Engine 1 is started" Margin="5,10,0,10" FontSize="18"/>
-                        <CheckBox Grid.Column="1" x:Name="ckbAutoStart" Content="" IsChecked="{Binding Path=AutoStartJob}" HorizontalAlignment="Left" Margin="21,6,0,6" Click="ckbBase_Click"/>
-                    </Grid>
-                </Border>
-                <Border Grid.Row="4" Name="ClearButtonBorder" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="360"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Auto finish job when Engine 1 shutdown" Margin="5,10,0,10" FontSize="18"/>
-                        <CheckBox Grid.Column="1" x:Name="ckbAutoFinish" Content="" IsChecked="{Binding Path=AutoFinishJob}" HorizontalAlignment="Left" Margin="20,0,0,0" Click="ckbBase_Click"/>
-                    </Grid>
-                </Border>
-                <Border Grid.Row="5" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="360"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Show landing data" Margin="5,10,0,10" FontSize="18"/>
-                            <CheckBox Grid.Column="1" x:Name="ckbShowLandingData" Content="" IsChecked="{Binding Path=ShowLandingData}" HorizontalAlignment="Left" Margin="20,0,0,0" Click="ckbBase_Click"/>
-                    </Grid>
-                </Border>
-                <StackPanel Grid.RowSpan="9" Grid.Column="1" Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
-                    <ui:AppBarButton x:Name="btnUpdateApp" Label="Update App" Margin="0,50,0,0" Click="btnUpdateApp_Click" >
-                        <ui:AppBarButton.Icon>
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE896;" />
-                        </ui:AppBarButton.Icon>
-                    </ui:AppBarButton>
-                </StackPanel>
-            </Grid>
-        </Border>
-    </DockPanel>
-    </Grid>
+            </DockPanel>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

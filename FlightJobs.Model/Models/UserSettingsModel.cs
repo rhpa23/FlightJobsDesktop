@@ -19,5 +19,6 @@
         public bool ShowLandingData { get; set; }
         public string ThemeName { get; set; }
         public string SimConnectStatus { get; set; }
+        public string SimbriefUsername { get; set; }
     }
 }

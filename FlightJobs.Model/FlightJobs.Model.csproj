@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -61,6 +64,8 @@
     <Compile Include="Models\FinishJobResponseModel.cs" />
     <Compile Include="Models\PilotLicenseExpensesModel.cs" />
     <Compile Include="Models\PilotLicenseExpensesUserModel.cs" />
+    <Compile Include="Models\RandomFlightModel.cs" />
+    <Compile Include="Models\SimBriefModel.cs" />
     <Compile Include="Models\UserRegisterModel.cs" />
     <Compile Include="Models\SearchJobTipsModel.cs" />
     <Compile Include="Models\StartJobResponseModel.cs" />
@@ -68,6 +73,9 @@
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserStatisticsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
