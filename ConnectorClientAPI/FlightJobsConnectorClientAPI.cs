@@ -15,8 +15,8 @@ namespace ConnectorClientAPI
     public class FlightJobsConnectorClientAPI
     {
         //public static string SITE_URL = "http://localhost:5646/";
-        public static string SITE_URL = "https://flightjobs.bsite.net/";
-        //public static string SITE_URL = "https://flightjobs.somee.com/";
+        //public static string SITE_URL = "https://flightjobs.bsite.net/";
+        public static string SITE_URL = "https://flightjobs.somee.com/";
         static HttpClient _client;
 
         public FlightJobsConnectorClientAPI()
@@ -373,7 +373,7 @@ namespace ConnectorClientAPI
             if (response.IsSuccessStatusCode)
             {
                 string json = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<IList<SearchJobTipsModel>>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
+                return JsonConvert.DeserializeObject<IList<SearchJobTipsModel>>(json);
             }
             else
             {
@@ -388,7 +388,7 @@ namespace ConnectorClientAPI
             if (response.IsSuccessStatusCode)
             {
                 string json = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<IList<SearchJobTipsModel>>(json.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", ""));
+                return JsonConvert.DeserializeObject<IList<SearchJobTipsModel>>(json);
             }
             else
             {
