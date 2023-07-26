@@ -4,6 +4,7 @@ using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
+using log4net;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,8 @@ namespace FlightJobsDesktop.Views.Modals
     {
         private NotificationManager _notificationManager;
         private IJobService _jobService;
+        
+        private static readonly ILog _log = LogManager.GetLogger(typeof(ConfirmJobModal));
 
         public ConfirmJobModal()
         {
@@ -49,6 +52,7 @@ namespace FlightJobsDesktop.Views.Modals
         {
             try
             {
+                GenerateView.ShowLoading();
                 var generateJobData = (GenerateJobViewModel)DataContext;
                 if (generateJobData.Capacity == null)
                 {
@@ -64,9 +68,14 @@ namespace FlightJobsDesktop.Views.Modals
                 generateJobData.JobItemList = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
                         .Map<IList<JobListItemModel>, IList<JobItemViewModel>>(listJobsModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Could not load data. Please try again later.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                GenerateView.HideLoading();
             }
         }
 

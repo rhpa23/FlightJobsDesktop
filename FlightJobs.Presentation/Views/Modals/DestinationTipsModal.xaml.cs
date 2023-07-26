@@ -4,6 +4,7 @@ using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
+using log4net;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace FlightJobsDesktop.Views.Modals
 
         private NotificationManager _notificationManager;
         private IJobService _jobService;
+        private static readonly ILog _log = LogManager.GetLogger(typeof(DestinationTipsModal));
 
         public TipsDataGridViewModel SelectedJobTip { get; set; }
         public bool CloneEvent { get; set; }
@@ -65,8 +67,9 @@ namespace FlightJobsDesktop.Views.Modals
                     DataContext = tipsDataGridViewModel;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Arrival jobs tips could not be loaded. Please try again later.", NotificationType.Error, "ModalArea");
             }
             finally
@@ -90,8 +93,9 @@ namespace FlightJobsDesktop.Views.Modals
                 CloneEvent = true;
                 ((Window)Parent).Close();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Clone job could not be run. Please try again later.", NotificationType.Error, "ModalArea");
             }
             finally

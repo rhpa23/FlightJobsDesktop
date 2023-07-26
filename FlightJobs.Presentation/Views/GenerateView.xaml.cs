@@ -5,12 +5,14 @@ using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views.Modals;
+using log4net;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace FlightJobsDesktop.Views
 {
@@ -19,11 +21,15 @@ namespace FlightJobsDesktop.Views
     /// </summary>
     public partial class GenerateView : Window
     {
+        internal static DockPanel _loadingPanel;
+        internal static StackPanel _loadingProgressPanel;
         private NotificationManager _notificationManager;
         private GenerateJobViewModel _generateJobViewModel;
         private IJobService _jobService;
 
-        private int _loadingCount;
+        private static readonly ILog _log = LogManager.GetLogger(typeof(GenerateView));
+
+        private static int _loadingCount;
 
         public GenerateView()
         {
@@ -36,6 +42,8 @@ namespace FlightJobsDesktop.Views
             _generateJobViewModel = generateJobViewModel;
             _notificationManager = new NotificationManager();
             _jobService = MainWindow.JobServiceFactory.Create();
+            _loadingPanel = LoadingPanel;
+            _loadingProgressPanel = LoadingProgressPanel;
         }
 
         private void UpdateFrameDataContext()
@@ -76,19 +84,20 @@ namespace FlightJobsDesktop.Views
             UpdateFrameDataContext();
         }
 
-        public void ShowLoading()
+        public static void ShowLoading(bool hideProgressPanel = false)
         {
-            LoadingPanel.Visibility = Visibility.Visible;
+            _loadingPanel.Visibility = Visibility.Visible;
+            _loadingProgressPanel.Visibility = hideProgressPanel ? Visibility.Collapsed : Visibility.Visible;
             _loadingCount++;
         }
 
-        public void HideLoading()
+        public static void HideLoading()
         {
             _loadingCount--;
 
             if (_loadingCount <= 0)
             {
-                LoadingPanel.Visibility = Visibility.Collapsed;
+                _loadingPanel.Visibility = Visibility.Collapsed;
                 _loadingCount = 0;
             }
         }
@@ -107,8 +116,9 @@ namespace FlightJobsDesktop.Views
                 _generateJobViewModel.CapacityList = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
                     .Map<IList<CustomPlaneCapacityModel>, IList<CapacityViewModel>>(capacitiesModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Data could not be loaded. Please try again later.", NotificationType.Error, "WindowAreaGenerateJob");
             }
         }
@@ -160,8 +170,9 @@ namespace FlightJobsDesktop.Views
                     _notificationManager.Show("Warning", "Select jobs to confirm.", NotificationType.Warning, "WindowAreaGenerateJob");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Data could not be Saved. Please try again later.", NotificationType.Error, "WindowAreaGenerateJob");
             }
             finally

@@ -2,6 +2,7 @@
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
+using log4net;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace FlightJobsDesktop.Views.Modals
 
         private NotificationManager _notificationManager;
         private IJobService _jobService;
+        private static readonly ILog _log = LogManager.GetLogger(typeof(AlternativeTipsModal));
 
         public TipsDataGridViewModel SelectedJobTip { get; set; }
 
@@ -51,8 +53,9 @@ namespace FlightJobsDesktop.Views.Modals
                     DataContext = tipsDataGridViewModel;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Alternative jobs tips could not be loaded. Please try again later.", NotificationType.Error, "ModalArea");
             }
             finally

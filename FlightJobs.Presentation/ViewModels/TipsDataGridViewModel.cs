@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlightJobs.Domain.Navdata.Utils;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -18,11 +19,8 @@ namespace FlightJobsDesktop.ViewModels
         public string AirportName { get; set; }
 
         public long Distance { get; set; }
-        
-        public string DistanceDesc { get { return $"{Distance} NM"; } }
-
         public long AirportRunwaySize { get; set; }
-        public string AirportRunwaySizeDesc { get { return $"{AirportRunwaySize} ft"; } }
+        public long AirportRunwaySizeMeters { get { return (long)DataConversionUtil.ConvertFeetToMeters(AirportRunwaySize); } }
 
         public int AirportElevation { get; set; }
         public string AirportElevationDesc { get { return $"{AirportElevation} ft"; } }

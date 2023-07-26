@@ -46,15 +46,28 @@ namespace FlightJobsDesktop.Views.Modals
         }
         private async void LoadCapacityList()
         {
-            var generateJobData = (GenerateJobViewModel)DataContext;
-            var capacitiesModel = await _jobService.GetPlaneCapacities(AppProperties.UserLogin.UserId);
-            generateJobData.CapacityList = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
-                .Map<IList<CustomPlaneCapacityModel>, IList<CapacityViewModel>>(capacitiesModel);
-
-            if (_lastCapacitySelected != null && generateJobData.CapacityList.Any(x => x.Id == _lastCapacitySelected.Id))
+            GenerateView.ShowLoading();
+            try
             {
-                generateJobData.Capacity = generateJobData.CapacityList.FirstOrDefault(x => x.Id == _lastCapacitySelected.Id);
-                lsvCapacityList.SelectedIndex = generateJobData.CapacityList.ToList().FindIndex(x => x.Id == _lastCapacitySelected.Id);
+                var generateJobData = (GenerateJobViewModel)DataContext;
+                var capacitiesModel = await _jobService.GetPlaneCapacities(AppProperties.UserLogin.UserId);
+                generateJobData.CapacityList = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
+                    .Map<IList<CustomPlaneCapacityModel>, IList<CapacityViewModel>>(capacitiesModel);
+
+                if (_lastCapacitySelected != null && generateJobData.CapacityList.Any(x => x.Id == _lastCapacitySelected.Id))
+                {
+                    generateJobData.Capacity = generateJobData.CapacityList.FirstOrDefault(x => x.Id == _lastCapacitySelected.Id);
+                    lsvCapacityList.SelectedIndex = generateJobData.CapacityList.ToList().FindIndex(x => x.Id == _lastCapacitySelected.Id);
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                GenerateView.HideLoading();
             }
         }
 
@@ -96,8 +109,9 @@ namespace FlightJobsDesktop.Views.Modals
                     File.Copy(filePath, destPath, true);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Logo image could not be saved. Please run as administrator.", NotificationType.Error, "WindowArea");
             }
         }
@@ -120,6 +134,7 @@ namespace FlightJobsDesktop.Views.Modals
         {
             try
             {
+                GenerateView.ShowLoading();
                 var generateJobData = (GenerateJobViewModel)DataContext;
                 var capacityModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg)
                     .Map<CapacityViewModel, CustomPlaneCapacityModel>(generateJobData.Capacity);
@@ -133,9 +148,14 @@ namespace FlightJobsDesktop.Views.Modals
                 _notificationManager.Show("Success", $"Capacity saved.", NotificationType.Success, "NotificationAreaCapacity");
                 LoadCapacityList();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Data could not be saved. Please try again later.", NotificationType.Error, "NotificationAreaCapacity");
+            }
+            finally
+            {
+                GenerateView.HideLoading();
             }
         }
 
@@ -143,6 +163,7 @@ namespace FlightJobsDesktop.Views.Modals
         {
             try
             {
+                GenerateView.ShowLoading();
                 var generateJobData = (GenerateJobViewModel)DataContext;
                 var capacityModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg)
                     .Map<CapacityViewModel, CustomPlaneCapacityModel>(generateJobData.Capacity);
@@ -157,9 +178,14 @@ namespace FlightJobsDesktop.Views.Modals
                     f.Hide();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Data could not be saved. Please try again later.", NotificationType.Error, "NotificationAreaCapacity");
+            }
+            finally
+            {
+                GenerateView.HideLoading();
             }
         }
 
