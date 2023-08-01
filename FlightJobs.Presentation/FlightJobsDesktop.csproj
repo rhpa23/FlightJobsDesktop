@@ -753,13 +753,16 @@
     <Resource Include="img\PilotExpenses\PilotCourseTrainingX.jpg" />
     <Resource Include="img\PilotExpenses\SimulatorTrainingX.jpg" />
     <Resource Include="img\PilotExpenses\WeatherExamX.jpg" />
-    <Content Include="web\img\arrival.png">
+    <Content Include="web\img\icons\alternative.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="web\img\departing.png">
+    <Content Include="web\img\icons\arrival.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="web\img\favorite.png">
+    <Content Include="web\img\icons\departing.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="web\img\icons\favorite.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="web\web-map.html">

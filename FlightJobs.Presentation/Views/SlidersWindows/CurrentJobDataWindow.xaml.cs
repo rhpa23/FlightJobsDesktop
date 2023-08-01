@@ -137,6 +137,7 @@ namespace FlightJobsDesktop.Views.SlidersWindows
 
         private void BtnShowFlightResults_Click(object sender, RoutedEventArgs e)
         {
+            FlightRecorderUtil.FlightRecorderList = FlightRecorderUtil.LoadFlightRecorderFile(_currentJobViewModel);
             ToggleResultsSlider(this.Width <= TARGET_WIDTH);
         }
         private void BtnCloseResults_Click(object sender, RoutedEventArgs e)
@@ -159,6 +160,9 @@ namespace FlightJobsDesktop.Views.SlidersWindows
 
                 if (radioButton.Name == RadioAltitude.Name)
                 {
+                    WindowsChartArea.Visibility = Visibility.Visible;
+                    RouteMapPanel.Visibility = Visibility.Collapsed;
+
                     FlightRecorderUtil.UpdateChartVerticalProfile(ChartFlightRecorder);
 
                     _currentJobViewModel.FlightRecorderAnalise.AverageFuelConsumption = 
@@ -168,11 +172,26 @@ namespace FlightJobsDesktop.Views.SlidersWindows
                 }
                 else if (radioButton.Name == RadioSpeed.Name)
                 {
+                    WindowsChartArea.Visibility = Visibility.Visible;
+                    RouteMapPanel.Visibility = Visibility.Collapsed;
+
                     FlightRecorderUtil.UpdateChartSpeed(ChartFlightRecorder);
                 }
                 else if (radioButton.Name == RadioFuel.Name)
                 {
+                    WindowsChartArea.Visibility = Visibility.Visible;
+                    RouteMapPanel.Visibility = Visibility.Collapsed;
+
                     FlightRecorderUtil.UpdateChartFuel(ChartFlightRecorder);
+                }
+                else if (radioButton.Name == RadioRoteMap.Name)
+                {
+                    WindowsChartArea.Visibility = Visibility.Collapsed;
+                    RouteMapPanel.Visibility = Visibility.Visible;
+
+                    var htmlText = FlightRecorderUtil.GetRouteMapHtmlText();
+
+                    RouteMapWebView.NavigateToString(htmlText);
                 }
             }
         }

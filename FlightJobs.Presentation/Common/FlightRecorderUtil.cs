@@ -129,6 +129,14 @@ namespace FlightJobsDesktop.Common
             }
         }
 
+        internal static string GetRouteMapHtmlText()
+        {
+            string jsonFlRec = JsonConvert.SerializeObject(FlightRecorderList);
+            string htmlText = File.ReadAllText("web/web-map.html");
+
+            return htmlText.Replace("MARKERS_LIST_REPLACEMENT", jsonFlRec);
+        }
+
         internal static double GetAverageFuelConsumption(long distance)
         {
             if (FlightRecorderList.Count <= 0) return 0;

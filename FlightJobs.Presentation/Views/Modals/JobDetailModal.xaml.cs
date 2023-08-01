@@ -60,6 +60,9 @@ namespace FlightJobsDesktop.Views.Modals
 
             if (radioButton.Name == RadioAltitude.Name)
             {
+                WindowsChartArea.Visibility = Visibility.Visible;
+                RouteMapPanel.Visibility = Visibility.Collapsed;
+
                 FlightRecorderUtil.UpdateChartVerticalProfile(ChartFlightRecorder);
                 DataContext = new FlightRecorderAnaliseViewModel()
                 {
@@ -69,11 +72,26 @@ namespace FlightJobsDesktop.Views.Modals
             }
             else if (radioButton.Name == RadioSpeed.Name)
             {
+                WindowsChartArea.Visibility = Visibility.Visible;
+                RouteMapPanel.Visibility = Visibility.Collapsed;
+
                 FlightRecorderUtil.UpdateChartSpeed(ChartFlightRecorder);
             }
             else if (radioButton.Name == RadioFuel.Name)
             {
+                WindowsChartArea.Visibility = Visibility.Visible;
+                RouteMapPanel.Visibility = Visibility.Collapsed;
+
                 FlightRecorderUtil.UpdateChartFuel(ChartFlightRecorder);
+            }
+            else if (radioButton.Name == RadioRoteMap.Name)
+            {
+                WindowsChartArea.Visibility = Visibility.Collapsed;
+                RouteMapPanel.Visibility = Visibility.Visible;
+
+                var htmlText = FlightRecorderUtil.GetRouteMapHtmlText();
+
+                RouteMapWebView.NavigateToString(htmlText);
             }
         }
     }

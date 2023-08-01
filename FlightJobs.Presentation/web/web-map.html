@@ -1,72 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-      crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
-        integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
-        crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" crossorigin="">
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" crossorigin=""></script>
+
+    <style>
+        #mapid {
+            height: 350px;
+        }
+
+        .map-container {
+            margin-top: 0px;
+            border: 1px solid #D1D3D4;
+            display: block;
+        }
+    </style>
+
 </head>
-<style>
-.map-container {
-	margin-top: 10px;
-	border: 1px solid #D1D3D4;
-	width:100%;
-    height: 100%;
-}
-* { padding: 0; margin: 10; }
-html, body {
-    height: 94%;
-}
-
-</style>
-<body scroll="no">
-
-<div id="mapContainer" class="map-container"></div>
-
+<body>
+    <div id="mapContainer" class="map-container">
+    </div>
 </body>
 </html>
+
 <script>
-	//ShowMap();
-	
-	
-    function ShowMap(markers) {
-		var mymap = L.map('mapContainer');
-		var bounds = new L.latLngBounds();
+    const markers = MARKERS_LIST_REPLACEMENT
+
+    ShowMap();
+
+    function ShowMap() {
+        document.getElementById('mapContainer').innerHTML = "<div id='mapid'></div>";
+        var mymap = L.map('mapid');
+        var bounds = new L.latLngBounds();
         var flight_path = [];
 
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-            {
-                attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-                maxZoom: 18
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }
         ).addTo(mymap);
 
-		for(var i = 0, len = markers.length; i < len; ++i) {
-			var marker = markers[i];
+        let landingLightOn = false;
+
+        markers.forEach(function (marker) {
+
             var marker_icon = L.icon({
-                iconUrl: marker.icon_url,
-                iconAnchor: [marker.icon_center_x, marker.icon_center_y]
+                iconUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAChSURBVChTY6A9KK+Zrl9e3sEP5cIBE5QGg5yCnf2Pn0VfuP8i60NOwZZ6qDAYMEJphurqZvmb9wIe/PrLzvD//z+Gf/++M+io7BTo7Kz4CJKHm/jvH5vCt28vGX5+B+IfLxh+fHvMwMLyWwAqjTARBFzceu///COu8P//HwZR4bcb1q8pDoRKobpxz65iRXmZew0qig8K1JRfJUCFaQIYGAAAlz3n2W9jSAAAAABJRU5ErkJggg==",
+                iconAnchor: [8, 8],
+                iconSize: [12, 12]
             });
 
-            var m = L.marker([marker.lat, marker.lng], { icon: marker_icon }).addTo(mymap);
-            m.bindPopup('<strong>' + marker.name + '</strong><br/>' +
-                marker.info + ' <br/> Runway size: ' +
-                marker.runway_size + '<br/>Elevation: ' +
-                marker.elevation + '<br/>Trasition: ' +
-                marker.trasition + '<br/><input type="button" value="Add to departure" onclick="setInputValue(\'Departure\', \'' + marker.icao + '\'); CalcDistance(); LoadMapInfo();" class="btn btn-defaut btn-xs">'
-                + '<br/><input type="button" value="Add to destination" onclick="setInputValue(\'Arrival\', \'' + marker.icao + '\'); CalcDistance(); LoadMapInfo();" class="btn btn-defaut btn-xs" style="margin-top:5px;">'
-                + '<br/><input type="button" value="Add to alternative" onclick="setInputValue(\'Alternative\', \'' + marker.icao + '\'); CalcDistance(); LoadMapInfo();" class="btn btn-defaut btn-xs" style="margin-top:5px;">');
+            if (marker.LightLandingOn != landingLightOn) {
 
-            if (marker.isRoute) {
-                flight_path.push([marker.lat, marker.lng]);
+                let landingTooltip = marker.LightLandingOn ? 'Landing light ON' : 'Landing light OFF';
 
-                bounds.extend([marker.lat, marker.lng]);
+                var m = L.marker([marker.Latitude, marker.Longitude], { icon: marker_icon }).addTo(mymap);
+
+                //.bindTooltip(landingTooltip, { direction: 'right' });
+
+                m.bindPopup('<strong>' + landingTooltip + '</strong>' +
+                    '<br/>Altitude: ' + marker.Altitude + 'ft' +
+                    '<br/>True speed: ' + marker.Speed + 'Kts' +
+                    '<br/>Altimeter: ' + marker.AltimeterInMillibars + 'mb' +
+                    '<br/>Fuel weight:' + marker.FuelWeightKilograms + 'Kg');
+
+                landingLightOn = marker.LightLandingOn;
+
+            } else {
+                L.marker([marker.Latitude, marker.Longitude], { icon: marker_icon, opacity: 0 }).addTo(mymap);
             }
-        }
-		
-		if (flight_path.length > 0) {
+
+            
+
+            //markerButtonsDef = '<br/><input type="button" value="Add to departure" onclick="updateURL(\'departure\', \'' + marker.icao + '\');" class="btn btn-defaut btn-xs">'
+            //    + '<br/><input type="button" value="Add to destination" onclick="updateURL(\'arrival\', \'' + marker.icao + '\');" class="btn btn-defaut btn-xs" style="margin-top:5px;">'
+            //    + '<br/><input type="button" value="Add to alternative" onclick="updateURL(\'alternative\', \'' + marker.icao + '\');" class="btn btn-defaut btn-xs" style="margin-top:5px;">';
+
+            //m.bindPopup('<strong>' + marker.name + '</strong><br/>' +
+            //    marker.info + ' <br/> Runway size: ' +
+            //    marker.runway_size + '<br/>Elevation: ' +
+            //    marker.elevation + '<br/>Trasition: ' +
+            //    marker.trasition + markerButtonsDef);
+
+            //if (marker.isRoute) {
+                flight_path.push([marker.Latitude, marker.Longitude]);
+
+                bounds.extend([marker.Latitude, marker.Longitude]);
+            //}
+        });
+
+        if (flight_path.length > 0) {
 
             L.polyline(flight_path, { color: '#5bc0de' }).addTo(mymap);
 
@@ -75,11 +98,5 @@ html, body {
         else {
             mymap.setView([48.865195, 2.321033], 2);
         }
-
     }
-	
-	function setInputValue(inputId, inputValue) {
-		window.external.notify(inputId + '#' + inputValue);
-    }
-	
 </script>
