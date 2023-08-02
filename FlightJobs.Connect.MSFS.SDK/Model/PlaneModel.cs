@@ -56,17 +56,17 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
                 NotifyPropertysChanged("PayloadPoundsText", "PayloadPoundsAndKilogramsText"); }
         }
         public string PayloadPoundsText { get; set; }
-        public string PayloadPoundsAndKilogramsText { 
-            get { return string.IsNullOrEmpty(PayloadPoundsText) || string.IsNullOrEmpty(PayloadKilogramsText) ? "" : $"{PayloadPoundsText} / {PayloadKilogramsText}"; }  }
+        public string PayloadPoundsAndKilogramsText {
+            get { return string.IsNullOrEmpty(PayloadPoundsText) || string.IsNullOrEmpty(PayloadKilogramsText) ? "" : $"{PayloadPoundsText} / {PayloadKilogramsText}"; } }
 
         private double _fuelWeightPounds;
         public double FuelWeightPounds
         {
             get { return _fuelWeightPounds; }
-            set { _fuelWeightPounds = value; FuelWeightPoundsText = $"{string.Format("{0:N0}", value)} Lb"; 
+            set { _fuelWeightPounds = value; FuelWeightPoundsText = $"{string.Format("{0:N0}", value)} Lb";
                 NotifyPropertysChanged("FuelWeightPoundsText", "FuelWeightPoundsAndKilogramsText"); }
         }
-        public string FuelWeightPoundsAndKilogramsText { 
+        public string FuelWeightPoundsAndKilogramsText {
             get { return string.IsNullOrEmpty(FuelWeightPoundsText) || string.IsNullOrEmpty(FuelWeightKilogramsText) ? "" : $"{FuelWeightPoundsText} / {FuelWeightKilogramsText}"; } }
         public string FuelWeightPoundsText { get; set; }
 
@@ -74,7 +74,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         public double PayloadKilograms
         {
             get { return _payloadKilograms; }
-            set { _payloadKilograms = value; PayloadKilogramsText = $"{string.Format("{0:N0}", value)} Kg"; 
+            set { _payloadKilograms = value; PayloadKilogramsText = $"{string.Format("{0:N0}", value)} Kg";
                 NotifyPropertysChanged("PayloadKilogramsText", "PayloadPoundsAndKilogramsText"); }
         }
         public string PayloadKilogramsText { get; set; }
@@ -83,7 +83,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         public double FuelWeightKilograms
         {
             get { return _fuelWeightKilograms; }
-            set { _fuelWeightKilograms = value; FuelWeightKilogramsText = $"{string.Format("{0:N0}", value)} Kg"; 
+            set { _fuelWeightKilograms = value; FuelWeightKilogramsText = $"{string.Format("{0:N0}", value)} Kg";
                 NotifyPropertysChanged("FuelWeightKilogramsText", "FuelWeightPoundsAndKilogramsText"); }
         }
         public string FuelWeightKilogramsText { get; set; }
@@ -92,7 +92,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         public int TouchdownFpm
         {
             get { return _touchdownFpm; }
-            set { _touchdownFpm = value; 
+            set { _touchdownFpm = value;
                 NotifyPropertysChanged("TouchdownFpm", "ScoreTouchdown", "ColorResultTouchdownFpm"); }
         }
 
@@ -137,8 +137,8 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         public double TouchdownCrosswind
         {
             get { return _touchdownCrosswind; }
-            set { _touchdownCrosswind = value;  
-                NotifyPropertysChanged("TouchdownCrosswindText", "ScoreWindAngle", "ColorResultTouchdownWindAngle"); 
+            set { _touchdownCrosswind = value;
+                NotifyPropertysChanged("TouchdownCrosswindText", "ScoreWindAngle", "ColorResultTouchdownWindAngle");
             }
         }
 
@@ -146,7 +146,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         public double TouchdownHeadwind
         {
             get { return _touchdownHeadwind; }
-            set { _touchdownHeadwind = value; TouchdownHeadwindText = $"{Math.Abs(_touchdownHeadwind)} kts"; 
+            set { _touchdownHeadwind = value; TouchdownHeadwindText = $"{Math.Abs(_touchdownHeadwind)} kts";
                 NotifyPropertysChanged("TouchdownHeadwindText", "ScoreWindAngle", "TouchdownWindAngle");
             }
         }
@@ -165,7 +165,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         public double TouchdownGForce
         {
             get { return _touchdownGForce; }
-            set { _touchdownGForce = value; TouchdownGForceText = $"{_touchdownGForce}G"; 
+            set { _touchdownGForce = value; TouchdownGForceText = $"{_touchdownGForce}G";
                 NotifyPropertysChanged("TouchdownGForceText", "ScoreGForce", "ColorResultGForce"); }
         }
         public string TouchdownGForceText { get; set; }
@@ -197,7 +197,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
             get { return _centerLineDerivation; }
             set
             {
-                _centerLineDerivation = value; 
+                _centerLineDerivation = value;
                 NotifyPropertysChanged("TouchdownCenterDerivation", "ScoreCenterDerivation", "ColorResultCenterDerivation");
             }
         }
@@ -208,7 +208,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
             get { return _thresholdDistance; }
             set
             {
-                _thresholdDistance = value; 
+                _thresholdDistance = value;
                 NotifyPropertysChanged("TouchdownThresholdDistance", "ScoreLandDistance", "ColorResultLandDistance");
             }
         }
@@ -273,7 +273,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         }
 
         public string ColorResultGForce
-        { 
+        {
             get { return GForceResult.GetColor(TouchdownGForce); }
         }
 
@@ -345,10 +345,44 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
             get { return LandDistanceResult.GetScore(TouchdownThresholdDistance, TouchdownRunwayLength); }
         }
 
-        public int ScoreLightLandingOn { get; set; }
-        public int ScoreLightBeaconOn { get; set; }
-        public int ScoreLightNavigationOn { get; set; }
-        public int ScoreAltimeterSettings { get; set; }
+        private int _scoreLightLandingOn;
+        public int ScoreLightLandingOn
+        {
+            get { return _scoreLightLandingOn; }
+            set
+            {
+                _scoreLightLandingOn = value; NotifyPropertyChanged();
+            }
+        }
 
+        private int _scoreLightBeaconOn;
+        public int ScoreLightBeaconOn
+        {
+            get { return _scoreLightBeaconOn; }
+            set
+            {
+                _scoreLightBeaconOn = value; NotifyPropertyChanged();
+            }
+        }
+
+        private int _scoreLightNavigationOn;
+        public int ScoreLightNavigationOn
+        {
+            get { return _scoreLightNavigationOn; }
+            set
+            {
+                _scoreLightNavigationOn = value; NotifyPropertyChanged();
+            }
+        }
+
+        private int _scoreAltimeterSettings;
+        public int ScoreAltimeterSettings
+        {
+            get { return _scoreAltimeterSettings; }
+            set
+            {
+                _scoreAltimeterSettings = value; NotifyPropertyChanged();
+            }
+        }
     }
 }

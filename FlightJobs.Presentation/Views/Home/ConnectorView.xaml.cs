@@ -506,17 +506,17 @@ namespace FlightJobsDesktop.Views.Home
                     _jumpCheckFinishTime = DateTime.Now.AddSeconds(3);
                     CheckForFinishJob();
                 }
-
-                if (DateTime.Now > _jumpValidationsTime) // wait 5 seconds to check again
-                {
-                    _jumpValidationsTime = DateTime.Now.AddSeconds(5);
-                    ValidateLightsResults();
-                    ValidateAltimeterResults();
-                }
             }
             else
             {
                 ChecktakeoffData();
+            }
+
+            if (DateTime.Now > _jumpValidationsTime) // wait 5 seconds to check again
+            {
+                _jumpValidationsTime = DateTime.Now.AddSeconds(5);
+                ValidateLightsResults();
+                ValidateAltimeterResults();
             }
 
             if (DateTime.Now > _jumpFlightDataTime && _isJobStarted)
