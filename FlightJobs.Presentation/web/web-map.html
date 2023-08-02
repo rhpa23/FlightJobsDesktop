@@ -41,52 +41,53 @@
         ).addTo(mymap);
 
         let landingLightOn = false;
+        let onGround = true;
 
         markers.forEach(function (marker) {
 
-            var marker_icon = L.icon({
-                iconUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAChSURBVChTY6A9KK+Zrl9e3sEP5cIBE5QGg5yCnf2Pn0VfuP8i60NOwZZ6qDAYMEJphurqZvmb9wIe/PrLzvD//z+Gf/++M+io7BTo7Kz4CJKHm/jvH5vCt28vGX5+B+IfLxh+fHvMwMLyWwAqjTARBFzceu///COu8P//HwZR4bcb1q8pDoRKobpxz65iRXmZew0qig8K1JRfJUCFaQIYGAAAlz3n2W9jSAAAAABJRU5ErkJggg==",
-                iconAnchor: [8, 8],
-                iconSize: [12, 12]
-            });
+            let iconBase64Url = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAChSURBVChTY6A9KK+Zrl9e3sEP5cIBE5QGg5yCnf2Pn0VfuP8i60NOwZZ6qDAYMEJphurqZvmb9wIe/PrLzvD//z+Gf/++M+io7BTo7Kz4CJKHm/jvH5vCt28vGX5+B+IfLxh+fHvMwMLyWwAqjTARBFzceu///COu8P//HwZR4bcb1q8pDoRKobpxz65iRXmZew0qig8K1JRfJUCFaQIYGAAAlz3n2W9jSAAAAABJRU5ErkJggg==";
+            let toolTipTitle = "Marker";
+            let highlightMarker = false;
+            let iconMarkerSize = [15, 15];
+
+            if (marker.OnGround != onGround) {
+                highlightMarker = true;
+                toolTipTitle = marker.OnGround ? "Touchdown point" : "Takeoff point";
+                iconBase64Url = marker.OnGround ? "data:image/png;base64,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" : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4woMEhkyEBfrEwAABOZJREFUSMetV11rXEUYfp45s9ns1japNKIhiduV2qJYCqmhlNbd0lPFSpPLqghKQVAUxBsvxAvpDygUtIKgWBEFi9C0UihZaLZQIcbVGr3QChabmmpbm4a2SfZj5vViz9lMJruJogeWfWfOzPv1vF+HYZgnAGLhIQDxaHcPTdat7rWkdbTQAExEE4AFoCLaRLREvyB6j4g2Hq2itXX4mUiGxHd1dMi9YCIm4ijgCjUR7SqrHDo+6yqw5J5yXOAK9V3sW6odRsrzlvj8BMQrmVEzMjJqU2q+BkAYhvnAuRx4GvuWui6NLa01uRcL1YXCaOXR/L41ItwpYA8hE+lgbtz1e+DhuxKmyoNokaWEBCOFYqU/N/SkiBwWcEPk3PKsSeeUw0RaBFIzl7pWww1GTWM69Qynqx2Z/tzQcUJOxUIjHJICDMSRy3QwZ9tUFW2qatN6zmrWqGlMh75tNY1KBWXTlfzLataYDuZrSVWBpmFaz9l2VYZmTQqF0eqG9hu4ONd3VMASgCGJdPPyb5L7927mxTt9CQs1EFtKQFnQEEICSqLUIMBoX9UxoSUkACBS3+8S8BMAa1ok8iyAU5q1F/Svd9Z3WuAYgF0ALB1AATboVvuLLaJepnqMKdiXApiJdclpUQLpBTAD4DyB67KQ7Fqifzp0vE9n7bxvJvQSgAOl4vC27tTVibsSs8G8SQb86lVg+zvAjl1PrCpL2xoR1Q3IAwI+C2AIK9TJVg8hEPBlRfv5/anLM9PVThDSqIwMw7yqW0EDCDStOvTg2erD79YZ9OeGdgJ4BsBmABsBrGsuqKFUmZAxC/Xct8Xjk2GYTzhRH+c3GIb5gBBaKIkCpVEoCDF9qSv2g5MXpD83uAXgMIC+ZXAsKtjXOxK3Ju5NXrN/lLu0k6J0i5QCINPVju7btXRnG02tUBg1SVVBQFsbKRTND7c29vTnhg4T+G4ZoVMA3ioVh/Or9a0JAHSEBr5QAML+3OBugl8IcBP1QCgp2PfGiycvbM0NHo6wXrcMlm8A+Gj8tRPXwiP5gAsFye9OrgLgQH5fpxH1PoCnCKT/YfBUCIwR8vR48cRUGObbmpTSoEW3q3en3tTUzOZVv+xXsDsE+BHeVACvfQG4rGB3t6u5cE/X2StR8Pil1G+xbnu0AKBmqqvVpco9id701PlScfgRAG8KcL3JSHIVwMFScbi3L/37uWRQla9vbkms4FLf0rgHIMhmMyQgZZtU67MZfe7M6WJPZuNnAioA2yLZbxPyYu7usS/TPQO6bJPkAo5wLGmlgN94JMhmM7GLQMBmsxndHpTvnDtz+lR3ZtMkgEOl4vDHD224r/JnpQtc6MO2Caa+pe7Is6ituoPAkhlp+9pvqgeP3RYneOLRxS3hzfIUy/R1iQUrZ5qAo+VyE4drdbNZzR8g3HsBAMOjB4DnP8R/fh7f85i2opqNQq6ljcGCW3ODmwTcy8ZgtkhLW49uUQI2enL9jKg6CQHQrmg/XZ+enLxR6Uw0wd/3XMNNAJEA6xiTkgCjGYqSiM+SEgeKIut3SWgSFCFnaynlWKe8qbTmGqQH1n7/85Hjv/30P7i6bd4m6VjnYlqNBMZQLIlqP03E035JngpQ48qY+l8a4o+3/icIVohey4X0+lfzt3a8ZRyt3V5hm+y7tPF4+Pzo4Nvg8zeI11quzOW5RAAAAABJRU5ErkJggg=="
+                iconMarkerSize = [30, 30];
+                onGround = marker.OnGround;
+            }
 
             if (marker.LightLandingOn != landingLightOn) {
+                highlightMarker = true;
+                toolTipTitle = marker.LightLandingOn ? 'Landing light ON' : 'Landing light OFF';
 
-                let landingTooltip = marker.LightLandingOn ? 'Landing light ON' : 'Landing light OFF';
+                landingLightOn = marker.LightLandingOn;
+            }
 
+            var marker_icon = L.icon({
+                iconUrl: iconBase64Url,
+                iconAnchor: [8, 8],
+                iconSize: iconMarkerSize
+            });
+
+            if (highlightMarker) {
                 var m = L.marker([marker.Latitude, marker.Longitude], { icon: marker_icon }).addTo(mymap);
 
-                //.bindTooltip(landingTooltip, { direction: 'right' });
-
-                m.bindPopup('<strong>' + landingTooltip + '</strong>' +
+                m.bindPopup('<strong>' + toolTipTitle + '</strong>' +
                     '<br/>Altitude: ' + marker.Altitude + 'ft' +
                     '<br/>True speed: ' + marker.Speed + 'Kts' +
                     '<br/>Altimeter: ' + marker.AltimeterInMillibars + 'mb' +
                     '<br/>Fuel weight:' + marker.FuelWeightKilograms + 'Kg');
-
-                landingLightOn = marker.LightLandingOn;
-
             } else {
+                marker_icon.iconSize = [0, 0];
                 L.marker([marker.Latitude, marker.Longitude], { icon: marker_icon, opacity: 0 }).addTo(mymap);
             }
 
-            
+            flight_path.push([marker.Latitude, marker.Longitude]);
 
-            //markerButtonsDef = '<br/><input type="button" value="Add to departure" onclick="updateURL(\'departure\', \'' + marker.icao + '\');" class="btn btn-defaut btn-xs">'
-            //    + '<br/><input type="button" value="Add to destination" onclick="updateURL(\'arrival\', \'' + marker.icao + '\');" class="btn btn-defaut btn-xs" style="margin-top:5px;">'
-            //    + '<br/><input type="button" value="Add to alternative" onclick="updateURL(\'alternative\', \'' + marker.icao + '\');" class="btn btn-defaut btn-xs" style="margin-top:5px;">';
+            bounds.extend([marker.Latitude, marker.Longitude]);
 
-            //m.bindPopup('<strong>' + marker.name + '</strong><br/>' +
-            //    marker.info + ' <br/> Runway size: ' +
-            //    marker.runway_size + '<br/>Elevation: ' +
-            //    marker.elevation + '<br/>Trasition: ' +
-            //    marker.trasition + markerButtonsDef);
-
-            //if (marker.isRoute) {
-                flight_path.push([marker.Latitude, marker.Longitude]);
-
-                bounds.extend([marker.Latitude, marker.Longitude]);
-            //}
         });
 
         if (flight_path.length > 0) {

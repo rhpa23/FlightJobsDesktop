@@ -278,7 +278,7 @@ namespace FlightJobsDesktop.Views.Home
                             _currentJob.PlaneSimData.TouchdownCenterDerivation = landingHelper.GetCenterLineDistance(rwy);
                             _currentJob.PlaneSimData.TouchdownThresholdDistance = landingHelper.GetTouchdownThresholdDistance(rwy);
                             _currentJob.PlaneSimData.TouchdownRunwayDesignator = rwy.Name;
-                            _currentJob.PlaneSimData.ColorResultTouchdownWindAngle = WindAngleResult.GetColor(_currentJob.PlaneSimData.TouchdownWindAngle);
+                            _currentJob.PlaneSimData.ColorResultTouchdownWindAngle = WindAngleResult.GetColor(_currentJob.PlaneSimData.TouchdownWindAngle, _currentJob.PlaneSimData.TouchdownWindSpeed);
                             CalculateScoreData();
                             SetupResultsMessags();
 

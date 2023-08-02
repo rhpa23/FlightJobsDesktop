@@ -8,10 +8,11 @@ namespace FlightJobs.Connect.MSFS.SDK.Model.Results
 {
     public class WindAngleResult : ResultBase
     {
-        private static ResultEnum Validade(int windAngle)
+        private static ResultEnum Validade(int windAngle, double windSpped)
         {
             if (windAngle < -140 && windAngle > -220 ||
-                windAngle > 140 && windAngle < 220)
+                windAngle > 140 && windAngle < 220 ||
+                windSpped <= 3)
                 return ResultEnum.Good;
             else if (windAngle < -90 && windAngle > -270 ||
                     (windAngle > 90 && windAngle < 270))
@@ -20,18 +21,18 @@ namespace FlightJobs.Connect.MSFS.SDK.Model.Results
                 return ResultEnum.Bad;
         }
 
-        public static string GetColor(int windAngle)
+        public static string GetColor(int windAngle, double windSpped)
         {
-            if (Validade(windAngle) == ResultEnum.Bad)
+            if (Validade(windAngle, windSpped) == ResultEnum.Bad)
             {
                 return "Red";
             }
             return "Green";
         }
 
-        public static int GetScore(int windAngle)
+        public static int GetScore(int windAngle, double windSpped)
         {
-            switch (Validade(windAngle))
+            switch (Validade(windAngle, windSpped))
             {
                 case ResultEnum.Good:
                     return 0;

@@ -319,7 +319,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
 
         public int ScoreWindAngle
         {
-            get { return WindAngleResult.GetScore(TouchdownWindAngle); }
+            get { return WindAngleResult.GetScore(TouchdownWindAngle, TouchdownWindSpeed); }
         }
 
         public string ColorResultCenterDerivation
