@@ -236,6 +236,12 @@ namespace FlightJobsDesktop.Views.Home
                             var rwy = takeoffHelper.GetRunway(takeoffAirport.Runways);
 
                             _currentJob.PlaneSimData.TakeoffCenterDerivation = takeoffHelper.GetCenterLineDistance(rwy);
+
+                            // add pecision to takeoff Flight recorder
+                            var fRecorder = new FlightRecorderViewModel(FlightJobsConnectSim.PlaneSimData);
+                            fRecorder.TimeUtc = DateTime.UtcNow;
+                            fRecorder.OnGround = false;
+                            FlightRecorderUtil.FlightRecorderList.Add(fRecorder);
                         }
                         else
                         {
@@ -284,6 +290,12 @@ namespace FlightJobsDesktop.Views.Home
 
                             _sliderTouchdownWindow.ToggleSlider(true, 15);
                             _sliderTouchdownWindow.DataContext = _currentJob;
+
+                            // add pecision to landing Flight recorder
+                            var fRecorder = new FlightRecorderViewModel(FlightJobsConnectSim.PlaneSimData);
+                            fRecorder.TimeUtc = DateTime.UtcNow;
+                            fRecorder.OnGround = true;
+                            FlightRecorderUtil.FlightRecorderList.Add(fRecorder);
                         }
                         else
                         {

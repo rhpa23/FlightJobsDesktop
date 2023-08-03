@@ -122,6 +122,8 @@ namespace FlightJobsDesktop
             this.Hide();
             ShowInTaskbar = false;
             e.Cancel = true;
+
+            _notificationManager.ShowButtonWindow("FlightJobs still running in the system tray.");
         }
 
         private void ShowMainWindow()

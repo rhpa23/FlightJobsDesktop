@@ -81,7 +81,7 @@
                     '<br/>Fuel weight:' + marker.FuelWeightKilograms + 'Kg');
             } else {
                 marker_icon.iconSize = [0, 0];
-                L.marker([marker.Latitude, marker.Longitude], { icon: marker_icon, opacity: 0 }).addTo(mymap);
+                L.marker([marker.Latitude, marker.Longitude], { icon: marker_icon, opacity: 0, interactive: false  }).addTo(mymap);
             }
 
             flight_path.push([marker.Latitude, marker.Longitude]);

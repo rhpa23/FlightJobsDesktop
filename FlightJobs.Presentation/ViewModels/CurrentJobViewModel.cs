@@ -127,5 +127,63 @@ namespace FlightJobsDesktop.ViewModels
             get { return _finishIsEnable; }
             set { _finishIsEnable = value; OnPropertyChanged(); }
         }
+
+        public static CurrentJobViewModel Copy(CurrentJobViewModel currentJob)
+        {
+            return new CurrentJobViewModel()
+            {
+                AlternativeICAO = currentJob.AlternativeICAO,
+                AlternativeLatitude = currentJob.AlternativeLatitude,
+                AlternativeLongitude = currentJob.AlternativeLongitude,
+                ArrivalICAO = currentJob.ArrivalICAO,
+                ArrivalLatitude = currentJob.ArrivalLatitude,
+                ArrivalLongitude = currentJob.ArrivalLongitude,
+                AviationType = currentJob.AviationType,
+                Cargo = currentJob.Cargo,
+                ChallengeCreatorUserId = currentJob.ChallengeCreatorUserId,
+                ChallengeExpirationDate = currentJob.ChallengeExpirationDate,
+                ChallengeType = currentJob.ChallengeType,
+                DepartureICAO = currentJob.DepartureICAO,
+                DepartureLatitude = currentJob.DepartureLatitude,
+                DepartureLongitude = currentJob.DepartureLongitude,
+                Dist = currentJob.Dist,
+                EndTime = currentJob.EndTime,
+                FinishFuelWeight = currentJob.FinishFuelWeight,
+                FinishIsEnable = currentJob.FinishIsEnable,
+                FirstClass = currentJob.FirstClass,
+                FlightRecorderAnalise = currentJob.FlightRecorderAnalise,
+                FlightResults = currentJob.FlightResults,
+                FlightTime = currentJob.FlightTime,
+                FlightTimeHours = currentJob.FlightTimeHours,
+                Id = currentJob.Id,
+                InProgress = currentJob.InProgress,
+                IsActivated = currentJob.IsActivated,
+                IsChallenge = currentJob.IsChallenge,
+                IsConnectedColor = currentJob.IsConnectedColor,
+                IsDone = currentJob.IsDone,
+                JobSummary = currentJob.JobSummary,
+                Month = currentJob.Month,
+                LastJob = currentJob.LastJob,
+                ModelDescription = currentJob.ModelDescription,
+                ModelName = currentJob.ModelName,
+                IsChallengeFromCurrentUser = currentJob.IsChallengeFromCurrentUser,
+                MsgResults = currentJob.MsgResults,
+                Pax = currentJob.Pax,
+                PaxWeight = currentJob.PaxWeight,
+                Pay = currentJob.Pay,
+                Payload = currentJob.Payload,
+                PlaneSimData = currentJob.PlaneSimData,
+                PayloadLabelColor = currentJob.PayloadLabelColor,
+                Score = currentJob.Score,
+                User = currentJob.AlternativeICAO,
+                SimData = currentJob.SimData,
+                SliderMessage = currentJob.SliderMessage,
+                SliderTopTitle = currentJob.SliderTopTitle,
+                StartFuelWeight = currentJob.StartFuelWeight,
+                WeightUnit = currentJob.WeightUnit,
+                StartTime = currentJob.StartTime,
+                UsedFuelWeight = currentJob.UsedFuelWeight
+            };
+        }
     }
 }

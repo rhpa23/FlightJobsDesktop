@@ -76,7 +76,7 @@
                                 <Button x:Name="BtnEdit" Content="Edit" Width="140" Margin="0,10,0,0" Visibility="Collapsed" Click="BtnEdit_Click" />
                                 <Button x:Name="BtnLedger" Content="Ledger balance" Width="140" Margin="0,10,0,0" Click="BtnLedger_Click" />
                                 <Button x:Name="BtnDebts" Content="Debts" Width="140" Margin="0,10,0,0" Visibility="Collapsed" Click="BtnDebts_Click" />
-                                <Button x:Name="BtnScoreRank" Content="Score rank" Width="140" Margin="0,10,0,0" />
+                                <Button x:Name="BtnScoreRank" Content="Score rank" Width="140" Margin="0,10,0,0" Click="BtnScoreRank_Click" />
                                 <Button x:Name="BtnPilotsHired" Content="Pilots hired" Width="140" Margin="0,10,0,0" Click="BtnPilotsHired_Click" />
                                 <Button x:Name="BtnFbo" Content="FBO" Width="140" Margin="0,10,0,0" Visibility="Collapsed" Click="BtnFbo_Click" />
                                 <Button x:Name="BtnExit" Content="Exit" Width="140" Margin="0,10,0,0" >

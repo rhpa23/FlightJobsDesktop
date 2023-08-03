@@ -66,7 +66,7 @@ namespace FlightJobsDesktop.Views.SlidersWindows
             InitializeComponent();
             _hideTimer.Tick += HideTimer_Tick;
             _hideTimer.Interval = new TimeSpan(0, 0, SECONDS_TO_CLOSE);
-            _currentJobViewModel = currentJobView;
+            _currentJobViewModel = CurrentJobViewModel.Copy(currentJobView);
 
             var chartFont = new Font("Segoe UI", 10);
             //ChartFlightRecorder.Series[0].Font = chartFont;
