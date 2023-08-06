@@ -362,24 +362,15 @@ namespace FlightJobsDesktop.Views.Home
 
         private void BtnScoreRank_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.ShowLoading();
-            Mouse.OverrideCursor = Cursors.Wait;
-
             try
             {
-
+                ShowModal("Airlines score ranking", new AirlineScoreRankingModal(), false);
             }
             catch (Exception ex)
             {
                 _log.Error(ex);
                 _notificationManager.Show("Error", "Airline score rank data could not be loaded. Please try again later.", NotificationType.Error, "WindowAreaAirline");
             }
-            finally
-            {
-                Mouse.OverrideCursor = Cursors.Arrow;
-                MainWindow.HideLoading();
-            }
-
         }
     }
 }

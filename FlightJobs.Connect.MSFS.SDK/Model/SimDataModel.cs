@@ -23,7 +23,7 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         {
             get { return _seaLevelPressureMillibars; }
             set { _seaLevelPressureMillibars = value; 
-                SeaLevelPressureText = $"{Math.Round(value, 0)} hPa /  {(Math.Round(value, 0) * 0.02953).ToString("0.00")} inHg";
+                SeaLevelPressureText = $"{Math.Round(value, 0)} hPa / {(Math.Round(value, 0) * 0.02953).ToString("0.00")}";
                 NotifyPropertyChanged("SeaLevelPressureText");
             }
         }
@@ -63,6 +63,20 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
             set { _visibilityMeters = value; VisibilityMetersText = $"{Math.Round(value, 0)} meters";  NotifyPropertyChanged("VisibilityMetersText"); }
         }
         public string VisibilityMetersText { get; set; }
+
+        private double _fps { get; set; }
+        public double FPS
+        {
+            get { return _fps; }
+            set { _fps = Math.Round(value, 0); NotifyPropertyChanged(); }
+        }
+
+        private double _simulationSpeed { get; set; }
+        public double SimulationSpeed
+        {
+            get { return _simulationSpeed; }
+            set { _simulationSpeed = value; NotifyPropertyChanged(); }
+        }
 
     }
 }

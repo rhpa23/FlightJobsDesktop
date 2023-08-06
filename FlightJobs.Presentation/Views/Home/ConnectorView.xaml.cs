@@ -241,6 +241,7 @@ namespace FlightJobsDesktop.Views.Home
                             var fRecorder = new FlightRecorderViewModel(FlightJobsConnectSim.PlaneSimData);
                             fRecorder.TimeUtc = DateTime.UtcNow;
                             fRecorder.OnGround = false;
+                            fRecorder.FPS = FlightJobsConnectSim.CommonSimData.FPS;
                             FlightRecorderUtil.FlightRecorderList.Add(fRecorder);
                         }
                         else
@@ -295,6 +296,7 @@ namespace FlightJobsDesktop.Views.Home
                             var fRecorder = new FlightRecorderViewModel(FlightJobsConnectSim.PlaneSimData);
                             fRecorder.TimeUtc = DateTime.UtcNow;
                             fRecorder.OnGround = true;
+                            fRecorder.FPS = FlightJobsConnectSim.CommonSimData.FPS;
                             FlightRecorderUtil.FlightRecorderList.Add(fRecorder);
                         }
                         else
@@ -479,7 +481,7 @@ namespace FlightJobsDesktop.Views.Home
 
             if (_currentJob.PlaneSimData.ScoreLightLandingOn == 0)
                 _currentJob.PlaneSimData.ScoreLightLandingOn =
-                    LandingLightsResult.GetScore(_currentJob.PlaneSimData.LightLandingOn, _currentJob.PlaneSimData.OnGround, _currentJob.PlaneSimData.CurrentAltitude);
+                    LandingLightsResult.GetScore(_currentJob.PlaneSimData.LightLandingOn, _currentJob.PlaneSimData.OnGround, _currentJob.PlaneSimData.EngOneRunning, _currentJob.PlaneSimData.CurrentAltitude);
 
             if (_currentJob.PlaneSimData.ScoreLightNavigationOn == 0)
                 _currentJob.PlaneSimData.ScoreLightNavigationOn =
@@ -536,6 +538,7 @@ namespace FlightJobsDesktop.Views.Home
                 _jumpFlightDataTime = DateTime.Now.AddSeconds(10);
                 var fRecorder = new FlightRecorderViewModel(FlightJobsConnectSim.PlaneSimData);
                 fRecorder.TimeUtc = DateTime.UtcNow;
+                fRecorder.FPS = FlightJobsConnectSim.CommonSimData.FPS;
                 FlightRecorderUtil.FlightRecorderList.Add(fRecorder);
             }
         }

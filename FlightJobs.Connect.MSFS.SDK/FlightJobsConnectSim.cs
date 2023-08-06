@@ -34,12 +34,11 @@ namespace FlightJobs.Connect.MSFS.SDK
         public double PlaneFuelWeightPounds;
         public double PlaneBrakeInicator;
         public double PlaneEngineOneIndicator;
-        public long PlaneAltitude;
+        public long IndicatedAltitude;
         public bool PlaneLightLandingOn;
         public bool PlaneLightBeaconOn;
         public bool PlaneLightNavigationOn;
         public double PlaneAltimeterMillibars;
-
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
@@ -119,7 +118,7 @@ namespace FlightJobs.Connect.MSFS.SDK
             _planeDataDefinitionList.Add(new SimVar() { Name = "FUEL TOTAL QUANTITY WEIGHT", Unit = "pounds", DataType = SIMCONNECT_DATATYPE.FLOAT64 });
             _planeDataDefinitionList.Add(new SimVar() { Name = "BRAKE INDICATOR", Unit = "number", DataType = SIMCONNECT_DATATYPE.FLOAT64 });
             _planeDataDefinitionList.Add(new SimVar() { Name = "ENG COMBUSTION:1", Unit = "number", DataType = SIMCONNECT_DATATYPE.FLOAT64 });
-            _planeDataDefinitionList.Add(new SimVar() { Name = "PLANE ALTITUDE", Unit = "Feet", DataType = SIMCONNECT_DATATYPE.INT64 });
+            _planeDataDefinitionList.Add(new SimVar() { Name = "INDICATED ALTITUDE", Unit = "Feet", DataType = SIMCONNECT_DATATYPE.INT64 });
             _planeDataDefinitionList.Add(new SimVar() { Name = "LIGHT LANDING ON", Unit = "Bool", DataType = SIMCONNECT_DATATYPE.INT32 });
             _planeDataDefinitionList.Add(new SimVar() { Name = "LIGHT BEACON ON", Unit = "Bool", DataType = SIMCONNECT_DATATYPE.INT32 });
             _planeDataDefinitionList.Add(new SimVar() { Name = "LIGHT NAV ON", Unit = "Bool", DataType = SIMCONNECT_DATATYPE.INT32 });
@@ -143,6 +142,8 @@ namespace FlightJobs.Connect.MSFS.SDK
             _backgroundConnector.DoWork += BackgroundConnector_DoWork;
             _timerTouchdownBounces.Tick += TimerBounce_Tick;
             _timerSimConnection.Start();
+
+            new FlightJobsSimConnect(CommonSimData);
         }
 
         private void SetTakeoffInfo()
@@ -312,7 +313,7 @@ namespace FlightJobs.Connect.MSFS.SDK
                     PlaneSimData.FuelWeightKilograms = UnitsConverterUtil.PoundsToKilograms(r.PlaneFuelWeightPounds);
                     PlaneSimData.EngOneRunning  = Convert.ToBoolean(r.PlaneEngineOneIndicator);
                     PlaneSimData.OnGround  = r.OnGround;
-                    PlaneSimData.CurrentAltitude = r.PlaneAltitude;
+                    PlaneSimData.CurrentAltitude = r.IndicatedAltitude;
                     PlaneSimData.LightLandingOn= r.PlaneLightLandingOn;
                     PlaneSimData.LightBeaconOn = r.PlaneLightBeaconOn;
                     PlaneSimData.LightNavigationOn = r.PlaneLightNavigationOn;

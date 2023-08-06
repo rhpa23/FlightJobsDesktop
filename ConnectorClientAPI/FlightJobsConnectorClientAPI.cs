@@ -609,5 +609,21 @@ namespace ConnectorClientAPI
 
             return true;
         }
+
+        public async Task<IList<AirlineModel>> GetAirlineRanking()
+        {
+            var url = $"{SITE_URL}api/AirlineApi/GetRanking";
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(response.Content.ReadAsStringAsync().Result, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            string json = response.Content.ReadAsStringAsync().Result.Replace("\"[", "[").Replace("]\"", "]").Replace("\\", "");
+            var airlines = JsonConvert.DeserializeObject<List<AirlineModel>>(json);
+
+            return airlines;
+        }
     }
 }

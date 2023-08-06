@@ -35,7 +35,12 @@
                 <ui:FontIcon x:Name="HideIco" FontFamily="Segoe MDL2 Assets" Glyph="&#xE8A0;" 
                          Foreground="White" Margin="0" MouseDown="HideIco_MouseDown" Grid.Column="2" />
             </Grid>
-            <TextBlock x:Name="TxbCapacityName" Foreground="LightGray" FontSize="10" TextTrimming="WordEllipsis" Width="145" Margin="0,10,0,0" HorizontalAlignment="Center" />
+            
+            <TextBlock x:Name="TxbFPS" Foreground="LightGray" FontSize="10" TextTrimming="WordEllipsis" Width="145" Margin="0,5,0,0" TextAlignment="Center" HorizontalAlignment="Center">
+                <Run Text="FPS: "/><Run Text="{Binding SimData.FPS}"/>
+            </TextBlock>
+            <TextBlock x:Name="TxbCapacityName" Foreground="LightGray" FontSize="10" TextTrimming="WordEllipsis" Width="145" Margin="0,5,0,0" HorizontalAlignment="Center" />
+            
             <Image x:Name="ImgCapacity" Height="60" Source="/img/background/default_thumb-capacity.jpg" Margin="0,5,0,0" />
             <Grid x:Name="GridRoute" Margin="0,15,0,0">
                 <Grid.ColumnDefinitions>

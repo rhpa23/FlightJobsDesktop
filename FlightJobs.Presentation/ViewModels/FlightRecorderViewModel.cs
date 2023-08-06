@@ -32,7 +32,7 @@ namespace FlightJobsDesktop.ViewModels
         public int AltimeterInMillibars { get; set; }
         public double Heading { get; set; }
         public DateTime TimeUtc { get; set; }
-        public int FPS { get; set; }
+        public double FPS { get; set; }
     }
 
     public class FlightRecorderAnaliseViewModel : ObservableObject

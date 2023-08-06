@@ -62,5 +62,10 @@ namespace FlightJobs.Infrastructure.Services
         {
             return await _flightJobsConnectorClientAPI.ExitAirline(new AirlineModel() { Id = airlineId }, userId);
         }
+
+        public async Task<IList<AirlineModel>> GetRanking()
+        {
+            return await _flightJobsConnectorClientAPI.GetAirlineRanking();
+        }
     }
 }

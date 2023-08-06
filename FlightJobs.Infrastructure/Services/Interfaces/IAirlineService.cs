@@ -17,5 +17,6 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
         Task<IList<AirlineFboDbModel>> HireFbo(string icao, string userId);
         Task<bool> JoinAirline(int airlineId, string userId);
         Task<bool> ExitAirline(int id, string userId);
+        Task<IList<AirlineModel>> GetRanking();
     }
 }

@@ -76,9 +76,10 @@
 
                 m.bindPopup('<strong>' + toolTipTitle + '</strong>' +
                     '<br/>Altitude: ' + marker.Altitude + 'ft' +
-                    '<br/>True speed: ' + marker.Speed + 'Kts' +
+                    '<br/>Ground speed: ' + marker.Speed + 'Kts' +
                     '<br/>Altimeter: ' + marker.AltimeterInMillibars + 'mb' +
-                    '<br/>Fuel weight:' + marker.FuelWeightKilograms + 'Kg');
+                    '<br/>Fuel weight:' + marker.FuelWeightKilograms + 'Kg' +
+                    '<br/>FPS: ' + marker.FPS);
             } else {
                 marker_icon.iconSize = [0, 0];
                 L.marker([marker.Latitude, marker.Longitude], { icon: marker_icon, opacity: 0, interactive: false  }).addTo(mymap);

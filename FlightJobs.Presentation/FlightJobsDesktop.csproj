@@ -175,6 +175,9 @@
     <Compile Include="Views\Modals\AirlineJobsLedgerModal.xaml.cs">
       <DependentUpon>AirlineJobsLedgerModal.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Modals\AirlineScoreRankingModal.xaml.cs">
+      <DependentUpon>AirlineScoreRankingModal.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Modals\ConfirmJobModal.xaml.cs">
       <DependentUpon>ConfirmJobModal.xaml</DependentUpon>
     </Compile>
@@ -285,6 +288,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Modals\AirlineJobsLedgerModal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modals\AirlineScoreRankingModal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -733,6 +740,7 @@
     <Resource Include="img\icons\departing.png" />
     <Resource Include="img\background\default_thumb-capacity.jpg" />
     <Resource Include="img\icons\license-001.png" />
+    <Resource Include="img\background\map640.png" />
     <Content Include="img\LogoDefault.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
