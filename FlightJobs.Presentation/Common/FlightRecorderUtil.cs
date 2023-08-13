@@ -99,6 +99,7 @@ namespace FlightJobsDesktop.Common
             {
                 var dataPoint = chart.Series[0].Points.Add(flightRecorder.Speed);
                 dataPoint.AxisLabel = flightRecorder.TimeUtc.ToShortTimeString();
+                dataPoint.ToolTip = $"{flightRecorder.TimeUtc.ToShortTimeString()} - {flightRecorder.Speed}kts";
             }
 
             var max = chart.Series[0].Points.FindMaxByValue();
@@ -122,11 +123,54 @@ namespace FlightJobsDesktop.Common
             for (int i = 1; i < recList.Length; i = i + 12)
             {
                 var currentFuelWeightKg = recList[i].FuelWeightKilograms;
-                var dataPoint = chart.Series[0].Points.Add(previewsFuelWeightKg - currentFuelWeightKg);
+                var consume = previewsFuelWeightKg - currentFuelWeightKg;
+                var dataPoint = chart.Series[0].Points.Add(consume);
                 dataPoint.AxisLabel = recList[i].TimeUtc.ToShortTimeString();
+                dataPoint.ToolTip = $"{recList[i].TimeUtc.ToShortTimeString()} - {consume}Kg";
 
                 previewsFuelWeightKg = currentFuelWeightKg;
             }
+        }
+
+        internal static void UpdateChartFPS(Chart chart)
+        {
+            if (FlightRecorderList.Count <= 0) return;
+
+            SetupFlightRecorderCharts(chart, SeriesChartType.StepLine, "FPS variation", "FSP");
+
+            var recList = FlightRecorderList.Where(x => x != null && !x.OnGround).ToArray();
+            for (int i = 1; i < recList.Length; i = i + 6)
+            {
+                var dataPoint = chart.Series[0].Points.Add(recList[i].FPS);
+                dataPoint.AxisLabel = recList[i].TimeUtc.ToShortTimeString();
+                dataPoint.ToolTip = $"{recList[i].TimeUtc.ToShortTimeString()} - {recList[i].FPS} FPS";
+            }
+
+            var max = chart.Series[0].Points.FindMaxByValue();
+            var min = chart.Series[0].Points.FindMinByValue();
+
+            max.MarkerSize = 5;
+            max.Label = $"Max FPS {max.YValues[0]}";
+
+            min.MarkerSize = 5;
+            min.Label = $"Min FPS {min.YValues[0]}";
+
+            StripLine stripLineAvarange = new StripLine();
+
+            var averageFPS = recList.Average(x => x.FPS);
+
+            // Set threshold line so that it is only shown once  
+            stripLineAvarange.Interval = 0;
+            stripLineAvarange.IntervalOffset = averageFPS;
+
+            stripLineAvarange.BackColor = Color.LightGreen;
+            stripLineAvarange.StripWidth = 0.3;
+
+            // Set text properties for the threshold line  
+            stripLineAvarange.Text = $"{Math.Round(averageFPS, 0)} ";
+            stripLineAvarange.ForeColor = Color.YellowGreen;
+
+            chart.ChartAreas[0].AxisY.StripLines.Add(stripLineAvarange);
         }
 
         internal static string GetRouteMapHtmlText()

@@ -28,6 +28,7 @@
                        Margin="10" LastChildFill="True" Height="370" Visibility="Collapsed">
                 <Controls:WebView x:Name="RouteMapWebView"  />
             </DockPanel>
+            <Label Content="* All Flight Recoreder data is kept in your 'ResourceData' folder. Backup then if you want to reinstall the system." Foreground="Gray" FontSize="10" Margin="10,0,0,0" />
             <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,10,0,10" >
                 <Rectangle.Fill>
                     <SolidColorBrush Color="SlateGray"/>
@@ -37,14 +38,15 @@
                 <RadioButton x:Name="RadioAltitude" Content="Altitude" Checked="ChartTypeRadioButton_Checked" IsChecked="True"/>
                 <RadioButton x:Name="RadioSpeed" Content="Speed" Checked="ChartTypeRadioButton_Checked"/>
                 <RadioButton x:Name="RadioFuel" Content="Fuel" Checked="ChartTypeRadioButton_Checked"/>
+                <RadioButton x:Name="RadioFps" Content="FPS" Checked="ChartTypeRadioButton_Checked"/>
                 <RadioButton x:Name="RadioRoteMap" Content="Route" Checked="ChartTypeRadioButton_Checked"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="#FF2B2B2B" Margin="0,25,0,0" >
-                <TextBlock Margin="120,15,0,15" Foreground="White" FontSize="16">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="#FF2B2B2B" Margin="0,15,0,0" >
+                <TextBlock Margin="120,10,0,15" Foreground="White" FontSize="16">
                                     <Run Text="Average fuel consumption: "/>
                                     <Run FontWeight="Bold" Text="{Binding AverageFuelConsumptioText, Mode=OneWay}"/>
                 </TextBlock>
-                <TextBlock Margin="60,15,0,15" Foreground="White" FontSize="16">
+                <TextBlock Margin="60,10,0,15" Foreground="White" FontSize="16">
                                     <Run Text="Average speed: "/>
                                     <Run FontWeight="Bold"  Text="{Binding AveragePlaneSpeedText, Mode=OneWay}"/>
                 </TextBlock>

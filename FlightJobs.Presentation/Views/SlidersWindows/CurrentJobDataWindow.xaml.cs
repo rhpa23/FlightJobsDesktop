@@ -137,6 +137,7 @@ namespace FlightJobsDesktop.Views.SlidersWindows
 
         private void BtnShowFlightResults_Click(object sender, RoutedEventArgs e)
         {
+            _hideTimer.Interval = new TimeSpan(0, 5, 0);
             FlightRecorderUtil.FlightRecorderList = FlightRecorderUtil.LoadFlightRecorderFile(_currentJobViewModel);
             ToggleResultsSlider(this.Width <= TARGET_WIDTH);
         }
@@ -152,6 +153,7 @@ namespace FlightJobsDesktop.Views.SlidersWindows
 
         private void ChartTypeRadioButton_Checked(object sender, RoutedEventArgs e)
         {
+            _hideTimer.Interval = new TimeSpan(0, 5, 0);
             if (_isResultsOpen)
             {
                 var radioButton = sender as RadioButton;
@@ -192,6 +194,13 @@ namespace FlightJobsDesktop.Views.SlidersWindows
                     var htmlText = FlightRecorderUtil.GetRouteMapHtmlText();
 
                     RouteMapWebView.NavigateToString(htmlText);
+                }
+                else if (radioButton.Name == RadioFps.Name)
+                {
+                    WindowsChartArea.Visibility = Visibility.Visible;
+                    RouteMapPanel.Visibility = Visibility.Collapsed;
+
+                    FlightRecorderUtil.UpdateChartFPS(ChartFlightRecorder);
                 }
             }
         }

@@ -95,6 +95,7 @@ namespace FlightJobs.Connect.MSFS.SDK
         private DispatcherTimer _timerReadSimData = new DispatcherTimer();
         private DispatcherTimer _timerSimConnection = new DispatcherTimer();
         private BackgroundWorker _backgroundConnector = new BackgroundWorker();
+        private FlightJobsSimConnect _flightJobsSimConnect;
 
         public void Initialize()
         {
@@ -142,8 +143,6 @@ namespace FlightJobs.Connect.MSFS.SDK
             _backgroundConnector.DoWork += BackgroundConnector_DoWork;
             _timerTouchdownBounces.Tick += TimerBounce_Tick;
             _timerSimConnection.Start();
-
-            new FlightJobsSimConnect(CommonSimData);
         }
 
         private void SetTakeoffInfo()
@@ -255,6 +254,11 @@ namespace FlightJobs.Connect.MSFS.SDK
             {
                 _timerReadSimData.Start();
                 //notifyIcon.Icon = Properties.Resources.online;
+
+                if (_flightJobsSimConnect == null)
+                {
+                    _flightJobsSimConnect = new FlightJobsSimConnect(CommonSimData);
+                }
             }
             else
             {

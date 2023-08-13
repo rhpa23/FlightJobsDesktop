@@ -124,7 +124,9 @@ namespace FlightJobsDesktop.Views.Home
                     _generateJobViewModel = new GenerateJobViewModel();
                     await _jobService.GetAllUserJobs(AppProperties.UserLogin.UserId);// To reload pedding list
                     lblDistance.Content = "0";
+                    PanelImgMap.Visibility = Visibility.Visible;
                     LoadManagerView();
+                    HomeView.TabHome.SelectedIndex = 0;
                 }
             }
             catch (Exception)
@@ -217,6 +219,8 @@ namespace FlightJobsDesktop.Views.Home
 
                     string url = _mapUrl + string.Format(_mapUrlQuery, departure, arrival, alternative, user);
                     MapWebView.Navigate(url);
+                    MapWebView.Visibility = Visibility.Visible;
+                    PanelImgMap.Visibility = Visibility.Collapsed;
 
                     _generateJobViewModel.Dist = GeoCalculationsUtil.CalcDistance(departure, arrival);
                     lblDistance.Content = _generateJobViewModel.DistDesc;
@@ -285,8 +289,10 @@ namespace FlightJobsDesktop.Views.Home
             MainWindow.ShowLoading();
             try
             {
-                string url = _mapUrl + string.Format(_mapUrlQuery, "", "", "", AppProperties.UserLogin.UserName);
-                MapWebView.Navigate(url);
+                if (PanelImgMap.Visibility == Visibility.Visible)
+                {
+                    MapWebView.Visibility = Visibility.Hidden;
+                }
 
                 var userJobsListView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<IList<JobModel>, IList<CurrentJobViewModel>>(AppProperties.UserJobs);
                 _generateJobViewModel.PendingJobs = userJobsListView;
@@ -326,6 +332,7 @@ namespace FlightJobsDesktop.Views.Home
                 {
                     await _jobService.ActivateJob(AppProperties.UserLogin.UserId, selected.Id);
                     await _jobService.GetAllUserJobs(AppProperties.UserLogin.UserId);// Reload the job list
+                    HomeView.TabHome.SelectedIndex = 0;
                 }
             }
             catch (Exception)
@@ -356,6 +363,7 @@ namespace FlightJobsDesktop.Views.Home
                     _generateJobViewModel.PendingJobs = userJobsListView;
                     lsvPendingJobs.ItemsSource = _generateJobViewModel.PendingJobs;
                     lsvPendingJobs.SelectedIndex = AppProperties.UserJobs.ToList().FindIndex(x => x.IsActivated);
+                    HomeView.TabHome.SelectedIndex = 0;
                 }
             }
             catch (Exception)
@@ -420,6 +428,20 @@ namespace FlightJobsDesktop.Views.Home
             {
                 MainWindow.HideLoading();
             }
+        }
+
+        private void BtnToggleMap_Click(object sender, RoutedEventArgs e)
+        {
+            MapWebView.Visibility = Visibility.Visible;
+            PanelImgMap.Visibility = Visibility.Collapsed;
+            var departure = _generateJobViewModel.DepartureICAO;
+            var arrival = _generateJobViewModel.ArrivalICAO;
+            var alternative = _generateJobViewModel.AlternativeICAO;
+            var user = AppProperties.UserLogin.UserName;
+
+            string url = _mapUrl + string.Format(_mapUrlQuery, departure, arrival, alternative, user);
+            MapWebView.Navigate(url);
+            
         }
     }
 }

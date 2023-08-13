@@ -46,7 +46,7 @@ namespace FlightJobsDesktop.Views.Home
                 //SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.CanResizeWithGrip,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                ShowInTaskbar = false,
+                ShowInTaskbar = true,
                 WindowStyle = canMaximize ? WindowStyle.None : WindowStyle.ToolWindow
             };
 

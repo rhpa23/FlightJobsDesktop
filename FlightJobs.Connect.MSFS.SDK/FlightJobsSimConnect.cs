@@ -31,7 +31,7 @@ namespace FlightJobs.Connect.MSFS.SDK
         public FlightJobsSimConnect(SimDataModel simDataModel)
         {
             _simDataModel = simDataModel;
-            _oTimer.Interval = new TimeSpan(0, 0, 0, 20, 0);
+            _oTimer.Interval = new TimeSpan(0, 0, 0, 10, 0);
             _oTimer.Tick += new EventHandler(OnTick);
             _oTimer.Start();
         }

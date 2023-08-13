@@ -172,7 +172,7 @@ namespace FlightJobsDesktop.Views.Home
                     // Reload Airline data
                     await _userAccessService.LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
                     await _userAccessService.LoadUserAirlineProperties();
-                    await LoadUserJobData();
+                    await LoadUserJobData(false);
                     EnableDisableNavegation(true);
                     _currentJob.StartIsEnable = !_isJobStarted;
                     _currentJob.FinishIsEnable = _isJobStarted;
@@ -573,7 +573,7 @@ namespace FlightJobsDesktop.Views.Home
             }
         }
 
-        internal async Task LoadUserJobData()
+        internal async Task LoadUserJobData(bool closeSiderJob = true)
         {
             MainWindow.ShowLoading();
             try
@@ -599,11 +599,11 @@ namespace FlightJobsDesktop.Views.Home
                         _currentJob.AlternativeLongitude = alternativeEntity.Lonx;
                     }
 
-                    if (_siderJobWindow == null)
-                    {
-                        _siderJobWindow = new CurrentJobDataWindow(_currentJob);
-                        _siderJobWindow.Show();
-                    }
+                    if (_siderJobWindow != null) _siderJobWindow.Close();
+                    
+                    _siderJobWindow = new CurrentJobDataWindow(_currentJob);
+                    _siderJobWindow.Show();
+
                     _siderJobWindow.GridSimData.Visibility = Visibility.Visible;// FlightJobsConnectSim.CommonSimData.IsConnected ? Visibility.Visible : Visibility.Collapsed;
                     _siderJobWindow.StartedIcon.Visibility = Visibility.Hidden;
                     _siderJobWindow.GridMessage.Visibility = Visibility.Collapsed;
@@ -619,6 +619,8 @@ namespace FlightJobsDesktop.Views.Home
                 {
                     PanelNoJob.Visibility = Visibility.Visible;
                     PanelCurrentJob.Visibility = Visibility.Collapsed;
+                    if (closeSiderJob && _siderJobWindow != null) _siderJobWindow.Hide();
+                    if (closeSiderJob && _sliderTouchdownWindow != null) _sliderTouchdownWindow.Hide();
                 }
 
                 var lastJob = await _jobService.GetLastUserJob(AppProperties.UserLogin.UserId);

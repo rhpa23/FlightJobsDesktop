@@ -93,6 +93,13 @@ namespace FlightJobsDesktop.Views.Modals
 
                 RouteMapWebView.NavigateToString(htmlText);
             }
+            else if (radioButton.Name == RadioFps.Name)
+            {
+                WindowsChartArea.Visibility = Visibility.Visible;
+                RouteMapPanel.Visibility = Visibility.Collapsed;
+
+                FlightRecorderUtil.UpdateChartFPS(ChartFlightRecorder);
+            }
         }
     }
 }

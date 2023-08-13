@@ -329,10 +329,11 @@
                                 </Rectangle.Fill>
                             </Rectangle>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <RadioButton x:Name="RadioAltitude" Content="Altitude" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
+                                <RadioButton Margin="30,0,0,0" x:Name="RadioAltitude" Content="Altitude" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
                                 <RadioButton x:Name="RadioSpeed" Content="Speed" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
                                 <RadioButton x:Name="RadioFuel" Content="Fuel" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
-                                <RadioButton x:Name="RadioRoteMap" Content="Route" Checked="ChartTypeRadioButton_Checked"/>
+                                <RadioButton x:Name="RadioFps" Content="FPS" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
+                                <RadioButton x:Name="RadioRoteMap" Content="Route" Foreground="White" Checked="ChartTypeRadioButton_Checked"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="#FF2B2B2B" Margin="0,10,0,0" >
                                 <TextBlock Margin="10,5,0,5" Foreground="White" FontSize="16">

@@ -143,13 +143,22 @@
             </ListView.View>
         </ListView>
         </Border>
-        <DockPanel Grid.Row="1" Grid.ColumnSpan="2"
+        <DockPanel Grid.Row="1" Grid.ColumnSpan="2" 
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch" 
         Width="Auto" 
         Margin="3,10,3,3" 
         LastChildFill="True">
             <Controls:WebView x:Name="MapWebView"  DOMContentLoaded="MapWebView_DOMContentLoaded"  />
+            
         </DockPanel>
+        <Grid x:Name="PanelImgMap" Grid.Row="1" Grid.ColumnSpan="2" Background="LightGray">
+            <Image x:Name="ImgMap" Source="/img/background/map640.png" Margin="20" />
+            <Border Style="{DynamicResource BorderButtonYellow}" Width="42" Height="40" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15">
+                <Button x:Name="BtnToggleMap" Click="BtnToggleMap_Click" Width="40" Height="40" >
+                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE819;" HorizontalAlignment="Left" FontSize="22" Margin="0" />
+                </Button>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
