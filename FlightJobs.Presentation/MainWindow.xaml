@@ -130,6 +130,12 @@
                         <ui:SymbolIcon Symbol="Setting"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
+                <ui:NavigationViewItemSeparator/>
+                <ui:NavigationViewItem Content="About" Tag="AboutView" x:Name="AboutViewPageItem"  Width="150" HorizontalAlignment="Left">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Help"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.PaneFooter>
                 <ui:NavigationViewItem Content="Exit" Tag="ExitApp" x:Name="ExitApp"  Width="150" HorizontalAlignment="Left" MouseLeftButtonUp="ExitApp_MouseLeftButtonUp" >

@@ -741,6 +741,9 @@
     <Resource Include="img\background\default_thumb-capacity.jpg" />
     <Resource Include="img\icons\license-001.png" />
     <Resource Include="img\background\map640.png" />
+    <Resource Include="img\icons\discordapp.png" />
+    <Resource Include="img\icons\fb.png" />
+    <Resource Include="img\icons\youtube.png" />
     <Content Include="img\LogoDefault.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -761,6 +764,7 @@
     <Resource Include="img\PilotExpenses\PilotCourseTrainingX.jpg" />
     <Resource Include="img\PilotExpenses\SimulatorTrainingX.jpg" />
     <Resource Include="img\PilotExpenses\WeatherExamX.jpg" />
+    <Resource Include="img\logo\btn_donateCC_LG.gif" />
     <Content Include="web\img\icons\alternative.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

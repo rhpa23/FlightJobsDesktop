@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Diagnostics;
+using System.Windows.Controls;
 
 namespace FlightJobsDesktop.Views
 {
@@ -10,6 +11,12 @@ namespace FlightJobsDesktop.Views
         public AboutView()
         {
             InitializeComponent();
+        }
+
+        private void WebLink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }

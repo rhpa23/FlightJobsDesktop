@@ -214,7 +214,10 @@ namespace FlightJobsDesktop.Views.Home
             ((TabItem)HomeView.TabHome.Items[1]).IsEnabled = isEnabled;
             foreach (var menu in MainWindow.NavigationBar.MenuItems)
             {
-                ((NavigationViewItem)menu).IsEnabled = isEnabled;
+                if (menu is NavigationViewItem)
+                {
+                    ((NavigationViewItem)menu).IsEnabled = isEnabled;
+                }
             }
         }
 

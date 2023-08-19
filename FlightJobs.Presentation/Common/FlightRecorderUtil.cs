@@ -87,6 +87,7 @@ namespace FlightJobsDesktop.Common
             max.MarkerSize = 5;
             max.MarkerColor = Color.GreenYellow;
             max.Label = $"Max {max.YValues[0]}ft";
+            chart.ChartAreas[0].AxisY.StripLines.Clear();
         }
 
         internal static void UpdateChartSpeed(Chart chart)
@@ -110,6 +111,7 @@ namespace FlightJobsDesktop.Common
 
             min.MarkerSize = 5;
             min.Label = $"Min speed {min.YValues[0]}kts";
+            chart.ChartAreas[0].AxisY.StripLines.Clear();
         }
 
         internal static void UpdateChartFuel(Chart chart)
@@ -130,6 +132,7 @@ namespace FlightJobsDesktop.Common
 
                 previewsFuelWeightKg = currentFuelWeightKg;
             }
+            chart.ChartAreas[0].AxisY.StripLines.Clear();
         }
 
         internal static void UpdateChartFPS(Chart chart)
@@ -170,6 +173,7 @@ namespace FlightJobsDesktop.Common
             stripLineAvarange.Text = $"{Math.Round(averageFPS, 0)} ";
             stripLineAvarange.ForeColor = Color.YellowGreen;
 
+            chart.ChartAreas[0].AxisY.StripLines.Clear();
             chart.ChartAreas[0].AxisY.StripLines.Add(stripLineAvarange);
         }
 

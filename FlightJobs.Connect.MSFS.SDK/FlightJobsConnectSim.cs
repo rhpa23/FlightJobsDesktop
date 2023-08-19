@@ -198,9 +198,12 @@ namespace FlightJobs.Connect.MSFS.SDK
             //if (!ShowLanding)
             try
             {
-                _fsConnect.RequestData(RequestDefinitionEnum.PlaneData, DefineEnum.PlaneDefineId);
-                _fsConnect.RequestData(RequestDefinitionEnum.PlanePayloadData, DefineEnum.PlanePayloadDefineId);
-                _fsConnect.RequestData(RequestDefinitionEnum.SimData, DefineEnum.SimDefinedId);
+                if (_fsConnect.Connected)
+                {
+                    _fsConnect.RequestData(RequestDefinitionEnum.PlaneData, DefineEnum.PlaneDefineId);
+                    _fsConnect.RequestData(RequestDefinitionEnum.PlanePayloadData, DefineEnum.PlanePayloadDefineId);
+                    _fsConnect.RequestData(RequestDefinitionEnum.SimData, DefineEnum.SimDefinedId);
+                }
             }
             catch (Exception ex)
             {
