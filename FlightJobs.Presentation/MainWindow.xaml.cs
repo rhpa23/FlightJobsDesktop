@@ -8,6 +8,7 @@ using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views;
 using FlightJobsDesktop.Views.Account;
+using FlightJobsDesktop.Views.Modals;
 using log4net;
 using ModernWpf;
 using ModernWpf.Controls;
@@ -19,6 +20,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -74,7 +76,7 @@ namespace FlightJobsDesktop
             _loadingProgressPanel = LoadingProgressPanel;
 
             System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
-            ni.Icon = new System.Drawing.Icon("favicon.ico");
+            ni.Icon = new System.Drawing.Icon("favicon-ok.ico");
             ni.Visible = true;
             ni.DoubleClick +=
                 delegate (object sender, EventArgs args)
@@ -90,31 +92,60 @@ namespace FlightJobsDesktop
             _log.Info("Initialized");
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        private void ShowModal(string title, object content)
+        {
+
+            Window window = new Window
+            {
+                Title = title,
+                Content = content,
+                Width = ((UserControl)content).MinWidth,
+                Height = ((UserControl)content).MinHeight + 40,
+                //SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.CanResize,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ShowInTaskbar = true,
+                WindowStyle = WindowStyle.ToolWindow,
+                Topmost = true,
+            };
+
+            window.ShowDialog();
+        }
+
+        private async void LoadData()
         {
             ShowLoading();
             try
             {
+                LoadSettingsFromFile();
+
                 await JobServiceFactory.Create().GetAllUserJobs(AppProperties.UserLogin.UserId);
                 await UserServiceFactory.Create().LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
 
                 contentFrame.Navigate(typeof(HomeView));
                 nvMain.SelectedItem = HomeViewPageItem;
 
-                LoadSettings();
+                LoadAllSettingsData();
 
                 _flightJobsConnectSim.Initialize();
-                //_timerCheckSimConnection.Start();
             }
             catch (Exception ex)
             {
                 _log.Error(ex);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
+                HideLoading();
+                ShowModal("Select Host", new SelectHostUrlModal(_userSettings));
+                LoadData();
             }
             finally
             {
                 HideLoading();
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadData();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -157,12 +188,36 @@ namespace FlightJobsDesktop
             contentFrame.Navigate(pageType);
         }
 
-        private void LoadSettings()
+        private void LoadSettingsFromFile()
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
             var jsonSettings = File.ReadAllText(System.IO.Path.Combine(path, "ResourceData\\Settings.json"));
             _userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
 
+            var infraService = MainWindow.InfraServiceFactory.Create();
+            var selectHost = new SelectHostViewModel();
+
+            switch (_userSettings.SelectedHostOption)
+            {
+                case 1:
+                    infraService.SetApiUrl(selectHost.Option1HostUrl);
+                    break;
+                case 2:
+                    infraService.SetApiUrl(selectHost.Option2HostUrl);
+                    break;
+                case 3:
+                    infraService.SetApiUrl(selectHost.Option3HostUrl);
+                    break;
+                case 4:
+                    infraService.SetApiUrl(selectHost.Option4HostUrl);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void LoadAllSettingsData()
+        {
             ThemeManager.Current.ApplicationTheme = _userSettings.ThemeName == "Light" ? ApplicationTheme.Light : ApplicationTheme.Dark;
             ControlzEx.Theming.ThemeManager.Current.ChangeThemeBaseColor(Application.Current, _userSettings.ThemeName);
 
@@ -205,7 +260,6 @@ namespace FlightJobsDesktop
                                         new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, PilotServiceFactory, 
                                                        AirlineServiceFactory, SqLiteContextFactory));
 
-            loginWindow.AutoSingIn = false;
             loginWindow.Show();
 
             Flyout f = FlyoutService.GetFlyout(BtnUserMenu) as Flyout;

@@ -15,13 +15,20 @@ using FlightJobs.Domain.Navdata.Utils;
 using FlightJobsDesktop.Views.POC;
 using ModernWpf;
 using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
+using System;
+using FlightJobsDesktop.ViewModels;
+using Newtonsoft.Json;
+using System.IO;
+using Notification.Wpf;
 
 namespace FlightJobsDesktop
 {
     /// <summary>
     /// Interação lógica para App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         private ServiceProvider _serviceProvider;
 
@@ -66,8 +73,18 @@ namespace FlightJobsDesktop
             var loginWindow = _serviceProvider.GetService<Login>();
             if (loginWindow.LoadLoginData())
             {
-                var mainWindow = _serviceProvider.GetService<MainWindow>();
-                mainWindow.Show();
+                var path = AppDomain.CurrentDomain.BaseDirectory;
+                var jsonSettings = File.ReadAllText(Path.Combine(path, "ResourceData\\Settings.json"));
+                var userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
+                if (!userSettings.StartInSysTray)
+                {
+                    var mainWindow = _serviceProvider.GetService<MainWindow>();
+                    mainWindow.Show();
+                }
+                else
+                {
+                    new NotificationManager().ShowButtonWindow("FlightJobs is running. Double-click to start.");
+                }
             }
             else
             {
@@ -83,7 +100,8 @@ namespace FlightJobsDesktop
 
             if (count > 1) // Single Instance check
             {
-                MessageBox.Show($"You already have an instance of {proc.ProcessName} running.", "FlightJobs Desktop", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.Forms.MessageBox.Show($"You already have an instance of {proc.ProcessName} running.", 
+                    "FlightJobs Desktop");
                 App.Current.Shutdown();
             }
         }

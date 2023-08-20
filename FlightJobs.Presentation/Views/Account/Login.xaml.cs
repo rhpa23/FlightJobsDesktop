@@ -4,6 +4,7 @@ using FlightJobs.Model.Models;
 using FlightJobsDesktop.Factorys;
 using FlightJobsDesktop.ValidationRules;
 using FlightJobsDesktop.ViewModels;
+using log4net;
 using ModernWpf;
 using Notification.Wpf;
 using System;
@@ -29,9 +30,8 @@ namespace FlightJobsDesktop.Views.Account
         private MainWindow _mainWindow;
         private int _loadingCount;
 
-        private IAbstractFactory<IUserAccessService> _factoryUser;
-
-        public bool AutoSingIn = true;
+        private readonly IAbstractFactory<IUserAccessService> _factoryUser;
+        private static readonly ILog _log = LogManager.GetLogger(typeof(Login));
 
         public Login(IAbstractFactory<IInfraService> factoryInfra, 
                      IAbstractFactory<IJobService> factoryJob, 
@@ -70,9 +70,6 @@ namespace FlightJobsDesktop.Views.Account
                 UseShellExecute = true,
             };
             System.Diagnostics.Process.Start(sInfo);
-
-            //new ForgotPassword().Show();
-            //Hide();
         }
 
         private async void btnSignIn_Click(object sender, RoutedEventArgs e)
@@ -121,9 +118,10 @@ namespace FlightJobsDesktop.Views.Account
                     return true;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
+                _log.Error($"SignIn failed.", ex);
             }
             finally
             {
@@ -159,7 +157,7 @@ namespace FlightJobsDesktop.Views.Account
             catch (Exception ex)
             {
                 _notificationManager.Show("Error", "Cannot load the login data.", NotificationType.Error, "WindowArea");
-                //log.Error($"LoadLoginData failed.", ex);
+                _log.Error($"LoadLoginData failed.", ex);
             }
             return false;
         }
@@ -190,10 +188,10 @@ namespace FlightJobsDesktop.Views.Account
                 string createText = $"{userViewModel.Email}|{userViewModel.Password}|{userViewModel.NickName}|{userViewModel.Id}";
                 File.WriteAllText(path, createText);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 _notificationManager.Show("Error", "Cannot save the login data.", NotificationType.Error, "WindowArea");
-                //log.Error($"SaveLoginData failed.", ex);
+                _log.Error($"SaveLoginData failed.", ex);
             }
         }
 
@@ -203,31 +201,16 @@ namespace FlightJobsDesktop.Views.Account
             {
                 await _jobService.GetAllUserJobs(userId);
             }
-            catch
+            catch (Exception ex)
             {
                 _notificationManager.Show("Error", "User jobs could not be loaded. Please try again later.", NotificationType.Error, "WindowArea");
+                _log.Error($"LoadUserJobList failed.", ex);
             }
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
-
-            //if (LoadLoginData())
-            //{
-            //    //var userViewModel = (AspnetUserViewModel)DataContext;
-
-            //    if (AutoSingIn)
-            //    {
-            //        //await LoadUserJobList(AppProperties.UserLogin.UserId);
-            //        //await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
-            //        //if (await SignIn(userViewModel, true))
-            //        //{
-            //        _mainWindow.Show();
-            //        this.Hide();
-            //        //}
-            //    }
-            //}
         }
 
         private void TextChanged(object sender, EventArgs e)

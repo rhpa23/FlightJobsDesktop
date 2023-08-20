@@ -44,6 +44,7 @@ namespace FlightJobsDesktop.ViewModels
         public bool AutoStartJob { get; set; }
         public bool AutoFinishJob { get; set; }
         public bool ShowLandingData { get; set; }
+        public int SelectedHostOption { get; set; }
 
         public string ThemeName { get; set; }
 

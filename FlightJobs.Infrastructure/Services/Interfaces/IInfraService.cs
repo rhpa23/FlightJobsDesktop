@@ -8,6 +8,9 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
 {
     public interface IInfraService
     {
+        void SetApiUrl(string siteUrl);
         string GetApiUrl();
+
+        Task<bool> PingUrl(string url);
     }
 }

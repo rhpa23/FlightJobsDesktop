@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -14,9 +15,11 @@ namespace ConnectorClientAPI
 {
     public class FlightJobsConnectorClientAPI
     {
+        public static string SiteUrl { get; set; } = "https://flightjobs.bsite.net/";
         //public static string SITE_URL = "http://localhost:5646/";
-        public static string SITE_URL = "https://flightjobs.bsite.net/";
+        //public static string SITE_URL = "https://flightjobs.bsite.net/";
         //public static string SITE_URL = "https://flightjobs.somee.com/";
+        //public static string SITE_URL = "http://flightjobs2027-001-site1.htempurl.com/";
         static HttpClient _client;
 
         public FlightJobsConnectorClientAPI()
@@ -27,14 +30,27 @@ namespace ConnectorClientAPI
             };
             
             _client = new HttpClient(handler);
-            _client.BaseAddress = new Uri(SITE_URL);
+            _client.BaseAddress = new Uri(SiteUrl);
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        public async Task<bool> PingUrl(string url)
+        {
+            try
+            {
+                var response = await _client.GetAsync(url);
+                return response != null && response.StatusCode == HttpStatusCode.Found;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public async Task SaveAvatar(string userId, string fileName)
         {
-            var url = $"{SITE_URL}api/UserApi/SaveAvatar?fileName={fileName}";
+            var url = $"{SiteUrl}api/UserApi/SaveAvatar?fileName={fileName}";
 
             var body = JsonConvert.SerializeObject(new { id = userId });
 
@@ -47,7 +63,7 @@ namespace ConnectorClientAPI
 
         public async Task TranfersMoneyToAirline(string userId, int percent)
         {
-            var url = $"{SITE_URL}api/UserApi/TransferMoneyToAirline?percent={percent}";
+            var url = $"{SiteUrl}api/UserApi/TransferMoneyToAirline?percent={percent}";
 
             var body = JsonConvert.SerializeObject(new { id = userId });
 
@@ -62,7 +78,7 @@ namespace ConnectorClientAPI
         {
             try
             {
-                var url = $"{SITE_URL}api/AuthenticationApi/Login";
+                var url = $"{SiteUrl}api/AuthenticationApi/Login";
                 _client.DefaultRequestHeaders.Clear();
                 _client.DefaultRequestHeaders.Add("Email", email);
                 _client.DefaultRequestHeaders.Add("Password", password);
@@ -90,7 +106,7 @@ namespace ConnectorClientAPI
 
         public async Task UserRegister(UserRegisterModel userModel)
         {
-            var url = $"{SITE_URL}api/AuthenticationApi/UserRegister";
+            var url = $"{SiteUrl}api/AuthenticationApi/UserRegister";
 
             var body = JsonConvert.SerializeObject(userModel);
 
@@ -103,7 +119,7 @@ namespace ConnectorClientAPI
 
         public async Task ConfirmJob(ConfirmJobModel confirmJobModel)
         {
-            var url = $"{SITE_URL}api/SearchApi/ConfirmJobs";
+            var url = $"{SiteUrl}api/SearchApi/ConfirmJobs";
             var body = JsonConvert.SerializeObject(confirmJobModel);
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
@@ -114,7 +130,7 @@ namespace ConnectorClientAPI
 
         public async Task RemoveJob(string userId, long jobId)
         {
-            var url = $"{SITE_URL}api/JobApi/RemoveJob?jobId={jobId}";
+            var url = $"{SiteUrl}api/JobApi/RemoveJob?jobId={jobId}";
             var body = JsonConvert.SerializeObject(new { id = userId });
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
@@ -125,7 +141,7 @@ namespace ConnectorClientAPI
 
         public async Task<IList<JobListItemModel>> GenerateConfirmJobs(GenerateJobModel generateJobData)
         {
-            var url = $"{SITE_URL}api/SearchApi/GenerateConfirmJobs";
+            var url = $"{SiteUrl}api/SearchApi/GenerateConfirmJobs";
             var body = JsonConvert.SerializeObject(generateJobData);
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (response.IsSuccessStatusCode)
@@ -141,7 +157,7 @@ namespace ConnectorClientAPI
 
         public async Task RemovePlaneCapacity(CustomPlaneCapacityModel capacityModel)
         {
-            var url = $"{SITE_URL}api/SearchApi/RemoveCapacity";
+            var url = $"{SiteUrl}api/SearchApi/RemoveCapacity";
             var body = JsonConvert.SerializeObject(capacityModel);
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
@@ -152,7 +168,7 @@ namespace ConnectorClientAPI
 
         public async Task SavePlaneCapacity(CustomPlaneCapacityModel capacityModel)
         {
-            var url = $"{SITE_URL}api/SearchApi/SaveCapacity";
+            var url = $"{SiteUrl}api/SearchApi/SaveCapacity";
             var body = JsonConvert.SerializeObject(capacityModel);
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
@@ -163,7 +179,7 @@ namespace ConnectorClientAPI
 
         public async Task<StartJobResponseModel> StartJob(DataModel data)
         {
-            var url = $"{SITE_URL}api/JobApi/StartJobMSFS";
+            var url = $"{SiteUrl}api/JobApi/StartJobMSFS";
             _client.DefaultRequestHeaders.Clear();
 
             _client.DefaultRequestHeaders.Add("UserId", data.UserId);
@@ -188,7 +204,7 @@ namespace ConnectorClientAPI
 
         public async Task<FinishJobResponseModel> FinishJob(DataModel data)
         {
-            var url = $"{SITE_URL}api/JobApi/FinishJobMsfsPost";
+            var url = $"{SiteUrl}api/JobApi/FinishJobMsfsPost";
             var body = JsonConvert.SerializeObject(data);
 
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
@@ -205,7 +221,7 @@ namespace ConnectorClientAPI
 
         public async Task<IList<JobModel>> GetUserJobs(string userId)
         {
-            var url = $"{SITE_URL}api/JobApi/GetUserJobs";
+            var url = $"{SiteUrl}api/JobApi/GetUserJobs";
             _client.DefaultRequestHeaders.Clear();
 
             _client.DefaultRequestHeaders.Add("UserId", userId);
@@ -224,7 +240,7 @@ namespace ConnectorClientAPI
 
         public async Task<PaginatedJobsModel> GetLogbookUserJobs(string sortOrder, string currentSort, int pageNumber, FilterJobsModel filterModel)
         {
-            var url = $"{SITE_URL}api/JobApi/GetUserJobsPaged?sortOrder={sortOrder}&currentSort={currentSort}&pageNumber={pageNumber}";
+            var url = $"{SiteUrl}api/JobApi/GetUserJobsPaged?sortOrder={sortOrder}&currentSort={currentSort}&pageNumber={pageNumber}";
             var body = JsonConvert.SerializeObject(filterModel);
 
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
@@ -241,7 +257,7 @@ namespace ConnectorClientAPI
 
         public async Task<JobModel> GetLastUserJob(string userId)
         {
-            var url = $"{SITE_URL}api/JobApi/GetLastUserJob";
+            var url = $"{SiteUrl}api/JobApi/GetLastUserJob";
             var body = JsonConvert.SerializeObject(new { id = userId });
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
@@ -255,7 +271,7 @@ namespace ConnectorClientAPI
 
         public async Task<bool> ActivateUserJob(string userId, long jobId)
         {
-            var url = $"{SITE_URL}api/JobApi/ActivateUserJob";
+            var url = $"{SiteUrl}api/JobApi/ActivateUserJob";
             _client.DefaultRequestHeaders.Clear();
 
             _client.DefaultRequestHeaders.Add("UserId", userId);
@@ -267,7 +283,7 @@ namespace ConnectorClientAPI
 
         public async Task<UserStatisticsModel> GetUserStatistics(string userId)
         {
-            var url = $"{SITE_URL}api/UserApi/GetUserStatistics";
+            var url = $"{SiteUrl}api/UserApi/GetUserStatistics";
 
             var body = JsonConvert.SerializeObject(new { id = userId });
 
@@ -278,7 +294,7 @@ namespace ConnectorClientAPI
 
         public async Task<UserStatisticsModel> GetUserStatisticsFlightsInfo(string userId)
         {
-            var url = $"{SITE_URL}api/UserApi/GetUserFlightsInfo";
+            var url = $"{SiteUrl}api/UserApi/GetUserFlightsInfo";
 
             var body = JsonConvert.SerializeObject(new { id = userId });
 
@@ -289,7 +305,7 @@ namespace ConnectorClientAPI
 
         public async Task<IList<PilotLicenseExpensesUserModel>> GetUserLicensesOverdue(string userId)
         {
-            var url = $"{SITE_URL}api/UserApi/GetUserLicensesOverdue";
+            var url = $"{SiteUrl}api/UserApi/GetUserLicensesOverdue";
 
             var body = JsonConvert.SerializeObject(new { id = userId });
 
@@ -300,7 +316,7 @@ namespace ConnectorClientAPI
 
         public async Task<UserStatisticsModel> BuyLicencePackage(string userId, long licenseExpenseId) 
         {
-            var url = $"{SITE_URL}api/UserApi/BuyLicencePackage?licenseExpenseId={licenseExpenseId}";
+            var url = $"{SiteUrl}api/UserApi/BuyLicencePackage?licenseExpenseId={licenseExpenseId}";
 
             var body = JsonConvert.SerializeObject(new { id = userId });
 
@@ -318,7 +334,7 @@ namespace ConnectorClientAPI
 
         public async Task<SimBriefModel> GetSimBriefData(string simbriefUserName)
         {
-            var url = $"{SITE_URL}api/SearchApi/GetSimBriefData?simbriefUserName={simbriefUserName}";
+            var url = $"{SiteUrl}api/SearchApi/GetSimBriefData?simbriefUserName={simbriefUserName}";
 
             HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (response.IsSuccessStatusCode)
@@ -333,7 +349,7 @@ namespace ConnectorClientAPI
         }
         public async Task<RandomFlightModel> GetRandomFlight(string departure, string destination)
         {
-            var url = $"{SITE_URL}api/SearchApi/GetRandomFlight?departure={departure}&destination={destination}";
+            var url = $"{SiteUrl}api/SearchApi/GetRandomFlight?departure={departure}&destination={destination}";
 
             HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (response.IsSuccessStatusCode)
@@ -349,7 +365,7 @@ namespace ConnectorClientAPI
 
         public async Task<UserStatisticsModel> UpdateUserSettings(UserSettingsModel userSettings)
         {
-            var url = $"{SITE_URL}api/UserApi/UpdateUserSettings";
+            var url = $"{SiteUrl}api/UserApi/UpdateUserSettings";
 
             var body = JsonConvert.SerializeObject(userSettings);
 
@@ -367,7 +383,7 @@ namespace ConnectorClientAPI
 
         public async Task<IList<SearchJobTipsModel>> GetArrivalTips(string departure, string userId)
         {
-            var url = $"{SITE_URL}api/SearchApi/GetArrivalTips?departure={departure}";
+            var url = $"{SiteUrl}api/SearchApi/GetArrivalTips?departure={departure}";
             var body = JsonConvert.SerializeObject(new { id = userId });
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (response.IsSuccessStatusCode)
@@ -383,7 +399,7 @@ namespace ConnectorClientAPI
 
         public async Task<IList<SearchJobTipsModel>> GetAlternativeTips(string arrival, int range)
         {
-            var url = $"{SITE_URL}api/SearchApi/GetAlternativeTips?arrival={arrival}&range={range}";
+            var url = $"{SiteUrl}api/SearchApi/GetAlternativeTips?arrival={arrival}&range={range}";
             HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (response.IsSuccessStatusCode)
             {
@@ -398,7 +414,7 @@ namespace ConnectorClientAPI
 
         public async Task<bool> CloneJob(long jobId, string userId)
         {
-            var url = $"{SITE_URL}api/SearchApi/CloneJob?jobId={jobId}";
+            var url = $"{SiteUrl}api/SearchApi/CloneJob?jobId={jobId}";
             var body = JsonConvert.SerializeObject(new { id = userId });
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (!response.IsSuccessStatusCode)
@@ -410,7 +426,7 @@ namespace ConnectorClientAPI
 
         public async Task<IList<CustomPlaneCapacityModel>> GetPlaneCapacities(string userId)
         {
-            var url = $"{SITE_URL}api/JobApi/GetUserPlaneCapacities";
+            var url = $"{SiteUrl}api/JobApi/GetUserPlaneCapacities";
             var body = JsonConvert.SerializeObject(new { id = userId });
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
             if (response.IsSuccessStatusCode)
@@ -426,7 +442,7 @@ namespace ConnectorClientAPI
 
         public async Task<PaginatedAirlinersModel> GetAirliners(string sortOrder, string currentSort, int pageNumber, PaginatedAirlinersFilterModel filterModel)
         {
-            var url = $"{SITE_URL}api/AirlineApi/GetAirliners?sortOrder={sortOrder}&currentSort={currentSort}&pageNumber={pageNumber}";
+            var url = $"{SiteUrl}api/AirlineApi/GetAirliners?sortOrder={sortOrder}&currentSort={currentSort}&pageNumber={pageNumber}";
             var body = JsonConvert.SerializeObject(filterModel);
 
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
@@ -443,7 +459,7 @@ namespace ConnectorClientAPI
 
         public async Task<AirlineModel> CreateAirline(AirlineModel airline, string userId)
         {
-            var url = $"{SITE_URL}api/AirlineApi/CreateAirline";
+            var url = $"{SiteUrl}api/AirlineApi/CreateAirline";
             var body = JsonConvert.SerializeObject(new { userId = userId, airline = airline });
 
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
@@ -460,7 +476,7 @@ namespace ConnectorClientAPI
 
         public async Task<bool> UpdateAirline(AirlineModel airline, string userId)
         {
-            var url = $"{SITE_URL}api/AirlineApi/UpdateAirline";
+            var url = $"{SiteUrl}api/AirlineApi/UpdateAirline";
             var body = JsonConvert.SerializeObject(new { userId = userId, airline = airline });
 
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
@@ -474,7 +490,7 @@ namespace ConnectorClientAPI
 
         public async Task<IList<UserModel>> GetAirlinePilotsHired(int airlineId)
         {
-            var url = $"{SITE_URL}api/AirlineApi/GetPilotsHired?id={airlineId}";
+            var url = $"{SiteUrl}api/AirlineApi/GetPilotsHired?id={airlineId}";
 
             HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (!response.IsSuccessStatusCode)
@@ -490,7 +506,7 @@ namespace ConnectorClientAPI
 
         public async Task<IList<AirlineFboDbModel>> GetAirlineFBOs(int airlineId)
         {
-            var url = $"{SITE_URL}api/AirlineApi/GetAirlineFBOs?id={airlineId}";
+            var url = $"{SiteUrl}api/AirlineApi/GetAirlineFBOs?id={airlineId}";
 
             HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (!response.IsSuccessStatusCode)
@@ -506,7 +522,7 @@ namespace ConnectorClientAPI
 
         public async Task<bool> PayAirlineDebts(AirlineModel airline, string userId)
         {
-            var url = $"{SITE_URL}api/AirlineApi/PayAirlineDebts";
+            var url = $"{SiteUrl}api/AirlineApi/PayAirlineDebts";
             var body = JsonConvert.SerializeObject(new { userId = userId, airline });
 
             HttpResponseMessage response = await _client.PostAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
@@ -520,7 +536,7 @@ namespace ConnectorClientAPI
 
         public async Task<PaginatedAirlineJobLedgerModel> GetAirlineLedger(int airlineId, int pageNumber, FilterJobsModel filterJob)
         {
-            var url = $"{SITE_URL}api/AirlineApi/GetAirlineLedger?airlineId={airlineId}&pageNumber={pageNumber}";
+            var url = $"{SiteUrl}api/AirlineApi/GetAirlineLedger?airlineId={airlineId}&pageNumber={pageNumber}";
 
             var body = JsonConvert.SerializeObject(filterJob);
 
@@ -538,7 +554,7 @@ namespace ConnectorClientAPI
 
         public async Task<List<AirlineFboDbModel>> GetFbos(string icao, int airlineId)
         {
-            var url = $"{SITE_URL}api/AirlineApi/GetFOBs?icao={icao}&airlineId={airlineId}";
+            var url = $"{SiteUrl}api/AirlineApi/GetFOBs?icao={icao}&airlineId={airlineId}";
 
             HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (!response.IsSuccessStatusCode)
@@ -554,7 +570,7 @@ namespace ConnectorClientAPI
 
         public async Task<IList<AirlineFboDbModel>> HireFbo(string icao, string userId)
         {
-            var url = $"{SITE_URL}api/AirlineApi/HireAirlineFbo";
+            var url = $"{SiteUrl}api/AirlineApi/HireAirlineFbo";
 
             var body = JsonConvert.SerializeObject(new { icao = icao, userId = userId });
 
@@ -577,7 +593,7 @@ namespace ConnectorClientAPI
 
         public async Task<bool> JoinAirline(AirlineModel airline, string userId)
         {
-            var url = $"{SITE_URL}api/AirlineApi/JoinAirline";
+            var url = $"{SiteUrl}api/AirlineApi/JoinAirline";
 
             var body = JsonConvert.SerializeObject(new { userId = userId, airline });
 
@@ -597,7 +613,7 @@ namespace ConnectorClientAPI
 
         public async Task<bool> ExitAirline(AirlineModel airline, string userId)
         {
-            var url = $"{SITE_URL}api/AirlineApi/ExitAirline";
+            var url = $"{SiteUrl}api/AirlineApi/ExitAirline";
 
             var body = JsonConvert.SerializeObject(new { userId = userId, airline });
 
@@ -612,7 +628,7 @@ namespace ConnectorClientAPI
 
         public async Task<IList<AirlineModel>> GetAirlineRanking()
         {
-            var url = $"{SITE_URL}api/AirlineApi/GetRanking";
+            var url = $"{SiteUrl}api/AirlineApi/GetRanking";
 
             HttpResponseMessage response = await _client.GetAsync(new Uri(url));
             if (!response.IsSuccessStatusCode)

@@ -44,7 +44,7 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
-    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <ApplicationIcon>favicon-ok.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
@@ -122,6 +122,7 @@
     <Compile Include="ViewModels\PaginatedAirlineJobLedgerViewModel.cs" />
     <Compile Include="ViewModels\LogbookViewModel.cs" />
     <Compile Include="ViewModels\PilotsHiredViewModel.cs" />
+    <Compile Include="ViewModels\SelectHostViewModel.cs" />
     <Compile Include="ViewModels\TipsDataGridViewModel.cs" />
     <Compile Include="ViewModels\UserSettingsViewModel.cs" />
     <Compile Include="ViewModels\CurrentJobViewModel.cs" />
@@ -204,6 +205,9 @@
     </Compile>
     <Compile Include="Views\Modals\PilotsHiredModal.xaml.cs">
       <DependentUpon>PilotsHiredModal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modals\SelectHostUrlModal.xaml.cs">
+      <DependentUpon>SelectHostUrlModal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Modals\TransferPilotMoneyToAirlineModal.xaml.cs">
       <DependentUpon>TransferPilotMoneyToAirlineModal.xaml</DependentUpon>
@@ -331,6 +335,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Modals\SelectHostUrlModal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Modals\TransferPilotMoneyToAirlineModal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -444,6 +452,9 @@
     <Resource Include="img\planes\Citation.jpg" />
     <Resource Include="img\planes\CRJ.jpg" />
     <Resource Include="img\planes\default.jpg" />
+    <Content Include="favicon-ok.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="img\avatar\default.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -492,9 +503,6 @@
     <Resource Include="img\graduation\16.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Content Include="favicon.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="img\logo\android-icon-144x144.png" />
     <Resource Include="img\logo\android-icon-192x192.png" />
     <Resource Include="img\logo\android-icon-36x36.png" />

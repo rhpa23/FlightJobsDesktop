@@ -4,6 +4,7 @@ using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
+using log4net;
 using ModernWpf;
 using Newtonsoft.Json;
 using Notification.Wpf;
@@ -24,6 +25,7 @@ namespace FlightJobsDesktop.Views
         private IUserAccessService _userAccessService;
 
         private UserSettingsViewModel _userSettings;
+        private static readonly ILog _log = LogManager.GetLogger(typeof(MainWindow));
 
         public SettingsView()
         {
@@ -45,27 +47,43 @@ namespace FlightJobsDesktop.Views
 
         private void ThemeSwitch_Toggled(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (!ThemeSwitch.IsOn)
+            try
             {
-                _userSettings.ThemeName = "Light";
-                ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
-                ControlzEx.Theming.ThemeManager.Current.ChangeThemeBaseColor(Application.Current, "Light");
-            }
-            else
-            {
-                _userSettings.ThemeName = "Dark";
-                ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
-                ControlzEx.Theming.ThemeManager.Current.ChangeThemeBaseColor(Application.Current, "Dark");
-            }
+                if (!ThemeSwitch.IsOn)
+                {
+                    _userSettings.ThemeName = "Light";
+                    ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
+                    ControlzEx.Theming.ThemeManager.Current.ChangeThemeBaseColor(Application.Current, "Light");
+                }
+                else
+                {
+                    _userSettings.ThemeName = "Dark";
+                    ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
+                    ControlzEx.Theming.ThemeManager.Current.ChangeThemeBaseColor(Application.Current, "Dark");
+                }
 
-            SaveSettings();
+                SaveSettings();
+            }
+            catch (Exception ex)
+            {
+                _log.Error("SettingsView ThemeSwitch", ex);
+                _notificationManager.Show("Error", "Error when try to apply Theme Settings.", NotificationType.Error, "WindowArea");
+            }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            _userSettings = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<UserSettingsModel, UserSettingsViewModel>(AppProperties.UserSettings);
-            _userSettings.WeightUnit = _userSettings.WeightUnit == null ? "kg" : _userSettings.WeightUnit;
-            DataContext = _userSettings;
+            try
+            {
+                _userSettings = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<UserSettingsModel, UserSettingsViewModel>(AppProperties.UserSettings);
+                _userSettings.WeightUnit = _userSettings.WeightUnit == null ? "kg" : _userSettings.WeightUnit;
+                DataContext = _userSettings;
+            }
+            catch (Exception ex)
+            {
+                _log.Error("SettingsView Loaded", ex);
+                _notificationManager.Show("Error", "Error when try to load FlightJobs settings.", NotificationType.Error, "WindowArea");
+            }
         }
 
         private void btnUpdateApp_Click(object sender, RoutedEventArgs e)
@@ -75,8 +93,9 @@ namespace FlightJobsDesktop.Views
                 SaveSettings();
                 _notificationManager.Show("Success", "Application settings saved!", NotificationType.Success, "WindowArea");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error("SettingsView UpdateApp", ex);
                 _notificationManager.Show("Error", "Error when try to save FlightJobs settings. Please your administrator rights.", NotificationType.Error, "WindowArea");
             }
         }
@@ -92,8 +111,9 @@ namespace FlightJobsDesktop.Views
                 AppProperties.UserSettings = userSettingsModel;
                 _notificationManager.Show("Success", "Settings saved!", NotificationType.Success, "WindowArea");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error("SettingsView btnUpdate", ex);
                 _notificationManager.Show("Error", "Error when try to save FlightJobs settings. Please verify your internet connection.", NotificationType.Error, "WindowArea");
             }
             finally
@@ -108,9 +128,10 @@ namespace FlightJobsDesktop.Views
             {
                 SaveSettings();
             }
-            catch (Exception)
-            {
-                _notificationManager.Show("Error", "Error when try to save application settings. Please verify your administrator permissions.", NotificationType.Error, "WindowArea");
+            catch (Exception ex) 
+            { 
+                _log.Error("SettingsView Checkbox click", ex); 
+                _notificationManager.Show("Error", "Error when try to save application settings. Please verify your administrator permissions.", NotificationType.Error, "WindowArea"); 
             }
         }
     }

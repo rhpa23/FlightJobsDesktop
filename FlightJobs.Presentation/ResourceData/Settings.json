@@ -1,8 +1,9 @@
 {
-  "StartInSysTray": true,
+  "StartInSysTray": false,
   "ExitWithFS": true,
   "AutoStartJob": true,
   "AutoFinishJob": true,
   "ShowLandingData": true,
-  "ThemeName": "Dark"
+  "ThemeName": "Dark",
+  "SelectedHostOption": 1
 }
