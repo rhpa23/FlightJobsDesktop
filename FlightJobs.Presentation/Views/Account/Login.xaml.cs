@@ -4,6 +4,7 @@ using FlightJobs.Model.Models;
 using FlightJobsDesktop.Factorys;
 using FlightJobsDesktop.ValidationRules;
 using FlightJobsDesktop.ViewModels;
+using FlightJobsDesktop.Views.Modals;
 using log4net;
 using ModernWpf;
 using Notification.Wpf;
@@ -29,6 +30,7 @@ namespace FlightJobsDesktop.Views.Account
         private LoginResponseModel _loginData;
         private MainWindow _mainWindow;
         private int _loadingCount;
+        private UserSettingsViewModel _userSettings;
 
         private readonly IAbstractFactory<IUserAccessService> _factoryUser;
         private static readonly ILog _log = LogManager.GetLogger(typeof(Login));
@@ -46,6 +48,7 @@ namespace FlightJobsDesktop.Views.Account
             _userAccessService = factoryUser.Create();
             _infraService = factoryInfra.Create();
             _mainWindow = mainWindow;
+            _userSettings = mainWindow.LoadSettingsFromFile();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -87,6 +90,25 @@ namespace FlightJobsDesktop.Views.Account
             }
         }
 
+        private void ShowModal(string title, object content)
+        {
+            Window window = new Window
+            {
+                Title = title,
+                Content = content,
+                   Width = ((UserControl)content).MinWidth,
+                   Height = ((UserControl)content).MinHeight + 40,
+                //SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.CanResize,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ShowInTaskbar = true,
+                WindowStyle = WindowStyle.ToolWindow,
+                Topmost = true,
+            };
+
+            window.ShowDialog();
+        }
+
         private void EnableControls(bool enabled)
         {
             txbEmail.IsEnabled = enabled;
@@ -122,6 +144,9 @@ namespace FlightJobsDesktop.Views.Account
             {
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
                 _log.Error($"SignIn failed.", ex);
+                HideLoading();
+                Mouse.OverrideCursor = Cursors.Arrow;
+                ShowModal("Select Host", new SelectHostUrlModal(_userSettings));
             }
             finally
             {

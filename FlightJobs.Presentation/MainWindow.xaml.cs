@@ -117,7 +117,7 @@ namespace FlightJobsDesktop
             ShowLoading();
             try
             {
-                LoadSettingsFromFile();
+                _userSettings = LoadSettingsFromFile();
 
                 await JobServiceFactory.Create().GetAllUserJobs(AppProperties.UserLogin.UserId);
                 await UserServiceFactory.Create().LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
@@ -188,31 +188,40 @@ namespace FlightJobsDesktop
             contentFrame.Navigate(pageType);
         }
 
-        private void LoadSettingsFromFile()
+        internal UserSettingsViewModel LoadSettingsFromFile()
         {
-            var path = AppDomain.CurrentDomain.BaseDirectory;
-            var jsonSettings = File.ReadAllText(System.IO.Path.Combine(path, "ResourceData\\Settings.json"));
-            _userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
-
-            var infraService = MainWindow.InfraServiceFactory.Create();
-            var selectHost = new SelectHostViewModel();
-
-            switch (_userSettings.SelectedHostOption)
+            try
             {
-                case 1:
-                    infraService.SetApiUrl(selectHost.Option1HostUrl);
-                    break;
-                case 2:
-                    infraService.SetApiUrl(selectHost.Option2HostUrl);
-                    break;
-                case 3:
-                    infraService.SetApiUrl(selectHost.Option3HostUrl);
-                    break;
-                case 4:
-                    infraService.SetApiUrl(selectHost.Option4HostUrl);
-                    break;
-                default:
-                    break;
+                var path = AppDomain.CurrentDomain.BaseDirectory;
+                var jsonSettings = File.ReadAllText(System.IO.Path.Combine(path, "ResourceData\\Settings.json"));
+                var userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
+
+                var infraService = MainWindow.InfraServiceFactory.Create();
+                var selectHost = new SelectHostViewModel();
+
+                switch (userSettings.SelectedHostOption)
+                {
+                    case 1:
+                        infraService.SetApiUrl(selectHost.Option1HostUrl);
+                        break;
+                    case 2:
+                        infraService.SetApiUrl(selectHost.Option2HostUrl);
+                        break;
+                    case 3:
+                        infraService.SetApiUrl(selectHost.Option3HostUrl);
+                        break;
+                    case 4:
+                        infraService.SetApiUrl(selectHost.Option4HostUrl);
+                        break;
+                    default:
+                        break;
+                }
+                return userSettings;
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex); // Just to log the Exception
+                throw ex;
             }
         }
 
