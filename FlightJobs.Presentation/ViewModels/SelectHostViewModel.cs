@@ -11,7 +11,7 @@ namespace FlightJobsDesktop.ViewModels
     {
         public string Option1HostUrl { get { return "https://flightjobs.bsite.net/"; } }
         public string Option2HostUrl { get { return "https://flightjobs.somee.com/"; } }
-        public string Option3HostUrl { get { return "http://flightjobs2027-001-site1.htempurl.com/"; } }
+        public string Option3HostUrl { get { return "https://flightjobs2027-001-site1.htempurl.com/"; } }
         public string Option4HostUrl { get { return "http://localhost:5646/"; } }
 
         public bool Option1IsSelected { get; set; }
