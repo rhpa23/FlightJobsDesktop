@@ -5,6 +5,7 @@ using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views.Modals;
 using log4net;
+using ModernWpf;
 using ModernWpf.Controls;
 using Notification.Wpf;
 using System;
@@ -16,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Input;
 
 namespace FlightJobsDesktop.Views.Home
@@ -39,6 +41,25 @@ namespace FlightJobsDesktop.Views.Home
             _airlineService = MainWindow.AirlineServiceFactory.Create();
             _userAccessService = MainWindow.UserServiceFactory.Create();
             _notificationManager = new NotificationManager();
+
+            var chartFont = new Font("Segoe UI", 10);
+            ChartBankBalanceMonth.Series[0].Font = chartFont;
+            ChartBankBalanceMonth.Series[0].LabelFormat = "F{0:C}";
+
+            ChartBankBalanceMonth.ChartAreas[0].AxisX.LabelStyle.Font = chartFont;
+            ChartBankBalanceMonth.ChartAreas[0].AxisY.LabelStyle.Font = chartFont;
+
+            if (ThemeManager.Current.ApplicationTheme == ApplicationTheme.Dark)
+            {
+                ChartBankBalanceMonth.BackColor = ColorTranslator.FromHtml("#FF2B2B2B");
+                ChartBankBalanceMonth.ChartAreas[0].AxisX.LabelStyle.ForeColor = Color.White;
+                ChartBankBalanceMonth.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.White;
+                ChartBankBalanceMonth.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.White;
+                ChartBankBalanceMonth.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.White;
+                ChartBankBalanceMonth.ChartAreas[0].BackColor = Color.Black;
+                ChartBankBalanceMonth.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+
+            }
         }
         private void HideConfirmExitPopup()
         {
@@ -126,7 +147,7 @@ namespace FlightJobsDesktop.Views.Home
         {
             if (AppProperties.UserStatistics.Airline == null)
             {
-                BtnActionsBorder.Visibility = Visibility.Collapsed;
+                //BtnActionsBorder.Visibility = Visibility.Collapsed;
                 PanelAirlineInfo.Visibility = Visibility.Collapsed;
                 PanelNoAirline.Visibility = Visibility.Visible;
                 _userAirlineView = new AirlineViewModel();
@@ -134,7 +155,7 @@ namespace FlightJobsDesktop.Views.Home
             else
             {
                 
-                BtnActionsBorder.Visibility = Visibility.Visible;
+                //BtnActionsBorder.Visibility = Visibility.Visible;
                 PanelAirlineInfo.Visibility = Visibility.Visible;
                 PanelNoAirline.Visibility = Visibility.Collapsed;
                 _userAirlineView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<AirlineModel, AirlineViewModel>(AppProperties.UserStatistics.Airline);
@@ -167,6 +188,38 @@ namespace FlightJobsDesktop.Views.Home
                 }
             }
             DataContext = _userAirlineView;
+        }
+
+        private void UpdateChartBankBalanceMonthData()
+        {
+            ChartBankBalanceMonth.Series[0].Points.Clear();
+            if (_userAirlineView.ChartModel != null && _userAirlineView.ChartModel.Data != null)
+            {
+                foreach (var point in _userAirlineView.ChartModel.Data)
+                {
+                    ChartBankBalanceMonth.Series[0].Points.Add(point.Value).AxisLabel = point.Key;
+                }
+                AddGoalStripLine();
+            }
+        }
+
+        private void AddGoalStripLine()
+        {
+            StripLine stripLineGoal = new StripLine();
+
+            // Set threshold line so that it is only shown once  
+            stripLineGoal.Interval = 0;
+            stripLineGoal.IntervalOffset = _userAirlineView.ChartModel.PayamentMonthGoal;
+
+            stripLineGoal.BackColor = Color.Green;
+            stripLineGoal.StripWidth = 3;
+
+            // Set text properties for the threshold line  
+            //stripLineGoal.Text = $" {_userAirlineView.ChartModel.PayamentMonthGoalCurrency} ";
+            //stripLineGoal.ForeColor = Color.Green;
+            //stripLineGoal.BackColor = Color.Green;
+
+            ChartBankBalanceMonth.ChartAreas[0].AxisY.StripLines.Add(stripLineGoal);
         }
 
         private async void BtnEdit_Click(object sender, RoutedEventArgs e)
@@ -342,11 +395,12 @@ namespace FlightJobsDesktop.Views.Home
         {
             MainWindow.ShowLoading();
             Mouse.OverrideCursor = Cursors.Wait;
-
+            WindowsChartArea.Visibility = Visibility.Hidden;
             try
             {
                 await _userAccessService.LoadUserAirlineProperties();
                 LoadAirlineData();
+                UpdateChartBankBalanceMonthData();
             }
             catch (Exception ex)
             {
@@ -355,6 +409,7 @@ namespace FlightJobsDesktop.Views.Home
             }
             finally
             {
+                WindowsChartArea.Visibility = Visibility.Visible;
                 Mouse.OverrideCursor = Cursors.Arrow;
                 MainWindow.HideLoading();
             }

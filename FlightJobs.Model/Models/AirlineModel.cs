@@ -37,5 +37,7 @@ namespace FlightJobs.Model.Models
         public DateTime DebtMaturityDate { get; set; }
 
         public IList<AirlineFboDbModel> HiredFBOs { get; set; } = new List<AirlineFboDbModel>();
+
+        public ChartAirlineBankBalanceModel ChartModel { get; set; }
     }
 }

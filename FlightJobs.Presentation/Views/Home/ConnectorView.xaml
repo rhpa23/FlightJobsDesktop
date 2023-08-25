@@ -130,14 +130,9 @@
                         </Border>
                     </StackPanel>
                     <StackPanel x:Name="PanelCurrentJob" Visibility="Collapsed">
-                        <Grid Margin="20,20,5,10" MinHeight="310" Width="810">
+                        <Grid Margin="20,20,5,10" HorizontalAlignment="Center" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="15" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
@@ -146,62 +141,84 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                                 <RowDefinition  />
                             </Grid.RowDefinitions>
-                            <Label Grid.Column="0" Grid.Row="0" Content="{Binding Path=DepartureICAO}" FontSize="24" Padding="5,0,5,0"/>
-                            <Rectangle Grid.Column="1" Grid.Row="0" Height="2" Width="60"  HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="10" Text="{Binding Path=JobSummary}" FontSize="16" Padding="0,10,0,10" Width="600" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" TextAlignment="Center" />
+                            <Label Grid.Column="0" Grid.Row="1" Content="{Binding Path=DepartureICAO}" FontSize="24" Padding="5,0,5,0"/>
+                            <Rectangle Grid.Column="1" Grid.Row="1" Height="2" Width="180" HorizontalAlignment="Center" VerticalAlignment="Center" >
                                 <Rectangle.Fill>
                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Label Grid.Column="2" Grid.Row="0" Content="{Binding Path=DistComplete}" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5,0,5,0"/>
-                            <Rectangle Grid.Column="3" Grid.Row="0" Height="2" Width="60"  HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <Label Grid.Column="2" Grid.Row="1" Content="{Binding Path=DistComplete}" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5,0,5,0"/>
+                            <Rectangle Grid.Column="3" Grid.Row="1" Height="2" Width="180"  HorizontalAlignment="Center" VerticalAlignment="Center" >
                                 <Rectangle.Fill>
                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Label Grid.Column="4" Grid.Row="0" Content="{Binding Path=ArrivalICAO}" FontSize="24" Padding="5,0,5,0"/>
-                            <Label Grid.Column="4" Grid.Row="1" Content="{Binding Path=AlternativeICAO}" Width="53" FontSize="16" VerticalAlignment="Top" Padding="0" Foreground="#FFB6B3B3" />
-                            <Rectangle Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" Height="1" Width="365"   HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <Label Grid.Column="4" Grid.Row="1" Content="{Binding Path=ArrivalICAO}" FontSize="24" Padding="5,0,5,0"/>
+                            <Label Grid.Column="4" Grid.Row="2" Content="{Binding Path=AlternativeICAO}" Width="53" FontSize="16" VerticalAlignment="Top" Padding="0" Foreground="#FFB6B3B3" />
+                        </Grid>
+
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="155" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition  />
+                                </Grid.RowDefinitions>
+                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE902;" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE821;" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Label Grid.Column="1" Grid.Row="0" Content="{Binding Path=PaxComplete}" FontSize="18" Name="LblCurrentPaxInfo" HorizontalAlignment="Left"/>
+                                <Label Grid.Column="1" Grid.Row="1" Content="Cargo:" FontSize="18" HorizontalAlignment="Left" />
+                                <Label Grid.Column="2" Grid.Row="0" Content="{Binding Path=PaxTotalWeight}" FontSize="18" Name="LblCurrentPaxWeight" HorizontalContentAlignment="Right"/>
+                                <Label Grid.Column="2" Grid.Row="1" Content="{Binding Path=CargoComplete}" Width="140" FontSize="18" Margin="3,0,0,0" Name="LblCurrentCargoWeight" HorizontalContentAlignment="Right"/>
+                                <Rectangle Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Height="1" Width="330" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,10,0,10" >
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Label Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Content="Total payload:" FontSize="18" FontWeight="Bold" Padding="0,0,5,0" HorizontalAlignment="Left"/>
+                                <Label Grid.Column="2" Grid.Row="3" Content="{Binding Path=PayloadComplete}" FontSize="18" FontWeight="Bold" Name="LblCurrentTotalCargoWeight" HorizontalContentAlignment="Right"/>
+
+                                <Label Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Content="Payment:" FontSize="18" FontWeight="Bold" Margin="0,30,0,10" />
+                                <Label Grid.Column="2" Grid.Row="4" Content="{Binding Path=PayComplete}" FontSize="18" FontWeight="Bold" Margin="0,30,0,10" HorizontalAlignment="Right" />
+
+                            </Grid>
+                            <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0" >
                                 <Rectangle.Fill>
-                                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
+                                    <SolidColorBrush Color="#333337"/>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Label Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Content="Payment:  " FontSize="18" Margin="0,10,0,10" HorizontalAlignment="Right"/>
-                            <Label Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="3" Content="{Binding Path=PayComplete}" FontSize="18" FontWeight="Bold" Margin="0,10,5,10" Name="LblCurrentPayment"/>
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE902;" Grid.Column="6" Grid.Row="0"/>
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE821;" Grid.Column="6" Grid.Row="1"/>
-                            <Label Grid.Column="7" Grid.Row="0" Content="{Binding Path=PaxComplete}" FontSize="18" Margin="10,5,0,0" Name="LblCurrentPaxInfo" HorizontalAlignment="Left"/>
-                            <Label Grid.Column="7" Grid.Row="1" Content="Cargo:" FontSize="18" Margin="10,10,0,3" HorizontalAlignment="Left" />
-                            <Label Grid.Column="8" Grid.Row="0" Content="{Binding Path=PaxTotalWeight}" Width="140" FontSize="18" Margin="3,5,0,0" Name="LblCurrentPaxWeight" HorizontalContentAlignment="Right"/>
-                            <Label Grid.Column="8" Grid.Row="1" Content="{Binding Path=CargoComplete}" Width="140" FontSize="18" Margin="3,0,0,0" Name="LblCurrentCargoWeight" HorizontalContentAlignment="Right"/>
-                            <Rectangle Grid.Column="6" Grid.Row="2" Grid.ColumnSpan="5" Height="1" Width="200" HorizontalAlignment="Left" VerticalAlignment="Center" >
-                                <Rectangle.Fill>
-                                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
-                                </Rectangle.Fill>
-                            </Rectangle>
-                            <Label Grid.Column="6" Grid.Row="3" Grid.ColumnSpan="2" Content="Total payload:" FontSize="18" Padding="0,0,5,0" HorizontalAlignment="Left"/>
-                            <Label Grid.Column="8" Grid.Row="3" Content="{Binding Path=PayloadComplete}" FontSize="18" Padding="3,0,0,0" Name="LblCurrentTotalCargoWeight" HorizontalContentAlignment="Right"/>
-                            <TextBlock Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="10" Text="{Binding Path=JobSummary}" FontSize="16" Padding="5,40,5,0" Width="600" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" TextAlignment="Center" />
-                            <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="10" Text="{Binding Path=PayloadComplete}" Foreground="{Binding PayloadLabelColor}" FontSize="16" Padding="5,5,5,0" Width="600" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" TextAlignment="Center" />
-                            <StackPanel Grid.Row="6" Grid.ColumnSpan="10" Margin="0,15,0,15" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                                <Border Margin="0,0,200,0" Style="{DynamicResource BorderButtonYellow}">
-                                    <Button x:Name="btnRefresh" Content="Refresh" Width="100"  />
+                            <StackPanel Margin="0,5,0,5" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                                <Border x:Name="btnStartBorder" Margin="0,20,0,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="{Binding StartIsEnable}" HorizontalAlignment="Left">
+                                    <Button Width="100" Click="btnStart_Click" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEDDA;" HorizontalAlignment="Left" FontSize="14" Foreground="Green" Margin="0,0,10,0" />
+                                            <Label>Start</Label>
+                                        </StackPanel>
+                                    </Button>
                                 </Border>
-                                <Border x:Name="btnStartBorder" Margin="0,0,200,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="{Binding StartIsEnable}">
-                                    <Button Content="Start" Width="100" Click="btnStart_Click" />
-                                </Border>
-                                <Border x:Name="btnFinishBorder" Margin="0,0,0,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="True">
-                                    <Button Content="Finish" Width="100" Click="btnFinish_Click" />
+                                <Border x:Name="btnFinishBorder" Margin="130,20,0,0" Style="{DynamicResource BorderButtonYellow}" IsEnabled="True" HorizontalAlignment="Right">
+                                    <Button Width="100" Click="btnFinish_Click" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71A;" HorizontalAlignment="Left" FontSize="14" Foreground="Green" Margin="0,0,10,0" />
+                                            <Label>Finish</Label>
+                                        </StackPanel>
+                                    </Button>
                                 </Border>
                             </StackPanel>
-
-                        </Grid>
+                        </StackPanel>
                     </StackPanel>
+
                 </StackPanel>
             </Border>
         </DockPanel>
