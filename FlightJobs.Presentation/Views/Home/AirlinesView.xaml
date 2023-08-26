@@ -6,8 +6,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
+             xmlns:wf="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
              xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
-             mc:Ignorable="d" Loaded="UserControl_Loaded" >
+             mc:Ignorable="d" Loaded="UserControl_Loaded"  >
     <UserControl.DataContext>
         <local:AirlineViewModel/>
     </UserControl.DataContext>
@@ -15,99 +16,133 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
             <ColumnDefinition  />
-            <ColumnDefinition Width="80" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="120" />
+            <RowDefinition  />
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="90"/>
         </Grid.RowDefinitions>
-        <Image Grid.ColumnSpan="3" Source="/img/background/airline-banner.jpg" />
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0" Orientation="Vertical">
-            <Image Source="{Binding Logo}" Width="150" Margin="0,5,0,0" />
+        <Image Grid.ColumnSpan="3" Source="/img/background/airline-banner.jpg" HorizontalAlignment="Left"  />
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" Orientation="Vertical">
+            <Image Source="{Binding Logo}" Width="150" Margin="0,5,0,0"  />
             <StackPanel Orientation="Horizontal">
-                <Image x:Name="ImageCountryFlag" Source="{Binding CountryFlag}" Width="20" Margin="0,5,0,0" />
-                <TextBlock Text="{Binding Country}" FontSize="12" HorizontalAlignment="Center" Margin="10,5,0,0"/>
+                <Image x:Name="ImageCountryFlag" Source="{Binding CountryFlag}" Width="20" Margin="0,15,0,0" />
+                <TextBlock Text="{Binding Country}" FontSize="12" HorizontalAlignment="Center" Margin="10,15,0,0"/>
             </StackPanel>
         </StackPanel>
         <StackPanel x:Name="PanelNoAirline" Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="0,30,0,0" Visibility="Collapsed">
             <TextBlock Text="Sign contract with an existing airline or buy your own company." FontSize="20"/>
         </StackPanel>
-        <StackPanel x:Name="PanelAirlineInfo" Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="20,0,0,0">
-            <TextBlock Text="{Binding Name}" FontSize="22" FontWeight="Bold" TextWrapping="WrapWithOverflow" />
-            <TextBlock Text="{Binding Description}" FontSize="12" TextWrapping="WrapWithOverflow" Margin="0,0,50,0" />
-            <Grid Margin="0,10,10,10">
+        <StackPanel x:Name="PanelAirlineInfo" Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="20,10,0,0">
+            
+            <Grid Margin="0,0,10,10">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="200"/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="370"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Bank balance" FontSize="14" FontWeight="Bold" Grid.Row="0" Margin="0,10,0,0"/>
-                <TextBlock Text="{Binding BankBalanceFormated}" FontSize="12" Grid.Row="1"/>
-                <TextBlock Text="Bank debt" FontSize="14" FontWeight="Bold" Grid.Row="2"  Margin="0,10,0,0"/>
-                <Border x:Name="BtnDebtText" Background="{Binding DebtColor}"  CornerRadius="5" Grid.Row="3" HorizontalAlignment="Left" Margin="0,5,0,0" 
+                <TextBlock Text="{Binding Name}" FontSize="22" FontWeight="Bold" TextWrapping="WrapWithOverflow" Grid.ColumnSpan="4" />
+                <TextBlock Text="{Binding Description}" FontSize="12" TextWrapping="WrapWithOverflow" Width="550" HorizontalAlignment="Left" Grid.Row="1" Grid.ColumnSpan="4" />
+                
+                <TextBlock Text="Bank balance" FontSize="14" FontWeight="Bold" Grid.Row="2" Margin="0,20,0,0"/>
+                <TextBlock Text="{Binding BankBalanceFormated}" FontSize="12" Grid.Row="3"/>
+                <TextBlock Text="Bank debt" FontSize="14" FontWeight="Bold" Grid.Row="4"  Margin="0,20,0,0"/>
+                <Border x:Name="BtnDebtText" Background="{Binding DebtColor}"  CornerRadius="5" Grid.Row="5" HorizontalAlignment="Left" Margin="0,-8,0,0" Height="30" VerticalAlignment="Top"
                         Style="{DynamicResource BorderButtonYellow}" ForceCursor="true" Cursor="Hand" IsEnabled="False" MouseLeftButtonUp="BtnDebtText_MouseLeftButtonUp">
                     <TextBlock Text="{Binding DebtValueFormated}" FontSize="12" Margin="5" Foreground="White" />
                 </Border>
 
-                <TextBlock Text="Owner" FontSize="14" FontWeight="Bold" Grid.Row="0" Grid.Column="1" Margin="200,10,0,0"/>
-                <TextBlock Text="{Binding OwnerUserName}" FontSize="12" Grid.Column="1" Grid.Row="1" Margin="200,0,0,0"/>
-                <TextBlock Text="Pilots hired" FontSize="14" FontWeight="Bold" Grid.Row="2" Grid.Column="1" Margin="200,10,0,0"/>
-                <TextBlock Text="{Binding HiredPilotsNumber}" FontSize="12" Grid.Column="1" Grid.Row="3" Margin="200,0,0,0"/>
+                <TextBlock Text="Owner" FontSize="14" FontWeight="Bold" Grid.Row="2" Grid.Column="1" Margin="0,20,0,0" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding OwnerUserName}" FontSize="12" Grid.Column="1" Grid.Row="3" Margin="0,0,0,0" HorizontalAlignment="Center"/>
+                <TextBlock Text="Pilots hired" FontSize="14" FontWeight="Bold" Grid.Row="4" Grid.Column="1" Margin="0,20,0,0" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding HiredPilotsNumber}" FontSize="12" Grid.Column="1" Grid.Row="5" Margin="0,0,0,0" HorizontalAlignment="Center"/>
 
-                <TextBlock Text="FBOs" FontSize="14" FontWeight="Bold" Grid.Row="0" Grid.Column="2" Margin="50,10,0,0"/>
-                <TextBlock Text="{Binding HiredFobsNumber}" FontSize="12" Grid.Column="2" Grid.Row="1" Margin="50,0,0,0"/>
-                <TextBlock Text="Score" FontSize="14" FontWeight="Bold" Grid.Row="2" Grid.Column="2" Margin="50,10,0,0"/>
-                <TextBlock Text="{Binding AirlineScore}" FontSize="12" Grid.Column="2" Grid.Row="3" Margin="50,0,0,0"/>
+                <TextBlock Text="FBOs" FontSize="14" FontWeight="Bold" Grid.Row="2" Grid.Column="2" Margin="0,20,0,0"  HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding HiredFobsNumber}" FontSize="12" Grid.Column="2" Grid.Row="3" Margin="0,0,0,0" HorizontalAlignment="Center"/>
+                <TextBlock Text="Score" FontSize="14" FontWeight="Bold" Grid.Row="4" Grid.Column="2" Margin="0,20,0,0" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding AirlineScore}" FontSize="12" Grid.Column="2" Grid.Row="5" Margin="0,0,0,0" HorizontalAlignment="Center"/>
+
+                <Border Style="{StaticResource LightBorderBoxStyle}" Grid.Column="3" Grid.RowSpan="7" Margin="0,-23,0,0" Height="210" >
+                    <WindowsFormsHost x:Name="WindowsChartArea" Margin="5" Visibility="Visible" Height="198" VerticalAlignment="Top">
+                        <wf:Chart x:Name="ChartBankBalanceMonth"> 
+                            <wf:Chart.Series>
+                                <wf:Series ChartType="Spline" IsValueShownAsLabel="True" MarkerSize="5" MarkerColor="LightGreen" 
+                                           MarkerStyle="Circle" BorderWidth="2" LabelBackColor="White" />
+                            </wf:Chart.Series>
+                            <wf:Chart.ChartAreas>
+                                <wf:ChartArea />
+                            </wf:Chart.ChartAreas>
+                        </wf:Chart>
+                    </WindowsFormsHost>
+                </Border>
             </Grid>
         </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical" VerticalAlignment="Top">
-            <Border x:Name="BtnActionsBorder" Style="{DynamicResource BorderButtonYellow}">
-                <Button Content="Actions" Width="80">
+        <Grid HorizontalAlignment="Stretch" Grid.Row="2" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="BtnEdit" Height="35" Width="130" Visibility="Collapsed" Style="{DynamicResource BorderButtonYellow}">
+                <Button Content="Edit" Width="130" Click="BtnEdit_Click" />
+            </Border>
+            <Border x:Name="BtnLedger" Height="35" Width="130" Style="{DynamicResource BorderButtonYellow}" Grid.Column="1">
+                <Button Content="Ledger balance" Width="130" Click="BtnLedger_Click" />
+            </Border>
+            <Border x:Name="BtnDebts" Height="35" Width="130" Visibility="Collapsed" Style="{DynamicResource BorderButtonYellow}" Grid.Column="2">
+                <Button Content="Debts" Width="130" Click="BtnDebts_Click" />
+            </Border>
+            <Border x:Name="BtnScoreRank" Height="35" Width="130" Style="{DynamicResource BorderButtonYellow}" Grid.Column="3">
+                <Button Content="Score rank" Width="130" Click="BtnScoreRank_Click" />
+            </Border>
+            <Border x:Name="BtnPilotsHired" Height="35" Width="130" Style="{DynamicResource BorderButtonYellow}" Grid.Column="4">
+                <Button Content="Pilots hired" Width="130" Click="BtnPilotsHired_Click" />
+            </Border>
+            <Border x:Name="BtnFbo" Height="35" Width="130" Visibility="Collapsed" Style="{DynamicResource BorderButtonYellow}" Grid.Column="5">
+                <Button Content="FBO" Width="130" Click="BtnFbo_Click" />
+            </Border>
+            <Border x:Name="BtnExit" Height="35" Width="130" Style="{DynamicResource BorderButtonYellow}" Grid.Column="6">
+                <Button Content="Exit" Width="130" >
                     <ui:FlyoutService.Flyout>
-                        <ui:Flyout x:Name="FlyoutActions" Placement="LeftEdgeAlignedTop" Opened="FlyoutActions_Opened">
-                            <StackPanel Orientation="Vertical">
-                                <Button x:Name="BtnEdit" Content="Edit" Width="140" Margin="0,10,0,0" Visibility="Collapsed" Click="BtnEdit_Click" />
-                                <Button x:Name="BtnLedger" Content="Ledger balance" Width="140" Margin="0,10,0,0" Click="BtnLedger_Click" />
-                                <Button x:Name="BtnDebts" Content="Debts" Width="140" Margin="0,10,0,0" Visibility="Collapsed" Click="BtnDebts_Click" />
-                                <Button x:Name="BtnScoreRank" Content="Score rank" Width="140" Margin="0,10,0,0" Click="BtnScoreRank_Click" />
-                                <Button x:Name="BtnPilotsHired" Content="Pilots hired" Width="140" Margin="0,10,0,0" Click="BtnPilotsHired_Click" />
-                                <Button x:Name="BtnFbo" Content="FBO" Width="140" Margin="0,10,0,0" Visibility="Collapsed" Click="BtnFbo_Click" />
-                                <Button x:Name="BtnExit" Content="Exit" Width="140" Margin="0,10,0,0" >
-                                    <ui:FlyoutService.Flyout>
-                                        <ui:Flyout x:Name="FlyoutConfirmExit" Placement="LeftEdgeAlignedTop" Opened="FlyoutConfirmExit_Opened">
-                                            <StackPanel>
-                                                <TextBlock Text="Do you really want to exit this airline?"/>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Button x:Name="BtnConfirmExit" Content="Yes" Margin="0,15,0,0" Click="BtnExit_Click" />
-                                                <Button x:Name="BtnNoExit" Content="No" Margin="20,15,0,0" Click="BtnNoExit_Click" />
-                                            </StackPanel>
-                                            </StackPanel>
-                                        </ui:Flyout>
-                                    </ui:FlyoutService.Flyout>
-                                </Button>
+                        <ui:Flyout x:Name="FlyoutConfirmExit" Placement="LeftEdgeAlignedTop" Opened="FlyoutConfirmExit_Opened">
+                            <StackPanel>
+                                <TextBlock Text="Do you really want to exit this airline?"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="BtnConfirmExit" Content="Yes" Margin="0,15,0,0" Click="BtnExit_Click" />
+                                    <Button x:Name="BtnNoExit" Content="No" Margin="20,15,0,0" Click="BtnNoExit_Click" />
+                                </StackPanel>
                             </StackPanel>
                         </ui:Flyout>
                     </ui:FlyoutService.Flyout>
                 </Button>
             </Border>
-        </StackPanel>
-        <Rectangle Grid.Row="2" Grid.ColumnSpan="3" Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,40,0,0" >
+        </Grid>
+        <Rectangle Grid.Row="3" Grid.ColumnSpan="3" Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,0,0" >
             <Rectangle.Fill>
-                <SolidColorBrush Color="LightGray"/>
+                <SolidColorBrush Color="#333337"/>
             </Rectangle.Fill>
         </Rectangle>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="3">
-            <Border x:Name="BtnJoinAirlinerBorder" Margin="0,60,0,60" Style="{DynamicResource BorderButtonYellow}">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="4" Grid.ColumnSpan="3">
+            <Border x:Name="BtnJoinAirlinerBorder" Height="37" Style="{DynamicResource BorderButtonYellow}">
                 <Button x:Name="BtnJoinAirliner" Content="Join an existing airline" Width="250" Height="37" Click="BtnJoinAirliner_Click" />
             </Border>
-            <Border x:Name="BtnBuyAirlineBorder" Margin="150,60,5,60" Style="{DynamicResource BorderButtonYellow}">
+            <Border x:Name="BtnBuyAirlineBorder" Margin="150,0,5,0" Height="37" Style="{DynamicResource BorderButtonYellow}">
                 <Button x:Name="BtnBuyAirline" Content="Buy your own airline ( F$40.000 )" Width="250" Height="37" Click="BtnBuyAirline_Click" />
             </Border>
 

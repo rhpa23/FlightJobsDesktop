@@ -23,7 +23,7 @@
                 <ColumnDefinition Width="60"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Border BorderBrush="#FF919191" BorderThickness="1" CornerRadius="5" Padding="0, 5, 0, 5" Margin="20,20,0,0">
+            <Border Style="{StaticResource LightBorderBoxStyle}" Padding="0, 5, 0, 5" Margin="20,20,0,0">
                 <Image x:Name="ImgAvatar" Height="173" Width="147" Source="{Binding Logo}" Cursor="Hand" MouseDown="Avatar_MouseDown" />
             </Border>
             <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" Margin="20,20,0,0">
@@ -139,7 +139,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border Grid.RowSpan="2" BorderBrush="#FF919191" BorderThickness="1" CornerRadius="5" Margin="20,20,0,20">
+            <Border Grid.RowSpan="2" Style="{StaticResource LightBorderBoxStyle}" Margin="20,20,0,20">
                 <StackPanel Orientation="Vertical">
                     <WindowsFormsHost x:Name="WindowsChartArea" Margin="5" Height="330" Visibility="Hidden">
                         <wf:Chart x:Name="ChartBankBalanceMonth">
@@ -162,7 +162,7 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <Border Grid.Row="0" Grid.Column="1" BorderBrush="#FF919191" BorderThickness="1" CornerRadius="5" Margin="20,20,20,20">
+            <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource LightBorderBoxStyle}" Margin="20,20,20,20">
                 <ListView ItemsSource="{Binding DepartureRanking}">
                     <ListView.View>
                         <GridView>
@@ -172,7 +172,7 @@
                     </ListView.View>
                 </ListView>
             </Border>
-            <Border Grid.Row="1" Grid.Column="1" BorderBrush="#FF919191" BorderThickness="1" CornerRadius="5" Margin="20,5,20,20">
+            <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource LightBorderBoxStyle}" Margin="20,0,20,20">
                 <ListView ItemsSource="{Binding DestinationRanking}">
                     <ListView.View>
                         <GridView>

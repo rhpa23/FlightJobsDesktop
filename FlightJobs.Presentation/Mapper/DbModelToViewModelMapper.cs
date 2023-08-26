@@ -21,6 +21,7 @@ namespace FlightJobsDesktop.Mapper
                     cfg.CreateMap<PilotLicenseExpensesUserModel, PilotLicenseExpensesUserViewModel>();
                     cfg.CreateMap<PilotLicenseExpensesModel, PilotLicenseExpensesViewModel>();
                     cfg.CreateMap<ChartUserBankBalanceModel, ChartUserBankBalanceViewModel>();
+                    cfg.CreateMap<ChartAirlineBankBalanceModel, ChartAirlineBankBalanceViewModel>();
                     cfg.CreateMap<UserStatisticsModel, UserStatisticsFlightsViewModel>();
                     cfg.CreateMap<AirlineFboDbModel, AirlineFboViewModel>();
                     cfg.CreateMap<AirlineModel, HiredFBOsViewModel>()

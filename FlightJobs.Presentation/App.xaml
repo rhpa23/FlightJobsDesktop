@@ -38,6 +38,7 @@
             <Style x:Key="LightBorderBoxStyle" TargetType="Border">
                 <Setter Property="BorderBrush" Value="#333337" />
                 <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="0,0,10,10"/>
             </Style>
             <Style x:Key="AppTitleBarStyle" TargetType="ui:TitleBarControl">
                 <Setter Property="ui:ThemeManager.RequestedTheme" Value="Dark" />

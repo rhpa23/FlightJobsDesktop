@@ -84,7 +84,7 @@
                 </Grid>
             </Border>
         </StackPanel>
-        <Border Margin="10,15,10,0" Grid.Column="1" BorderBrush="#333337" BorderThickness="1">
+        <Border Margin="10,15,3,0" Grid.Column="1" Style="{StaticResource LightBorderBoxStyle}">
             <ListView x:Name="lsvPendingJobs" Height="150" MouseLeftButtonUp="lsvPendingJobs_MouseLeftButtonUp"
                       ItemsSource="{Binding PendingJobs}" 
                       SelectedValue="{Binding PendingSelectedJob, Mode=TwoWay}">
@@ -152,7 +152,7 @@
             <Controls:WebView x:Name="MapWebView"  DOMContentLoaded="MapWebView_DOMContentLoaded"  />
             
         </DockPanel>
-        <Grid x:Name="PanelImgMap" Grid.Row="1" Grid.ColumnSpan="2" Background="LightGray">
+        <Grid x:Name="PanelImgMap" Grid.Row="1" Grid.ColumnSpan="2" Background="LightGray" Margin="3,10,3,3">
             <Image x:Name="ImgMap" Source="/img/background/map640.png" Margin="20" />
             <Border Style="{DynamicResource BorderButtonYellow}" Width="42" Height="40" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15">
                 <Button x:Name="BtnToggleMap" Click="BtnToggleMap_Click" Width="40" Height="40" >

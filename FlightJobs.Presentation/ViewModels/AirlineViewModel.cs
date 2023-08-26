@@ -44,5 +44,19 @@ namespace FlightJobsDesktop.ViewModels
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public ChartAirlineBankBalanceViewModel ChartModel { get; set; }
+    }
+
+
+    public class ChartAirlineBankBalanceViewModel
+    {
+        public Dictionary<string, double> Data { get; set; }
+
+        public double PayamentTotal { get; set; }
+        public string PayamentTotalCurrency { get { return string.Format("F{0:C}", PayamentTotal); } }
+
+        public double PayamentMonthGoal { get; set; }
+        public string PayamentMonthGoalCurrency { get { return string.Format("F{0:C}", PayamentMonthGoal); } }
     }
 }
