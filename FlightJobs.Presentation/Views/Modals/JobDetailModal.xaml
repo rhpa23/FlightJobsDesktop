@@ -28,7 +28,7 @@
                        Margin="10" LastChildFill="True" Height="370" Visibility="Collapsed">
                 <Controls:WebView x:Name="RouteMapWebView"  />
             </DockPanel>
-            <Label Content="* All Flight Recoreder data is kept in your 'ResourceData' folder. Backup then if you want to reinstall the system." Foreground="Gray" FontSize="10" Margin="10,0,0,0" />
+            <Label Content="* The Flight Recorder data is kept in files on your installation folder. Is recommended backup the 'Resource Data' folder if you do a reinstall." Foreground="Gray" FontSize="10" Margin="10,0,0,0" />
             <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,10,0,10" >
                 <Rectangle.Fill>
                     <SolidColorBrush Color="SlateGray"/>
