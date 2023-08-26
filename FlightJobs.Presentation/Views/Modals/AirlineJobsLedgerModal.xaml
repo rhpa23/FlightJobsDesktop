@@ -56,25 +56,25 @@
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Departure" Width="60" Binding="{Binding Job.DepartureICAO}" FontSize="10"/>
-                    <DataGridTextColumn Header="Arrival" Width="55" Binding="{Binding Job.ArrivalICAO}" FontSize="10" />
-                    <DataGridTextColumn Header="Model" Width="140" Binding="{Binding Job.ModelDescription}" FontSize="10" />
-                    <DataGridTextColumn Header="Distance" Width="55" Binding="{Binding Job.DistComplete}" FontSize="10"/>
-                    <DataGridTextColumn Header="Flight time" Width="60" Binding="{Binding Job.FlightTime}" FontSize="10"/>
-                    <DataGridTextColumn Header="Pax" Width="40" Binding="{Binding Job.Pax}" FontSize="10"/>
-                    <DataGridTextColumn Header="Payload" Width="55" Binding="{Binding Job.PayloadComplete}" FontSize="10"/>
-                    <DataGridTextColumn Header="Fuel loaded" Width="65" Binding="{Binding Job.StartFuelWeightComplete}" FontSize="10"/>
-                    <DataGridTextColumn Header="Fuel burned" Width="65" Binding="{Binding Job.UsedFuelWeightComplete}" FontSize="10"/>
-                    <DataGridTextColumn Header="Fuel price" Width="60" Binding="{Binding FuelPriceComplete}" FontSize="10"/>
-                    <DataGridTextColumn Header="Fuel cost" Width="70" Binding="{Binding FuelCostComplete}" FontSize="10" Foreground="Red"/>
-                    <DataGridTextColumn Header="Fuel cost / NM" Width="76" Binding="{Binding FuelCostPerNmComplete}" FontSize="10" />
-                    <DataGridTextColumn Header="Ground crew" Width="70" Binding="{Binding GroundCrewCostComplete}" FontSize="10" Foreground="Red"/>
-                    <DataGridTextColumn Header="Flight crew" Width="60" Binding="{Binding FlightCrewCostComplete}" FontSize="10" Foreground="Red"/>
-                    <DataGridTextColumn Header="Flight attendant" Width="85" Binding="{Binding FlightAttendantCostComplete}" FontSize="10" Foreground="Red"/>
-                    <DataGridTextColumn Header="Total crew labor" Width="85" Binding="{Binding TotalCrewCostLaborComplete}" FontSize="10" Foreground="Red"/>
-                    <DataGridTextColumn Header="Total flight" Width="75" Binding="{Binding TotalFlightCostComplete}" FontSize="10" Foreground="Red"/>
-                    <DataGridTextColumn Header="Revenue earned" Width="85" Binding="{Binding RevenueEarnedComplete}" FontSize="10"/>
-                    <DataGridTextColumn Header="Flight income" Width="80" Binding="{Binding FlightIncomeComplete}" FontSize="10" Foreground="Green"/>
+                    <DataGridTextColumn Header="Departure" Width="60" Binding="{Binding Job.DepartureICAO}" FontSize="12"/>
+                    <DataGridTextColumn Header="Arrival" Width="55" Binding="{Binding Job.ArrivalICAO}" FontSize="12" />
+                    <DataGridTextColumn Header="Model" Width="160" Binding="{Binding Job.ModelDescription}" FontSize="12" />
+                    <DataGridTextColumn Header="Distance" Width="55" Binding="{Binding Job.DistComplete}" FontSize="12"/>
+                    <DataGridTextColumn Header="Flight time" Width="60" Binding="{Binding Job.FlightTime}" FontSize="12"/>
+                    <DataGridTextColumn Header="Pax" Width="40" Binding="{Binding Job.Pax}" FontSize="12"/>
+                    <DataGridTextColumn Header="Payload" Width="55" Binding="{Binding Job.PayloadComplete}" FontSize="12"/>
+                    <DataGridTextColumn Header="Fuel loaded" Width="65" Binding="{Binding Job.StartFuelWeightComplete}" FontSize="12"/>
+                    <DataGridTextColumn Header="Fuel burned" Width="65" Binding="{Binding Job.UsedFuelWeightComplete}" FontSize="12"/>
+                    <DataGridTextColumn Header="Fuel price" Width="60" Binding="{Binding FuelPriceComplete}" FontSize="12"/>
+                    <DataGridTextColumn Header="Fuel cost" Width="80" Binding="{Binding FuelCostComplete}" FontSize="12" Foreground="Red"/>
+                    <DataGridTextColumn Header="Fuel cost / NM" Width="85" Binding="{Binding FuelCostPerNmComplete}" FontSize="12" />
+                    <DataGridTextColumn Header="Ground crew" Width="70" Binding="{Binding GroundCrewCostComplete}" FontSize="12" Foreground="Red"/>
+                    <DataGridTextColumn Header="Flight crew" Width="80" Binding="{Binding FlightCrewCostComplete}" FontSize="12" Foreground="Red"/>
+                    <DataGridTextColumn Header="Flight attendant" Width="85" Binding="{Binding FlightAttendantCostComplete}" FontSize="12" Foreground="Red"/>
+                    <DataGridTextColumn Header="Total crew labor" Width="85" Binding="{Binding TotalCrewCostLaborComplete}" FontSize="12" Foreground="Red"/>
+                    <DataGridTextColumn Header="Total flight" Width="75" Binding="{Binding TotalFlightCostComplete}" FontSize="12" Foreground="Red"/>
+                    <DataGridTextColumn Header="Revenue earned" Width="85" Binding="{Binding RevenueEarnedComplete}" FontSize="12"/>
+                    <DataGridTextColumn Header="Flight income" Width="80" Binding="{Binding FlightIncomeComplete}" FontSize="12" Foreground="Green"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

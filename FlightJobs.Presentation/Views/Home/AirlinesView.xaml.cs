@@ -47,18 +47,17 @@ namespace FlightJobsDesktop.Views.Home
             ChartBankBalanceMonth.Series[0].LabelFormat = "F{0:C}";
 
             ChartBankBalanceMonth.ChartAreas[0].AxisX.LabelStyle.Font = chartFont;
-            ChartBankBalanceMonth.ChartAreas[0].AxisY.LabelStyle.Font = chartFont;
+            //ChartBankBalanceMonth.ChartAreas[0].AxisY.LabelStyle.Font = chartFont;
+            ChartBankBalanceMonth.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
 
             if (ThemeManager.Current.ApplicationTheme == ApplicationTheme.Dark)
             {
                 ChartBankBalanceMonth.BackColor = ColorTranslator.FromHtml("#FF2B2B2B");
                 ChartBankBalanceMonth.ChartAreas[0].AxisX.LabelStyle.ForeColor = Color.White;
-                ChartBankBalanceMonth.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.White;
+                //ChartBankBalanceMonth.ChartAreas[0].AxisY.LabelStyle.ForeColor = Color.White;
                 ChartBankBalanceMonth.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.White;
                 ChartBankBalanceMonth.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.White;
                 ChartBankBalanceMonth.ChartAreas[0].BackColor = Color.Black;
-                ChartBankBalanceMonth.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
-
             }
         }
         private void HideConfirmExitPopup()
@@ -173,16 +172,16 @@ namespace FlightJobsDesktop.Views.Home
 
                 if (AppProperties.UserStatistics.Airline.OwnerUser?.Id == AppProperties.UserLogin.UserId)
                 {
-                    BtnEdit.Visibility = BtnFbo.Visibility = Visibility.Visible;
+                    BtnEdit.IsEnabled = BtnFbo.IsEnabled = true;
 
                     if (AppProperties.UserStatistics.Airline.DebtValue <= 0)
                     {
-                        BtnDebts.Visibility = Visibility.Collapsed;
+                        BtnDebts.IsEnabled = false;
                         BtnDebtText.IsEnabled = false;
                     }
                     else
                     {
-                        BtnDebts.Visibility = Visibility.Visible;
+                        BtnDebts.IsEnabled = true;
                         BtnDebtText.IsEnabled = true;
                     }
                 }
