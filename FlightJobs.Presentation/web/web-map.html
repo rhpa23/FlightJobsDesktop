@@ -34,11 +34,30 @@
         var bounds = new L.latLngBounds();
         var flight_path = [];
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        var ortho = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 19,
+                attribution: '&copy; Esri, Maxar, Earthstar Geographics, GIS User Community'
+            }
+        );
+        
+        var openstreetmap =  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }
-        ).addTo(mymap);
+        );
+
+        openstreetmap.addTo(mymap);
+
+        var baselayers = {
+            'Open Street Map': openstreetmap,
+            'Esri Satellite': ortho
+        };
+
+        L.control.layers(baselayers).addTo(mymap);
+
+        var scale = L.control.scale();
+        scale.addTo(mymap);
+
 
         let landingLightOn = false;
         let onGround = true;

@@ -14,9 +14,12 @@ using ModernWpf;
 using ModernWpf.Controls;
 using Newtonsoft.Json;
 using Notification.Wpf;
+using Squirrel;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -92,6 +95,28 @@ namespace FlightJobsDesktop
             _log.Info("Initialized");
         }
 
+        private async Task CheckForUpdates()
+        {
+            try
+            {
+                using (var manager = await UpdateManager.GitHubUpdateManager(@"https://github.com/rhpa23/FlightJobsDesktop"))
+                {
+                    var updateInfo = await manager.CheckForUpdate();
+
+                    if (updateInfo.ReleasesToApply.Any())
+                    {
+                        await manager.UpdateApp();
+                        _notificationManager.ShowButtonWindow("Application updated. The new version will take effect when restarted.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"Update application failed.", ex);
+                _notificationManager.Show("Error", "Update application failed.", NotificationType.Error, "WindowArea", TimeSpan.FromSeconds(40));
+            }
+        }
+
         private void ShowModal(string title, object content)
         {
 
@@ -112,7 +137,7 @@ namespace FlightJobsDesktop
             window.ShowDialog();
         }
 
-        private async void LoadData()
+        private async Task LoadData()
         {
             ShowLoading();
             try
@@ -128,6 +153,8 @@ namespace FlightJobsDesktop
                 LoadAllSettingsData();
 
                 _flightJobsConnectSim.Initialize();
+
+                TxbTitle.Text = $"FlightJobs Desktop - {Assembly.GetExecutingAssembly().GetName().Version}";
             }
             catch (Exception ex)
             {
@@ -135,7 +162,7 @@ namespace FlightJobsDesktop
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
                 HideLoading();
                 ShowModal("Select Host", new SelectHostUrlModal(_userSettings));
-                LoadData();
+                await LoadData();
             }
             finally
             {
@@ -143,9 +170,10 @@ namespace FlightJobsDesktop
             }
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadData();
+            await LoadData();
+            await CheckForUpdates();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

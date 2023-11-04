@@ -40,8 +40,8 @@ namespace FlightJobs.Domain.Navdata.Helpers
                     if (tempCenterDistance < centerDistance)
                     {
                         rwyResult = rwy;
+                        centerDistance = tempCenterDistance;
                     }
-                    centerDistance = tempCenterDistance;
                 }
 
             }
@@ -64,19 +64,22 @@ namespace FlightJobs.Domain.Navdata.Helpers
 
         public AirportEntity GetJobAirport(ISqLiteDbContext sqLiteDbContext, string icao, string alternativeICAO)
         {
-            var airport = sqLiteDbContext.GetAirportByIcao(icao);
-            if (GeoCalculationsUtil.CheckClosestLocation(_latitude, _longitude, airport.Laty, airport.Lonx))
+            if (icao != null)
             {
-                return airport;
-            }
-            else
-            {
-                if (alternativeICAO == null) return null;
-
-                var aptAlternative = sqLiteDbContext.GetAirportByIcao(alternativeICAO);
-                if (GeoCalculationsUtil.CheckClosestLocation(_latitude, _longitude, aptAlternative.Laty, aptAlternative.Lonx))
+                var airport = sqLiteDbContext.GetAirportByIcao(icao);
+                if (GeoCalculationsUtil.CheckClosestLocation(_latitude, _longitude, airport.Laty, airport.Lonx))
                 {
-                    return aptAlternative;
+                    return airport;
+                }
+                else
+                {
+                    if (alternativeICAO == null) return null;
+
+                    var aptAlternative = sqLiteDbContext.GetAirportByIcao(alternativeICAO);
+                    if (GeoCalculationsUtil.CheckClosestLocation(_latitude, _longitude, aptAlternative.Laty, aptAlternative.Lonx))
+                    {
+                        return aptAlternative;
+                    }
                 }
             }
             return null;

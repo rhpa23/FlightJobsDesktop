@@ -50,6 +50,7 @@ namespace FlightJobsDesktop.Views.Home
         private static bool _isJobStarted;
         private static bool _stopCheckJobStart;
         private static bool _stopCheckJobFinish;
+        private static bool _hasConnected;
         private static DateTime _jumpCheckStartTime = DateTime.Now.AddSeconds(5);
         private static DateTime _jumpCheckFinishTime = DateTime.Now.AddSeconds(5);
         private static DateTime _jumpValidationsTime = DateTime.Now.AddSeconds(5);
@@ -250,7 +251,8 @@ namespace FlightJobsDesktop.Views.Home
                         else
                         {
                             _currentJob.SliderMessage = "Wrong departure airport!!!";
-                            _siderJobWindow.GridMessage.Visibility = Visibility.Visible;
+                            if (_siderJobWindow != null)
+                                _siderJobWindow.GridMessage.Visibility = Visibility.Visible;
                         }
 
                         FlightJobsConnectSim.TakeoffDataCaptured = false;
@@ -279,7 +281,7 @@ namespace FlightJobsDesktop.Views.Home
                                                                   _currentJob.PlaneSimData.TouchdownLatitude,
                                                                   _currentJob.PlaneSimData.TouchdownLongitude);
 
-                        var landAirport = landingHelper.GetJobAirport(_sqLiteDbContext, _currentJob.ArrivalICAO, _currentJob.AlternativeICAO);
+                    var landAirport = landingHelper.GetJobAirport(_sqLiteDbContext, _currentJob.ArrivalICAO, _currentJob.AlternativeICAO);
                         if (landAirport != null)
                         {
                             var rwy = landingHelper.GetRunway(landAirport.Runways);
@@ -503,6 +505,11 @@ namespace FlightJobsDesktop.Views.Home
                 //ValidateAltimeterResults();
 
                 _currentJob.IsConnectedColor = Brushes.White;
+                _hasConnected = true;
+            }
+            else if (_hasConnected && AppProperties.UserSettings.LocalSettings.ExitWithFS)
+            {
+                App.Current.Shutdown();
             }
         }
 

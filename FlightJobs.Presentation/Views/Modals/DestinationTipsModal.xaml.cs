@@ -63,7 +63,7 @@ namespace FlightJobsDesktop.Views.Modals
                     var tipJobsListView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<IList<SearchJobTipsModel>, IList<TipsDataGridViewModel>>(list);
 
                     var tipsDataGridViewModel = new TipsDataGridViewModel();
-                    tipsDataGridViewModel.Tips = tipJobsListView;
+                    tipsDataGridViewModel.Tips = tipJobsListView.OrderByDescending(x => x.AirportRunwaySizeMeters).ToList();
                     DataContext = tipsDataGridViewModel;
                 }
             }

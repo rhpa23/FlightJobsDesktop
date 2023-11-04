@@ -39,7 +39,7 @@
                         <DataGridTextColumn Header="ICAO" Width="70" Binding="{Binding AirportICAO}" />
                         <DataGridTextColumn Header="Name" Width="*" Binding="{Binding AirportName}" />
                         <DataGridTextColumn Header="Distance (NM)" Width="120" Binding="{Binding Distance}" />
-                        <DataGridTextColumn Header="Rwy Length (m)" Width="130" Binding="{Binding AirportRunwaySizeMeters}" />
+                        <DataGridTextColumn Header="Rwy Length (m)" Width="130" Binding="{Binding AirportRunwaySizeMeters}" SortDirection="Descending" />
                         <DataGridTextColumn Header="Elevation" Width="80" Binding="{Binding AirportElevationDesc}" />
                         <DataGridTextColumn Header="Pax" Width="65" Binding="{Binding Pax}" />
                         <DataGridTextColumn Header="Cargo" Width="70" Binding="{Binding Cargo}" />

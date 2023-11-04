@@ -6,6 +6,7 @@ using log4net;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,7 +50,7 @@ namespace FlightJobsDesktop.Views.Modals
                     var tipJobsListView = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<IList<SearchJobTipsModel>, IList<TipsDataGridViewModel>>(list);
 
                     var tipsDataGridViewModel = new TipsDataGridViewModel();
-                    tipsDataGridViewModel.Tips = tipJobsListView;
+                    tipsDataGridViewModel.Tips = tipJobsListView.OrderByDescending(x => x.AirportRunwaySizeMeters).ToList();
                     DataContext = tipsDataGridViewModel;
                 }
             }

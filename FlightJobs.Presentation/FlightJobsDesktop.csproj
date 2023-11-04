@@ -41,6 +41,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -430,6 +431,9 @@
     </PackageReference>
     <PackageReference Include="ScottPlot.WPF">
       <Version>4.1.31</Version>
+    </PackageReference>
+    <PackageReference Include="squirrel.windows">
+      <Version>2.0.1</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SQLite">
       <Version>1.0.117</Version>

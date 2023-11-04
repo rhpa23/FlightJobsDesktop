@@ -28,6 +28,7 @@ namespace FlightJobs.Domain.Navdata
             DataTable dt = new DataTable();
             using (var cmd = _sqliteConnection.CreateCommand())
             {
+                term = term.Replace("\'", "");
                 cmd.CommandText = $"SELECT * FROM airport WHERE ident like '{term}%' OR name LIKE '{term}%';";
                 var da = new SQLiteDataAdapter(cmd.CommandText, _sqliteConnection);
                 da.Fill(dt);
@@ -46,6 +47,7 @@ namespace FlightJobs.Domain.Navdata
             DataTable dt = new DataTable();
             using (var cmd = _sqliteConnection.CreateCommand())
             {
+                icao = icao.Replace("\'", "");
                 cmd.CommandText = $"SELECT * FROM airport WHERE UPPER(ident) = '{icao?.ToUpper()}'";
                 var da = new SQLiteDataAdapter(cmd.CommandText, _sqliteConnection);
                 da.Fill(dt);
@@ -66,6 +68,7 @@ namespace FlightJobs.Domain.Navdata
             DataTable dt = new DataTable();
             using (var cmd = _sqliteConnection.CreateCommand())
             {
+                icao = icao.Replace("\'", "");
                 cmd.CommandText = $@"SELECT r.*, re.name, re.offset_threshold, re.heading AS heading_true, re.end_type FROM runway r
                                         INNER JOIN airport a ON r.airport_id = a.airport_id
                                         INNER JOIN runway_end re ON r.primary_end_id = re.runway_end_id OR r.secondary_end_id = re.runway_end_id
