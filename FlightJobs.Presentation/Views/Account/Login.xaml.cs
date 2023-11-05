@@ -162,8 +162,8 @@ namespace FlightJobsDesktop.Views.Account
         {
             try
             {
-                var path = AppDomain.CurrentDomain.BaseDirectory;
-                var lines = File.ReadLines(System.IO.Path.Combine(path, "ResourceData\\LoginSavedData.ini"));
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                var lines = File.ReadLines(Path.Combine(path, "FlightJobsDesktop\\ResourceData\\LoginSavedData.ini"));
                 var line = lines?.FirstOrDefault();
                 var info = line?.Split('|');
                 if (info?.Length == 4)
@@ -181,7 +181,7 @@ namespace FlightJobsDesktop.Views.Account
             }
             catch (Exception ex)
             {
-                _notificationManager.Show("Error", "Cannot load the login data.", NotificationType.Error, "WindowArea");
+                //_notificationManager.Show("Error", "Cannot load the login data.", NotificationType.Error, "WindowArea");
                 _log.Error($"LoadLoginData failed.", ex);
             }
             return false;
@@ -208,8 +208,17 @@ namespace FlightJobsDesktop.Views.Account
         {
             try
             {
-                var path = AppDomain.CurrentDomain.BaseDirectory;
-                path = Path.Combine(path, "ResourceData/LoginSavedData.ini");
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData");
+                if (!Directory.Exists(path))
+                {
+                    var dirInfo = Directory.CreateDirectory(path);
+                    path = Path.Combine(dirInfo.FullName, "LoginSavedData.ini");
+                }
+                else
+                {
+                    path = Path.Combine(path, "LoginSavedData.ini");
+                }
+                
                 string createText = $"{userViewModel.Email}|{userViewModel.Password}|{userViewModel.NickName}|{userViewModel.Id}";
                 File.WriteAllText(path, createText);
             }

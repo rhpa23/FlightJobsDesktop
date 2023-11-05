@@ -388,15 +388,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="ResourceData\LoginSavedData.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="ResourceData\Settings.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="ResourceData\Settings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="web\moq.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -811,9 +802,7 @@
       <Name>FlightJobs.Model</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ResourceData\FlightData\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Microsoft.Toolkit.Win32.UI.SDK.6.1.2\build\Microsoft.Toolkit.Win32.UI.SDK.targets" Condition="Exists('packages\Microsoft.Toolkit.Win32.UI.SDK.6.1.2\build\Microsoft.Toolkit.Win32.UI.SDK.targets')" />
   <Import Project="packages\Microsoft.Toolkit.Win32.UI.XamlApplication.6.1.2\build\Microsoft.Toolkit.Win32.UI.XamlApplication.targets" Condition="Exists('packages\Microsoft.Toolkit.Win32.UI.XamlApplication.6.1.2\build\Microsoft.Toolkit.Win32.UI.XamlApplication.targets')" />

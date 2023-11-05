@@ -220,8 +220,8 @@ namespace FlightJobsDesktop
         {
             try
             {
-                var path = AppDomain.CurrentDomain.BaseDirectory;
-                var jsonSettings = File.ReadAllText(System.IO.Path.Combine(path, "ResourceData\\Settings.json"));
+                var path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData\\Settings.json");
+                var jsonSettings = File.ReadAllText(path);
                 var userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
 
                 var infraService = MainWindow.InfraServiceFactory.Create();

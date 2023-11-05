@@ -73,9 +73,31 @@ namespace FlightJobsDesktop
             var loginWindow = _serviceProvider.GetService<Login>();
             if (loginWindow.LoadLoginData())
             {
-                var path = AppDomain.CurrentDomain.BaseDirectory;
-                var jsonSettings = File.ReadAllText(Path.Combine(path, "ResourceData\\Settings.json"));
-                var userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData\\Settings.json");
+
+                var userSettings = new UserSettingsViewModel();
+
+                if (!File.Exists(path))
+                {
+                    userSettings = new UserSettingsViewModel()
+                    {
+                       StartInSysTray = false,
+                       ExitWithFS = true,
+                       AutoStartJob = true,
+                       AutoFinishJob = true,
+                       ShowLandingData = true,
+                       ThemeName = "Dark",
+                       SelectedHostOption = 1
+                    };
+                    string jsonData = JsonConvert.SerializeObject(userSettings, Formatting.None);
+                    File.WriteAllText(path, jsonData);
+                }
+                else
+                {
+                    var jsonSettingsPath = File.ReadAllText(path);
+                    userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettingsPath);
+                }
+                
                 if (!userSettings.StartInSysTray)
                 {
                     var mainWindow = _serviceProvider.GetService<MainWindow>();

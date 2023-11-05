@@ -49,8 +49,7 @@ namespace FlightJobsDesktop.Views.Modals
         private void SaveSettings()
         {
             string jsonData = JsonConvert.SerializeObject(_userSettings, Formatting.None);
-            var path = AppDomain.CurrentDomain.BaseDirectory;
-            path = System.IO.Path.Combine(path, "ResourceData/Settings.json");
+            var path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData\\Settings.json");
             File.WriteAllText(path, jsonData);
 
             var settingsModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<UserSettingsViewModel, UserSettingsModel>(_userSettings);
