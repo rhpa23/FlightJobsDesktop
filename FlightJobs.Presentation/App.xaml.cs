@@ -73,8 +73,8 @@ namespace FlightJobsDesktop
             var loginWindow = _serviceProvider.GetService<Login>();
             if (loginWindow.LoadLoginData())
             {
-                var path = AppDomain.CurrentDomain.BaseDirectory;
-                var jsonSettings = File.ReadAllText(Path.Combine(path, "ResourceData\\Settings.json"));
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData\\Settings.json");
+                var jsonSettings = File.ReadAllText(path);
                 var userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
 
                 if (!userSettings.StartInSysTray)
