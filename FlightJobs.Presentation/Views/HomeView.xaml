@@ -49,15 +49,9 @@
                         <Label Content="Map" FontSize="22" Style="{DynamicResource CustomTabItem}" />
                     </StackPanel>
                 </TabItem.Header>
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Analysis" FontSize="22" Style="{DynamicResource CustomTabItem}" />
-                    </StackPanel>
-                </TabItem.Header>
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="Black">
+                    <Label Content="Coming soon..." HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>
