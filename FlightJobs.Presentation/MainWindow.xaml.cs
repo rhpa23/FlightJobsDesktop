@@ -221,8 +221,30 @@ namespace FlightJobsDesktop
             try
             {
                 var path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData\\Settings.json");
-                var jsonSettings = File.ReadAllText(path);
-                var userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
+                var userSettings = new UserSettingsViewModel();
+
+                if (!File.Exists(path))
+                {
+                    Directory.CreateDirectory(Directory.GetParent(path).FullName);
+
+                    userSettings = new UserSettingsViewModel()
+                    {
+                        StartInSysTray = false,
+                        ExitWithFS = true,
+                        AutoStartJob = true,
+                        AutoFinishJob = true,
+                        ShowLandingData = true,
+                        ThemeName = "Dark",
+                        SelectedHostOption = 1
+                    };
+                    string jsonData = JsonConvert.SerializeObject(userSettings, Formatting.None);
+                    File.WriteAllText(path, jsonData);
+                }
+                else
+                {
+                    var jsonSettingsData = File.ReadAllText(path);
+                    userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettingsData);
+                }
 
                 var infraService = MainWindow.InfraServiceFactory.Create();
                 var selectHost = new SelectHostViewModel();
