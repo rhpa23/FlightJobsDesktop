@@ -32,8 +32,8 @@ namespace FlightJobsDesktop.Common
         {
             try
             {
-                var path = AppDomain.CurrentDomain.BaseDirectory;
-                var dirInfo = Directory.CreateDirectory(Path.Combine(path, $"ResourceData/FlightData/{currentJob.Id}"));
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                var dirInfo = Directory.CreateDirectory(Path.Combine(path, $"FlightJobsDesktop\\FlightData\\{currentJob.Id}"));
                 path = Path.Combine(dirInfo.FullName, $"{currentJob.DepartureICAO}-{currentJob.ArrivalICAO}.json");
                 var lines = File.ReadAllLines(path);
                 var line = lines?.FirstOrDefault();
@@ -51,8 +51,8 @@ namespace FlightJobsDesktop.Common
             try
             {
                 string jsonFlRec = JsonConvert.SerializeObject(FlightRecorderList);
-                var path = AppDomain.CurrentDomain.BaseDirectory;
-                var dirInfo = Directory.CreateDirectory(Path.Combine(path, $"ResourceData/FlightData/{currentJob.Id}"));
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                var dirInfo = Directory.CreateDirectory(Path.Combine(path, $"FlightJobsDesktop\\FlightData\\{currentJob.Id}"));
                 path = Path.Combine(dirInfo.FullName, $"{currentJob.DepartureICAO}-{currentJob.ArrivalICAO}.json");
                 File.WriteAllText(path, jsonFlRec);
             }
