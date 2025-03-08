@@ -131,6 +131,7 @@ namespace FlightJobsDesktop.Views.Modals
 
                 DataContext = selectHost;
                 btnConfirmBorder.IsEnabled = true;
+                btnExitBorder.IsEnabled = true;
             } 
             catch (Exception ex)
             {
@@ -152,6 +153,11 @@ namespace FlightJobsDesktop.Views.Modals
             if (rdb == rbdOption2) _userSettings.SelectedHostOption = 2;
             if (rdb == rbdOption3) _userSettings.SelectedHostOption = 3;
             if (rdb == rbdOption4) _userSettings.SelectedHostOption = 4;
+        }
+
+        private void BtnExit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

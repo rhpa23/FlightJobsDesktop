@@ -51,8 +51,8 @@
             </Hyperlink>
         </TextBlock>
         <TextBlock Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Center" Cursor="Hand">
-            <Hyperlink NavigateUri="https://flightjobs.somee.com" RequestNavigate="WebLink_RequestNavigate">
-                https://flightjobs.somee.com
+            <Hyperlink NavigateUri="https://www.flightjobs.somee.com" RequestNavigate="WebLink_RequestNavigate">
+                https://www.flightjobs.somee.com
             </Hyperlink>
         </TextBlock>
         <TextBlock Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Center" Cursor="Hand">

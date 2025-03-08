@@ -9,7 +9,7 @@
         mc:Ignorable="d" MouseDown="HideIco_MouseDown"
         xmlns:wf="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         Title="Flight Jobs - Job data Slider" Cursor="Hand" Style="{DynamicResource BorderHighlightWindow}" Loaded="Window_Loaded"
-        SizeToContent="Height" Width="2" Topmost="True" WindowStyle="None" Background="#FF121212" ResizeMode="NoResize" Left="-1" Top="30" ShowInTaskbar="False">
+        SizeToContent="Height" Width="4" Topmost="True" WindowStyle="None" Background="#FF121212" ResizeMode="NoResize" Left="-1" Top="30" ShowInTaskbar="False">
     <Window.DataContext>
         <local:CurrentJobViewModel/>
     </Window.DataContext>

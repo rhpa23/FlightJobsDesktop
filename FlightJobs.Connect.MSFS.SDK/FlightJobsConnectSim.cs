@@ -241,8 +241,8 @@ namespace FlightJobs.Connect.MSFS.SDK
                     _fsConnect.RegisterDataDefinition<PlanePayloadResponseStruct>(RequestDefinitionEnum.PlanePayloadData, _planePayloadDataDefinitionList);
                     _fsConnect.RegisterDataDefinition<SimInfoResponseStruct>(RequestDefinitionEnum.SimData, _simDefinitionList);
                 }
-                catch
-                { /* Empyt because the sim is not running. PLEASE DON'T LOG HERE!!! */  }
+                catch (Exception ex)
+                { /* Empyt because the sim is not running. PLEASE DON'T LOG HERE!!! */  _log.Error(ex); }
             }
         }
 

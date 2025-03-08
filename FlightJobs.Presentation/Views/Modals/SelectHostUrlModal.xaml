@@ -43,10 +43,18 @@
                 <ui:FontIcon Visibility="Collapsed" x:Name="iconOption4Online" Foreground="{Binding Path=Option4IconColor}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
                              FontFamily="Segoe MDL2 Assets" Glyph="{Binding Path=Option4Icon}" FontSize="18"  />
             </Grid>
-            
-            <Border x:Name="btnConfirmBorder" Margin="0,30,0,0" Style="{DynamicResource BorderButtonYellow}" Height="50" Width="90">
-                <Button x:Name="BtnConfirm" Content="Confirm" Width="90" Height="50"  Click="BtnConfirm_Click" />
-            </Border>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Border x:Name="btnExitBorder" Margin="0,30,0,0" Style="{DynamicResource BorderButtonYellow}" Height="50" Width="90" Grid.Column="0" IsEnabled="False">
+                    <Button x:Name="BtnExit" Content="Exit" Width="90" Height="50"  Click="BtnExit_Click" />
+                </Border>
+                <Border x:Name="btnConfirmBorder" Margin="0,30,0,0" Style="{DynamicResource BorderButtonYellow}" Height="50" Width="90" Grid.Column="1">
+                    <Button x:Name="BtnConfirm" Content="Confirm" Width="90" Height="50"  Click="BtnConfirm_Click" />
+                </Border>
+            </Grid>
         </StackPanel>
         <notifications:NotificationArea x:Name="Notification" Position="TopCenter" MaxItems="3" />
     </Grid>

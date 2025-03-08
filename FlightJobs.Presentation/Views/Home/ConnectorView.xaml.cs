@@ -246,7 +246,10 @@ namespace FlightJobsDesktop.Views.Home
                             fRecorder.TimeUtc = DateTime.UtcNow;
                             fRecorder.OnGround = false;
                             fRecorder.FPS = FlightJobsConnectSim.CommonSimData.FPS;
-                            FlightRecorderUtil.FlightRecorderList.Add(fRecorder);
+                            lock (FlightRecorderUtil.FlightRecorderList)
+                            {
+                                FlightRecorderUtil.FlightRecorderList.Add(fRecorder);
+                            }
                         }
                         else
                         {
@@ -270,18 +273,15 @@ namespace FlightJobsDesktop.Views.Home
         {
             try
             {
-                if (FlightJobsConnectSim.LandingDataCaptured && AppProperties.UserSettings.LocalSettings.ShowLandingData)
+                if (FlightJobsConnectSim.LandingDataCaptured)
                 {
                     Application.Current.Dispatcher.Invoke((Action) delegate
                     {
-                        if (!_sliderTouchdownWindow.IsLoaded)
-                            _sliderTouchdownWindow.Show();
-
                         var landingHelper = new RunwayHelper(_currentJob.PlaneSimData.HeadingTrue,
                                                                   _currentJob.PlaneSimData.TouchdownLatitude,
                                                                   _currentJob.PlaneSimData.TouchdownLongitude);
 
-                    var landAirport = landingHelper.GetJobAirport(_sqLiteDbContext, _currentJob.ArrivalICAO, _currentJob.AlternativeICAO);
+                        var landAirport = landingHelper.GetJobAirport(_sqLiteDbContext, _currentJob.ArrivalICAO, _currentJob.AlternativeICAO);
                         if (landAirport != null)
                         {
                             var rwy = landingHelper.GetRunway(landAirport.Runways);
@@ -294,7 +294,10 @@ namespace FlightJobsDesktop.Views.Home
                             CalculateScoreData();
                             SetupResultsMessags();
 
-                            _sliderTouchdownWindow.ToggleSlider(true, 15);
+                            if (AppProperties.UserSettings.LocalSettings.ShowLandingData)
+                            {
+                                _sliderTouchdownWindow.ToggleSlider(true, 15);
+                            }                            
                             _sliderTouchdownWindow.DataContext = _currentJob;
 
                             // add pecision to landing Flight recorder
@@ -302,7 +305,11 @@ namespace FlightJobsDesktop.Views.Home
                             fRecorder.TimeUtc = DateTime.UtcNow;
                             fRecorder.OnGround = true;
                             fRecorder.FPS = FlightJobsConnectSim.CommonSimData.FPS;
-                            FlightRecorderUtil.FlightRecorderList.Add(fRecorder);
+
+                            lock (FlightRecorderUtil.FlightRecorderList)
+                            {
+                                FlightRecorderUtil.FlightRecorderList.Add(fRecorder);
+                            }
                         }
                         else
                         {
@@ -549,7 +556,10 @@ namespace FlightJobsDesktop.Views.Home
                 var fRecorder = new FlightRecorderViewModel(FlightJobsConnectSim.PlaneSimData);
                 fRecorder.TimeUtc = DateTime.UtcNow;
                 fRecorder.FPS = FlightJobsConnectSim.CommonSimData.FPS;
-                FlightRecorderUtil.FlightRecorderList.Add(fRecorder);
+                lock (FlightRecorderUtil.FlightRecorderList)
+                {
+                    FlightRecorderUtil.FlightRecorderList.Add(fRecorder);
+                }
             }
         }
 
@@ -612,7 +622,10 @@ namespace FlightJobsDesktop.Views.Home
                     if (_siderJobWindow != null) _siderJobWindow.Close();
                     
                     _siderJobWindow = new CurrentJobDataWindow(_currentJob);
-                    _siderJobWindow.Show();
+                    if (!_siderJobWindow.IsLoaded)
+                        _siderJobWindow.Show();
+                    if (!_sliderTouchdownWindow.IsLoaded)
+                        _sliderTouchdownWindow.Show();
 
                     _siderJobWindow.GridSimData.Visibility = Visibility.Visible;// FlightJobsConnectSim.CommonSimData.IsConnected ? Visibility.Visible : Visibility.Collapsed;
                     _siderJobWindow.StartedIcon.Visibility = Visibility.Hidden;

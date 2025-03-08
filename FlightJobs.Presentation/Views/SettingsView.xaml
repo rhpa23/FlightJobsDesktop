@@ -192,6 +192,11 @@
                                     <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE896;" />
                                 </ui:AppBarButton.Icon>
                             </ui:AppBarButton>
+                            <ui:AppBarButton x:Name="btnSelectHost" Label="Select Host" Margin="0,50,0,0" Click="btnSelectHost_Click" >
+                                <ui:AppBarButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE909;" />
+                                </ui:AppBarButton.Icon>
+                            </ui:AppBarButton>
                         </StackPanel>
                     </Grid>
                 </Border>

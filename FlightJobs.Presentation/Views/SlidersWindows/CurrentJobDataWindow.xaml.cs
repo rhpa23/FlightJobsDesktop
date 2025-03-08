@@ -85,7 +85,7 @@ namespace FlightJobsDesktop.Views.SlidersWindows
 
         internal void ToggleSlider(bool toShow, int secondsToClose = SECONDS_TO_CLOSE)
         {
-            var widthValue = toShow ? TARGET_WIDTH : 2;
+            var widthValue = toShow ? TARGET_WIDTH : 4;
             DoubleAnimation sliderAnimation = new DoubleAnimation(widthValue, new Duration(TimeSpan.FromSeconds(0.3)));
             BeginAnimation(WidthProperty, sliderAnimation);
             if (toShow)

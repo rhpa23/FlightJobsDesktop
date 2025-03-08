@@ -4,6 +4,7 @@ using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
+using FlightJobsDesktop.Views.Modals;
 using log4net;
 using ModernWpf;
 using Newtonsoft.Json;
@@ -132,6 +133,32 @@ namespace FlightJobsDesktop.Views
                 _log.Error("SettingsView Checkbox click", ex); 
                 _notificationManager.Show("Error", "Error when try to save application settings. Please verify your administrator permissions.", NotificationType.Error, "WindowArea"); 
             }
+        }
+
+        private void btnSelectHost_Click(object sender, RoutedEventArgs e)
+        {
+            ShowModal("Select Host (Confirm and restart for take effect)", new SelectHostUrlModal(_userSettings));
+            //MainWindow.loa
+        }
+
+        private void ShowModal(string title, object content)
+        {
+
+            Window window = new Window
+            {
+                Title = title,
+                Content = content,
+                Width = ((UserControl)content).MinWidth,
+                Height = ((UserControl)content).MinHeight + 40,
+                //SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.CanResize,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ShowInTaskbar = true,
+                WindowStyle = WindowStyle.ToolWindow,
+                Topmost = true,
+            };
+
+            window.ShowDialog();
         }
     }
 }
