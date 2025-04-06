@@ -56,7 +56,7 @@ namespace FlightJobsDesktop.Views.SlidersWindows
         DispatcherTimer _hideTimer = new DispatcherTimer();
         private bool _isResultsOpen = false;
         private const double TARGET_WIDTH = 190;
-        private const double TARGET_RESULTS_WIDTH = 820;
+        private const double TARGET_RESULTS_WIDTH = 900;
         private const int SECONDS_TO_CLOSE = 180;
         private CurrentJobViewModel _currentJobViewModel;
         private static readonly ILog _log = LogManager.GetLogger(typeof(CurrentJobDataWindow));

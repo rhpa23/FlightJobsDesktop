@@ -13,6 +13,15 @@
     <Window.DataContext>
         <local:CurrentJobViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <Style x:Key="OpacityMouseOverEffect" TargetType="StackPanel">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="StackPanel.Opacity" Value="0.9" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="190"/>
@@ -244,50 +253,68 @@
                             </StackPanel>
                         </TabItem.Header>
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Margin="0,10,5,0" >
-                            <Run Text="{Binding MsgResults.TouchdownScore}" Foreground="White" />
-                            <Run Text="{Binding PlaneSimData.ScoreTouchdown, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTouchdownFpm}"/>
-                            </TextBlock>
-                            <TextBlock Margin="0,10,5,0" >
-                            <Run Text="{Binding MsgResults.GForceScore}" Foreground="White" />
-                            <Run Text="{Binding PlaneSimData.ScoreGForce, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultGForce}"/>
-                            </TextBlock>
-                            <TextBlock Margin="0,10,5,0" >
-                            <Run Text="{Binding MsgResults.BounceScore}" Foreground="White"/>
-                            <Run Text="{Binding PlaneSimData.ScoreBounce, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultBounceCount}"/>
-                            </TextBlock>
-                            <TextBlock Margin="0,10,5,0" >
-                            <Run Text="{Binding MsgResults.LandingDerivationScore}" Foreground="White"/>
-                            <Run Text="{Binding PlaneSimData.ScoreCenterDerivation, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultCenterDerivation}"/>
-                            </TextBlock>
-                            <TextBlock Margin="0,10,5,0" >
-                            <Run Text="{Binding MsgResults.LandingDistanceScore}" Foreground="White"/>
-                            <Run Text="{Binding PlaneSimData.ScoreLandDistance, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultLandDistance}"/>
-                            </TextBlock>
-                            <TextBlock Margin="0,10,5,0" >
-                            <Run Text="{Binding MsgResults.UpwindLandingScore}" Foreground="White"/>
-                            <Run Text="{Binding PlaneSimData.ScoreWindAngle, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTouchdownWindAngle}"/>
-                            </TextBlock>
-                            <TextBlock Margin="0,10,5,0" >
-                            <Run Text="{Binding MsgResults.TakeoffDerivationScore}" Foreground="White"/>
-                            <Run Text="{Binding PlaneSimData.ScoreTakeoffCenterDerivation, Mode=OneWay}" FontWeight="Bold" Foreground="{Binding PlaneSimData.ColorResultTakeoffCenterDerivation}"/>
-                            </TextBlock>
-                            <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultBeaconLightVisibility}">
-                            <Run Text="{Binding MsgResults.BeaconLightsScore}" Foreground="White"/>
-                            <Run Text="{Binding PlaneSimData.ScoreLightBeaconOn}" FontWeight="Bold" Foreground="Orange"/>
-                            </TextBlock>
-                            <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultLandingLightVisibility}">
-                            <Run Text="{Binding MsgResults.LandingLightsScore}" Foreground="White"/>
-                            <Run Text="{Binding PlaneSimData.ScoreLightLandingOn}" FontWeight="Bold" Foreground="Orange"/>
-                            </TextBlock>
-                            <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultNavigationLightVisibility}">
-                            <Run Text="{Binding MsgResults.NavegationLightsScore}" Foreground="White"/>
-                            <Run Text="{Binding PlaneSimData.ScoreLightNavigationOn}" FontWeight="Bold" Foreground="Orange"/>
-                            </TextBlock>
-                            <TextBlock Margin="0,10,5,0" Visibility="{Binding FlightResults.ResultAltimeterSettingVisibility}">
-                            <Run Text="{Binding MsgResults.AltimeterScore}" Foreground="White"/>
-                            <Run Text="{Binding PlaneSimData.ScoreAltimeterSettings}" FontWeight="Bold" Foreground="Orange"/>
-                            </TextBlock>
+                            <StackPanel.Resources>
+                                <ImageBrush x:Key="backgroundLand" ImageSource="/img/results/background-land-01.jpg" />
+                                <ImageBrush x:Key="backgroundTakeoff" ImageSource="/img/results/background-takeoff-01.jpg"  />
+                                <ImageBrush x:Key="backgroundWarning" ImageSource="/img/results/background-warning-01.jpg"  />
+                                <ImageBrush x:Key="backgroundScore" ImageSource="/img/results/background-total-score-01.jpg"  />
+                            </StackPanel.Resources>
+
+                            <StackPanel Background="{StaticResource backgroundTakeoff}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}">
+                                <Label Content="{Binding MsgResults.TakeoffDerivationScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
+                                <Label Content="{Binding MsgResults.TakeoffDerivationScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
+                                <Label Content="{Binding PlaneSimData.ScoreTakeoffCenterDerivation, Mode=OneWay}" Foreground="{Binding PlaneSimData.ColorResultTakeoffCenterDerivation}" Margin="0,-38,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
+                            <StackPanel Background="{StaticResource backgroundLand}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}">
+                                <Label Content="{Binding MsgResults.TouchdownScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
+                                <Label Content="{Binding MsgResults.TouchdownScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
+                                <Label Content="{Binding PlaneSimData.ScoreTouchdown, Mode=OneWay}" Foreground="{Binding PlaneSimData.ColorResultTouchdownFpm}" Margin="0,-38,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
+                            <StackPanel Background="{StaticResource backgroundLand}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}">
+                                <Label Content="{Binding MsgResults.GForceScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
+                                <Label Content="{Binding MsgResults.GForceScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
+                                <Label Content="{Binding PlaneSimData.ScoreGForce, Mode=OneWay}" Foreground="{Binding PlaneSimData.ColorResultGForce}" Margin="0,-38,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
+                            <StackPanel Background="{StaticResource backgroundLand}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}">
+                                <Label Content="{Binding MsgResults.BounceScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
+                                <Label Content="{Binding MsgResults.BounceScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
+                                <Label Content="{Binding PlaneSimData.ScoreBounce, Mode=OneWay}" Foreground="{Binding PlaneSimData.ColorResultBounceCount}" Margin="0,-38,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
+                            <StackPanel Background="{StaticResource backgroundLand}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}">
+                                <Label Content="{Binding MsgResults.LandingDerivationScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
+                                <Label Content="{Binding MsgResults.LandingDerivationScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
+                                <Label Content="{Binding PlaneSimData.ScoreCenterDerivation, Mode=OneWay}" Foreground="{Binding PlaneSimData.ColorResultCenterDerivation}" Margin="0,-38,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
+                            <StackPanel Background="{StaticResource backgroundLand}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}">
+                                <Label Content="{Binding MsgResults.LandingDistanceScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
+                                <Label Content="{Binding MsgResults.LandingDistanceScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
+                                <Label Content="{Binding PlaneSimData.ScoreLandDistance, Mode=OneWay}" Foreground="{Binding PlaneSimData.ColorResultLandDistance}" Margin="0,-38,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
+                            <StackPanel Background="{StaticResource backgroundLand}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}">
+                                <Label Content="{Binding MsgResults.UpwindLandingScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
+                                <Label Content="{Binding MsgResults.UpwindLandingScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
+                                <Label Content="{Binding PlaneSimData.ScoreWindAngle, Mode=OneWay}" Foreground="{Binding PlaneSimData.ColorResultTouchdownWindAngle}" Margin="0,-38,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
+                            <StackPanel Background="{StaticResource backgroundWarning}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}" Visibility="{Binding FlightResults.ResultBeaconLightVisibility}">
+                                <Label Content="{Binding MsgResults.BeaconLightsScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
+                                <Label Content="{Binding MsgResults.BeaconLightsScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
+                                <Label Content="{Binding PlaneSimData.ScoreLightBeaconOn, Mode=OneWay}" Foreground="Orange" Margin="0,-38,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
+                            <StackPanel Background="{StaticResource backgroundWarning}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}" Visibility="{Binding FlightResults.ResultLandingLightVisibility}">
+                                <Label Content="{Binding MsgResults.LandingLightsScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
+                                <Label Content="{Binding MsgResults.LandingLightsScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
+                                <Label Content="{Binding PlaneSimData.ScoreLightLandingOn, Mode=OneWay}" Foreground="Orange" Margin="0,-38,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
+                            <StackPanel Background="{StaticResource backgroundWarning}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}" Visibility="{Binding FlightResults.ResultNavigationLightVisibility}">
+                                <Label Content="{Binding MsgResults.NavegationLightsScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
+                                <Label Content="{Binding MsgResults.NavegationLightsScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
+                                <Label Content="{Binding PlaneSimData.ScoreLightNavigationOn, Mode=OneWay}" Foreground="Orange" Margin="0,-38,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
+                            <StackPanel Background="{StaticResource backgroundWarning}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}" Visibility="{Binding FlightResults.ResultAltimeterSettingVisibility}">
+                                <Label Content="{Binding MsgResults.AltimeterScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
+                                <Label Content="{Binding MsgResults.AltimeterScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
+                                <Label Content="{Binding PlaneSimData.ScoreAltimeterSettings, Mode=OneWay}" Foreground="Orange" Margin="0,-38,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
 
                             <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,15,0,0" >
                                 <Rectangle.Fill>
@@ -295,10 +322,11 @@
                                 </Rectangle.Fill>
                             </Rectangle>
 
-                            <TextBlock Margin="0,5,5,15">
-                                <Run Text="{Binding MsgResults.TotalScore}" Foreground="White" FontWeight="Bold"/>
-                                <Run Text="{Binding Score}" FontWeight="Bold" Foreground="GreenYellow"/>
-                            </TextBlock>
+                            <StackPanel Background="{StaticResource backgroundScore}" Style="{StaticResource OpacityMouseOverEffect}" Height="60" Margin="0,5,0,20">
+                                <Label Content="{Binding MsgResults.TotalScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="18" />
+                                <Label Content="{Binding MsgResults.TotalScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="14" />
+                                <Label Content="{Binding Score, Mode=OneWay}" Foreground="GreenYellow" Margin="0,-40,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
                         </StackPanel>
                     </TabItem>
                     <TabItem>

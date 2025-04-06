@@ -6,6 +6,7 @@ using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views.Modals;
+using log4net;
 using ModernWpf.Controls;
 using Notification.Wpf;
 using System;
@@ -35,6 +36,7 @@ namespace FlightJobsDesktop.Views.Home
         private string _mapUrlQuery;
 
         private Flyout _flyoutConfirmRemove;
+        private static readonly ILog _log = LogManager.GetLogger(typeof(ManagerJobsView));
 
         public ManagerJobsView()
         {
@@ -256,7 +258,7 @@ namespace FlightJobsDesktop.Views.Home
             {
                 if (MapWebView.Source.HostNameType != UriHostNameType.Unknown)
                 {
-                    MapWebView.InvokeScript("eval", new string[] { "var node = document.getElementsByTagName('body')[0]; var map = document.getElementById('mapContainer'); while (node.hasChildNodes()) { node.removeChild(node.lastChild); } node.appendChild(map);" });
+                    //MapWebView.InvokeScript("eval", new string[] { "var node = document.getElementsByTagName('body')[0]; var map = document.getElementById('mapContainer'); while (node.hasChildNodes()) { node.removeChild(node.lastChild); } node.appendChild(map);" });
                     var queryDictionary = System.Web.HttpUtility.ParseQueryString(MapWebView.Source.Query);
 
                     var departureParam = GetIcaoInfo(queryDictionary[0].ToString());
@@ -278,8 +280,9 @@ namespace FlightJobsDesktop.Views.Home
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Error(ex);
                 _notificationManager.Show("Error", "Map data could not be loaded. Please try again later.", NotificationType.Error, "WindowArea");
             }
         }

@@ -242,7 +242,7 @@ namespace FlightJobs.Connect.MSFS.SDK
                     _fsConnect.RegisterDataDefinition<SimInfoResponseStruct>(RequestDefinitionEnum.SimData, _simDefinitionList);
                 }
                 catch (Exception ex)
-                { /* Empyt because the sim is not running. PLEASE DON'T LOG HERE!!! */  _log.Error(ex); }
+                { /* Empyt because the sim is not running. PLEASE DON'T LOG HERE!!! */  }
             }
         }
 

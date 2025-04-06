@@ -9,7 +9,7 @@ namespace FlightJobsDesktop.ViewModels
     public class MessagesResultViewModel : ObservableObject
     {
         private string _touchdownScore;
-        public string TouchdownScore 
+        public string TouchdownScoreTitle 
         {
             get { return _touchdownScore; }
             set
@@ -19,7 +19,7 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         private string _gForceScore;
-        public string GForceScore
+        public string GForceScoreTitle
         {
             get { return _gForceScore; }
             set
@@ -29,7 +29,7 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         private string _bounceScore;
-        public string BounceScore
+        public string BounceScoreTitle
         {
             get { return _bounceScore; }
             set
@@ -39,7 +39,7 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         private string _landingDerivationScore;
-        public string LandingDerivationScore
+        public string LandingDerivationScoreTitle
         {
             get { return _landingDerivationScore; }
             set
@@ -49,7 +49,7 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         private string _landingDistanceScore;
-        public string LandingDistanceScore
+        public string LandingDistanceScoreTitle
         {
             get { return _landingDistanceScore; }
             set
@@ -59,7 +59,7 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         private string _takeoffDerivationScore;
-        public string TakeoffDerivationScore
+        public string TakeoffDerivationScoreTitle
         {
             get { return _takeoffDerivationScore; }
             set
@@ -69,7 +69,7 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         private string _upwindLandingScore;
-        public string UpwindLandingScore
+        public string UpwindLandingScoreTitle
         {
             get { return _upwindLandingScore; }
             set
@@ -79,7 +79,7 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         private string _beaconLightsScore;
-        public string BeaconLightsScore
+        public string BeaconLightsScoreTitle
         {
             get { return _beaconLightsScore; }
             set
@@ -89,7 +89,7 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         private string _landingLightsScore;
-        public string LandingLightsScore
+        public string LandingLightsScoreTitle
         {
             get { return _landingLightsScore; }
             set
@@ -99,7 +99,7 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         private string _navegationLightsScore;
-        public string NavegationLightsScore
+        public string NavegationLightsScoreTitle
         {
             get { return _navegationLightsScore; }
             set
@@ -109,7 +109,7 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         private string _altimeterScore;
-        public string AltimeterScore
+        public string AltimeterScoreTitle
         {
             get { return _altimeterScore; }
             set
@@ -119,12 +119,134 @@ namespace FlightJobsDesktop.ViewModels
         }
 
         private string _totalScore;
-        public string TotalScore
+        public string TotalScoreTitle
         {
             get { return _totalScore; }
             set
             {
                 _totalScore = value; OnPropertyChanged();
+            }
+        }
+
+        /// SUB_TITLES
+        /// 
+        private string _touchdownScoreSubTitle;
+        public string TouchdownScoreSubTitle
+        {
+            get { return _touchdownScoreSubTitle; }
+            set
+            {
+                _touchdownScoreSubTitle = value; OnPropertyChanged();
+            }
+        }
+
+        private string _gForceScoreSubTitle;
+        public string GForceScoreSubTitle
+        {
+            get { return _gForceScoreSubTitle; }
+            set
+            {
+                _gForceScoreSubTitle = value; OnPropertyChanged();
+            }
+        }
+
+        private string _bounceScoreSubTitle;
+        public string BounceScoreSubTitle
+        {
+            get { return _bounceScoreSubTitle; }
+            set
+            {
+                _bounceScoreSubTitle = value; OnPropertyChanged();
+            }
+        }
+
+        private string _landingDerivationScoreSubTitle;
+        public string LandingDerivationScoreSubTitle
+        {
+            get { return _landingDerivationScoreSubTitle; }
+            set
+            {
+                _landingDerivationScoreSubTitle = value; OnPropertyChanged();
+            }
+        }
+
+        private string _landingDistanceScoreSubTitle;
+        public string LandingDistanceScoreSubTitle
+        {
+            get { return _landingDistanceScoreSubTitle; }
+            set
+            {
+                _landingDistanceScoreSubTitle = value; OnPropertyChanged();
+            }
+        }
+
+        private string _takeoffDerivationScoreSubTitle;
+        public string TakeoffDerivationScoreSubTitle
+        {
+            get { return _takeoffDerivationScoreSubTitle; }
+            set
+            {
+                _takeoffDerivationScoreSubTitle = value; OnPropertyChanged();
+            }
+        }
+
+        private string _upwindLandingScoreSubTitle;
+        public string UpwindLandingScoreSubTitle
+        {
+            get { return _upwindLandingScoreSubTitle; }
+            set
+            {
+                _upwindLandingScoreSubTitle = value; OnPropertyChanged();
+            }
+        }
+
+        private string _beaconLightsScoreSubTitle;
+        public string BeaconLightsScoreSubTitle
+        {
+            get { return _beaconLightsScoreSubTitle; }
+            set
+            {
+                _beaconLightsScoreSubTitle = value; OnPropertyChanged();
+            }
+        }
+
+        private string _landingLightsScoreSubTitle;
+        public string LandingLightsScoreSubTitle
+        {
+            get { return _landingLightsScoreSubTitle; }
+            set
+            {
+                _landingLightsScoreSubTitle = value; OnPropertyChanged();
+            }
+        }
+
+        private string _navegationLightsScoreSubTitle;
+        public string NavegationLightsScoreSubTitle
+        {
+            get { return _navegationLightsScoreSubTitle; }
+            set
+            {
+                _navegationLightsScoreSubTitle = value; OnPropertyChanged();
+            }
+        }
+
+        private string _altimeterScoreSubTitle;
+        public string AltimeterScoreSubTitle
+        {
+            get { return _altimeterScoreSubTitle; }
+            set
+            {
+                _altimeterScoreSubTitle = value; OnPropertyChanged();
+            }
+        }
+
+        private string _totalScoreSubTitle;
+        public string TotalScoreSubTitle
+        {
+            get { return _totalScoreSubTitle; }
+            set
+            {
+                _totalScoreSubTitle = value; OnPropertyChanged();
             }
         }
     }

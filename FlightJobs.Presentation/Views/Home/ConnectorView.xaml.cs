@@ -332,43 +332,59 @@ namespace FlightJobsDesktop.Views.Home
         {
             _resultMessages =  new List<string>();
 
-            _currentJob.MsgResults.TouchdownScore =
-                string.Format(MessagesConst.MSG_TOUCHDOWN, _currentJob.PlaneSimData.TouchdownFpm);
+            // TITLES
+            _currentJob.MsgResults.TouchdownScoreTitle =
+                string.Format(MessagesConst.MSG_TOUCHDOWN_TITLE, _currentJob.PlaneSimData.TouchdownFpm);
 
-            _currentJob.MsgResults.GForceScore =
-                string.Format(MessagesConst.MSG_GFORCE, _currentJob.PlaneSimData.TouchdownGForceText);
+            _currentJob.MsgResults.GForceScoreTitle =
+                string.Format(MessagesConst.MSG_GFORCE_TITLE, _currentJob.PlaneSimData.TouchdownGForceText);
 
-            _currentJob.MsgResults.BounceScore =
-                string.Format(MessagesConst.MSG_BOUNCE, _currentJob.PlaneSimData.TouchdownBounceCount);
+            _currentJob.MsgResults.BounceScoreTitle =
+                string.Format(MessagesConst.MSG_BOUNCE_TITLE, _currentJob.PlaneSimData.TouchdownBounceCount);
 
-            _currentJob.MsgResults.LandingDerivationScore =
-                string.Format(MessagesConst.MSG_LANDING_DERIVATION, _currentJob.PlaneSimData.TouchdownCenterDerivation);
+            _currentJob.MsgResults.LandingDerivationScoreTitle =
+                string.Format(MessagesConst.MSG_LANDING_DERIVATION_TITLE, _currentJob.PlaneSimData.TouchdownCenterDerivation);
 
-            _currentJob.MsgResults.LandingDistanceScore =
-                string.Format(MessagesConst.MSG_LANDING_DISTANCE, _currentJob.PlaneSimData.TouchdownThresholdDistance);
+            _currentJob.MsgResults.LandingDistanceScoreTitle =
+                string.Format(MessagesConst.MSG_LANDING_DISTANCE_TITLE, _currentJob.PlaneSimData.TouchdownThresholdDistance);
 
-            _currentJob.MsgResults.TakeoffDerivationScore =
-                string.Format(MessagesConst.MSG_TAKEOFF_DERIVATION, _currentJob.PlaneSimData.TakeoffCenterDerivation);
+            _currentJob.MsgResults.TakeoffDerivationScoreTitle =
+                string.Format(MessagesConst.MSG_TAKEOFF_DERIVATION_TITLE, _currentJob.PlaneSimData.TakeoffCenterDerivation);
 
-            _currentJob.MsgResults.UpwindLandingScore = MessagesConst.MSG_UPWIND_LANDING;
-            _currentJob.MsgResults.BeaconLightsScore = MessagesConst.MSG_BEACON_LIGHTS;
-            _currentJob.MsgResults.LandingLightsScore = MessagesConst.MSG_LANDING_LIGHTS;
-            _currentJob.MsgResults.NavegationLightsScore = MessagesConst.MSG_NAVEGATION_LIGHTS;
-            _currentJob.MsgResults.AltimeterScore = MessagesConst.MSG_ST_ALTIMETER;
-            _currentJob.MsgResults.TotalScore = MessagesConst.MSG_TOTAL_SCORE;
+            _currentJob.MsgResults.UpwindLandingScoreTitle = MessagesConst.MSG_UPWIND_LANDING_TITLE;
+            _currentJob.MsgResults.BeaconLightsScoreTitle = MessagesConst.MSG_BEACON_LIGHTS_TITLE;
+            _currentJob.MsgResults.LandingLightsScoreTitle = MessagesConst.MSG_LANDING_LIGHTS_TITLE;
+            _currentJob.MsgResults.NavegationLightsScoreTitle = MessagesConst.MSG_NAVEGATION_LIGHTS_TITLE;
+            _currentJob.MsgResults.AltimeterScoreTitle = MessagesConst.MSG_ST_ALTIMETER_TITLE;
+            _currentJob.MsgResults.TotalScoreTitle = MessagesConst.MSG_TOTAL_SCORE_TITLE;
 
-            _resultMessages.Add(_currentJob.MsgResults.TouchdownScore + _currentJob.PlaneSimData.ScoreTouchdown);
-            _resultMessages.Add(_currentJob.MsgResults.GForceScore + _currentJob.PlaneSimData.ScoreGForce);
-            _resultMessages.Add(_currentJob.MsgResults.BounceScore + _currentJob.PlaneSimData.ScoreBounce);
-            _resultMessages.Add(_currentJob.MsgResults.LandingDerivationScore + _currentJob.PlaneSimData.ScoreCenterDerivation);
-            _resultMessages.Add(_currentJob.MsgResults.LandingDistanceScore + _currentJob.PlaneSimData.ScoreLandDistance);
-            _resultMessages.Add(_currentJob.MsgResults.TakeoffDerivationScore + _currentJob.PlaneSimData.ScoreTakeoffCenterDerivation);
-            _resultMessages.Add(_currentJob.MsgResults.UpwindLandingScore + _currentJob.PlaneSimData.ScoreWindAngle);
-            _resultMessages.Add(_currentJob.MsgResults.BeaconLightsScore + _currentJob.PlaneSimData.ScoreLightBeaconOn);
-            _resultMessages.Add(_currentJob.MsgResults.LandingLightsScore + _currentJob.PlaneSimData.ScoreLightLandingOn);
-            _resultMessages.Add(_currentJob.MsgResults.NavegationLightsScore + _currentJob.PlaneSimData.ScoreLightNavigationOn);
-            _resultMessages.Add(_currentJob.MsgResults.AltimeterScore + _currentJob.PlaneSimData.ScoreAltimeterSettings);
-            _resultMessages.Add(_currentJob.MsgResults.TotalScore + _currentJob.Score);
+            // SUB TITLES
+            _currentJob.MsgResults.TouchdownScoreSubTitle = MessagesConst.MSG_TOUCHDOWN_SUB_TITLE;
+            _currentJob.MsgResults.GForceScoreSubTitle = MessagesConst.MSG_GFORCE_SUB_TITLE;
+            _currentJob.MsgResults.BounceScoreSubTitle = MessagesConst.MSG_BOUNCE_SUB_TITLE;
+            _currentJob.MsgResults.LandingDerivationScoreSubTitle = MessagesConst.MSG_LANDING_DERIVATION_SUB_TITLE;
+            _currentJob.MsgResults.LandingDistanceScoreSubTitle = MessagesConst.MSG_LANDING_DISTANCE_SUB_TITLE;
+            _currentJob.MsgResults.TakeoffDerivationScoreSubTitle = MessagesConst.MSG_TAKEOFF_DERIVATION_SUB_TITLE;
+            _currentJob.MsgResults.UpwindLandingScoreSubTitle = MessagesConst.MSG_UPWIND_LANDING_SUB_TITLE;
+            _currentJob.MsgResults.BeaconLightsScoreSubTitle = MessagesConst.MSG_BEACON_LIGHTS_SUB_TITLE;
+            _currentJob.MsgResults.LandingLightsScoreSubTitle = MessagesConst.MSG_LANDING_LIGHTS_SUB_TITLE;
+            _currentJob.MsgResults.NavegationLightsScoreSubTitle = MessagesConst.MSG_NAVEGATION_LIGHTS_SUB_TITLE;
+            _currentJob.MsgResults.AltimeterScoreSubTitle = MessagesConst.MSG_ST_ALTIMETER_SUB_TITLE;
+            _currentJob.MsgResults.TotalScoreSubTitle = MessagesConst.MSG_TOTAL_SCORE_SUB_TITLE;
+
+            // Result Messages List
+            _resultMessages.Add(_currentJob.MsgResults.TouchdownScoreTitle + _currentJob.MsgResults.TouchdownScoreSubTitle + _currentJob.PlaneSimData.ScoreTouchdown);
+            _resultMessages.Add(_currentJob.MsgResults.GForceScoreTitle + _currentJob.MsgResults.GForceScoreSubTitle + _currentJob.PlaneSimData.ScoreGForce);
+            _resultMessages.Add(_currentJob.MsgResults.BounceScoreTitle + _currentJob.MsgResults.BounceScoreSubTitle + _currentJob.PlaneSimData.ScoreBounce);
+            _resultMessages.Add(_currentJob.MsgResults.LandingDerivationScoreTitle + _currentJob.MsgResults.LandingDerivationScoreSubTitle + _currentJob.PlaneSimData.ScoreCenterDerivation);
+            _resultMessages.Add(_currentJob.MsgResults.LandingDistanceScoreTitle + _currentJob.MsgResults.LandingDistanceScoreSubTitle + _currentJob.PlaneSimData.ScoreLandDistance);
+            _resultMessages.Add(_currentJob.MsgResults.TakeoffDerivationScoreTitle + _currentJob.MsgResults.TakeoffDerivationScoreSubTitle + _currentJob.PlaneSimData.ScoreTakeoffCenterDerivation);
+            _resultMessages.Add(_currentJob.MsgResults.UpwindLandingScoreSubTitle + _currentJob.PlaneSimData.ScoreWindAngle);
+            _resultMessages.Add(_currentJob.MsgResults.BeaconLightsScoreSubTitle + _currentJob.PlaneSimData.ScoreLightBeaconOn);
+            _resultMessages.Add(_currentJob.MsgResults.LandingLightsScoreSubTitle + _currentJob.PlaneSimData.ScoreLightLandingOn);
+            _resultMessages.Add(_currentJob.MsgResults.NavegationLightsScoreSubTitle + _currentJob.PlaneSimData.ScoreLightNavigationOn);
+            _resultMessages.Add(_currentJob.MsgResults.AltimeterScoreSubTitle + _currentJob.PlaneSimData.ScoreAltimeterSettings);
+            _resultMessages.Add(_currentJob.MsgResults.TotalScoreTitle + _currentJob.Score);
 
             return _resultMessages;
         }

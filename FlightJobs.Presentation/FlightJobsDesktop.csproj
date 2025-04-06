@@ -769,6 +769,11 @@
     <Resource Include="img\PilotExpenses\SimulatorTrainingX.jpg" />
     <Resource Include="img\PilotExpenses\WeatherExamX.jpg" />
     <Resource Include="img\logo\btn_donateCC_LG.gif" />
+    <Resource Include="img\results\background-land-01.jpg" />
+    <Resource Include="img\results\background-warning-01.jpg" />
+    <Resource Include="img\results\background-score-01.jpg" />
+    <Resource Include="img\results\background-takeoff-01.jpg" />
+    <Resource Include="img\results\background-total-score-01.jpg" />
     <Content Include="web\img\icons\alternative.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
