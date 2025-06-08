@@ -24,6 +24,9 @@ namespace FlightJobsDesktop.Views.Home
     /// </summary>
     public partial class ManagerJobsView : UserControl
     {
+        internal static DockPanel _loadingPanel;
+        internal static StackPanel _loadingProgressPanel;
+
         private NotificationManager _notificationManager;
         private IJobService _jobService;
         private IInfraService _infraService;
@@ -44,6 +47,8 @@ namespace FlightJobsDesktop.Views.Home
 
             _generateJobViewModel = new GenerateJobViewModel();
             _notificationManager = new NotificationManager();
+            _loadingPanel = LoadingPanel;
+            _loadingProgressPanel = LoadingProgressPanel;
             _jobService = MainWindow.JobServiceFactory.Create();
             _infraService = MainWindow.InfraServiceFactory.Create();
             _userAccessService = MainWindow.UserServiceFactory.Create();
@@ -51,6 +56,7 @@ namespace FlightJobsDesktop.Views.Home
 
             _mapUrl = $"{_infraService.GetApiUrl()}Maps/GenerateJobsMap";
             _mapUrlQuery =  "?departure={0}&arrival={1}&alternative={2}&username={3}";
+            PanelFlightInfo.IsEnabled = true;
         }
 
         private void HideConfirmRemovePopup()
@@ -114,22 +120,11 @@ namespace FlightJobsDesktop.Views.Home
         {
             try
             {
-                GenerateView window = new GenerateView(_generateJobViewModel)
-                {
-                    ResizeMode = ResizeMode.CanResize,
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                    ShowInTaskbar = true,
-                    WindowStyle = WindowStyle.ToolWindow
-                };
-                if (window.ShowDialog().Value)
-                {
-                    _generateJobViewModel = new GenerateJobViewModel();
-                    await _jobService.GetAllUserJobs(AppProperties.UserLogin.UserId);// To reload pedding list
-                    lblDistance.Content = "0";
-                    PanelImgMap.Visibility = Visibility.Visible;
-                    LoadManagerView();
-                    HomeView.TabHome.SelectedIndex = 0;
-                }
+                PanelFlightInfo.IsEnabled = false;
+                MapWebView.Visibility = Visibility.Hidden;
+                PanelImgMap.Visibility = Visibility.Collapsed;
+                PanelAddJob.Visibility = Visibility.Visible;
+                LoadAddJobPanel();
             }
             catch (Exception)
             {
@@ -223,6 +218,7 @@ namespace FlightJobsDesktop.Views.Home
                     MapWebView.Navigate(url);
                     MapWebView.Visibility = Visibility.Visible;
                     PanelImgMap.Visibility = Visibility.Collapsed;
+                    PanelAddJob.Visibility = Visibility.Collapsed;
 
                     _generateJobViewModel.Dist = GeoCalculationsUtil.CalcDistance(departure, arrival);
                     lblDistance.Content = _generateJobViewModel.DistDesc;
@@ -445,6 +441,161 @@ namespace FlightJobsDesktop.Views.Home
             string url = _mapUrl + string.Format(_mapUrlQuery, departure, arrival, alternative, user);
             MapWebView.Navigate(url);
             
+        }
+
+        #region Add job
+
+        private void UpdateFrameDataContext()
+        {
+            var content = contentFrame.Content as FrameworkElement;
+            if (content != null)
+                content.DataContext = _generateJobViewModel;
+        }
+
+        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            var selectedItem = (NavigationViewItem)args.SelectedItem;
+            if (selectedItem != null)
+            {
+                sender.Header = selectedItem.Content;
+                string pageName = "FlightJobsDesktop.Views.Modals." + (string)selectedItem.Tag;
+                NavigateToPageControl(pageName);
+
+                if (selectedItem == ConfirmJobModalPageItem)
+                {
+                    BtnConfirmBorder.Visibility = Visibility.Visible;
+                    BtnNextBorder.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    BtnConfirmBorder.Visibility = Visibility.Hidden;
+                    BtnNextBorder.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+        private void NavigateToPageControl(string pageName)
+        {
+            Type pageType = typeof(FlightTypeModal).Assembly.GetType(pageName);
+
+            //content.DataContext = frame.DataContext;
+            contentFrame.Navigate(pageType, this);
+            UpdateFrameDataContext();
+        }
+
+        private void ShowLoading(bool hideProgressPanel = false)
+        {
+            _loadingPanel.Visibility = Visibility.Visible;
+            _loadingProgressPanel.Visibility = hideProgressPanel ? Visibility.Collapsed : Visibility.Visible;
+            //_loadingCount++;
+        }
+
+        private void HideLoading()
+        {
+            //_loadingCount--;
+
+            //if (_loadingCount <= 0)
+            //{
+                _loadingPanel.Visibility = Visibility.Collapsed;
+            //    _loadingCount = 0;
+            //}
+        }
+
+        private async void LoadAddJobPanel()
+        {
+            try
+            {
+                contentFrame.Navigate(typeof(FlightTypeModal));
+                nvGenerate.SelectedItem = FlightTypeModalPageItem;
+
+                _generateJobViewModel.Capacity = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
+                    .Map<CustomPlaneCapacityModel, CapacityViewModel>(AppProperties.UserStatistics.CustomPlaneCapacity);
+
+                var capacitiesModel = await _jobService.GetPlaneCapacities(AppProperties.UserLogin.UserId);
+                _generateJobViewModel.CapacityList = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg)
+                    .Map<IList<CustomPlaneCapacityModel>, IList<CapacityViewModel>>(capacitiesModel);
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                _notificationManager.Show("Error", "Data could not be loaded. Please try again later.", NotificationType.Error, "WindowArea");
+            }
+        }
+
+        private void BtnNext_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = nvGenerate.SelectedItem;
+            if (selectedItem != null)
+            {
+                contentFrame.Navigate(typeof(FlightTypeModal));
+                if (selectedItem == FlightTypeModalPageItem)
+                {
+                    nvGenerate.SelectedItem = CustomCapacityModalPageItem;
+                }
+                else if (selectedItem == CustomCapacityModalPageItem)
+                {
+                    nvGenerate.SelectedItem = ConfirmJobModalPageItem;
+                }
+            }
+        }
+
+        private void contentFrame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            UpdateFrameDataContext();
+        }
+
+        private async void BtnConfirm_Click(object sender, RoutedEventArgs e)
+        {
+            ShowLoading();
+            BtnConfirm.IsEnabled = false;
+            try
+            {
+                var selectedList = _generateJobViewModel.JobItemList.Where(x => x.IsSelected).ToList();
+                if (selectedList.Count() > 0)
+                {
+                    var confirmJobModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg)
+                                    .Map<GenerateJobViewModel, ConfirmJobModel>(_generateJobViewModel);
+
+                    confirmJobModel.UserId = AppProperties.UserLogin.UserId;
+
+                    // SAVE
+                    await _jobService.ConfirmJob(confirmJobModel);
+                    _notificationManager.Show("Success", "Confirmed with success.", NotificationType.Success, "WindowArea");
+
+                    _generateJobViewModel = new GenerateJobViewModel();
+                    await _jobService.GetAllUserJobs(AppProperties.UserLogin.UserId);// To reload pedding list
+                    lblDistance.Content = "0";
+                    PanelImgMap.Visibility = Visibility.Visible;
+                    LoadManagerView();
+                    HideLoading();
+                    HomeView.TabHome.SelectedIndex = 0;
+                }
+                else
+                {
+                    _notificationManager.Show("Warning", "Select jobs to confirm.", NotificationType.Warning, "WindowArea");
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                _notificationManager.Show("Error", "Data could not be Saved. Please try again later.", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                BtnConfirm.IsEnabled = true;
+                HideLoading();
+            }
+
+        }
+
+        #endregion
+
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            PanelFlightInfo.IsEnabled = true;
+            MapWebView.Visibility = Visibility.Visible;
+            PanelImgMap.Visibility = Visibility.Collapsed;
+            PanelAddJob.Visibility = Visibility.Hidden;
         }
     }
 }

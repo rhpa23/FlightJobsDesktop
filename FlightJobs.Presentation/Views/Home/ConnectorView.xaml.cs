@@ -676,7 +676,8 @@ namespace FlightJobsDesktop.Views.Home
                     _currentJob.LastJob.PilotScore = lastJobView.PilotScore;
                 }
 
-                LoadThumbImg(AppProperties.UserStatistics.CustomPlaneCapacity.ImagePath);
+                if (AppProperties.UserStatistics.CustomPlaneCapacity?.ImagePath != null)
+                    LoadThumbImg(AppProperties.UserStatistics.CustomPlaneCapacity.ImagePath);
 
                 // Moved to FinishJob                await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
                 HomeView.SetEllipseAirlinesVisibility();

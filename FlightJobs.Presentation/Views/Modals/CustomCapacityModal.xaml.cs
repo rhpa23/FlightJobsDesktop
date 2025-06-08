@@ -37,6 +37,10 @@ namespace FlightJobsDesktop.Views.Modals
         private static CapacityViewModel _lastCapacitySelected;
         private static readonly ILog _log = LogManager.GetLogger(typeof(CustomCapacityModal));
 
+        private Flyout _flyoutEditSave;
+        private Flyout _flyoutRemove;
+        private IList<UIElement> _flyoutEditSaveUIElements = new List<UIElement>();
+
         public CustomCapacityModal()
         {
             InitializeComponent();
@@ -44,9 +48,9 @@ namespace FlightJobsDesktop.Views.Modals
             
             _jobService = MainWindow.JobServiceFactory.Create();
         }
-        private async void LoadCapacityList()
+        private async Task LoadCapacityList()
         {
-            GenerateView.ShowLoading();
+            MainWindow.ShowLoading();
             try
             {
                 var generateJobData = (GenerateJobViewModel)DataContext;
@@ -67,7 +71,7 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                GenerateView.HideLoading();
+                MainWindow.HideLoading();
             }
         }
 
@@ -77,12 +81,17 @@ namespace FlightJobsDesktop.Views.Modals
             {
                 if (filename != null)
                 {
+                    var localPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                    var rootPath = System.IO.Path.Combine(localPath, $"FlightJobsDesktop\\images");
+
+                    DirectoryInfo directoryInfo = new DirectoryInfo(rootPath);
                     filename = new FileInfo(filename).Name;
-                    DirectoryInfo directoryInfo = new DirectoryInfo("img");
 
                     var imgLocalPath = $"{directoryInfo.FullName}\\{filename}";
                     if (File.Exists(imgLocalPath))
                         ImgPreview.Source = new BitmapImage(new Uri(imgLocalPath));
+                    else
+                        ImgPreview.Source = new BitmapImage(new Uri("/img/background/default_thumb-capacity.jpg", UriKind.Relative));
                 }
                 else
                 {
@@ -102,9 +111,12 @@ namespace FlightJobsDesktop.Views.Modals
             {
                 if (File.Exists(filePath))
                 {
-                    DirectoryInfo directoryInfo = new DirectoryInfo("img");
-                    if (!Directory.Exists("img")) directoryInfo = Directory.CreateDirectory("img");
+                    var localPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                    var rootPath = System.IO.Path.Combine(localPath, $"FlightJobsDesktop\\images");
 
+                    DirectoryInfo directoryInfo = new DirectoryInfo(rootPath);
+                    if (!Directory.Exists(rootPath)) directoryInfo = Directory.CreateDirectory(rootPath);
+                    
                     var destPath = $"{directoryInfo.FullName}\\{new FileInfo(filePath).Name}";
                     File.Copy(filePath, destPath, true);
                 }
@@ -122,19 +134,11 @@ namespace FlightJobsDesktop.Views.Modals
             e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
         }
 
-        private void BtnNewAndSave_Click(object sender, RoutedEventArgs e)
-        {
-            var generateJobData = (GenerateJobViewModel)DataContext;
-            generateJobData.Capacity = new CapacityViewModel();
-            LoadThumbImg(null);
-            TxtCapacityName.Focus();
-        }
-
-        private async void BtnSave_Click(object sender, RoutedEventArgs e)
+        private async Task SaveCapacity()
         {
             try
             {
-                GenerateView.ShowLoading();
+                MainWindow.ShowLoading();
                 var generateJobData = (GenerateJobViewModel)DataContext;
                 var capacityModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg)
                     .Map<CapacityViewModel, CustomPlaneCapacityModel>(generateJobData.Capacity);
@@ -146,7 +150,7 @@ namespace FlightJobsDesktop.Views.Modals
                 }
                 await _jobService.SavePlaneCapacity(capacityModel);
                 _notificationManager.Show("Success", $"Capacity saved.", NotificationType.Success, "NotificationAreaCapacity");
-                LoadCapacityList();
+                await LoadCapacityList();
             }
             catch (Exception ex)
             {
@@ -155,7 +159,65 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                GenerateView.HideLoading();
+                MainWindow.HideLoading();
+            }
+        }
+
+        private async void UpdateCapacity()
+        {
+            try
+            {
+                MainWindow.ShowLoading();
+                var generateJobData = (GenerateJobViewModel)DataContext;
+                var capacityModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg)
+                    .Map<CapacityViewModel, CustomPlaneCapacityModel>(generateJobData.Capacity);
+                capacityModel.UserId = AppProperties.UserLogin.UserId;
+                if (capacityModel.ImagePath != null)
+                {
+                    SaveThumbImg(capacityModel.ImagePath);
+                    capacityModel.ImagePath = new FileInfo(capacityModel.ImagePath).Name;
+                }
+                await _jobService.UpdatePlaneCapacity(capacityModel);
+                _notificationManager.Show("Success", $"Capacity updated.", NotificationType.Success, "NotificationAreaCapacity");
+                await LoadCapacityList();
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                _notificationManager.Show("Error", "Data could not be updated. Please try again later.", NotificationType.Error, "NotificationAreaCapacity");
+            }
+            finally
+            {
+                MainWindow.HideLoading();
+            }
+        }
+
+        private void HideEditPopup()
+        {
+            if (_flyoutEditSave != null)
+            {
+                _flyoutEditSave.Hide();
+            }
+        }
+
+        private void HideRemovePopup()
+        {
+            if (_flyoutRemove != null)
+            {
+                _flyoutRemove.Hide();
+            }
+        }
+
+        private void SelectCapacityListLine(FrameworkElement sender)
+        {
+            var selectedId = sender.Tag != null ? (int)sender.Tag : 0;
+
+            var generateJobData = (GenerateJobViewModel)DataContext;
+
+            if (generateJobData.CapacityList.Any(x => x.Id == selectedId))
+            {
+                generateJobData.Capacity = generateJobData.CapacityList.FirstOrDefault(x => x.Id == selectedId);
+                lsvCapacityList.SelectedIndex = generateJobData.CapacityList.ToList().FindIndex(x => x.Id == selectedId);
             }
         }
 
@@ -163,20 +225,16 @@ namespace FlightJobsDesktop.Views.Modals
         {
             try
             {
-                GenerateView.ShowLoading();
+                MainWindow.ShowLoading();
                 var generateJobData = (GenerateJobViewModel)DataContext;
                 var capacityModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg)
                     .Map<CapacityViewModel, CustomPlaneCapacityModel>(generateJobData.Capacity);
                 capacityModel.UserId = AppProperties.UserLogin.UserId;
                 await _jobService.RemovePlaneCapacity(capacityModel);
                 _notificationManager.Show("Success", $"Capacity removed.", NotificationType.Success, "NotificationAreaCapacity");
-                LoadCapacityList();
+                await LoadCapacityList();
 
-                Flyout f = FlyoutService.GetFlyout(BtnRemove) as Flyout;
-                if (f != null)
-                {
-                    f.Hide();
-                }
+                HideRemovePopup();
             }
             catch (Exception ex)
             {
@@ -185,7 +243,7 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                GenerateView.HideLoading();
+                MainWindow.HideLoading();
             }
         }
 
@@ -225,7 +283,132 @@ namespace FlightJobsDesktop.Views.Modals
                 var generateJobView = (GenerateJobViewModel)DataContext;
                 generateJobView.Capacity.ImagePath = fileDialog.FileName;
                 ImgPreview.Source = new BitmapImage(new Uri(fileDialog.FileName));
+                UpdateCapacity();
             }
+        }
+
+        private void BtnSaveEdit_Click(object sender, RoutedEventArgs e)
+        {
+            var generateJobData = (GenerateJobViewModel)DataContext;
+
+            foreach (var item in _flyoutEditSaveUIElements)
+            {
+                if (item is TextBox txBox && txBox.Name == "TxtCapacityName")
+                {
+                    generateJobData.Capacity.Name = txBox.Text;
+                }
+                if (item is NumberBox numBox)
+                {
+                    int numBoxIntValue = string.IsNullOrEmpty(numBox.Text) ? -1 : int.Parse(numBox.Text);
+                    switch (numBox.Name)
+                    {
+                        case "TxtPassengerCapacity":
+                            generateJobData.Capacity.PassengersNumber = numBoxIntValue;
+                            break;
+                        case "TxtPassengerWeight":
+                            generateJobData.Capacity.PassengerWeight = numBoxIntValue;
+                            break;
+                        case "TxtCargoCapacityWeight":
+                            generateJobData.Capacity.CargoWeight = numBoxIntValue;
+                            break;
+                    }
+                }
+            }
+            //SAVE
+            UpdateCapacity();
+            HideEditPopup();
+        }
+
+        private void BtnCancelEdit_Click(object sender, RoutedEventArgs e)
+        {
+            HideEditPopup();
+        }
+
+        private void BtnCancelRemove_Click(object sender, RoutedEventArgs e)
+        {
+            HideRemovePopup();
+        }
+
+        private void Flyout1_Opened(object sender, object e)
+        {
+            if (sender != null)
+            {
+                _flyoutEditSave = (Flyout)sender;
+                if (lsvCapacityList.SelectedValue != null)
+                    lsvCapacityList.SelectedValue = lsvCapacityList.SelectedValue;
+
+                _flyoutEditSaveUIElements.Clear();
+                var generateJobData = (GenerateJobViewModel)DataContext;
+                var cont = (StackPanel)_flyoutEditSave.Content;
+                foreach (var item in cont.Children)
+                {
+                    if (item is TextBox txBox && txBox.Name == "TxtCapacityName")
+                    {
+                        txBox.Text = generateJobData.Capacity.Name;
+                        _flyoutEditSaveUIElements.Add(txBox);
+                    }
+                    if (item is NumberBox numBox)
+                    {
+                        _flyoutEditSaveUIElements.Add(numBox);
+
+                        switch (numBox.Name)
+                        {
+                            case "TxtPassengerCapacity":
+                                numBox.Text = generateJobData.Capacity.PassengersNumber.ToString();
+                                break;
+                            case "TxtPassengerWeight":
+                                numBox.Text = generateJobData.Capacity.PassengerWeight.ToString();
+                                break;
+                            case "TxtCargoCapacityWeight":
+                                numBox.Text = generateJobData.Capacity.CargoWeight.ToString();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void Flyout2_Opened(object sender, object e)
+        {
+            if (sender != null)
+            {
+                _flyoutRemove = (Flyout)sender;
+            }
+        }
+
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            SelectCapacityListLine((FrameworkElement)sender);
+        }
+
+        private void BtnRemove_Click(object sender, RoutedEventArgs e)
+        {
+            SelectCapacityListLine((FrameworkElement)sender);
+        }
+
+        private void BtnNewAndSave_Click(object sender, RoutedEventArgs e)
+        {
+            var generateJobData = (GenerateJobViewModel)DataContext;
+            generateJobData.Capacity = new CapacityViewModel();
+            LoadThumbImg(null);
+            TxtNewCapacityName.Focus();
+        }
+
+        private async void BtnSaveNew_Click(object sender, RoutedEventArgs e)
+        {
+            await SaveCapacity();
+            var generateJobData = (GenerateJobViewModel)DataContext;
+            var capacity = generateJobData.CapacityList.FirstOrDefault(x => x.Name.ToLower() == TxtNewCapacityName.Text.ToLower());
+            generateJobData.Capacity = capacity;
+            lsvCapacityList.SelectedIndex = generateJobData.CapacityList.ToList().FindIndex(x => x.Id == capacity.Id);
+            FlyoutNewCapacity.Hide();
+        }
+
+        private void BtnCancelNew_Click(object sender, RoutedEventArgs e)
+        {
+            FlyoutNewCapacity.Hide();
         }
     }
 }

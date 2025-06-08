@@ -62,6 +62,11 @@ namespace FlightJobs.Infrastructure.Services
             await _flightJobsConnectorClientAPI.SavePlaneCapacity(capacityModel);
         }
 
+        public async Task UpdatePlaneCapacity(CustomPlaneCapacityModel capacityModel)
+        {
+            await _flightJobsConnectorClientAPI.UpdatePlaneCapacity(capacityModel);
+        }
+
         public async Task<IList<JobListItemModel>> GenerateConfirmJobs(GenerateJobModel generateJobData)
         {
             return await _flightJobsConnectorClientAPI.GenerateConfirmJobs(generateJobData);

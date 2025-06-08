@@ -177,6 +177,17 @@ namespace ConnectorClientAPI
             }
         }
 
+        public async Task UpdatePlaneCapacity(CustomPlaneCapacityModel capacityModel)
+        {
+            var url = $"{SiteUrl}api/SearchApi/UpdateCapacity";
+            var body = JsonConvert.SerializeObject(capacityModel);
+            HttpResponseMessage response = await _client.PutAsync(new Uri(url), new StringContent(body, Encoding.UTF8, "application/json"));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+
         public async Task<StartJobResponseModel> StartJob(DataModel data)
         {
             var url = $"{SiteUrl}api/JobApi/StartJobMSFS";

@@ -5,6 +5,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
              xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
              mc:Ignorable="d"><!--Background="White" Width="1100" Height="800">-->
     <UserControl.DataContext>
@@ -19,7 +20,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition  />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="0" Style="{StaticResource StackPanelBoxStyle}" Margin="0,15,0,0">
+        <StackPanel x:Name="PanelFlightInfo" Grid.Row="0" Grid.Column="0" Style="{StaticResource StackPanelBoxStyle}" Margin="0,15,0,0">
             <TextBlock Text="Add job" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" />
             <Border Style="{StaticResource LightBorderBoxStyle}">
                 <Grid>
@@ -159,6 +160,46 @@
                     <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE819;" HorizontalAlignment="Left" FontSize="22" Margin="0" />
                 </Button>
             </Border>
+        </Grid>
+        <Grid x:Name="PanelAddJob" Grid.Row="1" Grid.ColumnSpan="2" Background="Black" Margin="3,10,3,3" Visibility="Hidden">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="55"/>
+                </Grid.RowDefinitions>
+                <DockPanel x:Name="LoadingPanel" Visibility="Collapsed" Grid.RowSpan="2" Grid.ColumnSpan="2" Background="{StaticResource TransparentBlack}" Panel.ZIndex="5000">
+                    <StackPanel x:Name="LoadingProgressPanel" Orientation="Vertical" Width="400" Height="70" Background="Black">
+                        <TextBlock Text="Loading..." Foreground="White" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                        <ProgressBar Height="5" Width="300" Grid.Row="1" IsIndeterminate="True" Margin="0,10,0,10"/>
+                    </StackPanel>
+                </DockPanel>
+                <ui:NavigationView x:Name="nvGenerate" Grid.Row="0"
+                                        SelectionChanged="NavigationView_SelectionChanged"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch" PaneDisplayMode="Top" 
+                                        Header="{Binding ElementName=headerText, Path=Text, Mode=TwoWay}"
+                                        PaneTitle="{Binding ElementName=paneText, Path=Text, Mode=TwoWay}"
+                                        IsSettingsVisible="False" 
+                                        AlwaysShowHeader="False"
+                                        IsTabStop="False" IsBackEnabled="True" IsBackButtonVisible="Collapsed" OpenPaneLength="190" CompactPaneLength="50" IsPaneOpen="False">
+                    <ui:NavigationView.MenuItems>
+                        <ui:NavigationViewItem Content="1 - Flight type" Tag="FlightTypeModal" x:Name="FlightTypeModalPageItem" Width="200" HorizontalAlignment="Center"/>
+                        <ui:NavigationViewItem Content="2 - Custom capacity" Tag="CustomCapacityModal" x:Name="CustomCapacityModalPageItem" Width="200" HorizontalAlignment="Center"/>
+                        <ui:NavigationViewItem Content="3 - Select and confirm" Tag="ConfirmJobModal" x:Name="ConfirmJobModalPageItem" Width="200" HorizontalAlignment="Center"/>
+                    </ui:NavigationView.MenuItems>
+
+                    <ui:Frame x:Name="contentFrame" Grid.Row="0" HorizontalAlignment="Stretch" LoadCompleted="contentFrame_LoadCompleted" />
+                </ui:NavigationView>
+                <Border x:Name="BtnCancelBorder" Style="{DynamicResource BorderButtonYellow}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Height="36" Margin="0,0,200,0">
+                    <Button Name="BtnCancel" Content="Cancel" Width="75" Height="35" Padding="0" Click="BtnCancel_Click"/>
+                </Border>
+                <Border x:Name="BtnNextBorder" Style="{DynamicResource BorderButtonYellow}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Height="36" Margin="0,0,10,0">
+                    <Button Name="BtnNext" Content="Next" Width="65" Height="35" Padding="0" Click="BtnNext_Click"/>
+                </Border>
+                <Border x:Name="BtnConfirmBorder" Style="{DynamicResource BorderButtonYellow}" Grid.Row="1" Grid.Column="1" Visibility="Hidden" HorizontalAlignment="Right" Height="36" Margin="0,0,10,0">
+                    <Button Name="BtnConfirm" Content="Confirm" Width="65" Height="35" Padding="0" Click="BtnConfirm_Click"/>
+                </Border>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

@@ -7,23 +7,21 @@
              xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
-             mc:Ignorable="d" MinWidth="1150" MinHeight="475" Loaded="UserControl_Loaded"  >
+             mc:Ignorable="d" MinWidth="930" MinHeight="300" Loaded="UserControl_Loaded"  >
     <UserControl.DataContext>
         <local:GenerateJobViewModel/>
     </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition />
+            <RowDefinition  />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="350"/>
         </Grid.ColumnDefinitions>
-        <Label Content="* This information will be used to calculate the Job Profit." Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.ColumnSpan="4" Margin="20,20,20,20" />
-        <Separator Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Bottom" />
-        <Border Margin="10,5,10,15" Grid.Row="1" BorderBrush="#333337" BorderThickness="1">
-            <ListView Name="lsvCapacityList" HorizontalAlignment="Left" Margin="0,10,10,0" VerticalAlignment="Top" Width="540"
+        <Border Margin="0,5,0,5" Grid.Row="0" BorderBrush="#333337" BorderThickness="1">
+            <ListView Name="lsvCapacityList" HorizontalAlignment="Left" Margin="0,5,5,0" VerticalAlignment="Top"
                       ItemsSource="{Binding CapacityList}" SelectionChanged="lsvCapacityList_SelectionChanged"
                       SelectedValue="{Binding Capacity, Mode=TwoWay}">
                 <ListView.View>
@@ -39,76 +37,129 @@
                         </GridViewColumn>
                         <GridViewColumn Header="Name" Width="330" DisplayMemberBinding="{Binding Name, Mode=OneTime}" />
                         <GridViewColumn Header="Pax" Width="65" DisplayMemberBinding="{Binding PassengersNumber, Mode=OneTime}" />
-                        <GridViewColumn Header="Cargo" Width="80" DisplayMemberBinding="{Binding CargoWeight, Mode=OneTime}" />
+                        <GridViewColumn Header="Passenger weight" Width="135" DisplayMemberBinding="{Binding PassengerWeight, Mode=OneTime}" />
+                        <GridViewColumn Header="Cargo" Width="75" DisplayMemberBinding="{Binding CargoWeight, Mode=OneTime}" />
+                        <GridViewColumn Header="" Width="45" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="BtnEdit" Tag="{Binding Id}" ToolTip="Edit" Width="23" Height="23" Padding="0" Click="BtnEdit_Click" Margin="0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" >
+                                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEB7E;"/>
+                                        <ui:FlyoutService.Flyout>
+                                            <ui:Flyout x:Name="Flyout1" Opened="Flyout1_Opened">
+                                                <StackPanel Margin="10">
+                                                    <TextBox Name="TxtCapacityName" Grid.Row="0" Grid.Column="0" Text="{Binding Path=Capacity.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     Width="380"
+                                                     ui:ControlHelper.PlaceholderText="Name" 
+                                                     ui:ControlHelper.Header="Capacity Name" 
+                                                     Height="55" HorizontalAlignment="Stretch" 
+                                                     Grid.ColumnSpan="2" Margin="5,5,10,0" />
+                                                     <ui:NumberBox Name="TxtPassengerCapacity" Grid.Row="2" Grid.Column="0" Value="{Binding Path=Capacity.PassengersNumber, Mode=TwoWay}"
+                                                     ui:ControlHelper.PlaceholderText="Pax" 
+                                                     ui:ControlHelper.Header="Passengers" 
+                                                     Width="380" Height="55" HorizontalAlignment="Left" Margin="5,5,0,0" />
+                                                     <ui:NumberBox Name="TxtPassengerWeight" Grid.Row="3" Grid.Column="0" Value="{Binding Path=Capacity.PassengerWeight}"
+                                                     ui:ControlHelper.PlaceholderText="Weight" 
+                                                     ui:ControlHelper.Header="Passenger Weight" 
+                                                     Width="380" Height="55" HorizontalAlignment="Left" Margin="5,5,0,0" />
+                                                     <ui:NumberBox Name="TxtCargoCapacityWeight" Grid.Row="4" Grid.Column="0" Value="{Binding Path=Capacity.CargoWeight}"
+                                                     ui:ControlHelper.PlaceholderText="Cargo" 
+                                                     ui:ControlHelper.Header="Cargo weight" 
+                                                     Width="380" Height="55" HorizontalAlignment="Left" Margin="5,5,0,20"/>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                        <Button x:Name="BtnSaveEdit" Width="100" Click="BtnSaveEdit_Click" Content="Save" Margin="5"  />
+                                                        <Button x:Name="BtnCancelEdit" Width="100" Click="BtnCancelEdit_Click" Content="Cancel" Margin="5" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </ui:Flyout>
+                                        </ui:FlyoutService.Flyout>
+                                    </Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="" Width="45" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="BtnRemove" Tag="{Binding Id}" ToolTip="Remove" Click="BtnRemove_Click" Width="23" Height="23" Padding="0" Margin="0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" >
+                                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xe74d;"/>
+                                        <ui:FlyoutService.Flyout>
+                                            <ui:Flyout x:Name="Flyout2" Opened="Flyout2_Opened">
+                                                <StackPanel HorizontalAlignment="Center">
+                                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}"
+                                        Text="Do you want to remove the selected Capacity?" Margin="0,0,0,12" />
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                        <Button x:Name="BtnRemoveYes" Width="100" Click="BtnRemoveYes_Click" Content="Yes" Margin="5" />
+                                                        <Button x:Name="BtnCancelRemove" Width="100" Click="BtnCancelRemove_Click" Content="Cancel" Margin="5" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </ui:Flyout>
+                                        </ui:FlyoutService.Flyout>
+                                    </Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
         </Border>
 
-        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Gray" BorderThickness="1" Width="Auto" Margin="5,5,10,15">
+        <Border Grid.Row="0" Grid.Column="1" BorderBrush="Gray" BorderThickness="1" Width="335" Margin="15,5,0,5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
-                    <RowDefinition Height="10" />
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="42"/>
                     <RowDefinition Height="5"/>
-                    <RowDefinition/>
+                    <RowDefinition Height="55"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="190"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-
-                <TextBox Name="TxtCapacityName" Grid.Row="0" Grid.Column="0" Text="{Binding Path=Capacity.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         ui:ControlHelper.PlaceholderText="Name" 
-                         ui:ControlHelper.Header="Capacity Name" 
-                         Height="55" HorizontalAlignment="Stretch" 
-                         Grid.ColumnSpan="2" Margin="5,5,10,0" />
-                <ui:NumberBox Name="TxtPassengerCapacity" Grid.Row="2" Grid.Column="0" Value="{Binding Path=Capacity.PassengersNumber, Mode=TwoWay}"
-                         ui:ControlHelper.PlaceholderText="Pax" 
-                         ui:ControlHelper.Header="Passengers" 
-                         Width="140" Height="55" HorizontalAlignment="Left" Margin="5,5,0,0" />
-                <ui:NumberBox Name="TxtPassengerWeight" Grid.Row="3" Grid.Column="0" Value="{Binding Path=Capacity.PassengerWeight}"
-                         ui:ControlHelper.PlaceholderText="Weight" 
-                         ui:ControlHelper.Header="Passenger Weight" 
-                         Width="120" Height="55" HorizontalAlignment="Left" Margin="5,5,0,0" />
-                <ui:NumberBox Name="TxtCargoCapacityWeight" Grid.Row="4" Grid.Column="0" Value="{Binding Path=Capacity.CargoWeight}"
-                         ui:ControlHelper.PlaceholderText="Cargo" 
-                         ui:ControlHelper.Header="Cargo weight" 
-                         Width="130" Height="55" HorizontalAlignment="Left" Margin="5,5,0,0"/>
-                <Image x:Name="ImgPreview" Source="{Binding Capacity.ImagePath}" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" Width="220" Margin="0,10,5,5" Grid.RowSpan="2" Grid.ColumnSpan="2" VerticalAlignment="Top"/>
-                <Label Content="Image ( 330 x 115 )" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="12"/>
-                <Border x:Name="BtnAircrafImgtBorder" Width="100" Height="37" Margin="0,0,0,0" Grid.Row="4" Grid.Column="3" Style="{DynamicResource BorderButtonYellow}">
-                    <Button x:Name="BtnAircraftImg" Width="100" Height="37" Click="BtnAircraftImg_Click">
+                <Image x:Name="ImgPreview" Source="{Binding Capacity.ImagePath}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="320" Height="120" Stretch="Fill" Margin="0,5,0,0" />
+                <Label Content="Image ( 330 x 115 )" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="12"/>
+                <Border x:Name="BtnAircrafImgtBorder" Width="100" Height="32" Margin="0" Grid.Row="2" Grid.Column="3" Style="{DynamicResource BorderButtonYellow}">
+                    <Button x:Name="BtnAircraftImg" Width="100" Height="32" Click="BtnAircraftImg_Click">
                         <StackPanel Orientation="Horizontal">
                             <Label>Thumbnail...</Label>
                         </StackPanel>
                     </Button>
                 </Border>
-                <Separator Grid.Row="5" Grid.ColumnSpan="4"/>
-                <Border Style="{DynamicResource BorderButtonYellow}" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Height="31" Margin="0,0,265,0">
-                    <Button Name="BtnNewAndSave" Content="New" Width="55" Height="30" Click="BtnNewAndSave_Click" />
-                </Border>
-                <Border Style="{DynamicResource BorderButtonYellow}" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Height="31" Margin="0,0,135,0">
-                    <Button Name="BtnRemove" Content="Remove" Width="Auto" Height="30" Margin="0,-0.6,0,-1.4" VerticalAlignment="Bottom">
+                <Separator Grid.Row="3" />
+                <Border Style="{DynamicResource BorderButtonYellow}" Grid.Row="4" HorizontalAlignment="Center" Height="40" >
+                    <Button Name="BtnNewAndSave" Content="New" Width="95" Height="40" Click="BtnNewAndSave_Click">
                         <ui:FlyoutService.Flyout>
-                            <ui:Flyout x:Name="Flyout1">
-                                <StackPanel>
-                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}"
-                                               Text="Do you want to remove the selected Capacity?" Margin="0,0,0,12" />
-                                    <Button x:Name="BtnRemoveYes" Click="BtnRemoveYes_Click" Content="Yes" />
+                            <ui:Flyout x:Name="FlyoutNewCapacity">
+                                <StackPanel Margin="10">
+                                    <TextBox Name="TxtNewCapacityName" Grid.Row="0" Grid.Column="0" Text="{Binding Path=Capacity.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     Width="380"
+                                                     ui:ControlHelper.PlaceholderText="Name" 
+                                                     ui:ControlHelper.Header="Capacity Name" 
+                                                     Height="55" HorizontalAlignment="Stretch" 
+                                                     Grid.ColumnSpan="2" Margin="5,5,10,0" />
+                                    <ui:NumberBox Name="TxtNewPassengerCapacity" Grid.Row="2" Grid.Column="0" Value="{Binding Path=Capacity.PassengersNumber, Mode=TwoWay}"
+                                                     ui:ControlHelper.PlaceholderText="Pax" 
+                                                     ui:ControlHelper.Header="Passengers" 
+                                                     Width="380" Height="55" HorizontalAlignment="Left" Margin="5,5,0,0" />
+                                    <ui:NumberBox Name="TxtNewPassengerWeight" Grid.Row="3" Grid.Column="0" Value="{Binding Path=Capacity.PassengerWeight}"
+                                                     ui:ControlHelper.PlaceholderText="Weight" 
+                                                     ui:ControlHelper.Header="Passenger Weight" 
+                                                     Width="380" Height="55" HorizontalAlignment="Left" Margin="5,5,0,0" />
+                                    <ui:NumberBox Name="TxtNewCargoCapacityWeight" Grid.Row="4" Grid.Column="0" Value="{Binding Path=Capacity.CargoWeight}"
+                                                     ui:ControlHelper.PlaceholderText="Cargo" 
+                                                     ui:ControlHelper.Header="Cargo weight" 
+                                                     Width="380" Height="55" HorizontalAlignment="Left" Margin="5,5,0,20"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button x:Name="BtnSaveNew" Width="100" Click="BtnSaveNew_Click" Content="Save" Margin="5"  />
+                                        <Button x:Name="BtnCancelNew" Width="100" Click="BtnCancelNew_Click" Content="Cancel" Margin="5" />
+                                    </StackPanel>
                                 </StackPanel>
                             </ui:Flyout>
                         </ui:FlyoutService.Flyout>
                     </Button>
                 </Border>
-                <Border Style="{DynamicResource BorderButtonYellow}" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Height="31" Margin="0,0,5,0">
-                    <Button Name="BtnSave" Content="Save" Width="55" Height="30" Margin="0,-0.6,0,-1.4" VerticalAlignment="Bottom" Click="BtnSave_Click"/>
-                </Border>
             </Grid>
         </Border>
+        <Label Content="This information will be used to calculate the Job Profit." Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.ColumnSpan="4" Margin="0,0,5,5" FontSize="12" />
+        <Separator Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Bottom" />
         <notifications:NotificationArea x:Name="NotificationAreaCapacity" Position="BottomCenter" MaxItems="3" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="2" />
     </Grid>
 </UserControl>

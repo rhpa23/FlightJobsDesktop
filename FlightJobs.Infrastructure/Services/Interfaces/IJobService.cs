@@ -16,6 +16,7 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
         Task ActivateJob(string userId, long jobId);
         Task<IList<CustomPlaneCapacityModel>> GetPlaneCapacities(string userId);
         Task SavePlaneCapacity(CustomPlaneCapacityModel capacityModel);
+        Task UpdatePlaneCapacity(CustomPlaneCapacityModel capacityModel);
         Task RemovePlaneCapacity(CustomPlaneCapacityModel capacityModel);
         Task<IList<JobListItemModel>> GenerateConfirmJobs(GenerateJobModel generateJobData);
         Task ConfirmJob(ConfirmJobModel confirmJobModel);

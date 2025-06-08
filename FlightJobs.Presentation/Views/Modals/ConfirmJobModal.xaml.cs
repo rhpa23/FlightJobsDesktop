@@ -52,7 +52,7 @@ namespace FlightJobsDesktop.Views.Modals
         {
             try
             {
-                GenerateView.ShowLoading();
+                MainWindow.ShowLoading();
                 var generateJobData = (GenerateJobViewModel)DataContext;
                 if (generateJobData.Capacity == null)
                 {
@@ -75,7 +75,7 @@ namespace FlightJobsDesktop.Views.Modals
             }
             finally
             {
-                GenerateView.HideLoading();
+                MainWindow.HideLoading();
             }
         }
 
