@@ -588,7 +588,11 @@ namespace FlightJobsDesktop.Views.Home
                 if (filename != null)
                 {
                     filename = new FileInfo(filename).Name;
-                    DirectoryInfo directoryInfo = new DirectoryInfo("img");
+
+                    var localPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                    var imgPath = Path.Combine(localPath, $"FlightJobsDesktop\\images");
+
+                    DirectoryInfo directoryInfo = new DirectoryInfo(imgPath);
                     _siderJobWindow.TxbCapacityName.Text = AppProperties.UserStatistics.CustomPlaneCapacity.CustomNameCapacity;
 
                     var imgLocalPath = $"{directoryInfo.FullName}\\{filename}";
