@@ -568,6 +568,12 @@ namespace FlightJobsDesktop.Views.Home
                     PanelImgMap.Visibility = Visibility.Visible;
                     LoadManagerView();
                     HideLoading();
+
+                    PanelFlightInfo.IsEnabled = true;
+                    MapWebView.Visibility = Visibility.Hidden;
+                    PanelImgMap.Visibility = Visibility.Visible;
+                    PanelAddJob.Visibility = Visibility.Hidden;
+
                     HomeView.TabHome.SelectedIndex = 0;
                 }
                 else
