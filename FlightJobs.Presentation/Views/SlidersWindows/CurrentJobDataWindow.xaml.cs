@@ -137,6 +137,18 @@ namespace FlightJobsDesktop.Views.SlidersWindows
 
         private void BtnShowFlightResults_Click(object sender, RoutedEventArgs e)
         {
+            AngularGaugeTouchdownFpm.Value = Math.Abs(_currentJobViewModel.PlaneSimData.TouchdownFpm);
+            AngularGaugeGForce.Value = _currentJobViewModel.PlaneSimData.TouchdownGForce;
+
+            var touchdownRunwayLengthMaxLandZone = _currentJobViewModel.PlaneSimData.TouchdownRunwayLength * 0.25;
+
+            SectionDistanceGreen.FromValue = 0;
+            SectionDistanceGreen.ToValue = touchdownRunwayLengthMaxLandZone;
+            SectionDistanceOrange.FromValue = touchdownRunwayLengthMaxLandZone;
+            SectionDistanceOrange.ToValue = touchdownRunwayLengthMaxLandZone + 200;
+            SectionDistanceRed.FromValue = touchdownRunwayLengthMaxLandZone + 200;
+            SectionDistanceRed.ToValue = 2000;
+
             _hideTimer.Interval = new TimeSpan(0, 5, 0);
             FlightRecorderUtil.FlightRecorderList = FlightRecorderUtil.LoadFlightRecorderFile(_currentJobViewModel);
             ToggleResultsSlider(this.Width <= TARGET_WIDTH);
@@ -203,6 +215,11 @@ namespace FlightJobsDesktop.Views.SlidersWindows
                     FlightRecorderUtil.UpdateChartFPS(ChartFlightRecorder);
                 }
             }
+        }
+
+        private void BtnCloseApp_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

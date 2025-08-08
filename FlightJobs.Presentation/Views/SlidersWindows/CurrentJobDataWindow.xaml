@@ -6,6 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
+        xmlns:lc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d" MouseDown="HideIco_MouseDown"
         xmlns:wf="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         Title="Flight Jobs - Job data Slider" Cursor="Hand" Style="{DynamicResource BorderHighlightWindow}" Loaded="Window_Loaded"
@@ -17,7 +18,17 @@
         <Style x:Key="OpacityMouseOverEffect" TargetType="StackPanel">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="StackPanel.Opacity" Value="0.9" />
+                    <Setter Property="StackPanel.Opacity" Value="0.7" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="BorderMouseOverEffect" TargetType="{x:Type Border}">
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Border.BorderBrush" Value="SlateGray" />
+                    <Setter Property="Border.BorderThickness" Value="1" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -122,31 +133,17 @@
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
                     <RowDefinition Height="10"/>
                 </Grid.RowDefinitions>
                 <TextBlock Foreground="White" Background="SlateGray" TextAlignment="Center" Margin="0,10,0,0" Padding="3"
                            HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.ColumnSpan="3">
                     <Run Text="Landing  "/><Run Text="{Binding PlaneSimData.TouchdownRunwayDesignator}"/>
                 </TextBlock>
-                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultTouchdownFpm}" Canvas.Left="10" Canvas.Top="25" Grid.Row="2" Margin="0"  />
-                <TextBlock Text="Touchdown:" Foreground="White" Grid.Row="2" Grid.Column="1" />
-                <TextBlock Foreground="White" Grid.Row="2" Grid.Column="2" >
-                    <Run Text="{Binding PlaneSimData.TouchdownFpm}"/> <Run Text="fpm"/>
-                </TextBlock>
 
-                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultGForce}" Canvas.Left="10" Canvas.Top="25" Grid.Row="3" Margin="0" />
-                <TextBlock Text="GForce:" Foreground="White" Grid.Row="3" Grid.Column="1" />
-                <TextBlock Text="{Binding PlaneSimData.TouchdownGForceText}" Foreground="White" Grid.Row="3" Grid.Column="2" />
+                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultTouchdownWindSpeed}" Canvas.Left="10" Canvas.Top="25" Grid.Row="2" Margin="0" />
+                <TextBlock Text="Wind:" Foreground="White" Grid.Row="2" Grid.Column="1" />
 
-                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultTouchdownWindSpeed}" Canvas.Left="10" Canvas.Top="25" Grid.Row="4" Margin="0" />
-                <TextBlock Text="Wind:" Foreground="White" Grid.Row="4" Grid.Column="1" />
-
-                <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="2">
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2">
                     <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF0AD;" Foreground="{Binding PlaneSimData.ColorResultTouchdownWindAngle}" Margin="0" FontSize="11" RenderTransformOrigin="0.5,0.5" > 
                         <ui:FontIcon.RenderTransform>
                             <TransformGroup>
@@ -160,29 +157,13 @@
                     <TextBlock Text="{Binding PlaneSimData.TouchdownWindSpeedText}" Foreground="White" Margin="8,0,0,0"  />
                 </StackPanel>
 
-                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultBounceCount}" Canvas.Left="10" Canvas.Top="25" Grid.Row="5" Margin="0" />
-                <TextBlock Text="Bounces:" Foreground="White" Grid.Row="5" Grid.Column="1" />
-                <TextBlock Text="{Binding PlaneSimData.TouchdownBounceCount}" Foreground="White" Grid.Row="5" Grid.Column="2" />
-
-                <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="6" Margin="0" />
-                <TextBlock Text="Air speed:" Foreground="White" Grid.Row="6" Grid.Column="1" />
-                <TextBlock Text="{Binding PlaneSimData.TouchdownAirspeedText}" Foreground="White" Grid.Row="6" Grid.Column="2" />
+                <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="3" Margin="0" />
+                <TextBlock Text="Air speed:" Foreground="White" Grid.Row="3" Grid.Column="1" />
+                <TextBlock Text="{Binding PlaneSimData.TouchdownAirspeedText}" Foreground="White" Grid.Row="3" Grid.Column="2" />
                 
-                <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="7" Margin="0" />
-                <TextBlock Text="Ground speed:" Foreground="White" Grid.Row="7" Grid.Column="1" />
-                <TextBlock Text="{Binding PlaneSimData.TouchdownGroundspeedText}" Foreground="White" Grid.Row="7" Grid.Column="2" />
-
-                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultCenterDerivation}" Canvas.Left="10" Canvas.Top="25" Grid.Row="8" Margin="0" />
-                <TextBlock Text="Center line:" Foreground="White" Grid.Row="8" Grid.Column="1" ToolTip="Center line derivation" />
-                <TextBlock Foreground="White" Grid.Row="8" Grid.Column="2" >
-                    <Run Text="{Binding PlaneSimData.TouchdownCenterDerivation}"/> <Run Text="m"/>
-                </TextBlock>
-
-                <Ellipse Width="10" Height="10" Fill="{Binding PlaneSimData.ColorResultLandDistance}" Canvas.Left="10" Canvas.Top="25" Grid.Row="9" Margin="0" />
-                <TextBlock Text="Distance:" Foreground="White" Grid.Row="9" Grid.Column="1" ToolTip="Threshold distance" />
-                <TextBlock Foreground="White" Grid.Row="9" Grid.Column="2" >
-                    <Run Text="{Binding PlaneSimData.TouchdownThresholdDistance}"/> <Run Text="m"/>
-                </TextBlock>
+                <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="4" Margin="0" />
+                <TextBlock Text="Ground speed:" Foreground="White" Grid.Row="4" Grid.Column="1" />
+                <TextBlock Text="{Binding PlaneSimData.TouchdownGroundspeedText}" Foreground="White" Grid.Row="4" Grid.Column="2" />
                 
             </Grid>
             <Grid x:Name="GridResults" Visibility="Collapsed">
@@ -199,6 +180,7 @@
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="40"/>
+                    <RowDefinition Height="150"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Results" Foreground="White" Background="SlateGray" TextAlignment="Center" Margin="0,10,0,0" Padding="3"
                            HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.ColumnSpan="3"/>
@@ -209,12 +191,23 @@
                 <Ellipse Width="10" Height="10" Fill="Green" Canvas.Left="10" Canvas.Top="25" Grid.Row="3" Margin="2,0,0,0" />
                 <TextBlock Text="Flight time:" Foreground="White" Grid.Row="3" Grid.Column="1" />
                 <TextBlock Text="{Binding Path=LastJob.FlightTime, Mode=TwoWay}" Foreground="White" Grid.Row="3" Grid.Column="2" />
-                <Border Width="115" Grid.Row="6" Grid.ColumnSpan="3" Height="25" Style="{DynamicResource BorderButtonYellow}">
+                <Border Grid.Row="6" Grid.ColumnSpan="3" Width="115" Height="25" Style="{DynamicResource BorderButtonYellow}">
                     <Button x:Name="BtnShowFlightResults" Width="115" Height="35" Click="BtnShowFlightResults_Click">
                         <StackPanel Orientation="Horizontal">
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71D;" Foreground="White" HorizontalAlignment="Left" FontSize="12" Margin="0,0,5,0" />
                             <TextBlock Foreground="White" FontSize="12">
                                 <Run Text="Score"/> <Run Text="{Binding Score}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                </Border>
+                <Border Style="{DynamicResource BorderButtonYellow}" Grid.Row="7" Grid.ColumnSpan="3" Width="115" Height="25"
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                    <Button x:Name="BtnCloseApp"  Click="BtnCloseApp_Click" Width="115" Height="35">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7E8;" HorizontalAlignment="Left" FontSize="14" Foreground="White" Margin="0,0,5,0"/>
+                            <TextBlock Foreground="White" FontSize="12">
+                                <Run Text="Exit"/>
                             </TextBlock>
                         </StackPanel>
                     </Button>
@@ -252,7 +245,242 @@
                                 <Label Content="Flight results" FontSize="16" Style="{DynamicResource CustomTabItem}" />
                             </StackPanel>
                         </TabItem.Header>
-                        <StackPanel Orientation="Vertical">
+                        <Grid Margin="0,15,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="240"/>
+                                <RowDefinition Height="240"/>
+                                <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Border Style="{StaticResource BorderMouseOverEffect}" Width="190" Grid.Column="0" Grid.Row="0" Background="Black" HorizontalAlignment="Left" Margin="0,0,0,10">
+                                <StackPanel>
+                                    <ui:LayoutPanel>
+                                        <lc:AngularGauge Width="170" Height="180" Foreground="White" FromValue="0" ToValue="10" TicksStep="1" Value="{Binding PlaneSimData.TakeoffCenterDerivation}" SectionsInnerRadius="0.7" >
+                                            <lc:AngularGauge.Sections>
+                                                <lc:AngularSection FromValue="0" ToValue="3" Fill="Green"/>
+                                                <lc:AngularSection FromValue="3" ToValue="6" Fill="Orange"/>
+                                                <lc:AngularSection FromValue="6" ToValue="10" Fill="Red"/>
+                                            </lc:AngularGauge.Sections>
+                                        </lc:AngularGauge>
+                                        <TextBlock MinWidth="35" Padding="3,0,3,0" Background="White" FontWeight="Bold" Margin="65,55,65,100" HorizontalAlignment="Center" >
+                                            <Run Text="{Binding PlaneSimData.TakeoffCenterDerivation}"/>
+                                            <Run Text="m"/>
+                                        </TextBlock>
+                                    </ui:LayoutPanel>
+                                    <Label Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="12"
+                                       >Takeoff center derivation</Label>
+                                    <TextBlock Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="12">
+                                    <Run Text="Score: "/>
+                                    <Run Foreground="{Binding PlaneSimData.ColorResultTakeoffCenterDerivation}" Text="{Binding PlaneSimData.ScoreTakeoffCenterDerivation, Mode=OneWay}" FontWeight="Bold"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource BorderMouseOverEffect}" Width="190" Grid.Column="1" Grid.Row="0" Background="Black" HorizontalAlignment="Center" Margin="0,0,0,10">
+                                <StackPanel>
+                                    <ui:LayoutPanel>
+                                        <lc:AngularGauge Name="AngularGaugeTouchdownFpm" Width="170" Height="180" Foreground="White" FromValue="0" ToValue="700" TicksStep="100" SectionsInnerRadius="0.7" >
+                                            <lc:AngularGauge.Sections>
+                                                <lc:AngularSection FromValue="0" ToValue="180" Fill="Green"/>
+                                                <lc:AngularSection FromValue="180" ToValue="260" Fill="Orange"/>
+                                                <lc:AngularSection FromValue="260" ToValue="700" Fill="Red"/>
+                                            </lc:AngularGauge.Sections>
+                                        </lc:AngularGauge>
+                                        <TextBlock MinWidth="35" Padding="3,0,3,0" Background="White" FontWeight="Bold" Margin="65,55,65,100" HorizontalAlignment="Center" >
+                                            <Run Text="-"/>
+                                            <Run Text="{Binding PlaneSimData.TouchdownFpm}"/>
+                                            <Run Text="fpm"/>
+                                        </TextBlock>
+                                    </ui:LayoutPanel>
+                                    <Label Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="12"
+                                       >Touchdown VS</Label>
+                                    <TextBlock Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="12">
+                                    <Run Text="Score: "/>
+                                    <Run Foreground="{Binding PlaneSimData.ColorResultTouchdownFpm}" Text="{Binding PlaneSimData.ScoreTouchdown, Mode=OneWay}" FontWeight="Bold"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource BorderMouseOverEffect}" Width="190" Grid.Column="2" Grid.Row="0" Background="Black" HorizontalAlignment="Right" Margin="0,0,0,10">
+                                <StackPanel>
+                                    <ui:LayoutPanel>
+                                        <lc:AngularGauge Name="AngularGaugeGForce" Width="170" Height="180" Foreground="White" FromValue="0" ToValue="5" TicksStep="1" SectionsInnerRadius="0.7" >
+                                            <lc:AngularGauge.Sections>
+                                                <lc:AngularSection FromValue="0" ToValue="1.2" Fill="Green"/>
+                                                <lc:AngularSection FromValue="1.2" ToValue="1.4" Fill="Orange"/>
+                                                <lc:AngularSection FromValue="1.4" ToValue="5" Fill="Red"/>
+                                            </lc:AngularGauge.Sections>
+                                        </lc:AngularGauge>
+                                        <TextBlock MinWidth="35" Padding="3,0,3,0" Background="White" FontWeight="Bold" Margin="65,55,65,100" HorizontalAlignment="Center" >
+                                            <Run Text="{Binding PlaneSimData.TouchdownGForceText}"/>
+                                        </TextBlock>
+                                    </ui:LayoutPanel>
+                                    <Label Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="12"
+                                       >Touchdown G-Force</Label>
+                                    <TextBlock Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="12">
+                                    <Run Text="Score: "/>
+                                    <Run Foreground="{Binding PlaneSimData.ColorResultGForce}" Text="{Binding PlaneSimData.ScoreGForce, Mode=OneWay}" FontWeight="Bold"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource BorderMouseOverEffect}" Width="190" Grid.Column="0" Grid.Row="1" Background="Black" HorizontalAlignment="Left" Margin="0,0,0,10">
+                                <StackPanel>
+                                    <ui:LayoutPanel>
+                                        <lc:AngularGauge Width="170" Height="180" Foreground="White" FromValue="0" ToValue="10" TicksStep="1" Value="{Binding PlaneSimData.TouchdownCenterDerivation}" SectionsInnerRadius="0.7" >
+                                            <lc:AngularGauge.Sections>
+                                                <lc:AngularSection FromValue="0" ToValue="3" Fill="Green"/>
+                                                <lc:AngularSection FromValue="3" ToValue="6" Fill="Orange"/>
+                                                <lc:AngularSection FromValue="6" ToValue="10" Fill="Red"/>
+                                            </lc:AngularGauge.Sections>
+                                        </lc:AngularGauge>
+                                        <TextBlock MinWidth="35" Padding="3,0,3,0" Background="White" FontWeight="Bold" Margin="65,55,65,100" HorizontalAlignment="Center" >
+                                            <Run Text="{Binding PlaneSimData.TouchdownCenterDerivation}"/>
+                                            <Run Text="m"/>
+                                        </TextBlock>
+                                    </ui:LayoutPanel>
+                                    <Label Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="12"
+                                       >Landing center derivation</Label>
+                                    <TextBlock Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="12">
+                                    <Run Text="Score: "/>
+                                    <Run Foreground="{Binding PlaneSimData.ColorResultCenterDerivation}" Text="{Binding PlaneSimData.ScoreCenterDerivation, Mode=OneWay}" FontWeight="Bold"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource BorderMouseOverEffect}" Width="190" Grid.Column="1" Grid.Row="1" Background="Black" HorizontalAlignment="Center" Margin="0,0,0,10">
+                                <StackPanel>
+                                    <ui:LayoutPanel>
+                                        <lc:AngularGauge Width="170" Height="180" Foreground="White" FromValue="0" ToValue="3" Value="{Binding PlaneSimData.TouchdownBounceCount}" SectionsInnerRadius="0.7" >
+                                            <lc:AngularGauge.Sections>
+                                                <lc:AngularSection FromValue="0" ToValue="0.5" Fill="Green"/>
+                                                <lc:AngularSection FromValue="0.5" ToValue="1.5" Fill="Orange"/>
+                                                <lc:AngularSection FromValue="1.5" ToValue="3" Fill="Red"/>
+                                            </lc:AngularGauge.Sections>
+                                        </lc:AngularGauge>
+                                        <TextBlock MinWidth="35" Padding="3,0,3,0" Background="White" FontWeight="Bold" Margin="65,55,65,100" HorizontalAlignment="Center" >
+                                            <Run Text="{Binding PlaneSimData.TouchdownBounceCount}"/>
+                                        </TextBlock>
+                                    </ui:LayoutPanel>
+                                    <Label Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="12"
+                                       >Bounce(s)</Label>
+                                    <TextBlock Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="12">
+                                    <Run Text="Score: "/>
+                                    <Run Foreground="{Binding PlaneSimData.ColorResultBounceCount}" Text="{Binding PlaneSimData.ScoreBounce, Mode=OneWay}" FontWeight="Bold"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource BorderMouseOverEffect}" Width="190" Grid.Column="2" Grid.Row="1" Background="Black" HorizontalAlignment="Right" Margin="0,0,0,10">
+                                <StackPanel>
+                                    <ui:LayoutPanel>
+                                        <lc:AngularGauge Width="170" Height="180" Foreground="White" FromValue="0" ToValue="2000" TicksStep="50" Value="{Binding PlaneSimData.TouchdownThresholdDistance}" SectionsInnerRadius="0.7" >
+                                            <lc:AngularGauge.Sections>
+                                                <lc:AngularSection Name="SectionDistanceGreen" Fill="Green"/>
+                                                <lc:AngularSection Name="SectionDistanceOrange" Fill="Orange"/>
+                                                <lc:AngularSection Name="SectionDistanceRed" Fill="Red"/>
+                                            </lc:AngularGauge.Sections>
+                                        </lc:AngularGauge>
+                                        <TextBlock MinWidth="35" Padding="3,0,3,0" Background="White" FontWeight="Bold" Margin="65,55,65,100" HorizontalAlignment="Center" >
+                                        <Run Text="{Binding PlaneSimData.TouchdownThresholdDistance}"/>
+                                        <Run Text="m"/>
+                                        </TextBlock>
+                                    </ui:LayoutPanel>
+                                    <Label Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="12"
+                                       >Landing distance</Label>
+                                    <TextBlock Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="12">
+                                    <Run Text="Score: "/>
+                                    <Run Foreground="{Binding PlaneSimData.ColorResultLandDistance}" Text="{Binding PlaneSimData.ScoreLandDistance, Mode=OneWay}" FontWeight="Bold"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            
+                            <StackPanel Grid.Column="0" Grid.Row="2" Height="40" Margin="0,20,0,0" Style="{StaticResource OpacityMouseOverEffect}" Grid.ColumnSpan="2" Background="Black">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition  Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/><RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Column="0" Grid.Row="0" Content="{Binding MsgResults.UpwindLandingScoreTitle}" Foreground="White" Margin="10,5,0,0" FontWeight="Bold" FontSize="12" />
+                                    <Label Grid.Column="0" Grid.Row="1" Content="{Binding MsgResults.UpwindLandingScoreSubTitle}" Foreground="White" Margin="10,0,0,0" FontWeight="Light" FontSize="10" />
+                                    <Label Grid.Column="1" Grid.Row="0" Content="{Binding PlaneSimData.ScoreWindAngle, Mode=OneWay}" Foreground="{Binding PlaneSimData.ColorResultTouchdownWindAngle}" 
+                                           Margin="0,10,5,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="16" Grid.RowSpan="2" />
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="0" Grid.Row="3" Height="40" Margin="0,3,0,0" Style="{StaticResource OpacityMouseOverEffect}" Grid.ColumnSpan="2" Background="Black">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition  Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Column="0" Grid.Row="0" Content="{Binding MsgResults.BeaconLightsScoreTitle}" Foreground="White" Margin="10,5,0,0" FontWeight="Bold" FontSize="12" />
+                                    <Label Grid.Column="0" Grid.Row="1" Content="{Binding MsgResults.BeaconLightsScoreSubTitle}" Foreground="White" Margin="10,0,0,0" FontWeight="Light" FontSize="10" />
+                                    <Label Grid.Column="1" Grid.Row="0" Content="{Binding PlaneSimData.ScoreLightBeaconOn, Mode=OneWay}" Foreground="Orange" 
+                                           Margin="0,10,5,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="16" Grid.RowSpan="2" Visibility="{Binding FlightResults.ResultBeaconLightVisibility}" />
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="0" Grid.Row="4" Height="40" Margin="0,3,0,0" Style="{StaticResource OpacityMouseOverEffect}" Grid.ColumnSpan="2" Background="Black">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition  Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Column="0" Grid.Row="0" Content="{Binding MsgResults.LandingLightsScoreTitle}" Foreground="White" Margin="10,5,0,0" FontWeight="Bold" FontSize="12" />
+                                    <Label Grid.Column="0" Grid.Row="1" Content="{Binding MsgResults.LandingLightsScoreSubTitle}" Foreground="White" Margin="10,0,0,0" FontWeight="Light" FontSize="10" />
+                                    <Label Grid.Column="1" Grid.Row="0" Content="{Binding PlaneSimData.ScoreLightLandingOn, Mode=OneWay}" Foreground="Orange" 
+                                           Margin="0,10,5,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="16" Grid.RowSpan="2" Visibility="{Binding FlightResults.ResultLandingLightVisibility}" />
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="0" Grid.Row="5" Height="40" Margin="0,3,0,0" Style="{StaticResource OpacityMouseOverEffect}" Grid.ColumnSpan="2" Background="Black">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition  Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Column="0" Grid.Row="0" Content="{Binding MsgResults.NavegationLightsScoreTitle}" Foreground="White" Margin="10,5,0,0" FontWeight="Bold" FontSize="12" />
+                                    <Label Grid.Column="0" Grid.Row="1" Content="{Binding MsgResults.NavegationLightsScoreSubTitle}" Foreground="White" Margin="10,0,0,0" FontWeight="Light" FontSize="10" />
+                                    <Label Grid.Column="1" Grid.Row="0" Content="{Binding PlaneSimData.ScoreLightNavigationOn, Mode=OneWay}" Foreground="Orange" 
+                                           Margin="0,10,5,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="16" Grid.RowSpan="2" Visibility="{Binding FlightResults.ResultNavigationLightVisibility}" />
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="0" Grid.Row="6" Height="40" Margin="0,3,0,0" Style="{StaticResource OpacityMouseOverEffect}" Grid.ColumnSpan="2" Background="Black">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition  Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Column="0" Grid.Row="0" Content="{Binding MsgResults.AltimeterScoreTitle}" Foreground="White" Margin="10,5,0,0" FontWeight="Bold" FontSize="12" />
+                                    <Label Grid.Column="0" Grid.Row="1" Content="{Binding MsgResults.AltimeterScoreSubTitle}" Foreground="White" Margin="10,0,0,0" FontWeight="Light" FontSize="10" />
+                                    <Label Grid.Column="1" Grid.Row="0" Content="{Binding PlaneSimData.ScoreAltimeterSettings, Mode=OneWay}" Foreground="Orange" 
+                                           Margin="0,10,5,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="16" Grid.RowSpan="2" Visibility="{Binding FlightResults.ResultAltimeterSettingVisibility}" />
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="2" Grid.RowSpan="5" Style="{StaticResource OpacityMouseOverEffect}" Height="210" Margin="15,17,0,0" Background="Black">
+                                <Label Content="{Binding MsgResults.TotalScoreTitle}" Foreground="White" Margin="10,5,0,0" FontWeight="Bold" FontSize="18" />
+                                <TextBlock Text="{Binding MsgResults.TotalScoreSubTitle}" TextWrapping="Wrap" Foreground="White" Width="190" Margin="10,5,0,0" FontWeight="Light" FontSize="14" HorizontalAlignment="Left" />
+                                <Label Content="{Binding Score, Mode=OneWay}" Foreground="GreenYellow" Margin="0,40,0,0" HorizontalAlignment="Center" FontWeight="Bold" FontSize="32" />
+                            </StackPanel>
+                        </Grid>
+                        
+                        <!--<StackPanel Orientation="Vertical">
                             <StackPanel.Resources>
                                 <ImageBrush x:Key="backgroundLand" ImageSource="/img/results/background-land-01.jpg" />
                                 <ImageBrush x:Key="backgroundTakeoff" ImageSource="/img/results/background-takeoff-01.jpg"  />
@@ -260,6 +488,9 @@
                                 <ImageBrush x:Key="backgroundScore" ImageSource="/img/results/background-total-score-01.jpg"  />
                             </StackPanel.Resources>
 
+                            
+                            
+                            
                             <StackPanel Background="{StaticResource backgroundTakeoff}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}">
                                 <Label Content="{Binding MsgResults.TakeoffDerivationScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
                                 <Label Content="{Binding MsgResults.TakeoffDerivationScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
@@ -290,6 +521,7 @@
                                 <Label Content="{Binding MsgResults.LandingDistanceScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
                                 <Label Content="{Binding PlaneSimData.ScoreLandDistance, Mode=OneWay}" Foreground="{Binding PlaneSimData.ColorResultLandDistance}" Margin="0,-38,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
                             </StackPanel>
+                        
                             <StackPanel Background="{StaticResource backgroundLand}" Height="50" Margin="0,5,0,0" Style="{StaticResource OpacityMouseOverEffect}">
                                 <Label Content="{Binding MsgResults.UpwindLandingScoreTitle}" Foreground="White" Margin="100,5,0,0" FontWeight="Bold" FontSize="16" />
                                 <Label Content="{Binding MsgResults.UpwindLandingScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="12" />
@@ -327,7 +559,8 @@
                                 <Label Content="{Binding MsgResults.TotalScoreSubTitle}" Foreground="White" Margin="100,0,0,0" FontWeight="Light" FontSize="14" />
                                 <Label Content="{Binding Score, Mode=OneWay}" Foreground="GreenYellow" Margin="0,-40,30,0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="32" />
                             </StackPanel>
-                        </StackPanel>
+                        </StackPanel>-->
+                        
                     </TabItem>
                     <TabItem>
                         <TabItem.Header>

@@ -54,7 +54,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Range" Margin="500,15,5,10"/>
-            <ui:NumberBox x:Name="RangeNumberBox" Grid.Column="1" Width="75" Margin="10,10,25,10" PlaceholderText="Range" Value="60" Maximum="110" />
+            <ui:NumberBox x:Name="RangeNumberBox" Grid.Column="1" Width="75" Margin="10,10,25,10" PlaceholderText="Range" Value="60" Maximum="500" />
             <Button x:Name="btnReload" Content="Reload" Width="65" Height="35" Padding="0" Margin="10" Grid.Column="2" VerticalAlignment="Bottom"  HorizontalAlignment="Right" Click="btnReload_Click" />
         </Grid>
     </Grid>

@@ -165,8 +165,11 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         public double TouchdownGForce
         {
             get { return _touchdownGForce; }
-            set { _touchdownGForce = value; TouchdownGForceText = $"{_touchdownGForce}G";
-                NotifyPropertysChanged("TouchdownGForceText", "ScoreGForce", "ColorResultGForce"); }
+            set {
+                _touchdownGForce = value;
+                TouchdownGForceText = $"{_touchdownGForce}g";
+                NotifyPropertysChanged("TouchdownGForce", "TouchdownGForceText", "ScoreGForce", "ColorResultGForce");
+            }
         }
         public string TouchdownGForceText { get; set; }
 
@@ -233,8 +236,15 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
             }
         }
 
-        public double TouchdownRunwayLength { get; set; }
-
+        public double _touchdownRunwayLength;
+        public double TouchdownRunwayLength
+        {
+            get { return _touchdownRunwayLength; }
+            set {
+                _touchdownRunwayLength = value;
+                NotifyPropertysChanged("TouchdownRunwayLength");
+            }
+        }
 
         private double _takeoffLatitude;
         public double TakeoffLatitude
