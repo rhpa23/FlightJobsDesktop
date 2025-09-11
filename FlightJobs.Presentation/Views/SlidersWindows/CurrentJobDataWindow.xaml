@@ -290,7 +290,6 @@
                                             </lc:AngularGauge.Sections>
                                         </lc:AngularGauge>
                                         <TextBlock MinWidth="35" Padding="3,0,3,0" Background="White" FontWeight="Bold" Margin="65,55,65,100" HorizontalAlignment="Center" >
-                                            <Run Text="-"/>
                                             <Run Text="{Binding PlaneSimData.TouchdownFpm}"/>
                                             <Run Text="fpm"/>
                                         </TextBlock>
@@ -373,7 +372,7 @@
                             <Border Style="{StaticResource BorderMouseOverEffect}" Width="190" Grid.Column="2" Grid.Row="1" Background="Black" HorizontalAlignment="Right" Margin="0,0,0,10">
                                 <StackPanel>
                                     <ui:LayoutPanel>
-                                        <lc:AngularGauge Width="170" Height="180" Foreground="White" FromValue="0" ToValue="2000" TicksStep="50" Value="{Binding PlaneSimData.TouchdownThresholdDistance}" SectionsInnerRadius="0.7" >
+                                        <lc:AngularGauge x:Name="AngularGaugeTouchdownDistance" Width="170" Height="180" Foreground="White" FromValue="0" ToValue="2000" TicksStep="50" Value="{Binding PlaneSimData.TouchdownThresholdDistance}" SectionsInnerRadius="0.7" >
                                             <lc:AngularGauge.Sections>
                                                 <lc:AngularSection Name="SectionDistanceGreen" Fill="Green"/>
                                                 <lc:AngularSection Name="SectionDistanceOrange" Fill="Orange"/>

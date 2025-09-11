@@ -20,6 +20,22 @@ namespace FlightJobsDesktop.Views
             DebtAirlineEllipse = EllipseAirlines;
         }
 
+        public static void DisableTabControl()
+        {
+            for (int i = 0; i < TabHome.Items.Count; i++)
+            {
+                ((TabItem)TabHome.Items[i]).IsEnabled = false;
+            }            
+        }
+
+        public static void EnableTabControl()
+        {
+            for (int i = 0; i < TabHome.Items.Count; i++)
+            {
+                ((TabItem)TabHome.Items[i]).IsEnabled = true;
+            }
+        }
+
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl && ((TabControl)e.Source).SelectedContent is ManagerJobsView)

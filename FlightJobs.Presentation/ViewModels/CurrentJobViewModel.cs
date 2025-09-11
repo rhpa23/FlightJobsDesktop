@@ -55,6 +55,7 @@ namespace FlightJobsDesktop.ViewModels
         public string ChallengeExpirationDate { get; set; }
         public int ChallengeType { get; set; }
         public string WeightUnit { get; set; }
+        public bool LandingAnalisysMode { get; set; }
         private string _sliderMessage { get; set; }
         public string SliderMessage
         {

@@ -254,7 +254,7 @@ namespace FlightJobsDesktop.Views.Home
             {
                 if (MapWebView.Source.HostNameType != UriHostNameType.Unknown)
                 {
-                    //MapWebView.InvokeScript("eval", new string[] { "var node = document.getElementsByTagName('body')[0]; var map = document.getElementById('mapContainer'); while (node.hasChildNodes()) { node.removeChild(node.lastChild); } node.appendChild(map);" });
+                    MapWebView.InvokeScript("eval", new string[] { "var node = document.getElementsByTagName('body')[0]; var map = document.getElementById('mapContainer'); while (node.hasChildNodes()) { node.removeChild(node.lastChild); } node.appendChild(map);" });
                     var queryDictionary = System.Web.HttpUtility.ParseQueryString(MapWebView.Source.Query);
 
                     var departureParam = GetIcaoInfo(queryDictionary[0].ToString());

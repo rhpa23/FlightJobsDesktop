@@ -139,6 +139,7 @@ namespace FlightJobsDesktop.Views.SlidersWindows
         {
             AngularGaugeTouchdownFpm.Value = Math.Abs(_currentJobViewModel.PlaneSimData.TouchdownFpm);
             AngularGaugeGForce.Value = _currentJobViewModel.PlaneSimData.TouchdownGForce;
+            AngularGaugeTouchdownDistance.ToValue = _currentJobViewModel.PlaneSimData.TouchdownRunwayLength;
 
             var touchdownRunwayLengthMaxLandZone = _currentJobViewModel.PlaneSimData.TouchdownRunwayLength * 0.25;
 
@@ -147,7 +148,7 @@ namespace FlightJobsDesktop.Views.SlidersWindows
             SectionDistanceOrange.FromValue = touchdownRunwayLengthMaxLandZone;
             SectionDistanceOrange.ToValue = touchdownRunwayLengthMaxLandZone + 200;
             SectionDistanceRed.FromValue = touchdownRunwayLengthMaxLandZone + 200;
-            SectionDistanceRed.ToValue = 2000;
+            SectionDistanceRed.ToValue = _currentJobViewModel.PlaneSimData.TouchdownRunwayLength; //2000;
 
             _hideTimer.Interval = new TimeSpan(0, 5, 0);
             FlightRecorderUtil.FlightRecorderList = FlightRecorderUtil.LoadFlightRecorderFile(_currentJobViewModel);

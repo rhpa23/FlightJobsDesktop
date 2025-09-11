@@ -1,0 +1,101 @@
+﻿<UserControl x:Class="FlightJobsDesktop.Views.Home.PracticeView"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local:PracticeViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid x:Name="PracticeStartGrid" Visibility="Visible">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="90"/>
+                <RowDefinition/>
+                <RowDefinition Height="90"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock TextWrapping="Wrap" Width="600" Foreground="White" Grid.ColumnSpan="3"
+                               Text="Here you can practice landings without creating a job and see the results rate in the left slider window. Remember, this is just for practice and will not affect your score or virtual cash." 
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Image Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Source="/img/Practice/practice-001.jpg" />
+
+            <Border Grid.Row="2" Grid.Column="1" Width="115" Height="25" Style="{DynamicResource BorderButtonYellow}" HorizontalAlignment="Center">
+                <Button x:Name="BtnPacticeStart" Width="115" Height="35">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEDDA;" Foreground="Green" HorizontalAlignment="Left" FontSize="12" Margin="0,0,5,0" />
+                        <TextBlock Foreground="White" FontSize="12">
+                                <Run Text="Start"/>
+                        </TextBlock>
+
+                    </StackPanel>
+                    <ui:FlyoutService.Flyout>
+                        <ui:Flyout x:Name="FlyoutConfirm" Placement="Top" Opened="FlyoutConfirm_Opened">
+                            <StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <Label Content="Practice landings at:"/>
+                                    <ui:AutoSuggestBox Name="txtArrival" QueryIcon="Find" Text="{Binding Path=ArrivalICAO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    PlaceholderText="Landing" Margin="10,25,0,0" Width="350"
+                                    TextChanged="AutoSuggestBoxICAO_TextChanged"
+                                    SuggestionChosen="AutoSuggestBox_SuggestionChosen"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border x:Name="BtnOkBorder" Grid.Column="4" Width="60" Height="30" Margin="10,15,0,0" Style="{DynamicResource BorderButtonYellow}">
+                                        <Button x:Name="BtnStartOk" Content="Ok" Width="60" Height="30" Click="BtnStartOk_Click" />
+                                    </Border>
+                                    <Border x:Name="BtnCancelBorder" Grid.Column="4" Width="60" Height="30" Margin="20,15,0,0" Style="{DynamicResource BorderButtonYellow}">
+                                        <Button x:Name="BtnCancel" Content="Cancel" Width="60" Height="30" Click="BtnCancel_Click" />
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+                        </ui:Flyout>
+                    </ui:FlyoutService.Flyout>
+                </Button>
+            </Border>
+        </Grid>
+        <Grid x:Name="PracticeFinishGrid" VerticalAlignment="Center" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition />
+                <RowDefinition Height="75"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.ColumnSpan="2" Margin="5,5,5,5" HorizontalAlignment="Center"  VerticalAlignment="Bottom">Ready to practice your landings in:</TextBlock>
+            <TextBlock Grid.ColumnSpan="2" Grid.Row="1" x:Name="ArrivalICAOLabel" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="12">Remember to click on the reset button to try again.</TextBlock>
+            <Image Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Source="/img/Practice/practice-002.jpg" />
+            <Border x:Name="BtnPacticeFinishBorder" Grid.Row="4" Grid.Column="0" Width="115" Height="25" Style="{DynamicResource BorderButtonYellow}" HorizontalAlignment="Right" Margin="0,0,30,0">
+                <Button x:Name="BtnPacticeFinish" Width="115" Height="35" Click="BtnPacticeFinish_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71A;" Foreground="White" HorizontalAlignment="Left" FontSize="12" Margin="0,0,5,0" />
+                        <TextBlock Foreground="White" FontSize="12">
+                                <Run Text="Finish"/>
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+            </Border>
+            <Border x:Name="BtnPacticeResetBorder" Grid.Row="4" Grid.Column="2" Width="115" Height="25" Style="{DynamicResource BorderButtonYellow}" HorizontalAlignment="Left" Margin="30,0,0,0">
+                <Button x:Name="BtnPacticeReset" Width="115" Height="35" Click="BtnPacticeReset_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEE35;" Foreground="White" HorizontalAlignment="Left" FontSize="12" Margin="0,0,5,0" />
+                        <TextBlock Foreground="White" FontSize="12">
+                                <Run Text="Reset"/>
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

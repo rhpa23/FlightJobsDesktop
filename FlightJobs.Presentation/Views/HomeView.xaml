@@ -46,6 +46,14 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
+                        <Label Content="Practice" FontSize="22" Style="{DynamicResource CustomTabItem}" />
+                    </StackPanel>
+                </TabItem.Header>
+                <views:PracticeView/>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
                         <Label Content="Map" FontSize="22" Style="{DynamicResource CustomTabItem}" />
                     </StackPanel>
                 </TabItem.Header>

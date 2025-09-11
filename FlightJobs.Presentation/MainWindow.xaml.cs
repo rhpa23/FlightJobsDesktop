@@ -117,6 +117,28 @@ namespace FlightJobsDesktop
             }
         }
 
+        public static void EnableNavigationBar()
+        {
+            foreach (var item in NavigationBar.MenuItems)
+            {
+                if (item is NavigationViewItem && ((NavigationViewItem)item).Name != "ExitApp")
+                {
+                    ((NavigationViewItem)item).IsEnabled = true;
+                }
+            }
+        }
+
+        public static void DisableNavigationBar()
+        {
+            foreach (var item in NavigationBar.MenuItems)
+            {
+                if (item is NavigationViewItem && ((NavigationViewItem)item).Name != "ExitApp")
+                {
+                    ((NavigationViewItem)item).IsEnabled = false;
+                }
+            }
+        }
+
         private void ShowModal(string title, object content)
         {
 

@@ -234,6 +234,7 @@ namespace FlightJobsDesktop.Views.Home
                                                               _currentJob.PlaneSimData.TakeoffLatitude,
                                                               _currentJob.PlaneSimData.TakeoffLongitude);
 
+
                         var takeoffAirport = takeoffHelper.GetJobAirport(_sqLiteDbContext, _currentJob.DepartureICAO, null);
                         if (takeoffAirport != null)
                         {
@@ -297,8 +298,17 @@ namespace FlightJobsDesktop.Views.Home
                             if (AppProperties.UserSettings.LocalSettings.ShowLandingData)
                             {
                                 _sliderTouchdownWindow.ToggleSlider(true, 15);
-                            }                            
+                            }
                             _sliderTouchdownWindow.DataContext = _currentJob;
+
+                            if (_siderJobWindow != null && _currentJob.LandingAnalisysMode)
+                            {
+                                _siderJobWindow.StartedIcon.Visibility = Visibility.Hidden;
+                                _siderJobWindow.GridSimData.Visibility = Visibility.Collapsed;
+                                _siderJobWindow.GridMessage.Visibility = Visibility.Collapsed;
+                                _siderJobWindow.GridLanding.Visibility = Visibility.Visible;
+                                _siderJobWindow.GridResults.Visibility = Visibility.Visible;
+                            }
 
                             // add pecision to landing Flight recorder
                             var fRecorder = new FlightRecorderViewModel(FlightJobsConnectSim.PlaneSimData);
@@ -613,6 +623,53 @@ namespace FlightJobsDesktop.Views.Home
             }
         }
 
+        public static void LoadPracticeData(AirportEntity arrival)
+        {
+            MainWindow.ShowLoading();
+            try
+            {
+                _currentJob = new CurrentJobViewModel()
+                {
+                    LandingAnalisysMode = true,
+                    ArrivalICAO = arrival.Ident,
+                    DepartureICAO = arrival.Ident,
+                    DepartureLatitude = arrival.Laty,
+                    DepartureLongitude = arrival.Lonx,
+                    ArrivalLatitude = arrival.Laty,
+                    ArrivalLongitude = arrival.Lonx,
+                    PlaneSimData = FlightJobsConnectSim.PlaneSimData,
+                    SimData = FlightJobsConnectSim.CommonSimData,
+                    SliderTopTitle = "Practice mode"
+                };
+
+                if (_siderJobWindow != null) _siderJobWindow.Close();
+
+                _siderJobWindow = new CurrentJobDataWindow(_currentJob);
+                if (!_siderJobWindow.IsLoaded)
+                    _siderJobWindow.Show();
+                if (!_sliderTouchdownWindow.IsLoaded)
+                    _sliderTouchdownWindow.Show();
+
+                _siderJobWindow.GridSimData.Visibility = Visibility.Visible;
+                _siderJobWindow.StartedIcon.Visibility = Visibility.Hidden;
+                _siderJobWindow.GridMessage.Visibility = Visibility.Collapsed;
+                _siderJobWindow.GridLanding.Visibility = Visibility.Collapsed;
+                _siderJobWindow.GridResults.Visibility = Visibility.Collapsed;
+
+                 _siderJobWindow.DataContext = _currentJob;
+
+                _log.Info("Practice data was set");
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+            }
+            finally
+            {
+                MainWindow.HideLoading();
+            }
+        }
+
         internal async Task LoadUserJobData(bool closeSiderJob = true)
         {
             MainWindow.ShowLoading();
@@ -626,6 +683,7 @@ namespace FlightJobsDesktop.Views.Home
                     
                     _currentJob = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, CurrentJobViewModel>(activeJob);
                     _currentJob.JobSummary = $"Setup aircraft departure on {_currentJob.DepartureICAO} then fly to {_currentJob.ArrivalICAO} with this total payload";
+                    _currentJob.LandingAnalisysMode = false;
                     var arrivalEntity = _sqLiteDbContext.GetAirportByIcao(_currentJob.ArrivalICAO);
                     var departureEntity = _sqLiteDbContext.GetAirportByIcao(_currentJob.DepartureICAO);
                     var alternativeEntity = _sqLiteDbContext.GetAirportByIcao(_currentJob.AlternativeICAO);

@@ -120,6 +120,7 @@
     <Compile Include="ViewModels\GenerateJobViewModel.cs" />
     <Compile Include="ViewModels\HiredFBOsViewModel.cs" />
     <Compile Include="ViewModels\JobItemViewModel.cs" />
+    <Compile Include="ViewModels\PracticeViewModel.cs" />
     <Compile Include="ViewModels\MessagesResultViewModel.cs" />
     <Compile Include="ViewModels\PaginatedAirlineJobLedgerViewModel.cs" />
     <Compile Include="ViewModels\LogbookViewModel.cs" />
@@ -152,6 +153,9 @@
     </Compile>
     <Compile Include="Views\Account\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Home\PracticeView.xaml.cs">
+      <DependentUpon>PracticeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Home\LogbookView.xaml.cs">
       <DependentUpon>LogbookView.xaml</DependentUpon>
@@ -261,6 +265,10 @@
     <Page Include="Views\Account\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Home\PracticeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Home\LogbookView.xaml">
       <SubType>Designer</SubType>
@@ -527,6 +535,7 @@
     <Resource Include="img\logo\FlightJobsLogo0004.png" />
     <Resource Include="img\logo\FlightJobsLogo0005.png" />
     <Resource Include="img\logo\FlightJobsLogo0006.png" />
+    <Resource Include="img\Practice\practice-001.jpg" />
     <Resource Include="img\types\air-transport.jpg" />
     <Resource Include="img\types\cargo.jpg" />
     <Resource Include="img\types\general-aviation.jpg" />
@@ -770,6 +779,7 @@
     <Resource Include="img\results\background-score-01.jpg" />
     <Resource Include="img\results\background-takeoff-01.jpg" />
     <Resource Include="img\results\background-total-score-01.jpg" />
+    <Resource Include="img\Practice\practice-002.jpg" />
     <Content Include="web\img\icons\alternative.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
