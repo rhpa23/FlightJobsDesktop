@@ -72,7 +72,7 @@ namespace FlightJobsDesktop.Views.Home
             _backgroundCheck.DoWork += _backgroundCheck_DoWork;
 
             _timerCheckSimData = new DispatcherTimer();
-            _timerCheckSimData.Interval = new TimeSpan(0, 0, 0, 1, 0);
+            _timerCheckSimData.Interval = new TimeSpan(0, 0, 0, 0, 400);
             _timerCheckSimData.Tick += new EventHandler(OnTickCheckSimData);
             _timerCheckSimData.Start();
         }

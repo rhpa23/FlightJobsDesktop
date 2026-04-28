@@ -124,7 +124,7 @@ namespace FlightJobsDesktop.Views.Modals
                 }
 
                 var infraService = MainWindow.InfraServiceFactory.Create();
-                selectHost.Option1IsOnline = await infraService.PingUrl(selectHost.Option1HostUrl);
+                selectHost.Option1IsOnline = await infraService.PingUrl(selectHost.Option1HostUrl + "health");
                 selectHost.Option2IsOnline = await infraService.PingUrl(selectHost.Option2HostUrl);
                 selectHost.Option3IsOnline = await infraService.PingUrl(selectHost.Option3HostUrl);
                 selectHost.Option4IsOnline = await infraService.PingUrl(selectHost.Option4HostUrl);
