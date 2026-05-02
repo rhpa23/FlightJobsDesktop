@@ -171,8 +171,7 @@ namespace FlightJobsDesktop.Views.Home
                     var currentJob = AppProperties.UserJobs.FirstOrDefault(x => x.IsActivated);
                     AppProperties.UserJobs.Remove(currentJob);
                     // Reload Airline data
-                    await _userAccessService.LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
-                    await _userAccessService.LoadUserAirlineProperties();
+                    await _userAccessService.LoadUserStatisticsProperties();
                     await LoadUserJobData(false);
                     EnableDisableNavegation(true);
                     _currentJob.StartIsEnable = !_isJobStarted;
@@ -404,7 +403,7 @@ namespace FlightJobsDesktop.Views.Home
             if (_currentJob == null || _currentJob.PlaneSimData == null) return;
 
             var p = _currentJob.PlaneSimData;
-            _currentJob.Score = (long)(_currentJob.Dist * 0.35) +
+            _currentJob.Score = (long)(_currentJob.Distance * 0.35) +
                                     p.ScoreBounce + p.ScoreGForce + p.ScoreCenterDerivation + p.ScoreTakeoffCenterDerivation +
                                     p.ScoreLandDistance + p.ScoreLightBeaconOn + p.ScoreLightLandingOn +
                                     p.ScoreLightNavigationOn + p.ScoreTouchdown + p.ScoreWindAngle;
@@ -714,6 +713,7 @@ namespace FlightJobsDesktop.Views.Home
                     _stopCheckJobStart = false;
                     _currentJob.StartIsEnable = !_isJobStarted;
                     _currentJob.FinishIsEnable = _isJobStarted;
+                    _currentJob.WeightUnit = AppProperties.UserSettings.WeightUnit;
                     _log.Info("CurrentJob was set");
                 }
                 else
@@ -724,7 +724,7 @@ namespace FlightJobsDesktop.Views.Home
                     if (closeSiderJob && _sliderTouchdownWindow != null) _sliderTouchdownWindow.Hide();
                 }
 
-                var lastJob = await _jobService.GetLastUserJob(AppProperties.UserLogin.UserId);
+                var lastJob = await _jobService.GetLastUserJob();
                 if (lastJob != null)
                 {
                     _log.Info("LastJob was found and set");
@@ -741,8 +741,6 @@ namespace FlightJobsDesktop.Views.Home
                 if (AppProperties.UserStatistics.CustomPlaneCapacity?.ImagePath != null)
                     LoadThumbImg(AppProperties.UserStatistics.CustomPlaneCapacity.ImagePath);
 
-                // Moved to FinishJob                await _userAccessService.GetUserStatistics(AppProperties.UserLogin.UserId);
-                HomeView.SetEllipseAirlinesVisibility();
 
                 _currentJob.PlaneSimData = FlightJobsConnectSim.PlaneSimData;
                 _currentJob.SimData = FlightJobsConnectSim.CommonSimData;

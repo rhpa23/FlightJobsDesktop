@@ -181,7 +181,7 @@ namespace FlightJobsDesktop.Views.SlidersWindows
                     FlightRecorderUtil.UpdateChartVerticalProfile(ChartFlightRecorder);
 
                     _currentJobViewModel.FlightRecorderAnalise.AverageFuelConsumption = 
-                        FlightRecorderUtil.GetAverageFuelConsumption(_currentJobViewModel.Dist);
+                        FlightRecorderUtil.GetAverageFuelConsumption(_currentJobViewModel.Distance);
                     
                     _currentJobViewModel.FlightRecorderAnalise.AveragePlaneSpeed = FlightRecorderUtil.GetAverageSpeed();
                 }

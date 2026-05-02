@@ -5,10 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:FlightJobsDesktop.Views.Home"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             mc:Ignorable="d" Loaded="UserControl_Loaded">
+             mc:Ignorable="d">
     <Grid>
-        <TabControl x:Name="TabControlHome" SelectionChanged="TabControl_SelectionChanged"
-                    Style="{DynamicResource TabControlPivotStyle}"
+        <TabControl x:Name="TabControlHome"                    
                     MinHeight="400" MinWidth="1000">
             <TabItem>
                 <TabItem.Header>
@@ -17,31 +16,6 @@
                     </StackPanel>
                 </TabItem.Header>
                 <views:ConnectorView />
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Manager" FontSize="22" Style="{DynamicResource CustomTabItem}" />
-                    </StackPanel>
-                </TabItem.Header>
-                <views:ManagerJobsView  />
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Logbook" FontSize="22" Style="{DynamicResource CustomTabItem}" />
-                    </StackPanel>
-                </TabItem.Header>
-                <views:LogbookView/>
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Airlines" FontSize="22" Style="{DynamicResource CustomTabItem}" />
-                        <Ellipse x:Name="EllipseAirlines" Width="7" Height="7" Fill="Red" Margin="2,5,2,0" />
-                    </StackPanel>
-                </TabItem.Header>
-                <views:AirlinesView/>
             </TabItem>
             <TabItem>
                 <TabItem.Header>

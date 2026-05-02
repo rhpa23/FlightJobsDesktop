@@ -44,31 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\ApiDtos.cs" />
     <Compile Include="Enum\AviationType.cs" />
     <Compile Include="Exceptions\ApiException.cs" />
-    <Compile Include="Models\AirlineFboDbModel.cs" />
-    <Compile Include="Models\AirlineJobLedgerModel.cs" />
-    <Compile Include="Models\AirlineModel.cs" />
-    <Compile Include="Models\ChartAirlineBankBalanceModel.cs" />
-    <Compile Include="Models\ChartUserBankBalanceModel.cs" />
-    <Compile Include="Models\ConfirmJobModel.cs" />
     <Compile Include="Models\CustomPlaneCapacityModel.cs" />
     <Compile Include="Models\DataModel.cs" />
-    <Compile Include="Models\GenerateJobModel.cs" />
     <Compile Include="Models\JobListItemModel.cs" />
     <Compile Include="Models\JobModel.cs" />
-    <Compile Include="Models\LicenseItemModel.cs" />
     <Compile Include="Models\LoginResponseModel.cs" />
-    <Compile Include="Models\PaginatedAirlineJobLedgerModel.cs" />
-    <Compile Include="Models\PaginatedAirlinesModel.cs" />
-    <Compile Include="Models\PaginatedJobsModel.cs" />
     <Compile Include="Models\FinishJobResponseModel.cs" />
-    <Compile Include="Models\PilotLicenseExpensesModel.cs" />
-    <Compile Include="Models\PilotLicenseExpensesUserModel.cs" />
-    <Compile Include="Models\RandomFlightModel.cs" />
-    <Compile Include="Models\SimBriefModel.cs" />
-    <Compile Include="Models\UserRegisterModel.cs" />
-    <Compile Include="Models\SearchJobTipsModel.cs" />
     <Compile Include="Models\StartJobResponseModel.cs" />
     <Compile Include="Models\UserSettingsModel.cs" />
     <Compile Include="Models\UserModel.cs" />

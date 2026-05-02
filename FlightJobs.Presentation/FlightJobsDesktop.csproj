@@ -109,24 +109,13 @@
     <Compile Include="Mapper\ViewModelToDbModelMapper.cs" />
     <Compile Include="ValidationRules\EmailValidationRule.cs" />
     <Compile Include="ValidationRules\MinimumCharacterRule.cs" />
-    <Compile Include="ViewModels\AirlineFboViewModel.cs" />
-    <Compile Include="ViewModels\AirlineFilterViewModel.cs" />
-    <Compile Include="ViewModels\AirlineDebtsViewModel.cs" />
-    <Compile Include="ViewModels\AirlineViewModel.cs" />
-    <Compile Include="ViewModels\AirportViewModel.cs" />
     <Compile Include="ViewModels\CapacityViewModel.cs" />
     <Compile Include="ViewModels\FlightRecorderViewModel.cs" />
     <Compile Include="ViewModels\FlightResultsViewModel.cs" />
-    <Compile Include="ViewModels\GenerateJobViewModel.cs" />
-    <Compile Include="ViewModels\HiredFBOsViewModel.cs" />
     <Compile Include="ViewModels\JobItemViewModel.cs" />
     <Compile Include="ViewModels\PracticeViewModel.cs" />
     <Compile Include="ViewModels\MessagesResultViewModel.cs" />
-    <Compile Include="ViewModels\PaginatedAirlineJobLedgerViewModel.cs" />
-    <Compile Include="ViewModels\LogbookViewModel.cs" />
-    <Compile Include="ViewModels\PilotsHiredViewModel.cs" />
     <Compile Include="ViewModels\SelectHostViewModel.cs" />
-    <Compile Include="ViewModels\TipsDataGridViewModel.cs" />
     <Compile Include="ViewModels\UserSettingsViewModel.cs" />
     <Compile Include="ViewModels\CurrentJobViewModel.cs" />
     <Compile Include="ViewModels\AspnetUserViewModel.cs" />
@@ -135,15 +124,6 @@
     <Compile Include="ViewModels\UserStatisticsFlightsViewModel.cs" />
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Account\ForgotPassword.xaml.cs">
-      <DependentUpon>ForgotPassword.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Account\Register.xaml.cs">
-      <DependentUpon>Register.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Home\AirlinesView.xaml.cs">
-      <DependentUpon>AirlinesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Home\ConnectorView.xaml.cs">
       <DependentUpon>ConnectorView.xaml</DependentUpon>
@@ -157,69 +137,11 @@
     <Compile Include="Views\Home\PracticeView.xaml.cs">
       <DependentUpon>PracticeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Home\LogbookView.xaml.cs">
-      <DependentUpon>LogbookView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Home\ManagerJobsView.xaml.cs">
-      <DependentUpon>ManagerJobsView.xaml</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Modals\AirlineDebtModal.xaml.cs">
-      <DependentUpon>AirlineDebtModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\AirlineEditModal.xaml.cs">
-      <DependentUpon>AirlineEditModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\AirlineFBOs.xaml.cs">
-      <DependentUpon>AirlineFBOs.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\AirlineHireFboModal.xaml.cs">
-      <DependentUpon>AirlineHireFboModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\AirlineJobsLedgerModal.xaml.cs">
-      <DependentUpon>AirlineJobsLedgerModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\AirlineScoreRankingModal.xaml.cs">
-      <DependentUpon>AirlineScoreRankingModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\ConfirmJobModal.xaml.cs">
-      <DependentUpon>ConfirmJobModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\CustomCapacityModal.xaml.cs">
-      <DependentUpon>CustomCapacityModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\AlternativeTipsModal.xaml.cs">
-      <DependentUpon>AlternativeTipsModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\DestinationTipsModal.xaml.cs">
-      <DependentUpon>DestinationTipsModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\FlightTypeModal.xaml.cs">
-      <DependentUpon>FlightTypeModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\AirlineJoinModal.xaml.cs">
-      <DependentUpon>AirlineJoinModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\JobDetailModal.xaml.cs">
-      <DependentUpon>JobDetailModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\LicenseExpensesModal.xaml.cs">
-      <DependentUpon>LicenseExpensesModal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\PilotsHiredModal.xaml.cs">
-      <DependentUpon>PilotsHiredModal.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Modals\SelectHostUrlModal.xaml.cs">
       <DependentUpon>SelectHostUrlModal.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Modals\TransferPilotMoneyToAirlineModal.xaml.cs">
-      <DependentUpon>TransferPilotMoneyToAirlineModal.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\POC\ChartsPoC.xaml.cs">
       <DependentUpon>ChartsPoC.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PrivateView.xaml.cs">
-      <DependentUpon>PrivateView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
@@ -242,18 +164,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Account\ForgotPassword.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Account\Register.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Home\AirlinesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Home\ConnectorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -270,89 +180,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Home\LogbookView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Home\ManagerJobsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\AirlineDebtModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\AirlineEditModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\AirlineFBOs.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\AirlineHireFboModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\AirlineJobsLedgerModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\AirlineScoreRankingModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\ConfirmJobModal.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Modals\CustomCapacityModal.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Modals\AlternativeTipsModal.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Modals\DestinationTipsModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\FlightTypeModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\AirlineJoinModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\JobDetailModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\LicenseExpensesModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\PilotsHiredModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Modals\SelectHostUrlModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Modals\TransferPilotMoneyToAirlineModal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\POC\ChartsPoC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PrivateView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>

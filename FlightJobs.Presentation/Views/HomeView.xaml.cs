@@ -17,7 +17,6 @@ namespace FlightJobsDesktop.Views
         {
             InitializeComponent();
             TabHome = TabControlHome;
-            DebtAirlineEllipse = EllipseAirlines;
         }
 
         public static void DisableTabControl()
@@ -34,26 +33,6 @@ namespace FlightJobsDesktop.Views
             {
                 ((TabItem)TabHome.Items[i]).IsEnabled = true;
             }
-        }
-
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.Source is TabControl && ((TabControl)e.Source).SelectedContent is ManagerJobsView)
-            {
-                var managerView = (ManagerJobsView) ((TabControl)e.Source).SelectedContent;
-                managerView.LoadManagerView();
-            }
-        }
-
-        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-            SetEllipseAirlinesVisibility();
-            MainWindow.SetLicenseOverdueEllipseVisibility();
-        }
-
-        internal static void SetEllipseAirlinesVisibility()
-        {
-            DebtAirlineEllipse.Visibility = AppProperties.UserStatistics.Airline?.DebtValue == 0 ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
         }
     }
 }

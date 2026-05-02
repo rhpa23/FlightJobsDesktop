@@ -16,29 +16,9 @@ namespace FlightJobsDesktop.Mapper
             {
                 MapperCfg = new MapperConfiguration(cfg => {
 
-                    cfg.CreateMap<PilotLicenseItemModel, PilotLicenseItemViewModel>();
-                    cfg.CreateMap<LicenseItemModel, LicenseItemViewModel>();
-                    cfg.CreateMap<PilotLicenseExpensesUserModel, PilotLicenseExpensesUserViewModel>();
-                    cfg.CreateMap<PilotLicenseExpensesModel, PilotLicenseExpensesViewModel>();
-                    cfg.CreateMap<ChartUserBankBalanceModel, ChartUserBankBalanceViewModel>();
-                    cfg.CreateMap<ChartAirlineBankBalanceModel, ChartAirlineBankBalanceViewModel>();
                     cfg.CreateMap<UserStatisticsModel, UserStatisticsFlightsViewModel>();
-                    cfg.CreateMap<AirlineFboDbModel, AirlineFboViewModel>();
-                    cfg.CreateMap<AirlineModel, HiredFBOsViewModel>()
-                        .ForMember(dest => dest.AirlineName, opt => opt.MapFrom(src => src.Name));
-                    cfg.CreateMap<PaginatedAirlineJobLedgerModel, PaginatedAirlineJobLedgerViewModel>();
-                    cfg.CreateMap<AirlineJobLedgerModel, AirlineJobLedgerViewModel>();
-                    cfg.CreateMap<AirlineModel, AirlineDebtsViewModel>();
-                    cfg.CreateMap<UserModel, PilotHiredViewModel>();
-                    cfg.CreateMap<AirlineModel, AirlineViewModel>()
-                          .ForMember(dest => dest.OwnerUserId, opt => opt.MapFrom(src => src.UserId))
-                          .ForMember(dest => dest.MinimumScoreToHire, opt => opt.MapFrom(src => src.Score));
-                    cfg.CreateMap<PaginatedAirlinersModel, AirlineFilterViewModel>();
                     cfg.CreateMap<JobModel, CurrentJobViewModel>();
                     cfg.CreateMap<JobModel, LastJobViewModel>();
-                    cfg.CreateMap<JobModel, LogbookUserJobViewModel>();
-                    cfg.CreateMap<PaginatedJobsModel, LogbookViewModel>();
-                    cfg.CreateMap<SearchJobTipsModel, TipsDataGridViewModel>();
                     cfg.CreateMap<JobListItemModel, JobItemViewModel>();
                     cfg.CreateMap<CustomPlaneCapacityModel, CapacityViewModel>()
                           .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.CustomNameCapacity))

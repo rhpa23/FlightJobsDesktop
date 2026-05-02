@@ -18,14 +18,14 @@ namespace FlightJobsDesktop.ViewModels
         public double ArrivalLongitude { get; set; }
         public double AlternativeLatitude { get; set; }
         public double AlternativeLongitude { get; set; }
-        public long Dist { get; set; }
-        public string DistComplete { get { return Dist + " NM"; } }
+        public long Distance { get; set; }
+        public string DistComplete { get { return Distance + " NM"; } }
         public long Pax { get; set; }
         public string PaxComplete { get { return $"Pax: ({Pax} * {PaxWeight} {WeightUnit})"; } }
         public string PaxTotalWeight { get { return $"{Pax * PaxWeight} {WeightUnit}"; } }
         public long Cargo { get; set; }
         public string CargoComplete { get { return $"{Cargo} {WeightUnit}"; } }
-        public long Payload { get; set; }
+        public long Payload { get { return (Pax * PaxWeight) + Cargo; } }
         public string PayloadComplete { get { return $"{Payload} {WeightUnit}"; } }
         public long PayloadDisplay { get; set; }
         public long Pay { get; set; }
@@ -147,7 +147,7 @@ namespace FlightJobsDesktop.ViewModels
                 DepartureICAO = currentJob.DepartureICAO,
                 DepartureLatitude = currentJob.DepartureLatitude,
                 DepartureLongitude = currentJob.DepartureLongitude,
-                Dist = currentJob.Dist,
+                Distance = currentJob.Distance,
                 EndTime = currentJob.EndTime,
                 FinishFuelWeight = currentJob.FinishFuelWeight,
                 FinishIsEnable = currentJob.FinishIsEnable,
@@ -172,7 +172,6 @@ namespace FlightJobsDesktop.ViewModels
                 Pax = currentJob.Pax,
                 PaxWeight = currentJob.PaxWeight,
                 Pay = currentJob.Pay,
-                Payload = currentJob.Payload,
                 PlaneSimData = currentJob.PlaneSimData,
                 PayloadLabelColor = currentJob.PayloadLabelColor,
                 Score = currentJob.Score,

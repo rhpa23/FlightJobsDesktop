@@ -50,16 +50,12 @@ namespace FlightJobsDesktop
             services.AddAbstractFactory<IJobService, JobService>();
             services.AddAbstractFactory<IUserAccessService, UserAccessService>();
             services.AddAbstractFactory<IInfraService, InfraService>();
-            services.AddAbstractFactory<IAirlineService, AirlineService>();
             services.AddAbstractFactory<IPilotService, PilotService>();
 
             services.AddAbstractFactory<ISqLiteDbContext, SqLiteDbContext>();
 
             services.AddSingleton<MainWindow>();
             services.AddSingleton<Login>();
-            services.AddSingleton<Register>();
-
-            
         }
 
         private void OnStartup(object sender, StartupEventArgs e)

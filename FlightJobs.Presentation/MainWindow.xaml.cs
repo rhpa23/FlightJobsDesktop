@@ -48,7 +48,6 @@ namespace FlightJobsDesktop
         public static IAbstractFactory<IJobService> JobServiceFactory;
         public static IAbstractFactory<IUserAccessService> UserServiceFactory;
         public static IAbstractFactory<IInfraService> InfraServiceFactory;
-        public static IAbstractFactory<IAirlineService> AirlineServiceFactory;
         public static IAbstractFactory<ISqLiteDbContext> SqLiteContextFactory;
         public static IAbstractFactory<IPilotService> PilotServiceFactory;
 
@@ -58,7 +57,6 @@ namespace FlightJobsDesktop
                           IAbstractFactory<IJobService> factoryJob, 
                           IAbstractFactory<IUserAccessService> factoryUser,
                           IAbstractFactory<IPilotService> factoryPilot,
-                          IAbstractFactory<IAirlineService> factoryAirline,
                           IAbstractFactory<ISqLiteDbContext> factorySqLiteContext)
         {
             InitializeComponent();
@@ -68,13 +66,11 @@ namespace FlightJobsDesktop
             UserServiceFactory = factoryUser;
             PilotServiceFactory = factoryPilot;
             InfraServiceFactory = factoryInfra;
-            AirlineServiceFactory = factoryAirline;
             SqLiteContextFactory = factorySqLiteContext;
 
             ResizeMode = ResizeMode.CanResizeWithGrip;
 
             NavigationBar = nvMain;
-            LicenseOverdueEllipse = EllipseLicense;
             _loadingPanel = LoadingPanel;
             _loadingProgressPanel = LoadingProgressPanel;
 
@@ -165,9 +161,11 @@ namespace FlightJobsDesktop
             try
             {
                 _userSettings = LoadSettingsFromFile();
+               // AppProperties.UserLogin
+                await UserServiceFactory.Create().Login(AppProperties.UserLogin.Email, AppProperties.UserLogin.Password);
 
-                await JobServiceFactory.Create().GetAllUserJobs(AppProperties.UserLogin.UserId);
-                await UserServiceFactory.Create().LoadUserStatisticsProperties(AppProperties.UserLogin.UserId);
+                await JobServiceFactory.Create().GetAllUserJobs();
+                await UserServiceFactory.Create().LoadUserStatisticsProperties();
 
                 contentFrame.Navigate(typeof(HomeView));
                 nvMain.SelectedItem = HomeViewPageItem;
@@ -339,7 +337,7 @@ namespace FlightJobsDesktop
                                         JobServiceFactory, 
                                         UserServiceFactory, 
                                         new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, PilotServiceFactory, 
-                                                       AirlineServiceFactory, SqLiteContextFactory));
+                                                       SqLiteContextFactory));
 
             loginWindow.Show();
 
@@ -356,21 +354,5 @@ namespace FlightJobsDesktop
         {
             Application.Current.Shutdown();
         }
-
-        internal static void SetLicenseOverdueEllipseVisibility()
-        {
-            LicenseOverdueEllipse.Visibility = AppProperties.UserStatistics.LicensesOverdue == null ||
-                                               AppProperties.UserStatistics.LicensesOverdue.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-
-        //private void TitleBarButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    string pageName = "FlightJobsDesktop.Views." + (string)PrivateViewPageItem.Tag;
-        //    NavigateToPageControl(pageName);
-        //    nvMain.SelectedItem = PrivateViewPageItem;
-        //}
-
-
     }
 }

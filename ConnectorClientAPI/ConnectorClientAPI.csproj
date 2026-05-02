@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="FlightJobsConnectorClientAPI.BKP" />
+    <None Include="FlightJobsConnectorClientAPI.BKP2" />
     <Compile Include="FlightJobsConnectorClientAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

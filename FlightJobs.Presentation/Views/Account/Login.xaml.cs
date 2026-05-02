@@ -57,14 +57,6 @@ namespace FlightJobsDesktop.Views.Account
             Application.Current.Shutdown();
         }
 
-        private void Register_Click(object sender, RoutedEventArgs e)
-        {
-            if (!new Register(_factoryUser).ShowDialog().Value)
-            {
-                Application.Current.Shutdown();
-            }
-        }
-
         private void ForgotPassword_Click(object sender, RoutedEventArgs e)
         {
             var destinationurl = $"{_infraService.GetApiUrl()}Account/ForgotPassword";
@@ -126,7 +118,7 @@ namespace FlightJobsDesktop.Views.Account
                 _loginData = await _userAccessService.Login(userViewModel.Email, userViewModel.Password);
                 if (_loginData != null)
                 {
-                    await _userAccessService.LoadUserStatisticsProperties(_loginData.UserId);
+                    await _userAccessService.LoadUserStatisticsProperties();
 
                     if (!discreteLogin)
                     {
@@ -136,7 +128,7 @@ namespace FlightJobsDesktop.Views.Account
                         userViewModel.NickName = _loginData.UserName;
                         SaveLoginData(userViewModel);
                     }
-                    await LoadUserJobList(_loginData.UserId);
+                    await LoadUserJobList();
                     return true;
                 }
             }
@@ -170,8 +162,10 @@ namespace FlightJobsDesktop.Views.Account
                 {
                     AppProperties.UserLogin = new LoginResponseModel() 
                     {
+                        Email = info[0],
+                        Password = info[1],
+                        UserName = info[2],
                         UserId = info[3],
-                        UserName = info[2]
                     };
                     return true;
                     //txbEmail.Text = info[0];
@@ -229,11 +223,11 @@ namespace FlightJobsDesktop.Views.Account
             }
         }
 
-        private async Task LoadUserJobList(string userId)
+        private async Task LoadUserJobList()
         {
             try
             {
-                await _jobService.GetAllUserJobs(userId);
+                await _jobService.GetAllUserJobs();
             }
             catch (Exception ex)
             {

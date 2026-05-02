@@ -1,0 +1,1018 @@
+﻿using FlightJobs.Model;
+using FlightJobs.Model.DTOs;
+using FlightJobs.Model.Enum;
+using FlightJobs.Model.Models;
+using Newtonsoft.Json;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Script.Serialization;
+
+namespace ConnectorClientAPI
+{
+    public class LoginApiResponse
+    {
+        public string access_token { get; set; }
+        public UserApiResponse user { get; set; }
+    }
+
+    public class UserApiResponse
+    {
+        public string id { get; set; }
+        public string email { get; set; }
+        public string name { get; set; }
+        public object activeJob { get; set; }
+    }
+
+    public class FlightJobsConnectorClientAPI
+    {
+        public static string SiteUrl { get; set; } = "https://flightjobs.bsite.net/";
+        public static string ApiBaseUrl { get; set; } = "https://flightjobs-api.example.com/"; // TODO: Definir URL da nova API
+        static HttpClient _client;
+        private string _accessToken;
+
+        public FlightJobsConnectorClientAPI()
+        {
+            HttpClientHandler handler = new HttpClientHandler()
+            {
+                AllowAutoRedirect = false
+            };
+
+            _client = new HttpClient(handler);
+            _client.BaseAddress = new Uri(ApiBaseUrl);
+            _client.DefaultRequestHeaders.Accept.Clear();
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+
+        private void SetAuthorizationHeader()
+        {
+            _client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _accessToken);
+        }
+
+        public async Task<bool> PingUrl(string url)
+        {
+            try
+            {
+                var response = await _client.GetAsync(url);
+                return response != null && response.StatusCode == HttpStatusCode.Found;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task SaveAvatar(string userId, string fileName)
+        {
+            // Nova API: PUT profile/avatar com avatarId
+            // Nota: fileName pode ser mapeado para avatarId ou pode ser necessário fazer upload primeiro
+            var url = $"{ApiBaseUrl}profile/avatar";
+            SetAuthorizationHeader();
+
+            var body = JsonConvert.SerializeObject(new { avatarId = fileName });
+
+            HttpResponseMessage response = await _client.PutAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorContent);
+            }
+        }
+
+        public async Task TranfersMoneyToAirline(string userId, int percent)
+        {
+            // Nova API: POST profile/transfer
+            var url = $"{ApiBaseUrl}profile/transfer";
+            SetAuthorizationHeader();
+
+            var body = JsonConvert.SerializeObject(new { percent });
+
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorContent);
+            }
+        }
+
+        public async Task<LoginResponseModel> Login(string email, string password)
+        {
+            try
+            {
+                var url = $"{ApiBaseUrl}auth/login";
+
+                var body = JsonConvert.SerializeObject(new { email, password });
+
+                HttpResponseMessage response = await _client.PostAsync(
+                    new Uri(url),
+                    new StringContent(body, Encoding.UTF8, "application/json")
+                );
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<LoginApiResponse>(json);
+
+                    // Armazena o token para requisições futuras
+                    _accessToken = result.access_token;
+                    SetAuthorizationHeader();
+
+                    return new LoginResponseModel()
+                    {
+                        ActiveJobInfo = result.user?.activeJob != null ? result.user.activeJob.ToString() : "",
+                        UserId = result.user?.id,
+                        UserName = result.user?.name ?? "<no user name>"
+                    };
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpRequestException("Fail to connect FlightJobs API. Please try again and if the error persists contact the site administrator.", ex);
+            }
+        }
+
+        public async Task UserRegister(UserRegisterModel userModel)
+        {
+            var url = $"{ApiBaseUrl}auth/register";
+
+            // Mapeia UserRegisterModel para RegisterDto da nova API
+            var registerDto = new
+            {
+                email = userModel.Email,
+                password = userModel.Password,
+                name = userModel.Name,
+            };
+
+            var body = JsonConvert.SerializeObject(registerDto);
+
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorContent);
+            }
+        }
+
+        public async Task ConfirmJob(ConfirmJobModel confirmJobModel)
+        {
+            // Nova API: POST search/confirm
+            var url = $"{ApiBaseUrl}search/confirm";
+            SetAuthorizationHeader();
+
+            var confirmDto = new
+            {
+                departureICAO = confirmJobModel.DepartureICAO,
+                arrivalICAO = confirmJobModel.ArrivalICAO,
+                alternativeICAO = confirmJobModel.AlternativeICAO,
+                distance = confirmJobModel.Dist,
+                pax = confirmJobModel.Pax,
+                cargo = confirmJobModel.Cargo,
+                pay = confirmJobModel.Pay,
+                aviationType = confirmJobModel.AviationType,
+            };
+
+            var jobs = new ArrayList
+            {
+                confirmJobModel
+            };
+
+            var body = JsonConvert.SerializeObject(jobs);
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+        }
+
+        public async Task RemoveJob(string userId, long jobId)
+        {
+            var url = $"{ApiBaseUrl}jobs/{jobId}";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(new Uri(url));
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+        }
+
+        public async Task<IList<JobListItemModel>> GenerateConfirmJobs(GenerateJobModel generateJobData)
+        {
+            // Nova API: POST search/generate
+            var url = $"{ApiBaseUrl}search/generate";
+            SetAuthorizationHeader();
+
+            var generateDto = new
+            {
+                departure = generateJobData.Departure,
+                arrival = generateJobData.Arrival,
+                alternative = generateJobData.Alternative,
+                aviationType = generateJobData.AviationType,
+                passengers = generateJobData.CustomPlaneCapacity?.CustomPassengerCapacity,
+                capacityId = generateJobData.CustomPlaneCapacity?.Id,
+                paxWeight = generateJobData.CustomPlaneCapacity?.CustomPaxWeight,
+                cargoWeight = generateJobData.CustomPlaneCapacity?.CustomCargoCapacityWeight,
+            };
+
+            var body = JsonConvert.SerializeObject(generateDto);
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<IList<JobListItemModel>>(json);
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+        }
+
+        public async Task RemovePlaneCapacity(CustomPlaneCapacityModel capacityModel)
+        {
+            // Nova API: DELETE custom-capacity/{id}
+            var url = $"{ApiBaseUrl}custom-capacity/{capacityModel.Id}";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.DeleteAsync(new Uri(url));
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+        }
+
+        public async Task SavePlaneCapacity(CustomPlaneCapacityModel capacityModel)
+        {
+            // Nova API: POST custom-capacity
+            var url = $"{ApiBaseUrl}custom-capacity";
+            SetAuthorizationHeader();
+
+            var saveDto = new
+            {
+                //planeName = capacityModel.PlaneName,
+                //paxCapacity = capacityModel.PaxCapacity,
+                //cargoCapacity = capacityModel.CargoCapacity,
+                //paxWeight = capacityModel.PaxWeight,
+                //imageUrl = capacityModel.ImageUrl
+            };
+
+            var body = JsonConvert.SerializeObject(saveDto);
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+        }
+
+        public async Task UpdatePlaneCapacity(CustomPlaneCapacityModel capacityModel)
+        {
+            // Nova API: PUT custom-capacity/{id}
+            var url = $"{ApiBaseUrl}custom-capacity/{capacityModel.Id}";
+            SetAuthorizationHeader();
+
+            var updateDto = new
+            {
+                planeName = capacityModel.PlaneName,
+                paxCapacity = capacityModel.PaxCapacity,
+                cargoCapacity = capacityModel.CargoCapacity,
+                paxWeight = capacityModel.PaxWeight,
+                imageUrl = capacityModel.ImageUrl
+            };
+
+            var body = JsonConvert.SerializeObject(updateDto);
+            HttpResponseMessage response = await _client.PutAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+        }
+
+        public async Task<StartJobResponseModel> StartJob(DataModel data)
+        {
+            var url = $"{ApiBaseUrl}jobs/start";
+            SetAuthorizationHeader();
+
+            var startDto = new
+            {
+                latitude = data.Latitude,
+                longitude = data.Longitude,
+                planeDescription = data.Title,
+                payload = data.PayloadKilograms,
+                fuelWeight = data.FuelWeightKilograms
+            };
+
+            var body = JsonConvert.SerializeObject(startDto);
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<StartJobResponseDto>(json);
+
+            return new StartJobResponseModel()
+            {
+                ArrivalICAO = result.arrivalICAO,
+                ResultMessage = result.message
+            };
+        }
+
+        public async Task<FinishJobResponseModel> FinishJob(DataModel data)
+        {
+            var url = $"{ApiBaseUrl}jobs/finish";
+            SetAuthorizationHeader();
+
+            var finishDto = new
+            {
+                latitude = data.Latitude,
+                longitude = data.Longitude,
+                payload = data.PayloadKilograms,
+                fuelWeight = data.FuelWeightKilograms,
+                //flightTime = data.FlightTime // se disponível no DataModel
+            };
+
+            var body = JsonConvert.SerializeObject(finishDto);
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            var json = await response.Content.ReadAsStringAsync();
+            var finishedJob = JsonConvert.DeserializeObject<FinishJobResponseDto>(json);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(finishedJob?.message ?? "Error finishing job", new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            return new FinishJobResponseModel
+            {
+                // Mapear propriedades conforme necessário
+                ResultMessage = finishedJob.message
+            };
+        }
+
+        public async Task<IList<JobModel>> GetUserJobs(string userId)
+        {
+            var url = $"{ApiBaseUrl}jobs/pending";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var jobs = JsonConvert.DeserializeObject<IList<JobModel>>(json);
+
+            return jobs;
+        }
+
+        public async Task<PaginatedJobsModel> GetLogbookUserJobs(string sortOrder, string currentSort, int pageNumber, FilterJobsModel filterModel)
+        {
+            // Nova API: profile/logbook com query params
+            var queryParams = $"?sortOrder={sortOrder}&currentSort={currentSort}&page={pageNumber}";
+            if (!string.IsNullOrEmpty(filterModel?.Status)) queryParams += $"&status={filterModel.Status}";
+            if (!string.IsNullOrEmpty(filterModel?.Departure)) queryParams += $"&departure={filterModel.Departure}";
+            if (!string.IsNullOrEmpty(filterModel?.Arrival)) queryParams += $"&arrival={filterModel.Arrival}";
+
+            var url = $"{ApiBaseUrl}profile/logbook{queryParams}";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var jobs = JsonConvert.DeserializeObject<PaginatedJobsModel>(json);
+
+            return jobs;
+        }
+
+        public async Task<JobModel> GetLastUserJob(string userId)
+        {
+            // Nova API: profile/logbook com limit=1
+            var url = $"{ApiBaseUrl}profile/logbook?page=1&limit=1";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<PaginatedJobsModel>(json);
+            return result?.Jobs?.FirstOrDefault();
+        }
+
+        public async Task<bool> ActivateUserJob(string userId, long jobId)
+        {
+            var url = $"{ApiBaseUrl}jobs/{jobId}/activate";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent("", Encoding.UTF8, "application/json")
+            );
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<UserStatisticsModel> GetUserStatistics(string userId)
+        {
+            // Nova API: GET statistics/my-stats
+            var url = $"{ApiBaseUrl}statistics/my-stats";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent);
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<UserStatisticsModel>(json);
+        }
+
+        public async Task<UserStatisticsModel> GetUserStatisticsFlightsInfo(string userId)
+        {
+            // Nova API: GET statistics/my-stats (mesmo endpoint, dados consolidados)
+            var url = $"{ApiBaseUrl}statistics/my-stats";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent);
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<UserStatisticsModel>(json);
+        }
+
+        public async Task<IList<PilotLicenseExpensesUserModel>> GetUserLicensesOverdue(string userId)
+        {
+            // Nova API: GET profile/licenses
+            var url = $"{ApiBaseUrl}profile/licenses";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent);
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<IList<PilotLicenseExpensesUserModel>>(json);
+        }
+
+        public async Task<UserStatisticsModel> BuyLicencePackage(string userId, long licenseExpenseId)
+        {
+            // Nova API: POST profile/licenses/{licenseExpenseId}/buy-all
+            var url = $"{ApiBaseUrl}profile/licenses/{licenseExpenseId}/buy-all";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent("", Encoding.UTF8, "application/json")
+            );
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<UserStatisticsModel>(json);
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+        }
+
+        public async Task<SimBriefModel> GetSimBriefData(string simbriefUserName)
+        {
+            // Nova API: GET search/simbrief?username={simbriefUserName}
+            var url = $"{ApiBaseUrl}search/simbrief?username={simbriefUserName}";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<SimBriefModel>(json);
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+        }
+        public async Task<RandomFlightModel> GetRandomFlight(string departure, string destination)
+        {
+            // Nova API: GET search/random?departure={departure}&destination={destination}
+            var url = $"{ApiBaseUrl}search/random?departure={departure}&destination={destination}";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<RandomFlightModel>(json);
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+        }
+
+        public async Task<UserStatisticsModel> UpdateUserSettings(UserSettingsModel userSettings)
+        {
+            // Nova API: PATCH statistics/notification-preferences ou PATCH statistics/weight-unit
+            // Depende de quais configurações estão sendo atualizadas
+            SetAuthorizationHeader();
+
+            // Atualizar preferências de notificação
+            if (userSettings.SendLicenseWarning.HasValue || userSettings.SendAirlineBillsWarning.HasValue)
+            {
+                var url = $"{ApiBaseUrl}statistics/notification-preferences";
+                var body = JsonConvert.SerializeObject(new
+                {
+                    sendLicenseWarning = userSettings.SendLicenseWarning,
+                    sendAirlineBillsWarning = userSettings.SendAirlineBillsWarning
+                });
+
+                HttpResponseMessage response = await _client.PatchAsync(
+                    new Uri(url),
+                    new StringContent(body, Encoding.UTF8, "application/json")
+                );
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    throw new ApiException(errorContent);
+                }
+            }
+
+            // Atualizar unidade de peso
+            if (!string.IsNullOrEmpty(userSettings.WeightUnit))
+            {
+                var url = $"{ApiBaseUrl}statistics/weight-unit";
+                var body = JsonConvert.SerializeObject(new { weightUnit = userSettings.WeightUnit });
+
+                HttpResponseMessage response = await _client.PatchAsync(
+                    new Uri(url),
+                    new StringContent(body, Encoding.UTF8, "application/json")
+                );
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    throw new ApiException(errorContent);
+                }
+            }
+
+            // Retorna estatísticas atualizadas
+            return await GetUserStatistics(null);
+        }
+
+        public async Task<IList<SearchJobTipsModel>> GetArrivalTips(string departure, string userId)
+        {
+            // Nova API: GET search/arrival-tips?departure={departure}
+            var url = $"{ApiBaseUrl}search/arrival-tips?departure={departure}";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<IList<SearchJobTipsModel>>(json);
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+        }
+
+        public async Task<IList<SearchJobTipsModel>> GetAlternativeTips(string arrival, int range)
+        {
+            // Nova API: GET search/alternative-tips?arrival={arrival}&range={range}
+            var url = $"{ApiBaseUrl}search/alternative-tips?arrival={arrival}&range={range}";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<IList<SearchJobTipsModel>>(json);
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+        }
+
+        public async Task<bool> CloneJob(long jobId, string userId)
+        {
+            // Nova API: POST jobs (create) com dados clonados ou POST jobs/{jobId}/clone se existir
+            var url = $"{ApiBaseUrl}jobs";
+            SetAuthorizationHeader();
+
+            var cloneDto = new
+            {
+                clonedFromJobId = jobId
+            };
+
+            var body = JsonConvert.SerializeObject(cloneDto);
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+            return true;
+        }
+
+        public async Task<IList<CustomPlaneCapacityModel>> GetPlaneCapacities(string userId)
+        {
+            // Nova API: GET custom-capacity
+            var url = $"{ApiBaseUrl}custom-capacity";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<IList<CustomPlaneCapacityModel>>(json);
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new ApiException(errorContent);
+            }
+        }
+
+        public async Task<PaginatedAirlinersModel> GetAirliners(string sortOrder, string currentSort, int pageNumber, PaginatedAirlinersFilterModel filterModel)
+        {
+            // Nova API: POST airlines/airliners com query params
+            var url = $"{ApiBaseUrl}airlines/airliners?sortOrder={sortOrder}&currentSort={currentSort}&pageNumber={pageNumber}";
+            SetAuthorizationHeader();
+
+            var body = JsonConvert.SerializeObject(filterModel);
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var airlines = JsonConvert.DeserializeObject<PaginatedAirlinersModel>(json);
+
+            return airlines;
+        }
+
+        public async Task<AirlineModel> CreateAirline(AirlineModel airline, string userId)
+        {
+            // Nova API: POST airlines/create
+            var url = $"{ApiBaseUrl}airlines/create";
+            SetAuthorizationHeader();
+
+            var createDto = new CreateAirlineDto
+            {
+                name = airline.Name,
+                description = airline.Description,
+                logoUrl = airline.LogoUrl
+            };
+
+            var body = JsonConvert.SerializeObject(createDto);
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var airlineResult = JsonConvert.DeserializeObject<AirlineModel>(json);
+
+            return airlineResult;
+        }
+
+        public async Task<bool> UpdateAirline(AirlineModel airline, string userId)
+        {
+            // Nova API: POST airlines/update
+            var url = $"{ApiBaseUrl}airlines/update";
+            SetAuthorizationHeader();
+
+            var updateDto = new
+            {
+                id = airline.Id,
+                name = airline.Name,
+                description = airline.Description,
+                logoUrl = airline.LogoUrl
+            };
+
+            var body = JsonConvert.SerializeObject(updateDto);
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            return true;
+        }
+
+        public async Task<IList<UserModel>> GetAirlinePilotsHired(int airlineId)
+        {
+            // Nova API: GET airlines/{id}/pilots-hired
+            var url = $"{ApiBaseUrl}airlines/{airlineId}/pilots-hired";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var userModels = JsonConvert.DeserializeObject<IList<UserModel>>(json);
+
+            return userModels;
+        }
+
+        public async Task<IList<AirlineFboDbModel>> GetAirlineFBOs(int airlineId)
+        {
+            // Nova API: GET airlines/{id}/fbos
+            var url = $"{ApiBaseUrl}airlines/{airlineId}/fbos";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var fbosModels = JsonConvert.DeserializeObject<IList<AirlineFboDbModel>>(json);
+
+            return fbosModels;
+        }
+
+        public async Task<bool> PayAirlineDebts(AirlineModel airline, string userId)
+        {
+            // Nova API: POST airlines/pay-debts
+            var url = $"{ApiBaseUrl}airlines/pay-debts";
+            SetAuthorizationHeader();
+
+            var payDto = new PayDebtDto
+            {
+                airlineId = airline.Id,
+                amount = airline.Debt  // ou outro campo adequado
+            };
+
+            var body = JsonConvert.SerializeObject(payDto);
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            return true;
+        }
+
+        public async Task<PaginatedAirlineJobLedgerModel> GetAirlineLedger(int airlineId, int pageNumber, FilterJobsModel filterJob)
+        {
+            // Nova API: POST airlines/{airlineId}/ledger
+            var url = $"{ApiBaseUrl}airlines/{airlineId}/ledger?pageNumber={pageNumber}";
+            SetAuthorizationHeader();
+
+            var body = JsonConvert.SerializeObject(filterJob);
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var airlineJobsLedger = JsonConvert.DeserializeObject<PaginatedAirlineJobLedgerModel>(json);
+
+            return airlineJobsLedger;
+        }
+
+        public async Task<List<AirlineFboDbModel>> GetFbos(string icao, int airlineId)
+        {
+            // Nova API: GET airlines/fbos?icao={icao}&airlineId={airlineId}
+            var url = $"{ApiBaseUrl}airlines/fbos?icao={icao}&airlineId={airlineId}";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var airlineFBOs = JsonConvert.DeserializeObject<List<AirlineFboDbModel>>(json);
+
+            return airlineFBOs;
+        }
+
+        public async Task<IList<AirlineFboDbModel>> HireFbo(string icao, string userId)
+        {
+            // Nova API: POST airlines/hire-fbo
+            var url = $"{ApiBaseUrl}airlines/hire-fbo";
+            SetAuthorizationHeader();
+
+            var hireDto = new HireFboDto { icao = icao };
+            var body = JsonConvert.SerializeObject(hireDto);
+
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent(body, Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    throw new ApiException(errorContent);
+                }
+
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var airlineFbosHired = JsonConvert.DeserializeObject<IList<AirlineFboDbModel>>(json);
+
+            return airlineFbosHired;
+        }
+
+        public async Task<bool> JoinAirline(AirlineModel airline, string userId)
+        {
+            // Nova API: POST airlines/join ou POST airlines/{id}/join
+            var url = $"{ApiBaseUrl}airlines/{airline.Id}/join";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent("", Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    throw new ApiException(errorContent?.Replace("\"", ""));
+                }
+
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            return true;
+        }
+
+        public async Task<bool> ExitAirline(AirlineModel airline, string userId)
+        {
+            // Nova API: POST airlines/{id}/leave
+            var url = $"{ApiBaseUrl}airlines/{airline.Id}/leave";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.PostAsync(
+                new Uri(url),
+                new StringContent("", Encoding.UTF8, "application/json")
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            return true;
+        }
+
+        public async Task<IList<AirlineModel>> GetAirlineRanking()
+        {
+            // Nova API: GET airlines/ranking
+            var url = $"{ApiBaseUrl}airlines/ranking";
+            SetAuthorizationHeader();
+
+            HttpResponseMessage response = await _client.GetAsync(new Uri(url));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(errorContent, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var airlines = JsonConvert.DeserializeObject<List<AirlineModel>>(json);
+
+            return airlines;
+        }
+    }
+}

@@ -42,24 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\CipherService.cs" />
-    <Compile Include="Entities\Airlinecertificatesdbmodel.cs" />
-    <Compile Include="Entities\Airlinedbmodel.cs" />
-    <Compile Include="Entities\Airlinefbodbmodel.cs" />
-    <Compile Include="Entities\Aspnetrole.cs" />
     <Compile Include="Entities\Aspnetuser.cs" />
-    <Compile Include="Entities\Aspnetuserclaim.cs" />
     <Compile Include="Entities\Aspnetuserlogin.cs" />
-    <Compile Include="Entities\Aspnetuserrole.cs" />
-    <Compile Include="Entities\Certificatedbmodel.cs" />
     <Compile Include="Entities\Customplanecapacitydbmodel.cs" />
-    <Compile Include="Entities\Jobairlinedbmodel.cs" />
     <Compile Include="Entities\Jobdbmodel.cs" />
-    <Compile Include="Entities\Licenseitemuserdbmodel.cs" />
-    <Compile Include="Entities\MigrationHistory.cs" />
-    <Compile Include="Entities\Pilotlicenseexpensesdbmodel.cs" />
-    <Compile Include="Entities\Pilotlicenseexpensesuserdbmodel.cs" />
-    <Compile Include="Entities\Pilotlicenseitemdbmodel.cs" />
-    <Compile Include="Entities\Statisticcertificatesdbmodel.cs" />
     <Compile Include="Entities\Statisticsdbmodel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
