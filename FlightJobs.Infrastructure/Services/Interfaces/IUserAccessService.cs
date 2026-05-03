@@ -9,5 +9,11 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
         Task<LoginResponseModel> Login(string email, string password);
 
         Task LoadUserStatisticsProperties();
+
+        void SetApiTokens(string accessToken, string refreshToken);
+
+        Task<bool> TryAutoLoginWithSavedTokens();
+        void SaveLoginData(LoginResponseModel login);
+        bool LoadLoginData();
     }
 }

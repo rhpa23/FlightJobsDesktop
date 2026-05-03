@@ -126,7 +126,7 @@ namespace FlightJobsDesktop.Views.Account
                         await Task.Delay(TimeSpan.FromSeconds(3));
                         userViewModel.Id = _loginData.UserId;
                         userViewModel.NickName = _loginData.UserName;
-                        SaveLoginData(userViewModel);
+                        _userAccessService.SaveLoginData(_loginData);
                     }
                     await LoadUserJobList();
                     return true;
@@ -150,36 +150,7 @@ namespace FlightJobsDesktop.Views.Account
             return false;
         }
 
-        public bool LoadLoginData()
-        {
-            try
-            {
-                var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                var lines = File.ReadLines(Path.Combine(path, "FlightJobsDesktop\\ResourceData\\LoginSavedData.ini"));
-                var line = lines?.FirstOrDefault();
-                var info = line?.Split('|');
-                if (info?.Length == 4)
-                {
-                    AppProperties.UserLogin = new LoginResponseModel() 
-                    {
-                        Email = info[0],
-                        Password = info[1],
-                        UserName = info[2],
-                        UserId = info[3],
-                    };
-                    return true;
-                    //txbEmail.Text = info[0];
-                    //txbPassword.Password = info[1];
-                    //loaded = EmailValidationRule.IsValidEmail(txbEmail.Text) && !string.IsNullOrEmpty(txbPassword.Password);
-                }
-            }
-            catch (Exception ex)
-            {
-                //_notificationManager.Show("Error", "Cannot load the login data.", NotificationType.Error, "WindowArea");
-                _log.Error($"LoadLoginData failed.", ex);
-            }
-            return false;
-        }
+        
 
         public void ShowLoading()
         {
@@ -195,31 +166,6 @@ namespace FlightJobsDesktop.Views.Account
             {
                 LoadingPanel.Visibility = Visibility.Collapsed;
                 _loadingCount = 0;
-            }
-        }
-
-        private void SaveLoginData(AspnetUserViewModel userViewModel)
-        {
-            try
-            {
-                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData");
-                if (!Directory.Exists(path))
-                {
-                    var dirInfo = Directory.CreateDirectory(path);
-                    path = Path.Combine(dirInfo.FullName, "LoginSavedData.ini");
-                }
-                else
-                {
-                    path = Path.Combine(path, "LoginSavedData.ini");
-                }
-                
-                string createText = $"{userViewModel.Email}|{userViewModel.Password}|{userViewModel.NickName}|{userViewModel.Id}";
-                File.WriteAllText(path, createText);
-            }
-            catch (Exception ex)
-            {
-                _notificationManager.Show("Error", "Cannot save the login data.", NotificationType.Error, "WindowArea");
-                _log.Error($"SaveLoginData failed.", ex);
             }
         }
 

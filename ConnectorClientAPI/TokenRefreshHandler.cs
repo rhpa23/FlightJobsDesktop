@@ -14,13 +14,11 @@ namespace ConnectorClientAPI
     /// </summary>
     public class TokenRefreshHandler : DelegatingHandler
     {
-        private string _apiBaseUrl;
         private Func<Task<bool>> _refreshTokenCallback;
         private static readonly SemaphoreSlim _refreshLock = new SemaphoreSlim(1, 1);
 
-        public TokenRefreshHandler(string apiBaseUrl, Func<Task<bool>> refreshTokenCallback)
+        public TokenRefreshHandler(Func<Task<bool>> refreshTokenCallback)
         {
-            _apiBaseUrl = apiBaseUrl;
             _refreshTokenCallback = refreshTokenCallback;
         }
 
@@ -65,5 +63,14 @@ namespace ConnectorClientAPI
     {
         public string access_token { get; set; }
         public string refresh_token { get; set; }
+
+        public UserRefreshTokenResponse User { get; set; }
+    }
+
+    public class UserRefreshTokenResponse
+    {
+        public string Id { get; set; }
+        public string Email { get; set; }
+        public string UserName { get; set; }
     }
 }

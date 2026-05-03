@@ -10,6 +10,7 @@ using FlightJobsDesktop.Views;
 using FlightJobsDesktop.Views.Account;
 using FlightJobsDesktop.Views.Modals;
 using log4net;
+using Microsoft.Extensions.DependencyInjection;
 using ModernWpf;
 using ModernWpf.Controls;
 using Newtonsoft.Json;
@@ -39,6 +40,7 @@ namespace FlightJobsDesktop
         internal static DockPanel _loadingPanel;
         internal static StackPanel _loadingProgressPanel;
         private static int _loadingCount;
+        private static bool _isLogout;
         internal static Ellipse LicenseOverdueEllipse { get; set; }
 
         private FlightJobsConnectSim _flightJobsConnectSim = new FlightJobsConnectSim();
@@ -73,6 +75,7 @@ namespace FlightJobsDesktop
             NavigationBar = nvMain;
             _loadingPanel = LoadingPanel;
             _loadingProgressPanel = LoadingProgressPanel;
+            _isLogout = false;
 
             System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
             ni.Icon = new System.Drawing.Icon("favicon-ok.ico");
@@ -135,26 +138,6 @@ namespace FlightJobsDesktop
             }
         }
 
-        private void ShowModal(string title, object content)
-        {
-
-            Window window = new Window
-            {
-                Title = title,
-                Content = content,
-                Width = ((UserControl)content).MinWidth,
-                Height = ((UserControl)content).MinHeight + 40,
-                //SizeToContent = SizeToContent.WidthAndHeight,
-                ResizeMode = ResizeMode.CanResize,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                ShowInTaskbar = true,
-                WindowStyle = WindowStyle.ToolWindow,
-                Topmost = true,
-            };
-
-            window.ShowDialog();
-        }
-
         private async Task LoadData()
         {
             ShowLoading();
@@ -162,7 +145,7 @@ namespace FlightJobsDesktop
             {
                 _userSettings = LoadSettingsFromFile();
                // AppProperties.UserLogin
-                await UserServiceFactory.Create().Login(AppProperties.UserLogin.Email, AppProperties.UserLogin.Password);
+               // await UserServiceFactory.Create().Login(AppProperties.UserLogin.Email, AppProperties.UserLogin.Password);
 
                 await JobServiceFactory.Create().GetAllUserJobs();
                 await UserServiceFactory.Create().LoadUserStatisticsProperties();
@@ -181,8 +164,6 @@ namespace FlightJobsDesktop
                 _log.Error(ex);
                 _notificationManager.Show("Error", "Error when try to access Flightjobs online data.", NotificationType.Error, "WindowArea");
                 HideLoading();
-                ShowModal("Select Host", new SelectHostUrlModal(_userSettings));
-                await LoadData();
             }
             finally
             {
@@ -198,18 +179,24 @@ namespace FlightJobsDesktop
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            this.Hide();
-            ShowInTaskbar = false;
-            e.Cancel = true;
+            if (!_isLogout)
+            {
+                this.Hide();
+                ShowInTaskbar = false;
+                e.Cancel = true;
 
-            _notificationManager.ShowButtonWindow("FlightJobs still running in the system tray.");
+                _notificationManager.ShowButtonWindow("FlightJobs still running in the system tray.");
+            }
         }
 
         private void ShowMainWindow()
         {
-            Show();
-            WindowState = WindowState.Normal;
-            ShowInTaskbar = true;
+            if (!_isLogout)
+            {
+                Show();
+                WindowState = WindowState.Normal;
+                ShowInTaskbar = true;
+            }
         }
 
         public static void ShowLoading(bool hideProgressPanel = false)
@@ -333,10 +320,15 @@ namespace FlightJobsDesktop
 
         private void BtnLogoff_Click(object sender, RoutedEventArgs e)
         {
-            var loginWindow = new Login(InfraServiceFactory, 
-                                        JobServiceFactory, 
-                                        UserServiceFactory, 
-                                        new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, PilotServiceFactory, 
+            Logout();
+        }
+
+        private void Logout()
+        {
+            var loginWindow = new Login(InfraServiceFactory,
+                                        JobServiceFactory,
+                                        UserServiceFactory,
+                                        new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, PilotServiceFactory,
                                                        SqLiteContextFactory));
 
             loginWindow.Show();
@@ -346,7 +338,7 @@ namespace FlightJobsDesktop
             {
                 f.Hide();
             }
-
+            _isLogout = true;
             Close();
         }
 

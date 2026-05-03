@@ -22,6 +22,7 @@ using FlightJobsDesktop.ViewModels;
 using Newtonsoft.Json;
 using System.IO;
 using Notification.Wpf;
+using System.Threading.Tasks;
 
 namespace FlightJobsDesktop
 {
@@ -58,7 +59,7 @@ namespace FlightJobsDesktop
             services.AddSingleton<Login>();
         }
 
-        private void OnStartup(object sender, StartupEventArgs e)
+        private async void OnStartup(object sender, StartupEventArgs e)
         {
             //            new CurrentJobDataWindow().Show();
             //new ChartsPoC().Show();
@@ -67,8 +68,15 @@ namespace FlightJobsDesktop
 
             ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
             var loginWindow = _serviceProvider.GetService<Login>();
-            if (loginWindow.LoadLoginData())
+
+            var userAccessService = _serviceProvider.GetService<IUserAccessService>();
+
+            var isLoginDataLoaded = userAccessService.LoadLoginData();
+            var isTryAutoLoginSuccess = await userAccessService.TryAutoLoginWithSavedTokens();
+
+            if (isLoginDataLoaded && isTryAutoLoginSuccess)
             {
+                
                 var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData\\Settings.json");
                 var jsonSettings = File.ReadAllText(path);
                 var userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);

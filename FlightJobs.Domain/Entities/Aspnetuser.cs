@@ -9,13 +9,9 @@ namespace FlightJobs.Domain.Entities
     {
         public Aspnetuser()
         {
-            Aspnetuserclaims = new HashSet<Aspnetuserclaim>();
             Aspnetuserlogins = new HashSet<Aspnetuserlogin>();
-            Aspnetuserroles = new HashSet<Aspnetuserrole>();
             Customplanecapacitydbmodels = new HashSet<Customplanecapacitydbmodel>();
             Jobdbmodels = new HashSet<Jobdbmodel>();
-            Licenseitemuserdbmodels = new HashSet<Licenseitemuserdbmodel>();
-            Pilotlicenseexpensesuserdbmodels = new HashSet<Pilotlicenseexpensesuserdbmodel>();
             Statisticsdbmodels = new HashSet<Statisticsdbmodel>();
         }
 
@@ -31,13 +27,9 @@ namespace FlightJobs.Domain.Entities
         public int AccessFailedCount { get; set; }
         public string UserName { get; set; }
 
-        public virtual ICollection<Aspnetuserclaim> Aspnetuserclaims { get; set; }
         public virtual ICollection<Aspnetuserlogin> Aspnetuserlogins { get; set; }
-        public virtual ICollection<Aspnetuserrole> Aspnetuserroles { get; set; }
         public virtual ICollection<Customplanecapacitydbmodel> Customplanecapacitydbmodels { get; set; }
         public virtual ICollection<Jobdbmodel> Jobdbmodels { get; set; }
-        public virtual ICollection<Licenseitemuserdbmodel> Licenseitemuserdbmodels { get; set; }
-        public virtual ICollection<Pilotlicenseexpensesuserdbmodel> Pilotlicenseexpensesuserdbmodels { get; set; }
         public virtual ICollection<Statisticsdbmodel> Statisticsdbmodels { get; set; }
     }
 }

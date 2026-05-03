@@ -125,6 +125,7 @@
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Account\AutoLoginExamples.cs" />
     <Compile Include="Views\Home\ConnectorView.xaml.cs">
       <DependentUpon>ConnectorView.xaml</DependentUpon>
     </Compile>
@@ -224,6 +225,8 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Views\Account\AUTO_LOGIN_IMPLEMENTATION.md" />
+    <None Include="Views\Account\QUICK_REFERENCE.md" />
     <None Include="web\moq.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

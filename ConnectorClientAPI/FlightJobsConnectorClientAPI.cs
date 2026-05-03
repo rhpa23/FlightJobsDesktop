@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -51,7 +52,6 @@ namespace ConnectorClientAPI
 
             // Cria o TokenRefreshHandler com o innerHandler
             TokenRefreshHandler tokenRefreshHandler = new TokenRefreshHandler(
-                ApiBaseUrl,
                 RefreshAccessTokenAsync
             );
             tokenRefreshHandler.InnerHandler = innerHandler;
@@ -104,6 +104,15 @@ namespace ConnectorClientAPI
 
                         _accessToken = result.access_token;
                         _refreshToken = result.refresh_token;
+                        var loginData = new LoginResponseModel()
+                        {
+                            AccessToken = result.access_token,
+                            RefreshToken = result.refresh_token,
+                            Email = result.User?.Email,
+                            UserId = result.User?.Id,
+                            UserName = result.User?.UserName,
+                        };
+                        SaveLoginData(loginData);
                         SetAuthorizationHeader();
 
                         return true;
@@ -122,7 +131,7 @@ namespace ConnectorClientAPI
         {
             try
             {
-                var response = await _client.GetAsync($"{url}/api/");
+                var response = await _client.GetAsync($"{url}");
                 return response != null && response.StatusCode == HttpStatusCode.Found;
             }
             catch (Exception)
@@ -159,6 +168,8 @@ namespace ConnectorClientAPI
                         ActiveJobInfo = result.user?.activeJob != null ? result.user.activeJob.ToString() : "",
                         UserId = result.user?.id,
                         Email = result.user?.email,
+                        AccessToken = result.access_token,
+                        RefreshToken = result.refresh_token,
                     };
                 }
 
@@ -344,6 +355,32 @@ namespace ConnectorClientAPI
         }
 
         /// <summary>
+        /// Restaura tokens previamente salvos para fazer auto-login
+        /// </summary>
+        public void RestoreSavedTokens(string accessToken, string refreshToken)
+        {
+            _accessToken = accessToken;
+            _refreshToken = refreshToken;
+            SetAuthorizationHeader();
+        }
+
+        /// <summary>
+        /// Retorna o access token atual
+        /// </summary>
+        public string GetAccessToken()
+        {
+            return _accessToken;
+        }
+
+        /// <summary>
+        /// Retorna o refresh token atual
+        /// </summary>
+        public string GetRefreshToken()
+        {
+            return _refreshToken;
+        }
+
+        /// <summary>
         /// Limpa os tokens de acesso e refresh token
         /// </summary>
         public void Logout()
@@ -351,6 +388,23 @@ namespace ConnectorClientAPI
             _accessToken = null;
             _refreshToken = null;
             _client.DefaultRequestHeaders.Authorization = null;
+        }
+
+        public void SaveLoginData(LoginResponseModel login)
+        {
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData");
+            if (!Directory.Exists(path))
+            {
+                var dirInfo = Directory.CreateDirectory(path);
+                path = Path.Combine(dirInfo.FullName, "LoginSavedData.ini");
+            }
+            else
+            {
+                path = Path.Combine(path, "LoginSavedData.ini");
+            }
+
+            string createText = $"{login.Email}|{login.AccessToken}|{login.RefreshToken}|{login.UserName}|{login.UserId}";
+            File.WriteAllText(path, createText);
         }
     }
 }
