@@ -19,6 +19,7 @@ namespace ConnectorClientAPI
     public class LoginApiResponse
     {
         public string access_token { get; set; }
+        public string refresh_token { get; set; }
         public UserApiResponse user { get; set; }
     }
 
@@ -33,21 +34,29 @@ namespace ConnectorClientAPI
     public class FlightJobsConnectorClientAPI
     {
         public static string SiteUrl { get; set; } = "https://flightjobs.bsite.net/";
-        //public static string ApiBaseUrl { get; set; } = "http://localhost:3001/api/"; // TODO: Definir URL da nova API
-        public static string ApiBaseUrl { get; set; } = "https://flightjobs-api.vercel.app/api/";
-        
+        public static string ApiBaseUrl { get; set; } = "http://localhost:3001/api/"; // TODO: Definir URL da nova API
+        //public static string ApiBaseUrl { get; set; } = "https://flightjobs-api.vercel.app/api/";
+
 
         static HttpClient _client;
         private static string _accessToken;
+        private static string _refreshToken;
 
         public FlightJobsConnectorClientAPI()
         {
-            HttpClientHandler handler = new HttpClientHandler()
+            HttpClientHandler innerHandler = new HttpClientHandler()
             {
                 AllowAutoRedirect = false
             };
 
-            _client = new HttpClient(handler);
+            // Cria o TokenRefreshHandler com o innerHandler
+            TokenRefreshHandler tokenRefreshHandler = new TokenRefreshHandler(
+                ApiBaseUrl,
+                RefreshAccessTokenAsync
+            );
+            tokenRefreshHandler.InnerHandler = innerHandler;
+
+            _client = new HttpClient(tokenRefreshHandler);
             _client.BaseAddress = new Uri(ApiBaseUrl);
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -57,6 +66,56 @@ namespace ConnectorClientAPI
         {
             _client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", _accessToken);
+        }
+
+        /// <summary>
+        /// Renova o token de acesso usando o refresh token
+        /// </summary>
+        private async Task<bool> RefreshAccessTokenAsync()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(_refreshToken))
+                {
+                    return false;
+                }
+
+                var url = $"{ApiBaseUrl}auth/refresh";
+                var body = JsonConvert.SerializeObject(new { refreshToken = _refreshToken });
+
+                // Cria uma requisição sem o handler de refresh para evitar recursão infinita
+                using (var handler = new HttpClientHandler() { AllowAutoRedirect = false })
+                using (var tempClient = new HttpClient(handler))
+                {
+                    tempClient.BaseAddress = new Uri(ApiBaseUrl);
+                    tempClient.DefaultRequestHeaders.Accept.Clear();
+                    tempClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    tempClient.DefaultRequestHeaders.Add("User-Agent", "FlightJobs Desktop");
+
+                    HttpResponseMessage response = await tempClient.PostAsync(
+                        new Uri(url),
+                        new StringContent(body, Encoding.UTF8, "application/json")
+                    );
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var json = await response.Content.ReadAsStringAsync();
+                        var result = JsonConvert.DeserializeObject<RefreshTokenResponse>(json);
+
+                        _accessToken = result.access_token;
+                        _refreshToken = result.refresh_token;
+                        SetAuthorizationHeader();
+
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public async Task<bool> PingUrl(string url)
@@ -90,8 +149,9 @@ namespace ConnectorClientAPI
                     var json = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<LoginApiResponse>(json);
 
-                    // Armazena o token para requisições futuras
+                    // Armazena o token e refresh token para requisições futuras
                     _accessToken = result.access_token;
+                    _refreshToken = result.refresh_token;
                     SetAuthorizationHeader();
 
                     return new LoginResponseModel()
@@ -281,6 +341,16 @@ namespace ConnectorClientAPI
 
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<UserStatisticsModel>(json);
+        }
+
+        /// <summary>
+        /// Limpa os tokens de acesso e refresh token
+        /// </summary>
+        public void Logout()
+        {
+            _accessToken = null;
+            _refreshToken = null;
+            _client.DefaultRequestHeaders.Authorization = null;
         }
     }
 }

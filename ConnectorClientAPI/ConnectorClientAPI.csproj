@@ -47,10 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Examples\TokenRefreshExamples.cs" />
+    <Compile Include="TokenRefreshHandler.cs" />
     <None Include="FlightJobsConnectorClientAPI.BKP" />
     <None Include="FlightJobsConnectorClientAPI.BKP2" />
     <Compile Include="FlightJobsConnectorClientAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="TOKEN_REFRESH_IMPLEMENTATION.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
