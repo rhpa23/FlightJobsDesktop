@@ -28,13 +28,13 @@ namespace ConnectorClientAPI
     {
         public string id { get; set; }
         public string email { get; set; }
-        public string name { get; set; }
+        public string userName { get; set; }
         public object activeJob { get; set; }
     }
 
     public class FlightJobsConnectorClientAPI
     {
-        public static string SiteUrl { get; set; } = "https://flightjobs.bsite.net/";
+        public static string SiteUrl { get; set; } = "https://flightjobs.vercel.app/";
         public static string ApiBaseUrl { get; set; } = "http://localhost:3001/api/"; // TODO: Definir URL da nova API
         //public static string ApiBaseUrl { get; set; } = "https://flightjobs-api.vercel.app/api/";
 
@@ -170,6 +170,7 @@ namespace ConnectorClientAPI
                         Email = result.user?.email,
                         AccessToken = result.access_token,
                         RefreshToken = result.refresh_token,
+                        UserName = result.user?.userName,
                     };
                 }
 

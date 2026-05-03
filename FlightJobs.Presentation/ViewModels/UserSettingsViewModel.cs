@@ -53,11 +53,6 @@ namespace FlightJobsDesktop.ViewModels
 
         public SimDataModel CurrentSimData { get; set; }
 
-        private string _simbriefUsername { get; set; }
-        public string SimbriefUsername
-        {
-            get { return _simbriefUsername; }
-            set { _simbriefUsername = value; OnPropertyChanged(); }
-        }
+       
     }
 }

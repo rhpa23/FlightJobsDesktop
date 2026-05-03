@@ -4,7 +4,6 @@ using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
-using FlightJobsDesktop.Views.Modals;
 using log4net;
 using ModernWpf;
 using Newtonsoft.Json;
@@ -100,28 +99,6 @@ namespace FlightJobsDesktop.Views
             }
         }
 
-        private async void btnUpdate_Click(object sender, RoutedEventArgs e)
-        {
-            MainWindow.ShowLoading();
-            try
-            {
-                var userSettingsModel = new AutoMapper.Mapper(ViewModelToDbModelMapper.MapperCfg).Map<UserSettingsViewModel, UserSettingsModel>(_userSettings);
-                userSettingsModel.UserId = AppProperties.UserLogin.UserId;
-
-                AppProperties.UserSettings = userSettingsModel;
-                _notificationManager.Show("Success", "Settings saved!", NotificationType.Success, "WindowArea");
-            }
-            catch (Exception ex)
-            {
-                _log.Error("SettingsView btnUpdate", ex);
-                _notificationManager.Show("Error", "Error when try to save FlightJobs settings. Please verify your internet connection.", NotificationType.Error, "WindowArea");
-            }
-            finally
-            {
-                MainWindow.HideLoading();
-            }
-        }
-
         private void ckbBase_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -135,30 +112,5 @@ namespace FlightJobsDesktop.Views
             }
         }
 
-        private void btnSelectHost_Click(object sender, RoutedEventArgs e)
-        {
-            ShowModal("Select Host (Confirm and restart for take effect)", new SelectHostUrlModal(_userSettings));
-            //MainWindow.loa
-        }
-
-        private void ShowModal(string title, object content)
-        {
-
-            Window window = new Window
-            {
-                Title = title,
-                Content = content,
-                Width = ((UserControl)content).MinWidth,
-                Height = ((UserControl)content).MinHeight + 40,
-                //SizeToContent = SizeToContent.WidthAndHeight,
-                ResizeMode = ResizeMode.CanResize,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                ShowInTaskbar = true,
-                WindowStyle = WindowStyle.ToolWindow,
-                Topmost = true,
-            };
-
-            window.ShowDialog();
-        }
     }
 }

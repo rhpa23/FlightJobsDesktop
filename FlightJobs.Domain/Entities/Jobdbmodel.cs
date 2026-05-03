@@ -7,11 +7,6 @@ namespace FlightJobs.Domain.Entities
 {
     public partial class Jobdbmodel
     {
-        public Jobdbmodel()
-        {
-            Jobairlinedbmodels = new HashSet<Jobairlinedbmodel>();
-        }
-
         public int Id { get; set; }
         public int PaxWeight { get; set; }
         public string DepartureIcao { get; set; }
@@ -38,6 +33,5 @@ namespace FlightJobs.Domain.Entities
         public string UserId { get; set; }
 
         public virtual Aspnetuser User { get; set; }
-        public virtual ICollection<Jobairlinedbmodel> Jobairlinedbmodels { get; set; }
     }
 }

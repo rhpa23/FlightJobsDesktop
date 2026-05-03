@@ -115,7 +115,6 @@
     <Compile Include="ViewModels\JobItemViewModel.cs" />
     <Compile Include="ViewModels\PracticeViewModel.cs" />
     <Compile Include="ViewModels\MessagesResultViewModel.cs" />
-    <Compile Include="ViewModels\SelectHostViewModel.cs" />
     <Compile Include="ViewModels\UserSettingsViewModel.cs" />
     <Compile Include="ViewModels\CurrentJobViewModel.cs" />
     <Compile Include="ViewModels\AspnetUserViewModel.cs" />
@@ -137,9 +136,6 @@
     </Compile>
     <Compile Include="Views\Home\PracticeView.xaml.cs">
       <DependentUpon>PracticeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Modals\SelectHostUrlModal.xaml.cs">
-      <DependentUpon>SelectHostUrlModal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\POC\ChartsPoC.xaml.cs">
       <DependentUpon>ChartsPoC.xaml</DependentUpon>
@@ -180,10 +176,6 @@
     <Page Include="Views\Home\PracticeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Modals\SelectHostUrlModal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\POC\ChartsPoC.xaml">
       <SubType>Designer</SubType>

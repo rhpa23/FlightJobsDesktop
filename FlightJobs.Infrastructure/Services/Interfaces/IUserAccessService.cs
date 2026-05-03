@@ -8,7 +8,7 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
     {
         Task<LoginResponseModel> Login(string email, string password);
 
-        Task LoadUserStatisticsProperties();
+        Task<bool> LoadUserStatisticsProperties();
 
         void SetApiTokens(string accessToken, string refreshToken);
 

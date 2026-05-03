@@ -11,11 +11,19 @@ namespace FlightJobs.Infrastructure.Services
 {
     public class UserAccessService : ServiceBase, IUserAccessService
     {
-        public async Task LoadUserStatisticsProperties()
+        public async Task<bool> LoadUserStatisticsProperties()
         {
-            var userStatisticsData = await _flightJobsConnectorClientAPI.GetUserStatistics();
+            try
+            {
+                var userStatisticsData = await _flightJobsConnectorClientAPI.GetUserStatistics();
 
-            AppProperties.UserStatistics = userStatisticsData;
+                AppProperties.UserStatistics = userStatisticsData;
+                return true;
+            }
+            catch (HttpRequestException)
+            {
+                return false;
+            }
         }
 
         public async Task<LoginResponseModel> Login(string email, string password)
@@ -28,44 +36,6 @@ namespace FlightJobs.Infrastructure.Services
             }
             return loginData;
         }
-
-        /// <summary>
-        /// Faz login automático usando tokens salvos, sem necessidade de email/senha
-        /// </summary>
-        //public async Task<bool> AutoLoginWithSavedTokens(LoginResponseModel savedLoginData)
-        //{
-        //    try
-        //    {
-        //        if (savedLoginData == null || 
-        //            string.IsNullOrEmpty(savedLoginData.AccessToken) ||
-        //            string.IsNullOrEmpty(savedLoginData.RefreshToken))
-        //        {
-        //            return false;
-        //        }
-
-        //        // Restaura os tokens no client API
-        //        _flightJobsConnectorClientAPI.RestoreSavedTokens(
-        //            savedLoginData.AccessToken,
-        //            savedLoginData.RefreshToken
-        //        );
-
-        //        // Tenta carregar as estatísticas do usuário para validar o token
-        //        await LoadUserStatisticsProperties();
-
-        //        // Se chegou aqui, o token é válido
-        //        AppProperties.UserLogin = savedLoginData;
-        //        return true;
-        //    }
-        //    catch (HttpRequestException ex)
-        //    {
-        //        // Token pode ter expirado ou outro erro de requisição
-        //        return false;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return false;
-        //    }
-        //}
 
         public void SetApiTokens(string accessToken, string refreshToken)
         {
@@ -81,46 +51,15 @@ namespace FlightJobs.Infrastructure.Services
         /// </summary>
         public async Task<bool> TryAutoLoginWithSavedTokens()
         {
-            try
+            if (AppProperties.UserLogin != null)
             {
-                if (AppProperties.UserLogin != null)
+                int maxAttempts = 3;
+                for ( int i = 0; i < maxAttempts; i++)
                 {
-                    //const int maxRetries = 3;
-
-                    //for (int attempt = 1; attempt <= maxRetries; attempt++)
-                    //{
-                    // Tenta fazer auto-login com os tokens salvos
-                    //bool autoLoginSuccess = await AutoLoginWithSavedTokens(AppProperties.UserLogin);
-
-                    // Tenta carregar as estatísticas do usuário para validar o token
-                    await LoadUserStatisticsProperties();
-                    return true;
-
-                    //if (autoLoginSuccess)
-                    //{
-                    //    await LoadUserStatisticsProperties();
-                    //    return true;
-                    //}
-
-                    //AppProperties.UserLogin.AccessToken = _flightJobsConnectorClientAPI.GetAccessToken();
-                    //AppProperties.UserLogin.RefreshToken = _flightJobsConnectorClientAPI.GetRefreshToken();
-
-                    // Se chegou na última tentativa, desiste
-                    //if (attempt == maxRetries)
-                    //{
-                    //    break;
-                    //}
-                    //}
+                    var loaded = await LoadUserStatisticsProperties();
+                    if (loaded)
+                        return true;
                 }
-            }
-            catch (HttpRequestException)
-            {
-                // Token pode ter expirado ou outro erro de requisição
-                return false;
-            }
-            catch (Exception)
-            {
-                return false;
             }
             return false;
         }
@@ -128,7 +67,11 @@ namespace FlightJobs.Infrastructure.Services
         public bool LoadLoginData()
         {
             var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var lines = File.ReadLines(Path.Combine(path, "FlightJobsDesktop\\ResourceData\\LoginSavedData.ini"));
+            var filePath = Path.Combine(path, "FlightJobsDesktop\\ResourceData\\LoginSavedData.ini");
+            if (!File.Exists(filePath))
+                return false;
+
+            var lines = File.ReadLines(filePath);
             var line = lines?.FirstOrDefault();
             var info = line?.Split('|');
             if (info?.Length >= 5)

@@ -8,7 +8,6 @@ using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views;
 using FlightJobsDesktop.Views.Account;
-using FlightJobsDesktop.Views.Modals;
 using log4net;
 using Microsoft.Extensions.DependencyInjection;
 using ModernWpf;
@@ -254,25 +253,9 @@ namespace FlightJobsDesktop
                 }
 
                 var infraService = MainWindow.InfraServiceFactory.Create();
-                var selectHost = new SelectHostViewModel();
+                infraService.SetApiUrl("http://localhost:3002/");
+                //infraService.SetApiUrl("https://flightjobs.vercel.app/");
 
-                switch (userSettings.SelectedHostOption)
-                {
-                    case 1:
-                        infraService.SetApiUrl(selectHost.Option1HostUrl);
-                        break;
-                    case 2:
-                        infraService.SetApiUrl(selectHost.Option2HostUrl);
-                        break;
-                    case 3:
-                        infraService.SetApiUrl(selectHost.Option3HostUrl);
-                        break;
-                    case 4:
-                        infraService.SetApiUrl(selectHost.Option4HostUrl);
-                        break;
-                    default:
-                        break;
-                }
                 return userSettings;
             }
             catch (Exception ex)

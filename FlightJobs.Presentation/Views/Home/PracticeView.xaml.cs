@@ -6,7 +6,6 @@ using FlightJobs.Model.Models;
 using FlightJobsDesktop.Common;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
-using FlightJobsDesktop.Views.Modals;
 using ModernWpf.Controls;
 using Notification.Wpf;
 using System;

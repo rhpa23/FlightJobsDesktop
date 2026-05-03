@@ -14,90 +14,13 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition />
             </Grid.RowDefinitions>
+            
             <DockPanel Grid.Row="0"
-        HorizontalAlignment="Stretch"
-        Margin="30,20,30,20"
-        LastChildFill="True">
-
-                <TextBlock Text="FlightJobs Settings" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
-                <Border Style="{StaticResource LightBorderBoxStyle}">
-                    <Grid Margin="15,10,15,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <Border Grid.Row="0" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="360"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="Weight unit" Margin="5,10,0,10" FontSize="18"/>
-                                <ItemsControl Grid.Column="1" VerticalAlignment="Top" Margin="0,10,0,0" >
-                                    <StackPanel Orientation="Horizontal">
-                                        <RadioButton x:Name="rdbKilograms" Content="Kilograms" IsChecked="{Binding Path=IsWeightUnitKg}" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                                        <RadioButton x:Name="rdbPounds" Content="Pounds" IsChecked="{Binding Path=IsWeightUnitPounds}" HorizontalAlignment="Left" Margin="20,0,0,0"/>
-                                    </StackPanel>
-                                </ItemsControl>
-                            </Grid>
-                        </Border>
-                        <Border Grid.Row="1" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="360"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="Nickname" Margin="5,10,0,10" FontSize="18"/>
-                                <TextBox Grid.Column="1" Margin="10,10,5,5" Width="350" HorizontalAlignment="Left" 
-                                     ui:ControlHelper.PlaceholderText="Change your nickname" Text="{Binding Path=Username}" />
-                            </Grid>
-                        </Border>
-                        <Border Grid.Row="2" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="360"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="Password" Margin="5,10,0,10" FontSize="18"/>
-                                <PasswordBox Grid.Column="1" Margin="10,10,5,5" Width="350" HorizontalAlignment="Left" 
-                                     ui:ControlHelper.PlaceholderText="Change your password" helpers:PasswordBoxHelper.BindPassword="True" >
-                                    <helpers:PasswordBoxHelper.BoundPassword>
-                                        <Binding Path="Password" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" />
-                                    </helpers:PasswordBoxHelper.BoundPassword>
-                                </PasswordBox>
-                            </Grid>
-                        </Border>
-
-                        <Border Grid.Row="3" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="360"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="Receive alert emails" Margin="5,10,0,10" FontSize="18"/>
-                                <CheckBox Grid.Column="1" x:Name="ckbReceiveAlertEmails" Content="" IsChecked="{Binding Path=ReceiveAlertEmails}" HorizontalAlignment="Left" Margin="20,0,0,0"/>
-                            </Grid>
-                        </Border>
-                        <StackPanel Grid.RowSpan="4" Grid.Column="1" Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
-                            <ui:AppBarButton x:Name="btnUpdate" Label="Update" Icon="Save" Click="btnUpdate_Click"  />
-                        </StackPanel>
-                    </Grid>
-                </Border>
-            </DockPanel>
-            <DockPanel Grid.Row="1"
         
         HorizontalAlignment="Stretch"
         Width="Auto"
-        Margin="30,0,30,20"
+        Margin="30,40,30,20"
         LastChildFill="True">
                 <TextBlock Text="Application Settings" Style="{StaticResource TextBlockHeaderBoxStyle}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
                 <Border Style="{StaticResource LightBorderBoxStyle}">
@@ -115,17 +38,6 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Border CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}" Margin="0,0,0,10">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="360"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="SimBrief username" Margin="5,10,0,10" FontSize="18"/>
-                                <TextBox Grid.Column="1" Margin="10,10,5,5" Width="350" HorizontalAlignment="Left" 
-                                     ui:ControlHelper.PlaceholderText="Change your SimBrief username" Text="{Binding SimbriefUsername}" />
-                            </Grid>
-                        </Border>
                         <Border Grid.Row="1" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -190,11 +102,6 @@
                             <ui:AppBarButton x:Name="btnUpdateApp" Label="Update App" Margin="0,50,0,0" Click="btnUpdateApp_Click" >
                                 <ui:AppBarButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE896;" />
-                                </ui:AppBarButton.Icon>
-                            </ui:AppBarButton>
-                            <ui:AppBarButton x:Name="btnSelectHost" Label="Select Host" Margin="0,50,0,0" Click="btnSelectHost_Click" >
-                                <ui:AppBarButton.Icon>
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE909;" />
                                 </ui:AppBarButton.Icon>
                             </ui:AppBarButton>
                         </StackPanel>
