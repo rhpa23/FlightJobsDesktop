@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
@@ -35,9 +36,10 @@ namespace ConnectorClientAPI
     public class FlightJobsConnectorClientAPI
     {
         public static string SiteUrl { get; set; } = "https://flightjobs.vercel.app/";
-        public static string ApiBaseUrl { get; set; } = "http://localhost:3001/api/"; // TODO: Definir URL da nova API
-        //public static string ApiBaseUrl { get; set; } = "https://flightjobs-api.vercel.app/api/";
-
+        // public static string ApiBaseUrl { get; set; } = "http://localhost:3001/api/"; // TESTS
+        public static string ApiBaseUrl { get; set; } = "https://flightjobs-api.vercel.app/api/";  // PRODUCTION
+        
+        public static string UserAgent = "FlightJobs Desktop";
 
         static HttpClient _client;
         private static string _accessToken;
@@ -90,7 +92,7 @@ namespace ConnectorClientAPI
                     tempClient.BaseAddress = new Uri(ApiBaseUrl);
                     tempClient.DefaultRequestHeaders.Accept.Clear();
                     tempClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    tempClient.DefaultRequestHeaders.Add("User-Agent", "FlightJobs Desktop");
+                    tempClient.DefaultRequestHeaders.Add("User-Agent", UserAgent);
 
                     HttpResponseMessage response = await tempClient.PostAsync(
                         new Uri(url),
@@ -148,6 +150,7 @@ namespace ConnectorClientAPI
 
                 var body = JsonConvert.SerializeObject(new { email, password });
 
+                _client.DefaultRequestHeaders.Add("User-Agent", UserAgent);
                 HttpResponseMessage response = await _client.PostAsync(
                     new Uri(url),
                     new StringContent(body, Encoding.UTF8, "application/json")
