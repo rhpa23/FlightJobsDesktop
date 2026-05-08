@@ -206,7 +206,7 @@ namespace FlightJobsDesktop.Views.SlidersWindows
 
                     var htmlText = FlightRecorderUtil.GetRouteMapHtmlText();
 
-                    RouteMapWebView.NavigateToString(htmlText);
+                    InitializeAndNavigateRouteMap(htmlText);
                 }
                 else if (radioButton.Name == RadioFps.Name)
                 {
@@ -215,6 +215,22 @@ namespace FlightJobsDesktop.Views.SlidersWindows
 
                     FlightRecorderUtil.UpdateChartFPS(ChartFlightRecorder);
                 }
+            }
+        }
+
+        private async void InitializeAndNavigateRouteMap(string htmlText)
+        {
+            try
+            {
+                // Inicializa o WebView2 de forma assíncrona
+                await RouteMapWebView.EnsureCoreWebView2Async(null);
+
+                // Navega para o conteúdo HTML
+                RouteMapWebView.NavigateToString(htmlText);
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"Erro ao inicializar WebView2 para o mapa de rota: {ex.Message}", ex);
             }
         }
 

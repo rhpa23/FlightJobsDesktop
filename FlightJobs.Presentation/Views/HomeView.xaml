@@ -28,11 +28,11 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Map" FontSize="22" Style="{DynamicResource CustomTabItem}" />
+                        <Label Content="Web App" FontSize="22" Style="{DynamicResource CustomTabItem}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Background="Black">
-                    <Label Content="Coming soon..." HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <views:WebAppView />
                 </Grid>
             </TabItem>
         </TabControl>

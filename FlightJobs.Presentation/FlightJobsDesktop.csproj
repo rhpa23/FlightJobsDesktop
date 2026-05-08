@@ -134,6 +134,9 @@
     <Compile Include="Views\Account\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Home\WebAppView.xaml.cs">
+      <DependentUpon>WebAppView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Home\PracticeView.xaml.cs">
       <DependentUpon>PracticeView.xaml</DependentUpon>
     </Compile>
@@ -172,6 +175,10 @@
     <Page Include="Views\Account\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Home\WebAppView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Home\PracticeView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -265,6 +272,9 @@
     </PackageReference>
     <PackageReference Include="System.Data.SQLite.EF6">
       <Version>1.0.117</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Web.WebView2">
+      <Version>1.0.2651.64</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
