@@ -21,18 +21,24 @@ namespace FlightJobs.Infrastructure.Services
 
         public async Task<IList<JobModel>> GetAllUserJobs()
         {
-            var pendingJobs = await _flightJobsConnectorClientAPI.GetPendingUserJobs();
+            //var pendingJobs = await _flightJobsConnectorClientAPI.GetPendingUserJobs();
             var activeJob = await _flightJobsConnectorClientAPI.GetActiveUserJob();            
             AppProperties.UserJobs.Clear();
-            if (pendingJobs != null)
-            {
-                ((List<JobModel>)AppProperties.UserJobs).AddRange(pendingJobs);
-            }
+            //if (pendingJobs != null)
+            //{
+            //    ((List<JobModel>)AppProperties.UserJobs).AddRange(pendingJobs);
+            //}
             if (activeJob != null)
             {
                 ((List<JobModel>)AppProperties.UserJobs).Add(activeJob);
             }
             return AppProperties.UserJobs;
+        }
+
+        public async Task<JobModel> GetActiveUserJob()
+        {
+            var activeJob = await _flightJobsConnectorClientAPI.GetActiveUserJob();
+            return activeJob;
         }
 
         public async Task<JobModel> GetLastUserJob()

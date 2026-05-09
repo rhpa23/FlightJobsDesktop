@@ -206,7 +206,7 @@ namespace FlightJobsDesktop.Views.Home
 
         private void SetFinishJobInfo()
         {
-            _currentJob.JobSummary = $"Congratulations! Your Job from {_currentJob.DepartureICAO} to {_currentJob.ArrivalICAO} is finalized and your gain for that was: F${_currentJob.Pay}";
+            _currentJob.JobSummary = $"Well done! Your Job from {_currentJob.DepartureICAO} to {_currentJob.ArrivalICAO} is finalized and your gain for that was: F${_currentJob.Pay}";
         }
 
         private void EnableDisableNavegation(bool isEnabled)
@@ -674,7 +674,7 @@ namespace FlightJobsDesktop.Views.Home
             MainWindow.ShowLoading();
             try
             {
-                var activeJob = AppProperties.UserJobs.FirstOrDefault(x => x.IsActivated);
+                var activeJob = await _jobService.GetActiveUserJob();
                 if (activeJob != null)
                 {
                     PanelNoJob.Visibility = Visibility.Collapsed;
@@ -767,7 +767,7 @@ namespace FlightJobsDesktop.Views.Home
 
         private void BtnShowAddJobs_Click(object sender, RoutedEventArgs e)
         {
-            HomeView.TabHome.SelectedIndex = 1;
+            HomeView.TabHome.SelectedIndex = 2;
         }
 
         private async void btnStart_Click(object sender, RoutedEventArgs e)

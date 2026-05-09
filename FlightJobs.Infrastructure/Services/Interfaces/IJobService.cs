@@ -10,6 +10,7 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
         Task<FinishJobResponseModel> FinishJob(DataModel JobSimData);
         Task<IList<JobModel>> GetAllUserJobs();
         Task<JobModel> GetLastUserJob();
+        Task<JobModel> GetActiveUserJob();
         Task ActivateJob(long jobId);
     }
 }
