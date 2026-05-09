@@ -329,5 +329,11 @@ namespace FlightJobsDesktop
         {
             Application.Current.Shutdown();
         }
+
+        private void BtnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            NavigateToPageControl("FlightJobsDesktop.Views.SettingsView");
+            FlyoutUserMenu.Hide();
+        }
     }
 }

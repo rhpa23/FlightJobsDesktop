@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConnectorClientAPI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,10 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
     {
         void SetApiUrl(string siteUrl);
         string GetApiUrl();
+
+        string GetAccessToken();
+
+        string GetRefreshToken();
 
         Task<bool> PingUrl(string url);
     }

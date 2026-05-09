@@ -89,7 +89,7 @@
                             <StackPanel>
                                 <StackPanel Orientation="Vertical">
                                     <Button x:Name="BtnLogoff" Content="Logoff" Click="BtnLogoff_Click" HorizontalAlignment="Stretch"  />
-                                    <Button x:Name="BtnFlightsInfo" Content="Flights info" Margin="0,5,0,0" HorizontalAlignment="Stretch" />
+                                    <Button x:Name="BtnSettings" Content="Settings" Click="BtnSettings_Click"  Margin="0,5,0,0" HorizontalAlignment="Stretch" />
                                 </StackPanel>
                             </StackPanel>
                         </ui:Flyout>
@@ -108,7 +108,8 @@
                                         Header="{Binding ElementName=headerText, Path=Text, Mode=TwoWay}"
                                         PaneTitle="{Binding ElementName=paneText, Path=Text, Mode=TwoWay}"
                                         IsSettingsVisible="False" 
-                           AlwaysShowHeader="False"
+                                        AlwaysShowHeader="False"
+                                        IsPaneToggleButtonVisible="False"
                                         IsTabStop="False" IsBackEnabled="True" IsBackButtonVisible="Collapsed" OpenPaneLength="190" CompactPaneLength="40" IsPaneOpen="False">
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Content="Home" Tag="HomeView" x:Name="HomeViewPageItem" Width="150" HorizontalAlignment="Left">
