@@ -371,7 +371,7 @@ namespace ConnectorClientAPI
         /// <summary>
         /// Retorna o access token atual
         /// </summary>
-        public string GetAccessToken()
+        public static string GetAccessToken()
         {
             return _accessToken;
         }
@@ -379,7 +379,7 @@ namespace ConnectorClientAPI
         /// <summary>
         /// Retorna o refresh token atual
         /// </summary>
-        public string GetRefreshToken()
+        public static string GetRefreshToken()
         {
             return _refreshToken;
         }

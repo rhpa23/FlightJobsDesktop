@@ -20,5 +20,14 @@ namespace FlightJobs.Infrastructure.Services
         {
             return await _flightJobsConnectorClientAPI.PingUrl(url);
         }
+        public string GetAccessToken()
+        {
+            return FlightJobsConnectorClientAPI.GetAccessToken();
+        }
+
+        public string GetRefreshToken()
+        {
+            return FlightJobsConnectorClientAPI.GetRefreshToken();
+        }
     }
 }
