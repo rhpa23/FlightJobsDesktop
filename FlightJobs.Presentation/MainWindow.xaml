@@ -85,11 +85,10 @@
                     Padding="16,0"
                     Content="{Binding Path=Username}">
                     <ui:FlyoutService.Flyout>
-                        <ui:Flyout x:Name="FlyoutUserMenu">
+                        <ui:Flyout x:Name="FlyoutUserMenu" Placement="Bottom">
                             <StackPanel>
                                 <StackPanel Orientation="Vertical">
                                     <Button x:Name="BtnLogoff" Content="Logoff" Click="BtnLogoff_Click" HorizontalAlignment="Stretch"  />
-                                    <Button x:Name="BtnSettings" Content="Settings" Click="BtnSettings_Click"  Margin="0,5,0,0" HorizontalAlignment="Stretch" />
                                 </StackPanel>
                             </StackPanel>
                         </ui:Flyout>
@@ -114,7 +113,7 @@
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Content="Home" Tag="HomeView" x:Name="HomeViewPageItem" Width="150" HorizontalAlignment="Left">
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="Home"/>
+                        <ui:SymbolIcon Symbol="GoToStart"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem Content="Settings" Tag="SettingsView" x:Name="SettingsViewPageItem"  Width="150" HorizontalAlignment="Left">
