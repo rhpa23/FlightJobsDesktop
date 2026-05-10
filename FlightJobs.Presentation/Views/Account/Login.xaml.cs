@@ -58,7 +58,7 @@ namespace FlightJobsDesktop.Views.Account
 
         private void ForgotPassword_Click(object sender, RoutedEventArgs e)
         {
-            var destinationurl = $"{_infraService.GetApiUrl()}Account/ForgotPassword";
+            var destinationurl = $"{_infraService.GetApiUrl()}login";
             var sInfo = new System.Diagnostics.ProcessStartInfo(destinationurl)
             {
                 UseShellExecute = true,

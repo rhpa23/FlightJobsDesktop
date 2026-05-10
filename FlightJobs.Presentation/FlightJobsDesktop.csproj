@@ -46,7 +46,7 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
-    <ApplicationIcon>favicon-ok.ico</ApplicationIcon>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
@@ -294,6 +294,7 @@
     <Content Include="favicon-ok.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="favicon.ico" />
     <Content Include="img\avatar\default.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

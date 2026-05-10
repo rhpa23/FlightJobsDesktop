@@ -7,82 +7,435 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
-                <!--<ui:ThemeResources Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />-->
                 <ui:XamlControlsResources  />
                 <ui:ThemeResources />
-                <!--<ui:XamlControlsResources Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />-->
-                
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />-->
-                
-                
-                <!-- Theme setting -->
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />-->
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />-->
-                
-                
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- ║  FLIGHTJOBS DESIGN SYSTEM - Baseado na aplicação Web React    ║ -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+
+            <!-- ═══ CORES PRINCIPAIS (Gray Scale) ═══ -->
+            <!-- Background principal: #111827 (gray-900) -->
+            <SolidColorBrush x:Key="BackgroundPrimary" Color="#111827"/>
+            <!-- Background secundário/cards: #1f2937 (gray-800) -->
+            <SolidColorBrush x:Key="BackgroundSecondary" Color="#1f2937"/>
+            <!-- Background terciário: #374151 (gray-700) -->
+            <SolidColorBrush x:Key="BackgroundTertiary" Color="#374151"/>
+
+            <!-- Texto primário: #f9fafb (gray-50) -->
+            <SolidColorBrush x:Key="TextPrimary" Color="#f9fafb"/>
+            <!-- Texto secundário: #9ca3af (gray-400) -->
+            <SolidColorBrush x:Key="TextSecondary" Color="#9ca3af"/>
+            <!-- Texto terciário: #6b7280 (gray-500) -->
+            <SolidColorBrush x:Key="TextTertiary" Color="#6b7280"/>
+
+            <!-- Bordas: #374151 (gray-700) -->
+            <SolidColorBrush x:Key="BorderPrimary" Color="#374151"/>
+            <SolidColorBrush x:Key="BorderSecondary" Color="#4b5563"/>
+
+            <!-- ═══ CORES DE ÊNFASE (Blue Scale) ═══ -->
+            <!-- Primária: #3b82f6 (blue-500) -->
+            <SolidColorBrush x:Key="AccentPrimary" Color="#3b82f6"/>
+            <!-- Primária hover: #2563eb (blue-600) -->
+            <SolidColorBrush x:Key="AccentPrimaryHover" Color="#2563eb"/>
+            <!-- Primária light: #60a5fa (blue-400) -->
+            <SolidColorBrush x:Key="AccentPrimaryLight" Color="#60a5fa"/>
+            <!-- Primária bg: rgba(59, 130, 246, 0.1) -->
+            <SolidColorBrush x:Key="AccentPrimaryBg" Color="#1a3b82f6"/>
+            <SolidColorBrush x:Key="AccentPrimaryBgHover" Color="#333b82f6"/>
+
+            <!-- ═══ CORES DE ESTADO ═══ -->
+            <!-- Sucesso: #4ade80 (green-400) -->
+            <SolidColorBrush x:Key="Success" Color="#4ade80"/>
+            <SolidColorBrush x:Key="SuccessBg" Color="#1a22c55e"/>
+            <SolidColorBrush x:Key="SuccessBgHover" Color="#3322c55e"/>
+            <!-- Erro: #f87171 (red-400) -->
+            <SolidColorBrush x:Key="Error" Color="#f87171"/>
+            <SolidColorBrush x:Key="ErrorBg" Color="#1aef4444"/>
+            <SolidColorBrush x:Key="ErrorBgHover" Color="#33ef4444"/>
+            <!-- Alerta: #fbbf24 (yellow-400) -->
+            <SolidColorBrush x:Key="Warning" Color="#fbbf24"/>
+            <SolidColorBrush x:Key="WarningBg" Color="#1af59e0b"/>
+            <SolidColorBrush x:Key="WarningBgHover" Color="#33f59e0b"/>
+            <!-- Info: #818cf8 (indigo-400) -->
+            <SolidColorBrush x:Key="Info" Color="#818cf8"/>
+            <SolidColorBrush x:Key="InfoBg" Color="#1a6366f1"/>
+            <SolidColorBrush x:Key="InfoBgHover" Color="#336366f1"/>
+
+            <!-- ═══ BRUSHES DE GRADIENTE ═══ -->
+            <!-- Gradiente de card: from-gray-800 to-gray-900 -->
+            <LinearGradientBrush x:Key="CardGradient" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Offset="0" Color="#1f2937"/>
+                <GradientStop Offset="1" Color="#111827"/>
+            </LinearGradientBrush>
+
+            <!-- Gradiente de header: from-gray-900 via-gray-800 to-gray-900 -->
+            <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,0">
+                <GradientStop Offset="0" Color="#111827"/>
+                <GradientStop Offset="0.5" Color="#1f2937"/>
+                <GradientStop Offset="1" Color="#111827"/>
+            </LinearGradientBrush>
+
+            <!-- Gradiente azul suave -->
+            <LinearGradientBrush x:Key="BlueGradientBg" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Offset="0" Color="#331e3a8a"/>
+                <GradientStop Offset="1" Color="#1f2937"/>
+            </LinearGradientBrush>
+
+            <!-- ═══ SOMBRAS ═══ -->
+            <DropShadowEffect x:Key="CardShadow" ShadowDepth="0" BlurRadius="10" Opacity="0.3" Color="Black"/>
+            <DropShadowEffect x:Key="ElevatedShadow" ShadowDepth="2" BlurRadius="20" Opacity="0.4" Color="Black"/>
+
+            <!-- ═══ ESTILOS BASE ═══ -->
+            <!-- TextBlock primário -->
+            <Style x:Key="TextPrimaryStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="FontFamily" Value="Segoe UI"/>
+            </Style>
+
+            <!-- TextBlock secundário -->
+            <Style x:Key="TextSecondaryStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                <Setter Property="FontSize" Value="12"/>
+            </Style>
+
+            <!-- Label primário -->
+            <Style x:Key="LabelPrimaryStyle" TargetType="Label">
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="FontFamily" Value="Segoe UI"/>
+            </Style>
+
+            <!-- Label secundário -->
+            <Style x:Key="LabelSecondaryStyle" TargetType="Label">
+                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                <Setter Property="FontSize" Value="12"/>
+            </Style>
+
+            <!-- ═══ ESTILOS DE CARD ═══ -->
+            <!-- Card padrão com gradiente -->
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource CardGradient}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderPrimary}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="12"/>
+                <Setter Property="Padding" Value="20"/>
+                <Setter Property="Effect" Value="{StaticResource CardShadow}"/>
+                <Setter Property="Opacity" Value="0.5"/>
+            </Style>
+
+            <!-- Card com borda sutil -->
+            <Style x:Key="CardSubtleStyle" TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource CardGradient}"/>
+                <Setter Property="BorderBrush" Value="#37415150"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="12"/>
+                <Setter Property="Padding" Value="20"/>
+            </Style>
+
+            <!-- Card com hover -->
+            <Style x:Key="CardHoverStyle" TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource CardGradient}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderPrimary}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="12"/>
+                <Setter Property="Padding" Value="20"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="{StaticResource AccentPrimary}"/>
+                        <Setter Property="Effect" Value="{StaticResource ElevatedShadow}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- ═══ ESTILOS DE BOTÃO ═══ -->
+            <!-- Botão primário (blue) -->
+            <Style x:Key="ButtonPrimaryStyle" TargetType="Button">
+                <Setter Property="Background" Value="{StaticResource AccentPrimary}"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="12,8"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" 
+                                    CornerRadius="8"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource AccentPrimaryHover}"/>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.5"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Botão secundário/ghost -->
+            <Style x:Key="ButtonGhostStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderPrimary}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="12,8"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource BackgroundTertiary}"/>
+                        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Botão de perigo (vermelho) -->
+            <Style x:Key="ButtonDangerStyle" TargetType="Button" BasedOn="{StaticResource ButtonPrimaryStyle}">
+                <Setter Property="Background" Value="#dc2626"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#b91c1c"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- ═══ ESTILOS DE HEADER/CABEÇALHO ═══ -->
+            <!-- Header de card -->
+            <Style x:Key="CardHeaderStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Margin" Value="0,0,0,16"/>
+            </Style>
+
+            <!-- Header de seção -->
+            <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+
+            <!-- Subheader -->
+            <Style x:Key="SubHeaderStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
+
+            <!-- ═══ ESTILOS DE ÍCONE CONTAINER ═══ -->
+            <Style x:Key="IconContainerStyle" TargetType="Border">
+                <Setter Property="Width" Value="40"/>
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Background" Value="{StaticResource AccentPrimaryBg}"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+
+            <Style x:Key="IconContainerSuccessStyle" TargetType="Border" BasedOn="{StaticResource IconContainerStyle}">
+                <Setter Property="Background" Value="{StaticResource SuccessBg}"/>
+            </Style>
+
+            <Style x:Key="IconContainerWarningStyle" TargetType="Border" BasedOn="{StaticResource IconContainerStyle}">
+                <Setter Property="Background" Value="{StaticResource WarningBg}"/>
+            </Style>
+
+            <Style x:Key="IconContainerErrorStyle" TargetType="Border" BasedOn="{StaticResource IconContainerStyle}">
+                <Setter Property="Background" Value="{StaticResource ErrorBg}"/>
+            </Style>
+
+            <Style x:Key="IconContainerInfoStyle" TargetType="Border" BasedOn="{StaticResource IconContainerStyle}">
+                <Setter Property="Background" Value="{StaticResource InfoBg}"/>
+            </Style>
+
+            <!-- ═══ ESTILOS DE INPUT ═══ -->
+            <Style x:Key="InputStyle" TargetType="TextBox">
+                <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderPrimary}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="12,8"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Style.Triggers>
+                    <Trigger Property="IsFocused" Value="True">
+                        <Setter Property="BorderBrush" Value="{StaticResource AccentPrimary}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- ═══ ESTILOS DE TABCONTROL ═══ -->
+            <Style x:Key="ModernTabControl" TargetType="TabControl">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderPrimary}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+
+            <Style x:Key="ModernTabItem" TargetType="TabItem">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                <Setter Property="Padding" Value="16,12"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabItem">
+                            <Border Name="Border" Background="{TemplateBinding Background}" 
+                                    CornerRadius="8,8,0,0"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter ContentSource="Header" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="{StaticResource AccentPrimaryBg}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource AccentPrimaryLight}"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="{StaticResource BackgroundTertiary}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- ═══ ESTILOS DE LISTA/ITEMS ═══ -->
+            <Style x:Key="ListItemStyle" TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
+                <Setter Property="BorderBrush" Value="#37415150"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="8"/>
+                <Setter Property="Padding" Value="16"/>
+                <Setter Property="Margin" Value="0,4"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="{StaticResource BorderSecondary}"/>
+                        <Setter Property="Background" Value="#1f293780"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- ═══ ESTILOS DE BADGE ═══ -->
+            <Style x:Key="BadgeStyle" TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource AccentPrimaryBg}"/>
+                <Setter Property="BorderBrush" Value="#3b82f650"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="9999"/>
+                <Setter Property="Padding" Value="8,4"/>
+            </Style>
+
+            <Style x:Key="BadgeSuccessStyle" TargetType="Border" BasedOn="{StaticResource BadgeStyle}">
+                <Setter Property="Background" Value="{StaticResource SuccessBg}"/>
+                <Setter Property="BorderBrush" Value="#22c55e50"/>
+            </Style>
+
+            <Style x:Key="BadgeWarningStyle" TargetType="Border" BasedOn="{StaticResource BadgeStyle}">
+                <Setter Property="Background" Value="{StaticResource WarningBg}"/>
+                <Setter Property="BorderBrush" Value="#f59e0b50"/>
+            </Style>
+
+            <!-- ═══ ESTILOS LEGACY (mantidos para compatibilidade) ═══ -->
             <Style x:Key="StackPanelBoxStyle" TargetType="StackPanel">
                 <Setter Property="Margin" Value="0,10,0,0" />
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="VerticalAlignment" Value="Top"/>
             </Style>
+
             <Style x:Key="TextBlockHeaderBoxStyle" TargetType="TextBlock">
                 <Setter Property="HorizontalAlignment" Value="Stretch" />
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="Background" Value="#333337"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
                 <Setter Property="Margin" Value="0"/>
-                <Setter Property="Padding" Value="5"/>
+                <Setter Property="Padding" Value="12,8"/>
                 <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
             </Style>
+
             <Style x:Key="LightBorderBoxStyle" TargetType="Border">
-                <Setter Property="BorderBrush" Value="#333337" />
+                <Setter Property="Background" Value="{StaticResource CardGradient}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderPrimary}"/>
                 <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="CornerRadius" Value="0,0,10,10"/>
+                <Setter Property="CornerRadius" Value="0,0,12,12"/>
+                <Setter Property="Padding" Value="15"/>
             </Style>
+
             <Style x:Key="AppTitleBarStyle" TargetType="ui:TitleBarControl">
                 <Setter Property="ui:ThemeManager.RequestedTheme" Value="Dark" />
             </Style>
+
             <Style x:Key="AppTitleBarButtonStyle" TargetType="ui:TitleBarButton">
                 <Setter Property="IsActive" Value="{Binding IsActive, ElementName=Window}" />
             </Style>
+
             <Style x:Key="BorderHighlight" TargetType="Border">
-                <Setter Property="Border.BorderThickness" Value="1"/>
-                <Style.Triggers>
-                    <Trigger Property="Border.IsMouseOver" Value="True">
-                        <Setter Property="Border.BorderBrush" Value="#F7C600" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            <Style x:Key="BorderButtonYellow" TargetType="Border">
-                <Setter Property="Border.BorderBrush" Value="Gray"/>
-                <Setter Property="Border.BorderThickness" Value="2"/>
-                <Setter Property="CornerRadius" Value="3"/>
-                <Style.Triggers>
-                    <Trigger Property="Border.IsMouseOver" Value="True">
-                        <Setter Property="Border.BorderBrush" Value="#F7C600" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            <Style x:Key="BorderHighlightWindow" TargetType="Window">
-                <Setter Property="Border.BorderThickness" Value="1"/>
-                <Style.Triggers>
-                    <Trigger Property="Border.IsMouseOver" Value="True">
-                        <Setter Property="Border.BorderBrush" Value="Gray" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            <Style x:Key="CustomTabItem" TargetType="Label">
-                <Setter Property="Foreground" Value="#BFBFBF" />
-                <!-- This won't work -->
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="CornerRadius" Value="6"/>
+                <Setter Property="Padding" Value="8"/>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Foreground" Value="Gray" />
-                        <!--This won't work-->
+                        <Setter Property="BorderBrush" Value="{StaticResource AccentPrimary}" />
+                        <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
+
+            <Style x:Key="BorderButtonYellow" TargetType="Border">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderPrimary}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="8"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="{StaticResource AccentPrimary}" />
+                        <Setter Property="Background" Value="{StaticResource AccentPrimaryBg}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="BorderHighlightWindow" TargetType="Window">
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="{StaticResource BorderSecondary}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="CustomTabItem" TargetType="Label">
+                <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+                <Setter Property="FontSize" Value="16"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
             <SolidColorBrush x:Key="TransparentBlack" Color="Black" Opacity="0.5" />
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

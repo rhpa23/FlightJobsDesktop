@@ -44,32 +44,6 @@ namespace FlightJobsDesktop.Views
             AppProperties.UserSettings = settingsModel;
         }
 
-        private void ThemeSwitch_Toggled(object sender, System.Windows.RoutedEventArgs e)
-        {
-            try
-            {
-                if (!ThemeSwitch.IsOn)
-                {
-                    _userSettings.ThemeName = "Light";
-                    ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
-                    ControlzEx.Theming.ThemeManager.Current.ChangeThemeBaseColor(Application.Current, "Light");
-                }
-                else
-                {
-                    _userSettings.ThemeName = "Dark";
-                    ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
-                    ControlzEx.Theming.ThemeManager.Current.ChangeThemeBaseColor(Application.Current, "Dark");
-                }
-
-                SaveSettings();
-            }
-            catch (Exception ex)
-            {
-                _log.Error("SettingsView ThemeSwitch", ex);
-                _notificationManager.Show("Error", "Error when try to apply Theme Settings.", NotificationType.Error, "WindowArea");
-            }
-        }
-
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -82,20 +56,6 @@ namespace FlightJobsDesktop.Views
             {
                 _log.Error("SettingsView Loaded", ex);
                 _notificationManager.Show("Error", "Error when try to load FlightJobs settings.", NotificationType.Error, "WindowArea");
-            }
-        }
-
-        private void btnUpdateApp_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                SaveSettings();
-                _notificationManager.Show("Success", "Application settings saved!", NotificationType.Success, "WindowArea");
-            }
-            catch (Exception ex)
-            {
-                _log.Error("SettingsView UpdateApp", ex);
-                _notificationManager.Show("Error", "Error when try to save FlightJobs settings. Please your administrator rights.", NotificationType.Error, "WindowArea");
             }
         }
 

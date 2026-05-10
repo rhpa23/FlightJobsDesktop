@@ -6,12 +6,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:FlightJobsDesktop.ViewModels"
              xmlns:helpers="clr-namespace:FlightJobsDesktop.Helpers" 
-             mc:Ignorable="d" Loaded="UserControl_Loaded" ><!--Background="White" Width="900" Height="800">-->
+             mc:Ignorable="d" Loaded="UserControl_Loaded"
+             Background="{StaticResource BackgroundPrimary}">
     <UserControl.DataContext>
         <local:UserSettingsViewModel/>
     </UserControl.DataContext>
-    <ScrollViewer IsTabStop="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-        <Grid>
+    <ScrollViewer IsTabStop="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="{StaticResource BackgroundPrimary}">
+        <Grid Background="{StaticResource BackgroundPrimary}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -38,23 +39,13 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="1" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="360"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="UI Theme" Margin="5,10,0,10" FontSize="18"/>
-                                <ui:ToggleSwitch Grid.Column="1" Name="ThemeSwitch" IsOn="{Binding Path=IsDarkTheme, Mode=OneWay}" Toggled="ThemeSwitch_Toggled" Header="" HorizontalAlignment="Left" Height="30" Margin="10,10,0,0" VerticalAlignment="Top" Width="90" MinWidth="90" OffContent="Light" OnContent="Dark"/>
-                            </Grid>
-                        </Border>
                         <Border Grid.Row="2" CornerRadius="0,3,3,0" Style="{DynamicResource BorderHighlight}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="360"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="Start in system tray" Margin="5,10,0,10" FontSize="18"/>
+                                <Label Grid.Column="0" Content="Start in system tray" Margin="5,10,0,10" FontSize="18" Style="{StaticResource LabelPrimaryStyle}"/>
                                 <CheckBox Grid.Column="1" x:Name="ckbSysTray" Content="" IsChecked="{Binding Path=StartInSysTray}" HorizontalAlignment="Left" Margin="20,0,0,0" Click="ckbBase_Click"/>
                             </Grid>
                         </Border>
@@ -64,7 +55,7 @@
                                     <ColumnDefinition Width="360"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="Exit on MSFS shutdown" Margin="5,10,0,10" FontSize="18"/>
+                                <Label Grid.Column="0" Content="Exit on MSFS shutdown" Margin="5,10,0,10" FontSize="18" Style="{StaticResource LabelPrimaryStyle}"/>
                                 <CheckBox Grid.Column="1" x:Name="ckbExitWithFS" Content="" IsChecked="{Binding Path=ExitWithFS}" HorizontalAlignment="Left" Margin="20,0,0,0" Click="ckbBase_Click"/>
                             </Grid>
                         </Border>
@@ -74,7 +65,7 @@
                                     <ColumnDefinition Width="360"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="Auto start job when Engine 1 is started" Margin="5,10,0,10" FontSize="18"/>
+                                <Label Grid.Column="0" Content="Auto start job when Engine 1 is started" Margin="5,10,0,10" FontSize="18" Style="{StaticResource LabelPrimaryStyle}"/>
                                 <CheckBox Grid.Column="1" x:Name="ckbAutoStart" Content="" IsChecked="{Binding Path=AutoStartJob}" HorizontalAlignment="Left" Margin="21,6,0,6" Click="ckbBase_Click"/>
                             </Grid>
                         </Border>
@@ -84,7 +75,7 @@
                                     <ColumnDefinition Width="360"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="Auto finish job when Engine 1 shutdown" Margin="5,10,0,10" FontSize="18"/>
+                                <Label Grid.Column="0" Content="Auto finish job when Engine 1 shutdown" Margin="5,10,0,10" FontSize="18" Style="{StaticResource LabelPrimaryStyle}"/>
                                 <CheckBox Grid.Column="1" x:Name="ckbAutoFinish" Content="" IsChecked="{Binding Path=AutoFinishJob}" HorizontalAlignment="Left" Margin="20,0,0,0" Click="ckbBase_Click"/>
                             </Grid>
                         </Border>
@@ -94,17 +85,11 @@
                                     <ColumnDefinition Width="360"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="Show landing data" Margin="5,10,0,10" FontSize="18"/>
+                                <Label Grid.Column="0" Content="Show landing data" Margin="5,10,0,10" FontSize="18" Style="{StaticResource LabelPrimaryStyle}"/>
                                 <CheckBox Grid.Column="1" x:Name="ckbShowLandingData" Content="" IsChecked="{Binding Path=ShowLandingData}" HorizontalAlignment="Left" Margin="20,0,0,0" Click="ckbBase_Click"/>
                             </Grid>
                         </Border>
-                        <StackPanel Grid.RowSpan="9" Grid.Column="1" Margin="0,10,0,0" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
-                            <ui:AppBarButton x:Name="btnUpdateApp" Label="Update App" Margin="0,50,0,0" Click="btnUpdateApp_Click" >
-                                <ui:AppBarButton.Icon>
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE896;" />
-                                </ui:AppBarButton.Icon>
-                            </ui:AppBarButton>
-                        </StackPanel>
+
                     </Grid>
                 </Border>
             </DockPanel>

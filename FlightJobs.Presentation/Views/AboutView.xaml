@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="300"
-             d:DesignWidth="300">
-    <Grid>
+             d:DesignWidth="300"
+             Background="{StaticResource BackgroundPrimary}">
+    <Grid Background="{StaticResource BackgroundPrimary}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -20,12 +21,12 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
             <RowDefinition Height="80"/>
-            <RowDefinition Height="45"/>
+            <RowDefinition Height="75"/>
             <RowDefinition Height="80"/>
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
         
-        <Image Grid.ColumnSpan="3" Source="/img/logo/FlightJobsLogo0004.png" HorizontalAlignment="Center" Margin="0,20,0,10" />
+        <Image Height="40" Grid.ColumnSpan="3" Source="/img/logo/FlightJobsLogo0004.png" HorizontalAlignment="Center" Margin="0,20,0,10" />
 
         <TextBlock Text="This application was created in 2018 for personal and shared freely with the MS Flight Simulator community. The objective is to improve the simulation experience from the point of view of the Pilots. Simulate pilot's work, earning virtual money and experience to be hired by an airline company."
                    Grid.Row="1"
@@ -34,47 +35,40 @@
                    TextWrapping="Wrap"
                    Grid.ColumnSpan="3"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
+                   VerticalAlignment="Center"
+                   Foreground="{StaticResource TextSecondary}" />
 
-        <TextBlock Text="The web version can be accessed through these links:"
+        <TextBlock Text="The website can be accessed from this URL:"
                    Grid.Row="2"
                    FontSize="16"
                    Margin="20,0,20,0"
                    TextWrapping="Wrap"
                    Grid.ColumnSpan="3"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
+                   VerticalAlignment="Center"
+                   Foreground="{StaticResource TextPrimary}" />
 
-        <TextBlock Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Center" Cursor="Hand">
-            <Hyperlink NavigateUri="https://flightjobs.bsite.net" RequestNavigate="WebLink_RequestNavigate">
-                https://flightjobs.bsite.net
-            </Hyperlink>
-        </TextBlock>
-        <TextBlock Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Center" Cursor="Hand">
-            <Hyperlink NavigateUri="https://www.flightjobs.somee.com" RequestNavigate="WebLink_RequestNavigate">
-                https://www.flightjobs.somee.com
-            </Hyperlink>
-        </TextBlock>
-        <TextBlock Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Center" Cursor="Hand">
-            <Hyperlink NavigateUri="http://flightjobs2027-001-site1.htempurl.com" RequestNavigate="WebLink_RequestNavigate">
-                http://flightjobs2027-001-site1.htempurl.com
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Center" Cursor="Hand" Foreground="{StaticResource AccentPrimaryLight}">
+            <Hyperlink NavigateUri="https://flightjobs.vercel.app" RequestNavigate="WebLink_RequestNavigate" Foreground="{StaticResource AccentPrimaryLight}">
+                https://flightjobs.vercel.app
             </Hyperlink>
         </TextBlock>
 
-        <TextBlock Text="If you liked it, please consider a donate any value using the PayPal button below:"
+        <TextBlock Text="If you liked it, please consider donating any value using the PayPal button below:"
                    Grid.Row="6"
                    FontSize="16"
                    Margin="20,0,20,0"
                    TextWrapping="Wrap"
                    Grid.ColumnSpan="3"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
+                   VerticalAlignment="Center"
+                   Foreground="{StaticResource TextSecondary}" />
 
         <Border Grid.Row="7" Grid.ColumnSpan="3" Padding="3" Style="{DynamicResource BorderHighlight}" HorizontalAlignment="Center" Cursor="Hand">
             <TextBlock>
-            <Hyperlink NavigateUri="https://www.paypal.com/donate?token=rszsrlaX6Ior-8BYher1_Y55EshCBF6v42XzyOGKXS9WCo9FGR5kTSqBxYmwYaRkSb-ufOHjseJ9QpA4" RequestNavigate="WebLink_RequestNavigate">
-                <Image Width="190" ToolTip="PayPal - The safer, easier way to pay online!"
-                       Source="/img/logo/btn_donateCC_LG.gif" />        
+            <Hyperlink NavigateUri="https://www.paypal.com/donate?token=ItUJ8vj8DdFDZ5QfClBd3Mt5DadiqW0YH-51iZTJEbOljuZc7Goiz12pL5TpMQOy5iLoiIVEu5MDTIyb" RequestNavigate="WebLink_RequestNavigate" TextDecorations="None">
+                <Image Width="290" Height="50" ToolTip="PayPal - The safer, easier way to pay online!"
+                       Source="/img/logo/btn_donateCC_LG.gif" />
             </Hyperlink>
             </TextBlock>
         </Border>
@@ -86,25 +80,26 @@
                    TextWrapping="Wrap"
                    Grid.ColumnSpan="3"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
+                   VerticalAlignment="Center"
+                   Foreground="{StaticResource TextSecondary}" />
 
         <Border Grid.Row="9" Grid.Column="0" Padding="3" Style="{DynamicResource BorderHighlight}" HorizontalAlignment="Right" Cursor="Hand">
             <TextBlock>
-            <Hyperlink NavigateUri="https://discordapp.com/invite/xmpAWz7" RequestNavigate="WebLink_RequestNavigate">
+            <Hyperlink NavigateUri="https://discordapp.com/invite/xmpAWz7" RequestNavigate="WebLink_RequestNavigate" TextDecorations="None">
                 <Image Source="/img/icons/discordapp.png" />
             </Hyperlink>
             </TextBlock>
         </Border>
         <Border Grid.Row="9" Grid.Column="1" Padding="3" Style="{DynamicResource BorderHighlight}" HorizontalAlignment="Center" Cursor="Hand">
             <TextBlock>
-            <Hyperlink NavigateUri="https://fb.me/rhpa23" RequestNavigate="WebLink_RequestNavigate">
+            <Hyperlink NavigateUri="https://fb.me/rhpa23" RequestNavigate="WebLink_RequestNavigate" TextDecorations="None">
                 <Image Source="/img/icons/fb.png" />
             </Hyperlink>
             </TextBlock>
         </Border>
         <Border Grid.Row="9" Grid.Column="2" Padding="3" Style="{DynamicResource BorderHighlight}" HorizontalAlignment="Left" Cursor="Hand">
             <TextBlock>
-            <Hyperlink NavigateUri="https://www.youtube.com/channel/UCBHN8OG2yilRq3SrxAGaIaw" RequestNavigate="WebLink_RequestNavigate">
+            <Hyperlink NavigateUri="https://www.youtube.com/channel/UCBHN8OG2yilRq3SrxAGaIaw" RequestNavigate="WebLink_RequestNavigate" TextDecorations="None">
                 <Image Source="/img/icons/youtube.png" />
             </Hyperlink>
             </TextBlock>

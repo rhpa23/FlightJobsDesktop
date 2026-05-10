@@ -11,11 +11,12 @@
         xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="FlightJobs - Login" Height="470" Width="680" ResizeMode="NoResize" Loaded="Window_Loaded">
+        Title="FlightJobs - Login" Height="500" Width="700" ResizeMode="NoResize" Loaded="Window_Loaded"
+        Background="{StaticResource BackgroundPrimary}">
     <Window.DataContext>
         <local:AspnetUserViewModel/>
     </Window.DataContext>
-    <Grid>
+    <Grid Background="{StaticResource BackgroundPrimary}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition />
@@ -31,18 +32,22 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <DockPanel x:Name="LoadingPanel" Visibility="Collapsed" Grid.RowSpan="8" Grid.ColumnSpan="2" Background="{StaticResource TransparentBlack}" Panel.ZIndex="5000">
-            <StackPanel Orientation="Vertical" Width="400" Height="70" Background="Black">
-                <TextBlock Text="Loading..." Foreground="White" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                <ProgressBar Height="5" Width="300" Grid.Row="1" IsIndeterminate="True" Margin="0,10,0,10"/>
-            </StackPanel>
+            <Border Width="400" Height="70" Background="{StaticResource BackgroundSecondary}" CornerRadius="12">
+                <StackPanel Orientation="Vertical">
+                <TextBlock Text="Loading..." Foreground="{StaticResource TextPrimary}" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                <ProgressBar Height="5" Width="300" Grid.Row="1" IsIndeterminate="True" Margin="0,10,0,10" Foreground="{StaticResource AccentPrimary}" Background="{StaticResource BackgroundTertiary}"/>
+                </StackPanel>
+            </Border>
         </DockPanel>
-        <Image Source="/img/background/tower-view.jpg" Width="290" Grid.RowSpan="8" VerticalAlignment="Top" >
-            <Image.Style>
-                <Style TargetType="Image">
-                    <Setter Property="Opacity" Value="0.7" />
-                </Style>
-            </Image.Style>
-        </Image>
+        <Border Width="280" Grid.RowSpan="8" Background="{StaticResource CardGradient}" CornerRadius="0,12,12,0" Margin="0,0,10,0">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="2" BlurRadius="10" Opacity="0.3"/>
+            </Border.Effect>
+            <Grid>
+                <Image Source="/img/background/tower-view.jpg" Stretch="UniformToFill" Opacity="0.6"/>
+                <Rectangle Fill="{StaticResource BackgroundPrimary}" Opacity="0.4"/>
+            </Grid>
+        </Border>
 
         <Image Source="/img/logo/FlightJobsLogo0002.png" Grid.Row="0" Grid.Column="1" Width="70" Margin="0,10,0,0" >
             <Image.Style>
@@ -51,9 +56,10 @@
                 </Style>
             </Image.Style>
         </Image>
-        <Label Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Content="Sign in to App" Margin="5,5,0,5" FontSize="22"/>
-        <TextBox x:Name="txbEmail" Grid.Column="1" Grid.Row="2" Height="55" Width="280" TextWrapping="Wrap" Margin="0,20,0,0" 
-                 ui:ControlHelper.Header="Email" ui:ControlHelper.PlaceholderText="Email" TextChanged="TextChanged">
+        <Label Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Content="Sign in to FlightJobs" Margin="5,5,0,5" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+        <TextBox x:Name="txbEmail" Grid.Column="1" Grid.Row="2" Height="60" Width="300" TextWrapping="Wrap" Margin="0,25,0,0" 
+                 ui:ControlHelper.Header="Email" ui:ControlHelper.PlaceholderText="pilot@example.com" TextChanged="TextChanged"
+                 Background="{StaticResource BackgroundSecondary}" Foreground="{StaticResource TextPrimary}" BorderBrush="{StaticResource BorderPrimary}">
             <TextBox.Text>
                 <Binding Path="Email" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
                     <Binding.ValidationRules>
@@ -62,20 +68,41 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <PasswordBox x:Name="txbPassword" Grid.Column="1" Grid.Row="3" Height="55" Width="280" Margin="0,20,0,0" helpers:PasswordBoxHelper.BindPassword="True" 
-                     ui:ControlHelper.PlaceholderText="Password" ui:ControlHelper.Header="Password" PasswordChanged="TextChanged">
+        <PasswordBox x:Name="txbPassword" Grid.Column="1" Grid.Row="3" Height="60" Width="300" Margin="0,20,0,0" helpers:PasswordBoxHelper.BindPassword="True" 
+                     ui:ControlHelper.PlaceholderText="••••••••" ui:ControlHelper.Header="Password" PasswordChanged="TextChanged"
+                     Background="{StaticResource BackgroundSecondary}" Foreground="{StaticResource TextPrimary}" BorderBrush="{StaticResource BorderPrimary}">
             <helpers:PasswordBoxHelper.BoundPassword>
                 <Binding Path="Password" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" />
             </helpers:PasswordBoxHelper.BoundPassword>
         </PasswordBox>
-        <TextBlock Grid.Column="1" Grid.Row="5" Height="20" Margin="5,20,5,5" HorizontalAlignment="Center" FontSize="16">
-            <Hyperlink><TextBlock Text="New User?" /></Hyperlink>
+        <TextBlock Grid.Column="1" Grid.Row="5" Width="300" Height="60" Margin="5,15,5,0" HorizontalAlignment="Center" FontSize="14" TextWrapping="Wrap" 
+                       Text="To sign up or if you forgot your password, please visit Flightjobs on the web:" Foreground="{StaticResource TextPrimary}"/>
+        <TextBlock Grid.Column="1" Grid.Row="6" Height="20" Margin="5,0,5,5" HorizontalAlignment="Center" FontSize="14">
+            <Hyperlink Click="ForgotPassword_Click" Foreground="{StaticResource AccentPrimaryLight}"><TextBlock Text="Flightjobs" Foreground="{StaticResource AccentPrimaryLight}"/></Hyperlink>
         </TextBlock>
-        <TextBlock Grid.Column="1" Grid.Row="6" Height="20" Margin="5,10,5,5" HorizontalAlignment="Center" FontSize="16">
-            <Hyperlink Click="ForgotPassword_Click"><TextBlock Text="Forgot your password?" /></Hyperlink>
-        </TextBlock>
-        <Border x:Name="btnSignIn" Grid.Column="1" Grid.Row="4" Margin="0,30,0,0" Width="280" Style="{DynamicResource BorderButtonYellow}">
-            <Button Content="Sign in" HorizontalAlignment="Center" VerticalAlignment="Top" Width="280" FontSize="18" Click="btnSignIn_Click" IsDefault="True"/>
+        <Border x:Name="btnSignIn" Grid.Column="1" Grid.Row="4" Margin="0,25,0,0" Width="300" CornerRadius="8" Background="{StaticResource AccentPrimary}">
+            <Button Content="Sign in" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontSize="16" FontWeight="Medium" Click="btnSignIn_Click" IsDefault="True" Background="{StaticResource AccentPrimary}" Foreground="White" BorderThickness="0">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="{StaticResource AccentPrimary}"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="8" Padding="12,8">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource AccentPrimaryHover}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Border>
         <notifications:NotificationArea x:Name="WindowArea" Position="TopCenter" MaxItems="3" Grid.Row="5" Grid.ColumnSpan="2" Grid.RowSpan="4"  />
         <notifications:NotificationArea x:Name="WindowAreaLoading" Position="TopCenter" MaxItems="3" Grid.Row="5" Grid.ColumnSpan="2" Grid.RowSpan="4"  />

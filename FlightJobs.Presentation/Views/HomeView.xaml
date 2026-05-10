@@ -5,14 +5,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:FlightJobsDesktop.Views.Home"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             mc:Ignorable="d">
-    <Grid>
+             mc:Ignorable="d"
+             Background="{StaticResource BackgroundPrimary}">
+    <Grid Background="{StaticResource BackgroundPrimary}">
         <TabControl x:Name="TabControlHome"                    
-                    MinHeight="400" MinWidth="1000">
+                    MinHeight="400" 
+                    MinWidth="1000"
+                    Margin="15,0,5,0"
+                    Style="{StaticResource ModernTabControl}"
+                    Background="{StaticResource BackgroundPrimary}"
+                    BorderBrush="{StaticResource BorderPrimary}"
+                    BorderThickness="0">
+            <TabControl.Resources>
+                <Style TargetType="TabItem" BasedOn="{StaticResource ModernTabItem}"/>
+            </TabControl.Resources>
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Connector" FontSize="22" Style="{DynamicResource CustomTabItem}" />
+                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE80F;" Margin="0,0,8,0" FontSize="16" Foreground="{StaticResource AccentPrimaryLight}"/>
+                        <Label Content="Home" FontSize="16" Style="{StaticResource CustomTabItem}" />
                     </StackPanel>
                 </TabItem.Header>
                 <views:ConnectorView />
@@ -20,7 +31,8 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Practice" FontSize="22" Style="{DynamicResource CustomTabItem}" />
+                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE709;" Margin="0,0,8,0" FontSize="16" Foreground="{StaticResource AccentPrimaryLight}"/>
+                        <Label Content="Practice" FontSize="16" Style="{StaticResource CustomTabItem}" />
                     </StackPanel>
                 </TabItem.Header>
                 <views:PracticeView/>
@@ -28,10 +40,11 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Web App" FontSize="22" Style="{DynamicResource CustomTabItem}" />
+                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE774;" Margin="0,0,8,0" FontSize="16" Foreground="{StaticResource AccentPrimaryLight}"/>
+                        <Label Content="Web App" FontSize="16" Style="{StaticResource CustomTabItem}" />
                     </StackPanel>
                 </TabItem.Header>
-                <Grid Background="Black">
+                <Grid Background="{StaticResource BackgroundPrimary}">
                     <views:WebAppView x:Name="WebAppViewControl" />
                 </Grid>
             </TabItem>

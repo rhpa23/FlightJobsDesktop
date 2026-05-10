@@ -23,12 +23,12 @@
         <Style x:Key="AppTitleBarButtonStyle" TargetType="ui:TitleBarButton">
             <Setter Property="IsActive" Value="{Binding IsActive, ElementName=Window}" />
         </Style>
-        <Style x:Key="AppTitleBarBackButtonStyle" TargetType="ui:TitleBarButton" BasedOn="{StaticResource TitleBarBackButtonStyle}">
+        <Style x:Key="AppTitleBarBackButtonStyle" TargetType="ui:TitleBarButton">
             <Setter Property="IsActive" Value="{Binding IsActive, ElementName=Window}" />
         </Style>
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="{StaticResource BackgroundPrimary}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
@@ -36,29 +36,30 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-
         <DockPanel x:Name="LoadingPanel" Visibility="Collapsed" Grid.RowSpan="2" Grid.ColumnSpan="2" Background="{StaticResource TransparentBlack}" Panel.ZIndex="5000">
-            <StackPanel x:Name="LoadingProgressPanel" Visibility="Collapsed" Orientation="Vertical" Width="400" Height="70" Background="Black" VerticalAlignment="Top" Margin="0,35,0,0">
-                <TextBlock Text="Loading..." Foreground="White" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                <ProgressBar Height="5" Width="300" Grid.Row="1" IsIndeterminate="True" Margin="0,10,0,10"/>
-            </StackPanel>
+            <Border Width="400" Height="70" Background="{StaticResource BackgroundSecondary}" CornerRadius="12" VerticalAlignment="Top" Margin="0,35,0,0">
+                <StackPanel x:Name="LoadingProgressPanel" Visibility="Collapsed" Orientation="Vertical">
+                    <TextBlock Text="Loading..." Foreground="{StaticResource TextPrimary}" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                    <ProgressBar Height="5" Width="300" Grid.Row="1" IsIndeterminate="True" Margin="0,10,0,10" Foreground="{StaticResource AccentPrimary}" Background="{StaticResource BackgroundTertiary}"/>
+                </StackPanel>
+            </Border>
         </DockPanel>
 
+        <!-- Header estilo Web - gradiente, borda inferior -->
         <Grid x:Name="AppTitleBar"
             Height="{Binding ElementName=Window, Path=(ui:TitleBar.Height)}"
-            ui:ThemeManager.RequestedTheme="Dark" Background="{DynamicResource SystemControlRevealFocusVisualBrush}">
-
+            ui:ThemeManager.RequestedTheme="Dark"
+            Background="{StaticResource HeaderGradient}">
             <Grid.Style>
                 <Style TargetType="Grid">
-                    <Setter Property="TextElement.Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+                    <Setter Property="TextElement.Foreground" Value="{StaticResource TextPrimary}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsActive, ElementName=Window}" Value="False">
-                            <Setter Property="TextElement.Foreground" Value="{DynamicResource SystemControlDisabledBaseMediumLowBrush}" />
+                            <Setter Property="TextElement.Foreground" Value="{StaticResource TextSecondary}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
-
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
@@ -66,11 +67,12 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Image Source="/img/logo/FlightJobsLogo0002.png" Width="40" Margin="5,1,2,2"  />
-            <TextBlock x:Name="TxbSimConnectStatus" Text="{Binding CurrentSimData.IsConnectedText}" Grid.Column="1" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0"/>
+            <Border BorderBrush="{StaticResource BorderPrimary}" BorderThickness="0,0,0,1"/>
+            <Image Source="/img/logo/FlightJobsLogo0002.png" Width="36" Margin="10,2,8,2"  />
+            <TextBlock x:Name="TxbSimConnectStatus" Text="{Binding CurrentSimData.IsConnectedText}" Grid.Column="1" FontSize="12" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
 
             <!-- Horizontally centered title -->
-            <TextBlock x:Name="TxbTitle" Grid.Column="1" Grid.ColumnSpan="5" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Text="FlightJobs Desktop" />
+            <TextBlock x:Name="TxbTitle" Grid.Column="1" Grid.ColumnSpan="5" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="FlightJobs Desktop" />
 
             <StackPanel
                 Grid.Column="2"
@@ -79,23 +81,24 @@
                 Orientation="Horizontal">
                 <ui:TitleBarButton x:Name="BtnUserMenu"
                     Style="{StaticResource AppTitleBarButtonStyle}"
-                    FontFamily="{DynamicResource ContentControlThemeFontFamily}"
+                    FontFamily="Segoe UI"
                     FontSize="13"
                     Width="NaN"
                     Padding="16,0"
-                    Content="{Binding Path=Username}">
+                    Content="{Binding Path=Username}"
+                    Foreground="{StaticResource TextSecondary}">
                     <ui:FlyoutService.Flyout>
                         <ui:Flyout x:Name="FlyoutUserMenu" Placement="Bottom">
                             <StackPanel>
                                 <StackPanel Orientation="Vertical">
-                                    <Button x:Name="BtnLogoff" Content="Logoff" Click="BtnLogoff_Click" HorizontalAlignment="Stretch"  />
+                                    <Button x:Name="BtnLogoff" Content="Logoff" Click="BtnLogoff_Click" HorizontalAlignment="Stretch" Background="Transparent" Foreground="{StaticResource TextPrimary}" />
                                 </StackPanel>
                             </StackPanel>
                         </ui:Flyout>
                     </ui:FlyoutService.Flyout>
                 </ui:TitleBarButton>
                 <Rectangle
-                    Fill="{Binding ElementName=AppTitleBar, Path=(TextElement.Foreground)}"
+                    Fill="{StaticResource BorderPrimary}"
                     Width="1"
                     Margin="24,8" />
             </StackPanel>
@@ -109,33 +112,35 @@
                                         IsSettingsVisible="False" 
                                         AlwaysShowHeader="False"
                                         IsPaneToggleButtonVisible="False"
-                                        IsTabStop="False" IsBackEnabled="True" IsBackButtonVisible="Collapsed" OpenPaneLength="190" CompactPaneLength="40" IsPaneOpen="False">
+                                        IsTabStop="False" IsBackEnabled="True" IsBackButtonVisible="Collapsed" 
+                                        OpenPaneLength="200" CompactPaneLength="48" IsPaneOpen="False"
+                                        Background="{StaticResource BackgroundPrimary}">
             <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Content="Home" Tag="HomeView" x:Name="HomeViewPageItem" Width="150" HorizontalAlignment="Left">
+                <ui:NavigationViewItem Tag="HomeView" x:Name="HomeViewPageItem" Width="180" HorizontalAlignment="Left" Foreground="{StaticResource TextSecondary}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="GoToStart"/>
+                        <ui:SymbolIcon Symbol="GoToStart" Foreground="{StaticResource AccentPrimaryLight}"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem Content="Settings" Tag="SettingsView" x:Name="SettingsViewPageItem"  Width="150" HorizontalAlignment="Left">
+                <ui:NavigationViewItem Content="Settings" Tag="SettingsView" x:Name="SettingsViewPageItem" Width="180" HorizontalAlignment="Left" Foreground="{StaticResource TextSecondary}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="Setting"/>
+                        <ui:SymbolIcon Symbol="Setting" Foreground="{StaticResource TextSecondary}"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItemSeparator/>
-                <ui:NavigationViewItem Content="About" Tag="AboutView" x:Name="AboutViewPageItem"  Width="150" HorizontalAlignment="Left">
+                <ui:NavigationViewItem Content="About" Tag="AboutView" x:Name="AboutViewPageItem" Width="180" HorizontalAlignment="Left" Foreground="{StaticResource TextSecondary}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="Help"/>
+                        <ui:SymbolIcon Symbol="Help" Foreground="{StaticResource TextSecondary}"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.PaneFooter>
-                <ui:NavigationViewItem Content="Exit" Tag="ExitApp" x:Name="ExitApp"  Width="150" HorizontalAlignment="Left" MouseLeftButtonUp="ExitApp_MouseLeftButtonUp" >
+                <ui:NavigationViewItem ToolTip="Exit Application" Tag="ExitApp" x:Name="ExitApp" Width="180" HorizontalAlignment="Left" MouseLeftButtonUp="ExitApp_MouseLeftButtonUp" Foreground="{StaticResource TextSecondary}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7E8;"/>
+                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7E8;" Foreground="{StaticResource Error}"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
             </ui:NavigationView.PaneFooter>
-            <ui:Frame x:Name="contentFrame" HorizontalAlignment="Stretch"/>
+            <ui:Frame x:Name="contentFrame" HorizontalAlignment="Stretch" Background="{StaticResource BackgroundPrimary}"/>
         </ui:NavigationView>
         <notifications:NotificationArea x:Name="WindowArea" Position="TopCenter" MaxItems="3" Grid.Row="1" Grid.ColumnSpan="2" />
     </Grid>
