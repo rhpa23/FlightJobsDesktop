@@ -12,6 +12,7 @@ using FlightJobsDesktop.Common;
 using FlightJobsDesktop.Const;
 using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
+using FlightJobsDesktop.Views;
 using FlightJobsDesktop.Views.SlidersWindows;
 using log4net;
 using ModernWpf.Controls;
@@ -765,8 +766,9 @@ namespace FlightJobsDesktop.Views.Home
                 await LoadUserJobData();
         }
 
-        private void BtnShowAddJobs_Click(object sender, RoutedEventArgs e)
+        private async void BtnShowAddJobs_Click(object sender, RoutedEventArgs e)
         {
+            await HomeView.WebAppViewInstance.NavegateToPage("search");
             HomeView.TabHome.SelectedIndex = 2;
         }
 

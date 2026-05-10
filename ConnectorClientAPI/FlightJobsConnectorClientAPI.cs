@@ -35,8 +35,9 @@ namespace ConnectorClientAPI
 
     public class FlightJobsConnectorClientAPI
     {
-        public static string SiteUrl { get; set; } = "https://flightjobs.vercel.app/";
-        // public static string ApiBaseUrl { get; set; } = "http://localhost:3001/api/"; // TESTS
+        //public static string SiteUrl { get; set; } = "http://localhost:3002/"; // TESTS
+        public static string SiteUrl { get; set; } = "https://flightjobs.vercel.app/"; // PRODUCTION
+        //public static string ApiBaseUrl { get; set; } = "http://localhost:3001/api/"; // TESTS
         public static string ApiBaseUrl { get; set; } = "https://flightjobs-api.vercel.app/api/";  // PRODUCTION
         
         public static string UserAgent = "FlightJobs Desktop";

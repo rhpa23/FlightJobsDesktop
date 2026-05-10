@@ -32,7 +32,7 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Background="Black">
-                    <views:WebAppView />
+                    <views:WebAppView x:Name="WebAppViewControl" />
                 </Grid>
             </TabItem>
         </TabControl>

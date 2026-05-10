@@ -21,10 +21,26 @@ namespace FlightJobsDesktop.Views.Home
     {
         private static readonly ILog _logger = LogManager.GetLogger(typeof(WebAppView));
         private bool _isWebViewInitialized = false;
+        public string SiteUrl { get; set; }
+        public string Page { get; set; }
 
         public WebAppView()
         {
             InitializeComponent();
+        }
+
+        public async Task NavegateToPage(string page)
+        {
+            Page = page;
+
+            if (WebAppControl?.CoreWebView2 == null)
+                return;
+
+            string url = $"{SiteUrl}/{Page}";
+            // Navega para a URL
+            WebAppControl.Source = new Uri(url);
+
+            _logger.Info($"Navegação para {url} iniciada com sucesso (WebView2).");
         }
 
         private async void LoadWebApp()
@@ -36,7 +52,8 @@ namespace FlightJobsDesktop.Views.Home
                     return;
 
                 var infraService = MainWindow.InfraServiceFactory.Create();
-                string siteUrl = infraService.GetApiUrl();
+                SiteUrl = infraService.GetApiUrl();
+                string url = string.IsNullOrEmpty(Page) ? SiteUrl : $"{SiteUrl}/{Page}";
                 string accessToken = infraService.GetAccessToken();
                 string refreshToken = infraService.GetRefreshToken();
 
@@ -69,9 +86,9 @@ namespace FlightJobsDesktop.Views.Home
                 };
 
                 // Navega para a URL
-                WebAppControl.Source = new Uri(siteUrl);
+                WebAppControl.Source = new Uri(url);
 
-                _logger.Info($"Navegação para {siteUrl} iniciada com sucesso (WebView2).");
+                _logger.Info($"Navegação para {url} iniciada com sucesso (WebView2).");
             }
             catch (Exception ex)
             {

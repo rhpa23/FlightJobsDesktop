@@ -252,10 +252,6 @@ namespace FlightJobsDesktop
                     userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettingsData);
                 }
 
-                var infraService = MainWindow.InfraServiceFactory.Create();
-                // infraService.SetApiUrl("http://localhost:3002/");
-                infraService.SetApiUrl("https://flightjobs.vercel.app/");
-
                 return userSettings;
             }
             catch (Exception ex)
