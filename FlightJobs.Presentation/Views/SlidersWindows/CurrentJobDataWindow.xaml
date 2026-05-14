@@ -64,9 +64,9 @@
             <Image x:Name="ImgCapacity" Height="60" Source="/img/background/default_thumb-capacity.jpg" Margin="0,5,0,0" />
             <Grid x:Name="GridRoute" Margin="0,15,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="105"/>
+                    <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
@@ -75,14 +75,14 @@
                 </Grid.RowDefinitions>
                 <Image Source="/img/icons/departing.png" />
                 <StackPanel Orientation="Vertical" Grid.Column="1" Grid.RowSpan="2">
-                    <Image Source="/img/logo/FlightJobsLogo0004.png" Width="40" Margin="0,-10,0,0" />
+                    <Image Source="/img/logo/FlightJobsLogo0004.png" Margin="0,7,0,0" />
 
                     <Rectangle Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,5,0,0" >
                         <Rectangle.Fill>
                             <SolidColorBrush Color="SlateGray"/>
                         </Rectangle.Fill>
                     </Rectangle>
-                    <TextBlock x:Name="TxbDistance" Text="{Binding DistComplete}" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                    <TextBlock x:Name="TxbDistance" Text="{Binding DistComplete}" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                 </StackPanel>
                 <Image Source="/img/icons/arrival.png" Grid.Column="2" />
                 <TextBlock Text="{Binding DepartureICAO}" Grid.Row="1" Foreground="White" HorizontalAlignment="Center" />

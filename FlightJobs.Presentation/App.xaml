@@ -40,7 +40,7 @@
             <!-- Primária hover: #2563eb (blue-600) -->
             <SolidColorBrush x:Key="AccentPrimaryHover" Color="#2563eb"/>
             <!-- Primária light: #60a5fa (blue-400) -->
-            <SolidColorBrush x:Key="AccentPrimaryLight" Color="#60a5fa"/>
+            <SolidColorBrush x:Key="AccentPrimaryLight" Color="White"/>
             <!-- Primária bg: rgba(59, 130, 246, 0.1) -->
             <SolidColorBrush x:Key="AccentPrimaryBg" Color="#1a3b82f6"/>
             <SolidColorBrush x:Key="AccentPrimaryBgHover" Color="#333b82f6"/>
