@@ -16,6 +16,8 @@ namespace ConnectorClientAPI
     {
         private Func<Task<bool>> _refreshTokenCallback;
         private static readonly SemaphoreSlim _refreshLock = new SemaphoreSlim(1, 1);
+        private static bool _isRefreshing = false;
+        private const int MaxRefreshRetries = 1;
 
         public TokenRefreshHandler(Func<Task<bool>> refreshTokenCallback)
         {
@@ -26,28 +28,43 @@ namespace ConnectorClientAPI
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            // Realiza a requisição inicial
+            return await SendWithRetry(request, cancellationToken, 0);
+        }
+
+        private async Task<HttpResponseMessage> SendWithRetry(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken,
+            int retryCount)
+        {
+            // Realiza a requisição
             HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
 
-            // Se a resposta for 401 (Unauthorized), tenta renovar o token
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            // Se a resposta for 401 (Unauthorized) e não excedeu o limite de retries
+            if (response.StatusCode == HttpStatusCode.Unauthorized && retryCount < MaxRefreshRetries)
             {
                 // Usa um semáforo para evitar múltiplas tentativas simultâneas de refresh
                 await _refreshLock.WaitAsync(cancellationToken);
                 try
                 {
-                    // Tenta renovar o token através do callback
-                    bool refreshed = await _refreshTokenCallback();
-
-                    if (refreshed)
+                    // Evita recursão infinita se já estiver em processo de refresh
+                    if (!_isRefreshing)
                     {
-                        // Se o token foi renovado, tenta realizar a requisição novamente
-                        response.Dispose();
-                        response = await base.SendAsync(request, cancellationToken);
+                        _isRefreshing = true;
+                        
+                        // Tenta renovar o token através do callback
+                        bool refreshed = await _refreshTokenCallback();
+
+                        if (refreshed)
+                        {
+                            // Se o token foi renovado, tenta realizar a requisição novamente
+                            response.Dispose();
+                            response = await SendWithRetry(request, cancellationToken, retryCount + 1);
+                        }
                     }
                 }
                 finally
                 {
+                    _isRefreshing = false;
                     _refreshLock.Release();
                 }
             }

@@ -109,6 +109,10 @@ namespace FlightJobsDesktop.Views.Account
                         _userAccessService.SaveLoginData(_loginData);
                     }
                     await LoadUserJobList();
+                    
+                    // Verifica se há job pendente para recuperação
+                    await CheckAndRecoverPendingJob();
+                    
                     return true;
                 }
             }
@@ -127,6 +131,64 @@ namespace FlightJobsDesktop.Views.Account
             }
             
             return false;
+        }
+
+        /// <summary>
+        /// Verifica e recupera dados de job pendente salvo localmente
+        /// </summary>
+        private async Task CheckAndRecoverPendingJob()
+        {
+            try
+            {
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData\\PendingJob.json");
+                
+                if (File.Exists(path))
+                {
+                    _log.Info("Pending job data found. Attempting to recover...");
+                    
+                    // Notifica usuário sobre job pendente
+                    _notificationManager.Show(
+                        "Pending Job Found",
+                        "You have a pending job that was saved. Trying to recover it...",
+                        NotificationType.Information,
+                        "WindowArea",
+                        TimeSpan.FromSeconds(3)
+                    );
+                    
+                    // Aguarda um pouco para o usuário ver a notificação
+                    await Task.Delay(TimeSpan.FromSeconds(2));
+                    
+                    // Tenta recuperar o job usando a propriedade estática
+                    var connectorView = HomeView.ConnectorViewInstance;
+                    if (connectorView != null)
+                    {
+                        bool recovered = await connectorView.TryRecoverPendingJob();
+                        
+                        if (recovered)
+                        {
+                            _notificationManager.Show(
+                                "Job Recovered",
+                                "Your pending job has been recovered. You can now try to finish it.",
+                                NotificationType.Success,
+                                "WindowArea"
+                            );
+                        }
+                        else
+                        {
+                            _notificationManager.Show(
+                                "Recovery Failed",
+                                "Could not recover the pending job. Please try again or contact support.",
+                                NotificationType.Warning,
+                                "WindowArea"
+                            );
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Failed to check pending job data", ex);
+            }
         }
 
         

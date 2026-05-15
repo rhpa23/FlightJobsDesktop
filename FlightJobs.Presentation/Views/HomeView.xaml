@@ -26,7 +26,7 @@
                         <Label Content="Home" FontSize="16" Style="{StaticResource CustomTabItem}" />
                     </StackPanel>
                 </TabItem.Header>
-                <views:ConnectorView />
+                <views:ConnectorView x:Name="ConnectorViewControl" />
             </TabItem>
             <TabItem>
                 <TabItem.Header>

@@ -13,12 +13,14 @@ namespace FlightJobsDesktop.Views
         internal static TabControl TabHome { get; set; }
         internal static Ellipse DebtAirlineEllipse { get; set; }
         internal static WebAppView WebAppViewInstance { get; set; }
+        internal static ConnectorView ConnectorViewInstance { get; set; }
 
         public HomeView()
         {
             InitializeComponent();
             TabHome = TabControlHome;
             WebAppViewInstance = WebAppViewControl;
+            ConnectorViewInstance = ConnectorViewControl;
         }
 
         public static void DisableTabControl()

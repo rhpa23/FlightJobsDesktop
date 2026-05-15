@@ -321,6 +321,19 @@ namespace FlightJobsDesktop
             Close();
         }
 
+        /// <summary>
+        /// Mostra a janela de login para reautenticação em caso de sessão expirada
+        /// </summary>
+        internal static void ShowLoginWindow()
+        {
+            var loginWindow = new Login(InfraServiceFactory,
+                                        JobServiceFactory,
+                                        UserServiceFactory,
+                                        new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, PilotServiceFactory,
+                                                       SqLiteContextFactory));
+            loginWindow.Show();
+        }
+
         private void ExitApp_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Application.Current.Shutdown();

@@ -205,6 +205,33 @@ namespace ConnectorClientAPI
                 new StringContent(body, Encoding.UTF8, "application/json")
             );
 
+            // Se recebeu 401, tenta renovar o token explicitamente antes de falhar
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                response.Dispose();
+                
+                // Tenta renovar o token
+                bool refreshed = await RefreshAccessTokenAsync();
+                
+                if (refreshed)
+                {
+                    // Se renovou, tenta novamente
+                    SetAuthorizationHeader();
+                    response = await _client.PostAsync(
+                        new Uri(url),
+                        new StringContent(body, Encoding.UTF8, "application/json")
+                    );
+                }
+                else
+                {
+                    // Se não conseguiu renovar, lança exceção informativa
+                    throw new HttpRequestException(
+                        "Session expired. Please login again to start a new job.",
+                        new Exception($"Error status code: {response.StatusCode}")
+                    );
+                }
+            }
+
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
@@ -244,17 +271,61 @@ namespace ConnectorClientAPI
                 new StringContent(body, Encoding.UTF8, "application/json")
             );
 
+            // Se recebeu 401, tenta renovar o token explicitamente antes de falhar
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                response.Dispose();
+                
+                // Tenta renovar o token
+                bool refreshed = await RefreshAccessTokenAsync();
+                
+                if (refreshed)
+                {
+                    // Se renovou, tenta novamente
+                    SetAuthorizationHeader();
+                    response = await _client.PostAsync(
+                        new Uri(url),
+                        new StringContent(body, Encoding.UTF8, "application/json")
+                    );
+                }
+                else
+                {
+                    // Se não conseguiu renovar, lança exceção informativa
+                    throw new HttpRequestException(
+                        "Session expired. Please login again to finish the job.",
+                        new Exception($"Error status code: {response.StatusCode}")
+                    );
+                }
+            }
+
+            // Verifica status code ANTES de desserializar
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                var errorMessage = $"Error finishing job. Status: {response.StatusCode}";
+                
+                // Tenta extrair mensagem de erro do JSON se possível
+                try
+                {
+                    var errorDto = JsonConvert.DeserializeObject<FinishJobResponseDto>(errorContent);
+                    if (!string.IsNullOrEmpty(errorDto?.message))
+                    {
+                        errorMessage = errorDto.message;
+                    }
+                }
+                catch
+                {
+                    // Se não conseguir desserializar, usa a mensagem padrão
+                }
+                
+                throw new HttpRequestException(errorMessage, new Exception($"Error status code: {response.StatusCode}"));
+            }
+
             var json = await response.Content.ReadAsStringAsync();
             var finishedJob = JsonConvert.DeserializeObject<FinishJobResponseDto>(json);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new HttpRequestException(finishedJob?.message ?? "Error finishing job", new Exception($"Error status code: {response.StatusCode}"));
-            }
-
             return new FinishJobResponseModel
             {
-                // Mapear propriedades conforme necessário
                 ResultMessage = finishedJob.message
             };
         }

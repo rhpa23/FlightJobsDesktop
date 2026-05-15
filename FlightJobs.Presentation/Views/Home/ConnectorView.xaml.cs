@@ -193,9 +193,36 @@ namespace FlightJobsDesktop.Views.Home
                 _log.Error(ex);
                 _currentJob.StartIsEnable = false;
                 _currentJob.FinishIsEnable = true;
-                _notificationManager.Show("Error", ex.Message, NotificationType.Error, "WindowArea");
-                _currentJob.SliderMessage = ex.Message;
-                _siderJobWindow.GridMessage.Visibility = Visibility.Visible;
+                
+                // Verifica se é erro de expiração de sessão
+                bool isSessionExpired = ex.Message.Contains("Session expired") ||
+                                        ex.Message.Contains("Unauthorized") ||
+                                        ex.Message.Contains("login again");
+                
+                if (isSessionExpired)
+                {
+                    // Salva dados do job localmente para recuperação
+                    SavePendingJobData();
+                    
+                    _notificationManager.Show(
+                        "Session Expired",
+                        "Your session expired. Please login again to finish the job. Your job data has been saved.",
+                        NotificationType.Warning,
+                        "WindowArea"
+                    );
+                    _currentJob.SliderMessage = "Session expired. Please login again.";
+                    
+                    // Redireciona para login
+                    MainWindow.ShowLoginWindow();
+                }
+                else
+                {
+                    _notificationManager.Show("Error", ex.Message, NotificationType.Error, "WindowArea");
+                    _currentJob.SliderMessage = ex.Message;
+                }
+                
+                if (_siderJobWindow != null)
+                    _siderJobWindow.GridMessage.Visibility = Visibility.Visible;
             }
             finally
             {
@@ -208,6 +235,50 @@ namespace FlightJobsDesktop.Views.Home
         private void SetFinishJobInfo()
         {
             _currentJob.JobSummary = $"Well done! Your Job from {_currentJob.DepartureICAO} to {_currentJob.ArrivalICAO} is finalized and your gain for that was: F${_currentJob.Pay}";
+        }
+
+        /// <summary>
+        /// Salva dados do job pendente localmente para recuperação após reautenticação
+        /// </summary>
+        private void SavePendingJobData()
+        {
+            try
+            {
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                path = Path.Combine(path, "PendingJob.json");
+
+                var pendingJobData = new
+                {
+                    JobId = _currentJob.Id,
+                    DepartureICAO = _currentJob.DepartureICAO,
+                    ArrivalICAO = _currentJob.ArrivalICAO,
+                    AlternativeICAO = _currentJob.AlternativeICAO,
+                    DepartureLatitude = _currentJob.DepartureLatitude,
+                    DepartureLongitude = _currentJob.DepartureLongitude,
+                    ArrivalLatitude = _currentJob.ArrivalLatitude,
+                    ArrivalLongitude = _currentJob.ArrivalLongitude,
+                    AlternativeLatitude = _currentJob.AlternativeLatitude,
+                    AlternativeLongitude = _currentJob.AlternativeLongitude,
+                    Payload = _currentJob.Payload,
+                    Distance = _currentJob.Distance,
+                    Score = _currentJob.Score,
+                    ResultMessages = _resultMessages,
+                    PlaneSimDataJson = JsonConvert.SerializeObject(_currentJob.PlaneSimData),
+                    SavedAt = DateTime.UtcNow
+                };
+
+                var json = JsonConvert.SerializeObject(pendingJobData, Formatting.Indented);
+                File.WriteAllText(path, json);
+                _log.Info("Pending job data saved to local file");
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Failed to save pending job data", ex);
+            }
         }
 
         private void EnableDisableNavegation(bool isEnabled)
@@ -780,6 +851,68 @@ namespace FlightJobsDesktop.Views.Home
         private async void btnFinish_Click(object sender, RoutedEventArgs e)
         {
             await FinishJob();
+        }
+
+        /// <summary>
+        /// Tenta recuperar dados do job pendente e restaurar o estado
+        /// </summary>
+        public async Task<bool> TryRecoverPendingJob()
+        {
+            try
+            {
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData\\PendingJob.json");
+                
+                if (!File.Exists(path))
+                {
+                    return false;
+                }
+
+                var json = File.ReadAllText(path);
+                var pendingJob = JsonConvert.DeserializeObject<dynamic>(json);
+                
+                if (pendingJob == null)
+                {
+                    return false;
+                }
+
+                // Restaura dados do job pendente
+                _currentJob.Id = pendingJob.JobId;
+                _currentJob.DepartureICAO = pendingJob.DepartureICAO;
+                _currentJob.ArrivalICAO = pendingJob.ArrivalICAO;
+                _currentJob.AlternativeICAO = pendingJob.AlternativeICAO;
+                _currentJob.DepartureLatitude = pendingJob.DepartureLatitude;
+                _currentJob.DepartureLongitude = pendingJob.DepartureLongitude;
+                _currentJob.ArrivalLatitude = pendingJob.ArrivalLatitude;
+                _currentJob.ArrivalLongitude = pendingJob.ArrivalLongitude;
+                _currentJob.AlternativeLatitude = pendingJob.AlternativeLatitude;
+                _currentJob.AlternativeLongitude = pendingJob.AlternativeLongitude;
+                //_currentJob.Payload = pendingJob.Payload;
+                _currentJob.Distance = pendingJob.Distance;
+                _currentJob.Score = pendingJob.Score;
+                _resultMessages = pendingJob.ResultMessages?.ToObject<IList<string>>();
+                
+                // Restaura dados do simulador se disponíveis
+                if (pendingJob.PlaneSimDataJson != null)
+                {
+                    var planeData = JsonConvert.DeserializeObject<PlaneModel>(pendingJob.PlaneSimDataJson.ToString());
+                    if (planeData != null)
+                    {
+                        _currentJob.PlaneSimData = planeData;
+                    }
+                }
+
+                _log.Info("Pending job data recovered successfully");
+                
+                // Remove arquivo após recuperação bem-sucedida
+                File.Delete(path);
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Failed to recover pending job", ex);
+                return false;
+            }
         }
     }
 }
