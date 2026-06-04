@@ -574,11 +574,11 @@
                             
                             <!-- Chart Variable Selectors (Radio Buttons) -->
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <RadioButton x:Name="RadioAltitude" Content="Altitude" Foreground="{StaticResource TextPrimary}" Margin="10,0" Checked="ChartTypeRadioButton_Checked"/>
-                                <RadioButton x:Name="RadioSpeed" Content="Speed" Foreground="{StaticResource TextPrimary}" Margin="10,0" Checked="ChartTypeRadioButton_Checked"/>
-                                <RadioButton x:Name="RadioFuel" Content="Fuel" Foreground="{StaticResource TextPrimary}" Margin="10,0" Checked="ChartTypeRadioButton_Checked"/>
-                                <RadioButton x:Name="RadioFps" Content="FPS" Foreground="{StaticResource TextPrimary}" Margin="10,0" Checked="ChartTypeRadioButton_Checked"/>
-                                <RadioButton x:Name="RadioRoteMap" Content="Route" Foreground="{StaticResource TextPrimary}" Margin="10,0" Checked="ChartTypeRadioButton_Checked"/>
+                                <RadioButton x:Name="RadioAltitude" Content="Altitude" Foreground="{StaticResource TextPrimary}" Margin="5,0" Checked="ChartTypeRadioButton_Checked"/>
+                                <RadioButton x:Name="RadioSpeed" Content="Speed" Foreground="{StaticResource TextPrimary}" Margin="5,0" Checked="ChartTypeRadioButton_Checked"/>
+                                <RadioButton x:Name="RadioFuel" Content="Fuel" Foreground="{StaticResource TextPrimary}" Margin="5,0" Checked="ChartTypeRadioButton_Checked"/>
+                                <RadioButton x:Name="RadioFps" Content="FPS" Foreground="{StaticResource TextPrimary}" Margin="5,0" Checked="ChartTypeRadioButton_Checked"/>
+                                <RadioButton x:Name="RadioRoteMap" Content="Route" Foreground="{StaticResource TextPrimary}" Margin="5,0" Checked="ChartTypeRadioButton_Checked"/>
                             </StackPanel>
                             
                             <!-- Bottom Stats Bar -->

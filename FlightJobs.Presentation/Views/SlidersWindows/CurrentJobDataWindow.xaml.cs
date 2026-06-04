@@ -151,12 +151,14 @@ namespace FlightJobsDesktop.Views.SlidersWindows
                 touchdownRunwayLengthMaxLandZone = 300;
             else
                 touchdownRunwayLengthMaxLandZone = 400;
-            
+
+            var touchdownZoneLenght = 350;
+
             SectionDistanceOrange.FromValue = 0;
             SectionDistanceOrange.ToValue = touchdownRunwayLengthMaxLandZone;
             SectionDistanceGreen.FromValue = touchdownRunwayLengthMaxLandZone;
-            SectionDistanceGreen.ToValue = touchdownRunwayLengthMaxLandZone + 300;
-            SectionDistanceRed.FromValue = touchdownRunwayLengthMaxLandZone + 300;
+            SectionDistanceGreen.ToValue = touchdownRunwayLengthMaxLandZone + touchdownZoneLenght;
+            SectionDistanceRed.FromValue = touchdownRunwayLengthMaxLandZone + touchdownZoneLenght;
             SectionDistanceRed.ToValue = runwayLength;
 
             _hideTimer.Interval = new TimeSpan(0, 5, 0);
