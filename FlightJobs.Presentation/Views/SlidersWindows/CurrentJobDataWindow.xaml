@@ -282,8 +282,8 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="240"/>
-                                <RowDefinition Height="240"/>
+                                <RowDefinition Height="260"/>
+                                <RowDefinition Height="260"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -426,7 +426,7 @@
                                         <lc:AngularGauge x:Name="AngularGaugeTouchdownDistance" Width="170" Height="180" Foreground="White" FromValue="0" ToValue="2000" TicksStep="50" Value="{Binding PlaneSimData.TouchdownThresholdDistance}" SectionsInnerRadius="0.7" >
                                             <lc:AngularGauge.Sections>
                                                 <lc:AngularSection Name="SectionDistanceGreen" Fill="Green"/>
-                                                <lc:AngularSection Name="SectionDistanceOrange" Fill="Orange"/>
+                                                <lc:AngularSection Name="SectionDistanceOrange" Fill="Red"/>
                                                 <lc:AngularSection Name="SectionDistanceRed" Fill="Red"/>
                                             </lc:AngularGauge.Sections>
                                         </lc:AngularGauge>

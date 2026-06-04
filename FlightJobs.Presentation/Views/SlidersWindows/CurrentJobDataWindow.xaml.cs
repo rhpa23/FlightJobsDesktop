@@ -1,4 +1,4 @@
-﻿using FlightJobs.Connect.MSFS.SDK;
+using FlightJobs.Connect.MSFS.SDK;
 using FlightJobs.Connect.MSFS.SDK.Model;
 using FlightJobs.Infrastructure;
 using FlightJobs.Model.Models;
@@ -141,14 +141,23 @@ namespace FlightJobsDesktop.Views.SlidersWindows
             AngularGaugeGForce.Value = _currentJobViewModel.PlaneSimData.TouchdownGForce;
             AngularGaugeTouchdownDistance.ToValue = _currentJobViewModel.PlaneSimData.TouchdownRunwayLength;
 
-            var touchdownRunwayLengthMaxLandZone = _currentJobViewModel.PlaneSimData.TouchdownRunwayLength * 0.25;
-
-            SectionDistanceGreen.FromValue = 0;
-            SectionDistanceGreen.ToValue = touchdownRunwayLengthMaxLandZone;
-            SectionDistanceOrange.FromValue = touchdownRunwayLengthMaxLandZone;
-            SectionDistanceOrange.ToValue = touchdownRunwayLengthMaxLandZone + 200;
-            SectionDistanceRed.FromValue = touchdownRunwayLengthMaxLandZone + 200;
-            SectionDistanceRed.ToValue = _currentJobViewModel.PlaneSimData.TouchdownRunwayLength; //2000;
+            var runwayLength = _currentJobViewModel.PlaneSimData.TouchdownRunwayLength;
+            double touchdownRunwayLengthMaxLandZone;
+            if (runwayLength < 800)
+                touchdownRunwayLengthMaxLandZone = 150;
+            else if (runwayLength <= 1200)
+                touchdownRunwayLengthMaxLandZone = 250;
+            else if (runwayLength <= 2400)
+                touchdownRunwayLengthMaxLandZone = 300;
+            else
+                touchdownRunwayLengthMaxLandZone = 400;
+            
+            SectionDistanceOrange.FromValue = 0;
+            SectionDistanceOrange.ToValue = touchdownRunwayLengthMaxLandZone;
+            SectionDistanceGreen.FromValue = touchdownRunwayLengthMaxLandZone;
+            SectionDistanceGreen.ToValue = touchdownRunwayLengthMaxLandZone + 300;
+            SectionDistanceRed.FromValue = touchdownRunwayLengthMaxLandZone + 300;
+            SectionDistanceRed.ToValue = runwayLength;
 
             _hideTimer.Interval = new TimeSpan(0, 5, 0);
             FlightRecorderUtil.FlightRecorderList = FlightRecorderUtil.LoadFlightRecorderFile(_currentJobViewModel);
