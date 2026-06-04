@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,13 +10,24 @@ namespace FlightJobs.Connect.MSFS.SDK.Model.Results
     {
         private static ResultEnum Validade(double landDistance, double runwaylength)
         {
-            double maxDistance = runwaylength * 0.25; // 25%
-            if (landDistance < maxDistance)
-                return ResultEnum.Good;
-            else if (landDistance <= maxDistance + 200)
-                return ResultEnum.Normal;
+            double touchdownRunwayLengthMaxLandZone;
+            if (runwaylength < 800)
+                touchdownRunwayLengthMaxLandZone = 150;
+            else if (runwaylength <= 1200)
+                touchdownRunwayLengthMaxLandZone = 250;
+            else if (runwaylength <= 2400)
+                touchdownRunwayLengthMaxLandZone = 300;
             else
+                touchdownRunwayLengthMaxLandZone = 400;
+
+            double touchdownZoneLength = 350;
+
+            if (landDistance < touchdownRunwayLengthMaxLandZone)
+                return ResultEnum.Normal;
+            else if (landDistance > touchdownRunwayLengthMaxLandZone + touchdownZoneLength)
                 return ResultEnum.Bad;
+            else
+                return ResultEnum.Good;
         }
 
         public static string GetColor(double landDistance, double runwaylength)
@@ -29,11 +40,11 @@ namespace FlightJobs.Connect.MSFS.SDK.Model.Results
             switch (Validade(landDistance, runwaylength))
             {
                 case ResultEnum.Good:
-                    return 5;
+                    return 15;
                 case ResultEnum.Normal:
-                    return -5;
+                    return -10;
                 case ResultEnum.Bad:
-                    return -15;
+                    return -25;
                 default:
                     return 0;
             }
