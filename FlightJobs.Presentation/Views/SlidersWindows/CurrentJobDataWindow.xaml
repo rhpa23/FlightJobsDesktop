@@ -293,6 +293,46 @@
                             
                             <!-- Gauge Card 1: Takeoff Center Derivation -->
                             <Border Style="{StaticResource GaugeCardStyle}" Width="190" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,10">
+                                <Border.ToolTip>
+                                    <ToolTip Background="{StaticResource BackgroundSecondary}" 
+                                             BorderBrush="{StaticResource BorderPrimary}" 
+                                             BorderThickness="1" 
+                                             Padding="12" 
+                                             MaxWidth="320">
+                                        <StackPanel>
+                                            <TextBlock Text="Takeoff Center Derivation" 
+                                                       Foreground="{StaticResource TextPrimary}" 
+                                                       FontWeight="Bold" 
+                                                       FontSize="13" 
+                                                       Margin="0,0,0,8"/>
+                                            <TextBlock Text="Takeoff Center Derivation measures the lateral distance between the aircraft’s centerline and the runway centerline at the moment of liftoff, indicating directional control during the takeoff roll." 
+                                                       Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       Margin="0,0,0,8"/>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource TextPrimary}">Why It Happens:</Run> Results from uncorrected crosswinds, improper heading corrections (over-correcting with rudder), or engine failure during takeoff (V1 cut) without prompt decisive action.
+                                            </TextBlock>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16" 
+                                                       Margin="0,4,0,0">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource Error}">Why It Must Be Avoided:</Run> Excessive lateral deviation at liftoff significantly increases the risk of a runway excursion, especially in gusty conditions. It can also lead to asymmetrical lift if one main gear lifts off early.
+                                            </TextBlock>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16" 
+                                                       Margin="0,4,0,0">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource Success}">Standard Recovery:</Run> Pilots must maintain directional control using rudder. A maximum lateral deviation of 2-3 meters (approx. 6-10 ft) is generally considered acceptable for certification.
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </Border.ToolTip>
                                 <StackPanel>
                                     <ui:LayoutPanel>
                                         <lc:AngularGauge Width="170" Height="180" Foreground="White" FromValue="0" ToValue="10" TicksStep="1" Value="{Binding PlaneSimData.TakeoffCenterDerivation}" SectionsInnerRadius="0.7" >
@@ -319,6 +359,46 @@
                             
                             <!-- Gauge Card 2: Touchdown VS -->
                             <Border Style="{StaticResource GaugeCardStyle}" Width="190" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,10">
+                                <Border.ToolTip>
+                                    <ToolTip Background="{StaticResource BackgroundSecondary}" 
+                                             BorderBrush="{StaticResource BorderPrimary}" 
+                                             BorderThickness="1" 
+                                             Padding="12" 
+                                             MaxWidth="320">
+                                        <StackPanel>
+                                            <TextBlock Text="Touchdown Vertical Speed (VS)" 
+                                                       Foreground="{StaticResource TextPrimary}" 
+                                                       FontWeight="Bold" 
+                                                       FontSize="13" 
+                                                       Margin="0,0,0,8"/>
+                                            <TextBlock Text="Touchdown Vertical Speed (VS) measures the rate of descent of the aircraft at the precise moment of main wheel contact with the runway surface." 
+                                                       Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       Margin="0,0,0,8"/>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource TextPrimary}">Why It Happens:</Run> Primarily determined by the flare execution (the pilot’s action to raise the nose and arrest the descent) and the aircraft’s weight. A late or insufficient flare causes a high sink rate.
+                                            </TextBlock>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16" 
+                                                       Margin="0,4,0,0">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource Error}">Why It Must Be Avoided:</Run> High sink rates (e.g., > 500 ft/min) result in hard landings that can damage landing gear, fuselage structure, and avionics. It also increases the risk of a bounce or runway excursion.
+                                            </TextBlock>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16" 
+                                                       Margin="0,4,0,0">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource Success}">Standard Recovery:</Run> Pilots aim to reduce vertical speed to near zero at touchdown. For heavy jets, optimal landing sink rates are typically below 200 ft/min. Anything above 300 ft/min is generally considered excessive.
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </Border.ToolTip>
                                 <StackPanel>
                                     <ui:LayoutPanel>
                                         <lc:AngularGauge Name="AngularGaugeTouchdownFpm" Width="170" Height="180" Foreground="White" FromValue="0" ToValue="700" TicksStep="100" SectionsInnerRadius="0.7" >
@@ -345,6 +425,46 @@
                             
                             <!-- Gauge Card 3: Touchdown G-Force -->
                             <Border Style="{StaticResource GaugeCardStyle}" Width="190" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,0,10">
+                                <Border.ToolTip>
+                                    <ToolTip Background="{StaticResource BackgroundSecondary}" 
+                                             BorderBrush="{StaticResource BorderPrimary}" 
+                                             BorderThickness="1" 
+                                             Padding="12" 
+                                             MaxWidth="320">
+                                        <StackPanel>
+                                            <TextBlock Text="Touchdown G-Force (Hard Landing)" 
+                                                       Foreground="{StaticResource TextPrimary}" 
+                                                       FontWeight="Bold" 
+                                                       FontSize="13" 
+                                                       Margin="0,0,0,8"/>
+                                            <TextBlock Text="Touchdown G-Force measures the peak vertical acceleration experienced by the aircraft at the exact moment of wheel-to-ground contact, indicating the structural impact of the landing." 
+                                                       Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       Margin="0,0,0,8"/>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource TextPrimary}">Why It Happens:</Run> Caused by a high sink rate (vertical speed) during flare, wind shear or sudden loss of lift just before touchdown, improper flare timing (flaring too late), or high aircraft weight.
+                                            </TextBlock>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16" 
+                                                       Margin="0,4,0,0">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource Error}">Why It Must Be Avoided:</Run> High G-forces indicate a &quot;Hard Landing&quot;, which can cause immediate structural damage to the fuselage, collapse the landing gear, blow out tires, or mandate expensive, time-consuming maintenance inspections before the next flight.
+                                            </TextBlock>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16" 
+                                                       Margin="0,4,0,0">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource Info}">Standard Thresholds:</Run> Normal landings range from 1.1G to 1.4G. Touchdowns exceeding 2.0G typically trigger automated aircraft maintenance alerts.
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </Border.ToolTip>
                                 <StackPanel>
                                     <ui:LayoutPanel>
                                         <lc:AngularGauge Name="AngularGaugeGForce" Width="170" Height="180" Foreground="White" FromValue="0" ToValue="5" TicksStep="1" SectionsInnerRadius="0.7" >
@@ -370,6 +490,46 @@
                             
                             <!-- Gauge Card 4: Landing Center Derivation -->
                             <Border Style="{StaticResource GaugeCardStyle}" Width="190" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Margin="0,0,0,10">
+                                <Border.ToolTip>
+                                    <ToolTip Background="{StaticResource BackgroundSecondary}" 
+                                             BorderBrush="{StaticResource BorderPrimary}" 
+                                             BorderThickness="1" 
+                                             Padding="12" 
+                                             MaxWidth="320">
+                                        <StackPanel>
+                                            <TextBlock Text="Runway Centerline Deviation" 
+                                                       Foreground="{StaticResource TextPrimary}" 
+                                                       FontWeight="Bold" 
+                                                       FontSize="13" 
+                                                       Margin="0,0,0,8"/>
+                                            <TextBlock Text="Runway Centerline Deviation refers to the lateral distance between the aircraft’s landing gear and the physical center of the runway during touchdown and rollout." 
+                                                       Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       Margin="0,0,0,8"/>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource TextPrimary}">Why It Happens:</Run> Primarily caused by uncorrected crosswinds, improper crab or sideslip compensation (crosswind landing technique), late alignment corrections, or sudden wind shear.
+                                            </TextBlock>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16" 
+                                                       Margin="0,4,0,0">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource Error}">Why It Must Be Avoided:</Run> Exceeding lateral limits significantly increases the risk of a runway excursion (veering off the paved surface), colliding with runway lights/signage, or damaging the landing gear due to excessive side-loading.
+                                            </TextBlock>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16" 
+                                                       Margin="0,4,0,0">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource Success}">Standard Recovery:</Run> Pilots must maintain precise directional control using rudder and aileron inputs. If the aircraft cannot be realigned before touchdown or stabilizes poorly during rollout, an immediate Go-Around or maximum braking must be initiated.
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </Border.ToolTip>
                                 <StackPanel>
                                     <ui:LayoutPanel>
                                         <lc:AngularGauge Width="170" Height="180" Foreground="White" FromValue="0" ToValue="10" TicksStep="1" Value="{Binding PlaneSimData.TouchdownCenterDerivation}" SectionsInnerRadius="0.7" >
@@ -396,6 +556,46 @@
                             
                             <!-- Gauge Card 5: Bounce(s) -->
                             <Border Style="{StaticResource GaugeCardStyle}" Width="190" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,10">
+                                <Border.ToolTip>
+                                    <ToolTip Background="{StaticResource BackgroundSecondary}" 
+                                             BorderBrush="{StaticResource BorderPrimary}" 
+                                             BorderThickness="1" 
+                                             Padding="12" 
+                                             MaxWidth="320">
+                                        <StackPanel>
+                                            <TextBlock Text="Runway Bouncing (Bounced Landing)" 
+                                                       Foreground="{StaticResource TextPrimary}" 
+                                                       FontWeight="Bold" 
+                                                       FontSize="13" 
+                                                       Margin="0,0,0,8"/>
+                                            <TextBlock Text="A bounced landing occurs when an aircraft touches down and immediately becomes airborne again due to excessive vertical energy or an improper landing attitude." 
+                                                       Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       Margin="0,0,0,8"/>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource TextPrimary}">Why It Happens:</Run> Caused by excessive airspeed on final approach, high sink rate (hard impact), incorrect pitch attitude (landing nose-first or flat), or improper use of flight controls during flare.
+                                            </TextBlock>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16" 
+                                                       Margin="0,4,0,0">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource Error}">Why It Must Be Avoided:</Run> It creates a high risk of nose gear collapse, tail strikes, structural damage, or a complete loss of control (porpoising) on subsequent impacts.
+                                            </TextBlock>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       LineHeight="16" 
+                                                       Margin="0,4,0,0">
+                                                • <Run FontWeight="Bold" Foreground="{StaticResource Success}">Standard Recovery:</Run> Pilots must either maintain a safe pitch attitude to let the aircraft resettle smoothly or immediately execute a Go-Around (rejected landing).
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </Border.ToolTip>
                                 <StackPanel>
                                     <ui:LayoutPanel>
                                         <lc:AngularGauge Width="170" Height="180" Foreground="White" FromValue="0" ToValue="3" Value="{Binding PlaneSimData.TouchdownBounceCount}" SectionsInnerRadius="0.7" >
@@ -421,6 +621,40 @@
                             
                             <!-- Gauge Card 6: Landing Distance -->
                             <Border Style="{StaticResource GaugeCardStyle}" Width="190" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,0,10">
+                                <Border.ToolTip>
+                                    <ToolTip Background="{StaticResource BackgroundSecondary}" 
+                                             BorderBrush="{StaticResource BorderPrimary}" 
+                                             BorderThickness="1" 
+                                             Padding="12" 
+                                             MaxWidth="320">
+                                        <StackPanel>
+                                            <TextBlock Text="Runway Aiming Point Distance" 
+                                                       Foreground="{StaticResource TextPrimary}" 
+                                                       FontWeight="Bold" 
+                                                       FontSize="13" 
+                                                       Margin="0,0,0,8"/>
+                                            <TextBlock Text="The distance from the threshold (runway start) to the aiming point (ideal touchdown zone) is a fixed distance based on the Runway Landing Distance Available (LDA):" 
+                                                       Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       TextWrapping="Wrap" 
+                                                       Margin="0,0,0,8"/>
+                                            <TextBlock Foreground="{StaticResource TextSecondary}" 
+                                                       FontSize="11" 
+                                                       Margin="8,0,0,8" 
+                                                       LineHeight="16">
+                                                • Under 800m: <Run Foreground="{StaticResource Info}" FontWeight="SemiBold">150m</Run> (approx. 500 ft)<LineBreak/>
+                                                • 800m to 1,200m: <Run Foreground="{StaticResource Info}" FontWeight="SemiBold">250m</Run> (approx. 800 ft)<LineBreak/>
+                                                • 1,200m to 2,400m: <Run Foreground="{StaticResource Info}" FontWeight="SemiBold">300m</Run> (approx. 1,000 ft)<LineBreak/>
+                                                • Over 2,400m: <Run Foreground="{StaticResource Info}" FontWeight="SemiBold">400m</Run> (approx. 1,300 ft)
+                                            </TextBlock>
+                                            <TextBlock Text="Note: These fixed standards comply with ICAO Annex 14 and FAA regulations to guarantee obstacle clearance during final approach." 
+                                                       Foreground="{StaticResource TextTertiary}" 
+                                                       FontSize="10" 
+                                                       TextWrapping="Wrap" 
+                                                       FontStyle="Italic"/>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </Border.ToolTip>
                                 <StackPanel>
                                     <ui:LayoutPanel>
                                         <lc:AngularGauge x:Name="AngularGaugeTouchdownDistance" Width="170" Height="180" Foreground="White" FromValue="0" ToValue="2000" TicksStep="50" Value="{Binding PlaneSimData.TouchdownThresholdDistance}" SectionsInnerRadius="0.7" >
