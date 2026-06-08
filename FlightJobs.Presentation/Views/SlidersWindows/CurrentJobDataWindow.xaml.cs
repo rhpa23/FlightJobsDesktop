@@ -137,6 +137,12 @@ namespace FlightJobsDesktop.Views.SlidersWindows
 
         private void BtnShowFlightResults_Click(object sender, RoutedEventArgs e)
         {
+            if (_currentJobViewModel == null || _currentJobViewModel.PlaneSimData == null)
+            {
+                _log.Warn("BtnShowFlightResults_Click: _currentJobViewModel or PlaneSimData is null.");
+                return;
+            }
+
             AngularGaugeTouchdownFpm.Value = Math.Abs(_currentJobViewModel.PlaneSimData.TouchdownFpm);
             AngularGaugeGForce.Value = _currentJobViewModel.PlaneSimData.TouchdownGForce;
             AngularGaugeTouchdownDistance.ToValue = _currentJobViewModel.PlaneSimData.TouchdownRunwayLength;
