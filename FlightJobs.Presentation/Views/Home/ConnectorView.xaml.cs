@@ -1,4 +1,4 @@
-﻿using FlightJobs.Connect.MSFS.SDK;
+using FlightJobs.Connect.MSFS.SDK;
 using FlightJobs.Connect.MSFS.SDK.Model;
 using FlightJobs.Connect.MSFS.SDK.Model.Results;
 using FlightJobs.Domain.Navdata.Entities;
@@ -311,7 +311,7 @@ namespace FlightJobsDesktop.Views.Home
                         {
                             var rwy = takeoffHelper.GetRunway(takeoffAirport.Runways);
 
-                            _currentJob.PlaneSimData.TakeoffCenterDerivation = takeoffHelper.GetCenterLineDistance(rwy);
+                            _currentJob.PlaneSimData.TakeoffCenterDerivation = takeoffHelper.GetCenterLineDistanceSigned(rwy);
 
                             // add pecision to takeoff Flight recorder
                             var fRecorder = new FlightRecorderViewModel(FlightJobsConnectSim.PlaneSimData);
@@ -359,7 +359,7 @@ namespace FlightJobsDesktop.Views.Home
                             var rwy = landingHelper.GetRunway(landAirport.Runways);
 
                             _currentJob.PlaneSimData.TouchdownRunwayLength = landingHelper.GetRunwayLength(rwy);
-                            _currentJob.PlaneSimData.TouchdownCenterDerivation = landingHelper.GetCenterLineDistance(rwy);
+                            _currentJob.PlaneSimData.TouchdownCenterDerivation = landingHelper.GetCenterLineDistanceSigned(rwy);
                             _currentJob.PlaneSimData.TouchdownThresholdDistance = landingHelper.GetTouchdownThresholdDistance(rwy);
                             _currentJob.PlaneSimData.TouchdownRunwayDesignator = rwy.Name;
                             _currentJob.PlaneSimData.ColorResultTouchdownWindAngle = WindAngleResult.GetColor(_currentJob.PlaneSimData.TouchdownWindAngle, _currentJob.PlaneSimData.TouchdownWindSpeed);

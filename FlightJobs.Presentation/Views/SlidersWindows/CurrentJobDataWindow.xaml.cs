@@ -148,6 +148,8 @@ namespace FlightJobsDesktop.Views.SlidersWindows
                 _currentJobViewModel.PlaneSimData.TouchdownThresholdDistance = 455;
                 _currentJobViewModel.PlaneSimData.TouchdownFpm = -150;
                 _currentJobViewModel.PlaneSimData.TouchdownGForce = 1.2;
+                _currentJobViewModel.PlaneSimData.TouchdownCenterDerivation = 1.8; // 0.8m deviation to the right
+                _currentJobViewModel.PlaneSimData.TakeoffCenterDerivation = 4.5; // 0.8m deviation to the right
             }*/
 
             if (_currentJobViewModel == null || _currentJobViewModel.PlaneSimData == null)
@@ -210,6 +212,26 @@ namespace FlightJobsDesktop.Views.SlidersWindows
                 double topPosIndicator = 180.0 * (1.0 - clampedVal / runwayLength) - 10.0;
                 Canvas.SetTop(IndicatorGroup, topPosIndicator);
             }
+
+            // Landing Center Derivation visual update
+            double derivation = _currentJobViewModel.PlaneSimData.TouchdownCenterDerivationRaw;
+            LblCenterDerivationValue.Text = Math.Abs(derivation).ToString("F1") + "m";
+            
+            // Center is at X = 85. Runway width is 60 (from 55 to 115).
+            // Max derivation represented is 10.0m on each side.
+            double clampedDerivation = Math.Max(-10.0, Math.Min(10.0, derivation));
+            // center X is 85. Scale: 10m = 30px. So 1m = 3px.
+            // X position of Diamond: 85 + clampedDerivation * 3 - (width/2) = 85 + clampedDerivation * 3 - 6 = 79 + clampedDerivation * 3.
+            double xPosDiamond = 79.0 + (clampedDerivation * 3.0);
+            Canvas.SetLeft(DiamondGroup, xPosDiamond);
+
+            // Takeoff Center Derivation visual update
+            double takeoffDerivation = _currentJobViewModel.PlaneSimData.TakeoffCenterDerivationRaw;
+            LblTakeoffDerivationValue.Text = Math.Abs(takeoffDerivation).ToString("F1") + "m";
+            // Clamp and calculate X position (same scale as landing)
+            double clampedTakeoff = Math.Max(-10.0, Math.Min(10.0, takeoffDerivation));
+            double xPosTakeoff = 79.0 + (clampedTakeoff * 3.0);
+            Canvas.SetLeft(TakeoffDiamondGroup, xPosTakeoff);
 
             _hideTimer.Interval = new TimeSpan(0, 5, 0);
             FlightRecorderUtil.FlightRecorderList = FlightRecorderUtil.LoadFlightRecorderFile(_currentJobViewModel);

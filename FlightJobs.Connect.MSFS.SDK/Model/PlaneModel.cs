@@ -1,4 +1,4 @@
-﻿using FlightJobs.Connect.MSFS.SDK.Model.Results;
+using FlightJobs.Connect.MSFS.SDK.Model.Results;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -197,12 +197,17 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         private double _centerLineDerivation;
         public double TouchdownCenterDerivation
         {
-            get { return _centerLineDerivation; }
+            get { return Math.Abs(_centerLineDerivation); }
             set
             {
                 _centerLineDerivation = value;
-                NotifyPropertysChanged("TouchdownCenterDerivation", "ScoreCenterDerivation", "ColorResultCenterDerivation");
+                NotifyPropertysChanged("TouchdownCenterDerivation", "ScoreCenterDerivation", "ColorResultCenterDerivation", "TouchdownCenterDerivationRaw");
             }
+        }
+
+        public double TouchdownCenterDerivationRaw
+        {
+            get { return _centerLineDerivation; }
         }
 
         private double _thresholdDistance;
@@ -269,12 +274,17 @@ namespace FlightJobs.Connect.MSFS.SDK.Model
         private double _centerLineTakeoffDerivation;
         public double TakeoffCenterDerivation
         {
-            get { return _centerLineTakeoffDerivation; }
+            get { return Math.Abs(_centerLineTakeoffDerivation); }
             set
             {
                 _centerLineTakeoffDerivation = value;
-                NotifyPropertysChanged("TakeoffCenterDerivation", "ScoreTakeoffCenterDerivation", "ColorResultTakeoffCenterDerivation");
+                NotifyPropertysChanged("TakeoffCenterDerivation", "ScoreTakeoffCenterDerivation", "ColorResultTakeoffCenterDerivation", "TakeoffCenterDerivationRaw");
             }
+        }
+
+        public double TakeoffCenterDerivationRaw
+        {
+            get { return _centerLineTakeoffDerivation; }
         }
 
         public string ColorResultTakeoffCenterDerivation

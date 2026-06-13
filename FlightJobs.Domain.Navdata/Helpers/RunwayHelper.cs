@@ -1,4 +1,4 @@
-﻿using FlightJobs.Domain.Navdata.Entities;
+using FlightJobs.Domain.Navdata.Entities;
 using FlightJobs.Domain.Navdata.Interface;
 using FlightJobs.Domain.Navdata.Utils;
 using System;
@@ -60,6 +60,29 @@ namespace FlightJobs.Domain.Navdata.Helpers
             var distS = GeoCalculationsUtil.CalcDistance(rwy.SecondaryLaty, rwy.SecondaryLonx, _latitude, _longitude);
 
             return Math.Round(GeoCalculationsUtil.GetTriangleHeight(rwyLen, distP, distS), 1);
+        }
+
+        public double GetCenterLineDistanceSigned(RunwayEntity rwy)
+        {
+            var distance = GetCenterLineDistance(rwy);
+            double latA = rwy.PrimaryLaty;
+            double lonA = rwy.PrimaryLonx;
+            double latB = rwy.SecondaryLaty;
+            double lonB = rwy.SecondaryLonx;
+
+            var distToPrimary = GeoCalculationsUtil.CalcDistance(rwy.PrimaryLaty, rwy.PrimaryLonx, _latitude, _longitude);
+            var distToSecondary = GeoCalculationsUtil.CalcDistance(rwy.SecondaryLaty, rwy.SecondaryLonx, _latitude, _longitude);
+
+            if (distToSecondary < distToPrimary)
+            {
+                latA = rwy.SecondaryLaty;
+                lonA = rwy.SecondaryLonx;
+                latB = rwy.PrimaryLaty;
+                lonB = rwy.PrimaryLonx;
+            }
+
+            double cross = (lonB - lonA) * (_latitude - latA) - (latB - latA) * (_longitude - lonA);
+            return cross < 0 ? distance : -distance;
         }
 
         public AirportEntity GetJobAirport(ISqLiteDbContext sqLiteDbContext, string icao, string alternativeICAO)
