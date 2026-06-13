@@ -39,8 +39,6 @@ namespace FlightJobsDesktop.Views.Home
             string url = $"{SiteUrl}/{Page}";
             // Navega para a URL
             WebAppControl.Source = new Uri(url);
-
-            _logger.Info($"Navegação para {url} iniciada com sucesso (WebView2).");
         }
 
         private async void LoadWebApp()
@@ -81,14 +79,11 @@ namespace FlightJobsDesktop.Views.Home
                             }}
                         ";
                         await WebAppControl.ExecuteScriptAsync(script);
-                        _logger.Info("Tokens injetados no localStorage do WebView2.");
                     }
                 };
 
                 // Navega para a URL
                 WebAppControl.Source = new Uri(url);
-
-                _logger.Info($"Navegação para {url} iniciada com sucesso (WebView2).");
             }
             catch (Exception ex)
             {

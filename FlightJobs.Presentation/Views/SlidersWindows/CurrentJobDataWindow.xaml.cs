@@ -137,6 +137,19 @@ namespace FlightJobsDesktop.Views.SlidersWindows
 
         private void BtnShowFlightResults_Click(object sender, RoutedEventArgs e)
         {
+            // MOCK FOR DESIGN VISUALIZATION (Temporary testing)
+            /*if (_currentJobViewModel != null)
+            {
+                if (_currentJobViewModel.PlaneSimData == null)
+                {
+                    _currentJobViewModel.PlaneSimData = new PlaneModel();
+                }
+                _currentJobViewModel.PlaneSimData.TouchdownRunwayLength = 2300;
+                _currentJobViewModel.PlaneSimData.TouchdownThresholdDistance = 455;
+                _currentJobViewModel.PlaneSimData.TouchdownFpm = -150;
+                _currentJobViewModel.PlaneSimData.TouchdownGForce = 1.2;
+            }*/
+
             if (_currentJobViewModel == null || _currentJobViewModel.PlaneSimData == null)
             {
                 _log.Warn("BtnShowFlightResults_Click: _currentJobViewModel or PlaneSimData is null.");
@@ -145,7 +158,6 @@ namespace FlightJobsDesktop.Views.SlidersWindows
 
             AngularGaugeTouchdownFpm.Value = Math.Abs(_currentJobViewModel.PlaneSimData.TouchdownFpm);
             AngularGaugeGForce.Value = _currentJobViewModel.PlaneSimData.TouchdownGForce;
-            AngularGaugeTouchdownDistance.ToValue = _currentJobViewModel.PlaneSimData.TouchdownRunwayLength;
 
             var runwayLength = _currentJobViewModel.PlaneSimData.TouchdownRunwayLength;
             double touchdownRunwayLengthMaxLandZone;
@@ -160,12 +172,44 @@ namespace FlightJobsDesktop.Views.SlidersWindows
 
             var touchdownZoneLenght = 350;
 
-            SectionDistanceOrange.FromValue = 0;
-            SectionDistanceOrange.ToValue = touchdownRunwayLengthMaxLandZone;
-            SectionDistanceGreen.FromValue = touchdownRunwayLengthMaxLandZone;
-            SectionDistanceGreen.ToValue = touchdownRunwayLengthMaxLandZone + touchdownZoneLenght;
-            SectionDistanceRed.FromValue = touchdownRunwayLengthMaxLandZone + touchdownZoneLenght;
-            SectionDistanceRed.ToValue = runwayLength;
+            if (runwayLength > 0)
+            {
+                LblValMax.Text = runwayLength.ToString("F0");
+                var greenTopValue = touchdownRunwayLengthMaxLandZone + touchdownZoneLenght;
+                var greenBottomValue = touchdownRunwayLengthMaxLandZone;
+                LblValGreenTop.Text = greenTopValue.ToString("F0");
+                LblValGreenBottom.Text = greenBottomValue.ToString("F0");
+
+                // Calculate heights of the zones
+                double topRedHeight = runwayLength - greenTopValue;
+                double greenHeight = touchdownZoneLenght;
+                double bottomRedHeight = greenBottomValue;
+
+                // Protect against values <= 0
+                if (topRedHeight < 0) topRedHeight = 0;
+                if (greenHeight < 0) greenHeight = 0;
+                if (bottomRedHeight < 0) bottomRedHeight = 0;
+
+                // Set Grid Row heights
+                RowTopRed.Height = new GridLength(topRedHeight, GridUnitType.Star);
+                RowGreen.Height = new GridLength(greenHeight, GridUnitType.Star);
+                RowBottomRed.Height = new GridLength(bottomRedHeight, GridUnitType.Star);
+
+                // Position left labels vertically (canvas height is 180)
+                double topPosGreenTop = 180.0 * (1.0 - greenTopValue / runwayLength) - 8.0;
+                double topPosGreenBottom = 180.0 * (1.0 - greenBottomValue / runwayLength) - 8.0;
+
+                Canvas.SetTop(LblValGreenTop, topPosGreenTop);
+                Canvas.SetTop(LblValGreenBottom, topPosGreenBottom);
+
+                // Position the current value indicator line and update its label
+                double currentVal = _currentJobViewModel.PlaneSimData.TouchdownThresholdDistance;
+                LblCurrentDistance.Text = currentVal.ToString("F0") + "m";
+
+                double clampedVal = Math.Max(0.0, Math.Min(runwayLength, currentVal));
+                double topPosIndicator = 180.0 * (1.0 - clampedVal / runwayLength) - 10.0;
+                Canvas.SetTop(IndicatorGroup, topPosIndicator);
+            }
 
             _hideTimer.Interval = new TimeSpan(0, 5, 0);
             FlightRecorderUtil.FlightRecorderList = FlightRecorderUtil.LoadFlightRecorderFile(_currentJobViewModel);

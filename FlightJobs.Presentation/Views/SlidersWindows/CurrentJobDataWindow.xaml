@@ -656,26 +656,42 @@
                                     </ToolTip>
                                 </Border.ToolTip>
                                 <StackPanel>
-                                    <ui:LayoutPanel>
-                                        <lc:AngularGauge x:Name="AngularGaugeTouchdownDistance" Width="170" Height="180" Foreground="White" FromValue="0" ToValue="2000" TicksStep="50" Value="{Binding PlaneSimData.TouchdownThresholdDistance}" SectionsInnerRadius="0.7" >
-                                            <lc:AngularGauge.Sections>
-                                                <lc:AngularSection Name="SectionDistanceGreen" Fill="Green"/>
-                                                <lc:AngularSection Name="SectionDistanceOrange" Fill="Red"/>
-                                                <lc:AngularSection Name="SectionDistanceRed" Fill="Red"/>
-                                            </lc:AngularGauge.Sections>
-                                        </lc:AngularGauge>
-                                        <Border Background="{StaticResource BackgroundPrimary}" BorderBrush="{StaticResource BorderPrimary}" BorderThickness="1" CornerRadius="4" Padding="4,2" Margin="65,55,65,100" HorizontalAlignment="Center" MinWidth="50">
-                                            <TextBlock Foreground="{StaticResource TextPrimary}" FontWeight="Bold" HorizontalAlignment="Center">
-                                                <Run Text="{Binding PlaneSimData.TouchdownThresholdDistance}"/>
-                                                <Run Text="m" FontSize="10"/>
-                                            </TextBlock>
-                                        </Border>
-                                    </ui:LayoutPanel>
-                                    <TextBlock Style="{StaticResource TextSecondaryStyle}" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="12" TextAlignment="Center">Landing distance</TextBlock>
-                                    <TextBlock Style="{StaticResource TextSecondaryStyle}" HorizontalAlignment="Center" Margin="0,2,0,10" FontSize="12">
-                                        <Run Text="Score: "/>
-                                        <Run Foreground="{Binding PlaneSimData.ColorResultLandDistance}" Text="{Binding PlaneSimData.ScoreLandDistance, Mode=OneWay}" FontWeight="Bold"/>
-                                    </TextBlock>
+                                    <Canvas x:Name="CanvasDistanceIndicator" Width="170" Height="180" HorizontalAlignment="Center">
+                                         <!-- Left Labels -->
+                                         <TextBlock x:Name="LblValMax" Foreground="{StaticResource TextSecondary}" FontSize="12" Width="45" TextAlignment="Right" Canvas.Left="5" Canvas.Top="0"/>
+                                         <TextBlock x:Name="LblValGreenTop" Foreground="{StaticResource TextSecondary}" FontSize="12" Width="45" TextAlignment="Right" Canvas.Left="5"/>
+                                         <TextBlock x:Name="LblValGreenBottom" Foreground="{StaticResource TextSecondary}" FontSize="12" Width="45" TextAlignment="Right" Canvas.Left="5"/>
+                                         <TextBlock x:Name="LblValMin" Foreground="{StaticResource TextSecondary}" FontSize="12" Width="45" TextAlignment="Right" Canvas.Left="5" Canvas.Bottom="0" Text="0"/>
+
+                                         <!-- Vertical Bar -->
+                                         <Border Canvas.Left="55" Canvas.Top="0" Width="45" Height="180" CornerRadius="2" ClipToBounds="True">
+                                             <Grid x:Name="GridBarZones">
+                                                 <Grid.RowDefinitions>
+                                                     <RowDefinition x:Name="RowTopRed" Height="1*"/>
+                                                     <RowDefinition x:Name="RowGreen" Height="1*"/>
+                                                     <RowDefinition x:Name="RowBottomRed" Height="1*"/>
+                                                 </Grid.RowDefinitions>
+                                                 <Border Grid.Row="0" Background="{StaticResource Error}"/>
+                                                 <Border Grid.Row="1" Background="{StaticResource Success}"/>
+                                                 <Border Grid.Row="2" Background="{StaticResource Error}"/>
+                                             </Grid>
+                                         </Border>
+
+                                         <!-- Indicator Line and Label -->
+                                         <StackPanel x:Name="IndicatorGroup" Orientation="Horizontal" Canvas.Left="40" Canvas.Top="90">
+                                             <Border Margin="11,0,0,0" Height="2" Width="55" Background="White" SnapsToDevicePixels="True" CornerRadius="1">
+                                                 <Border.Effect>
+                                                     <DropShadowEffect Color="Black" BlurRadius="3" ShadowDepth="1" Opacity="0.5"/>
+                                                 </Border.Effect>
+                                             </Border>
+                                             <TextBlock x:Name="LblCurrentDistance" Margin="5,0,0,0" Foreground="{StaticResource TextPrimary}" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                         </StackPanel>
+                                     </Canvas>
+                                     <TextBlock Style="{StaticResource TextSecondaryStyle}" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="12" TextAlignment="Center">Landing distance</TextBlock>
+                                     <TextBlock Style="{StaticResource TextSecondaryStyle}" HorizontalAlignment="Center" Margin="0,2,0,10" FontSize="12">
+                                         <Run Text="Score: "/>
+                                         <Run Foreground="{Binding PlaneSimData.ColorResultLandDistance}" Text="{Binding PlaneSimData.ScoreLandDistance, Mode=OneWay}" FontWeight="Bold"/>
+                                     </TextBlock>
                                 </StackPanel>
                             </Border>
                             
