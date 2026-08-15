@@ -112,24 +112,41 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Payload:" Style="{StaticResource TextSecondaryStyle}" FontWeight="Bold" Margin="0,8,0,0" Grid.Column="0" Grid.Row="0"/>
-                <TextBlock Text="{Binding PayloadComplete}" Foreground="{Binding PayloadLabelColor}" FontWeight="Bold" Margin="0,8,0,0" Grid.Column="1" Grid.Row="0"/>
+                
+                <!-- Flight data header -->
+                <Border Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource BackgroundSecondary}" CornerRadius="4" Margin="0,4,0,8" Padding="6,4">
+                    <TextBlock Style="{StaticResource TextPrimaryStyle}" Text="Flight data" FontWeight="SemiBold" FontSize="11" TextAlignment="Center" HorizontalAlignment="Center"/>
+                </Border>
                 
                 <TextBlock Text="Pax:" Style="{StaticResource TextSecondaryStyle}" Margin="0,4,0,0" Grid.Column="0" Grid.Row="1"/>
                 <TextBlock Text="{Binding Pax}" Foreground="{Binding IsConnectedColor}" FontWeight="SemiBold" Margin="0,4,0,0" Grid.Column="1" Grid.Row="1"/>
                 
                 <TextBlock Text="Cargo:" Style="{StaticResource TextSecondaryStyle}" Margin="0,4,0,0" Grid.Column="0" Grid.Row="2"/>
                 <TextBlock Text="{Binding CargoComplete}" Foreground="{Binding IsConnectedColor}" FontWeight="SemiBold" Margin="0,4,0,0" Grid.Column="1" Grid.Row="2"/>
+
+                <TextBlock Text="Payload:" Style="{StaticResource TextSecondaryStyle}" FontWeight="Bold" Margin="0,4,0,0" Grid.Column="0" Grid.Row="3"/>
+                <TextBlock Text="{Binding PayloadComplete}" Foreground="{Binding PayloadLabelColor}" FontWeight="Bold" Margin="0,4,0,0" Grid.Column="1" Grid.Row="3"/>
+
+                <!-- Sim data header -->
+                <Border Grid.Row="4" Grid.ColumnSpan="2" Background="{StaticResource BackgroundSecondary}" CornerRadius="4" Margin="0,12,0,8" Padding="6,4">
+                    <TextBlock Style="{StaticResource TextPrimaryStyle}" Text="Sim data" FontWeight="SemiBold" FontSize="11" TextAlignment="Center" HorizontalAlignment="Center"/>
+                </Border>
+
+                <TextBlock Text="Payload:" Style="{StaticResource TextSecondaryStyle}" FontWeight="Bold" Margin="0,4,0,0" Grid.Column="0" Grid.Row="5"/>
+                <TextBlock Text="{Binding PlaneSimData.PayloadKilogramsText}" Foreground="{Binding IsConnectedColor}" FontWeight="Bold" Margin="0,4,0,0" Grid.Column="1" Grid.Row="5"/>
+
+                <TextBlock Text="Wind:" Style="{StaticResource TextSecondaryStyle}" Margin="0,4,0,0" Grid.Column="0" Grid.Row="6"/>
+                <TextBlock Text="{Binding SimData.WindDirectionAndSpeedText}" Foreground="{Binding IsConnectedColor}" FontWeight="SemiBold" Margin="0,4,0,0" Grid.Column="1" Grid.Row="6"/>
                 
-                <TextBlock Text="Wind:" Style="{StaticResource TextSecondaryStyle}" Margin="0,4,0,0" Grid.Column="0" Grid.Row="3"/>
-                <TextBlock Text="{Binding SimData.WindDirectionAndSpeedText}" Foreground="{Binding IsConnectedColor}" FontWeight="SemiBold" Margin="0,4,0,0" Grid.Column="1" Grid.Row="3"/>
+                <TextBlock Text="Temp:" Style="{StaticResource TextSecondaryStyle}" Margin="0,4,0,0" Grid.Column="0" Grid.Row="7"/>
+                <TextBlock Text="{Binding SimData.TemperatureCelsiusText}" Foreground="{Binding IsConnectedColor}" FontWeight="SemiBold" Margin="0,4,0,0" Grid.Column="1" Grid.Row="7"/>
                 
-                <TextBlock Text="Temp:" Style="{StaticResource TextSecondaryStyle}" Margin="0,4,0,0" Grid.Column="0" Grid.Row="4"/>
-                <TextBlock Text="{Binding SimData.TemperatureCelsiusText}" Foreground="{Binding IsConnectedColor}" FontWeight="SemiBold" Margin="0,4,0,0" Grid.Column="1" Grid.Row="4"/>
-                
-                <TextBlock Text="Pressure:" Style="{StaticResource TextSecondaryStyle}" Margin="0,4,0,4" Grid.Column="0" Grid.Row="5"/>
-                <TextBlock Text="{Binding SimData.SeaLevelPressureText}" Foreground="{Binding IsConnectedColor}" FontWeight="SemiBold" Margin="0,4,0,4" Grid.Column="1" Grid.Row="5"/>
+                <TextBlock Text="Pressure:" Style="{StaticResource TextSecondaryStyle}" Margin="0,4,0,4" Grid.Column="0" Grid.Row="8"/>
+                <TextBlock Text="{Binding SimData.SeaLevelPressureText}" Foreground="{Binding IsConnectedColor}" FontWeight="SemiBold" Margin="0,4,0,4" Grid.Column="1" Grid.Row="8"/>
             </Grid>
             
             <!-- Landing Summary Panel (Shown during simulation/landing phase) -->
