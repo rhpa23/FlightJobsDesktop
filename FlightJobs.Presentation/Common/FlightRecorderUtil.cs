@@ -1,4 +1,4 @@
-﻿using FlightJobs.Connect.MSFS.SDK;
+using FlightJobs.Connect.MSFS.SDK;
 using FlightJobs.Connect.MSFS.SDK.Model;
 using FlightJobsDesktop.ViewModels;
 using log4net;
@@ -179,10 +179,25 @@ namespace FlightJobsDesktop.Common
 
         internal static string GetRouteMapHtmlText()
         {
-            string jsonFlRec = JsonConvert.SerializeObject(FlightRecorderList);
-            string htmlText = File.ReadAllText("web/web-map.html");
+            try
+            {
+                string jsonFlRec = JsonConvert.SerializeObject(FlightRecorderList);
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "web", "web-map.html");
 
-            return htmlText.Replace("MARKERS_LIST_REPLACEMENT", jsonFlRec);
+                if (!File.Exists(path))
+                {
+                    _log.Error($"GetRouteMapHtmlText: HTML file not found at {path}");
+                    return "<html><body><h3>Map resource not found</h3></body></html>";
+                }
+
+                string htmlText = File.ReadAllText(path);
+                return htmlText.Replace("MARKERS_LIST_REPLACEMENT", jsonFlRec);
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"Error in GetRouteMapHtmlText: {ex.Message}", ex);
+                return $"<html><body><h3>Error loading map: {ex.Message}</h3></body></html>";
+            }
         }
 
         internal static double GetAverageFuelConsumption(long distance)

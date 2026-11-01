@@ -1,4 +1,4 @@
-﻿<Window x:Class="FlightJobsDesktop.Views.Account.Login"
+<Window x:Class="FlightJobsDesktop.Views.Account.Login"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -11,7 +11,7 @@
         xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="FlightJobs - Login" Height="500" Width="700" ResizeMode="NoResize" Loaded="Window_Loaded"
+        Title="FlightJobs - Login" Height="530" Width="700" ResizeMode="NoResize" Loaded="Window_Loaded"
         Background="{StaticResource BackgroundPrimary}">
     <Window.DataContext>
         <local:AspnetUserViewModel/>
@@ -68,19 +68,18 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <PasswordBox x:Name="txbPassword" Grid.Column="1" Grid.Row="3" Height="60" Width="300" Margin="0,20,0,0" helpers:PasswordBoxHelper.BindPassword="True" 
+        <PasswordBox x:Name="txbPassword" Grid.Column="1" Grid.Row="3" Height="60" Width="300" Margin="0,15,0,0" helpers:PasswordBoxHelper.BindPassword="True" 
                      ui:ControlHelper.PlaceholderText="••••••••" ui:ControlHelper.Header="Password" PasswordChanged="TextChanged"
                      Background="{StaticResource BackgroundSecondary}" Foreground="{StaticResource TextPrimary}" BorderBrush="{StaticResource BorderPrimary}">
             <helpers:PasswordBoxHelper.BoundPassword>
                 <Binding Path="Password" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" />
             </helpers:PasswordBoxHelper.BoundPassword>
         </PasswordBox>
-        <TextBlock Grid.Column="1" Grid.Row="5" Width="300" Height="60" Margin="5,15,5,0" HorizontalAlignment="Center" FontSize="14" TextWrapping="Wrap" 
-                       Text="To sign up or if you forgot your password, please visit Flightjobs on the web:" Foreground="{StaticResource TextPrimary}"/>
-        <TextBlock Grid.Column="1" Grid.Row="6" Height="20" Margin="5,0,5,5" HorizontalAlignment="Center" FontSize="14">
-            <Hyperlink Click="ForgotPassword_Click" Foreground="{StaticResource AccentPrimaryLight}"><TextBlock Text="Flightjobs" Foreground="{StaticResource AccentPrimaryLight}"/></Hyperlink>
-        </TextBlock>
-        <Border x:Name="btnSignIn" Grid.Column="1" Grid.Row="4" Margin="0,25,0,0" Width="300" CornerRadius="8" Background="{StaticResource AccentPrimary}">
+        <CheckBox x:Name="chkRememberCredentials" Grid.Column="1" Grid.Row="4" Width="300" Margin="0,12,0,0"
+                  IsChecked="True"
+                  Content="Salvar senha e email" Foreground="{StaticResource TextSecondary}"
+                  FontSize="13" Cursor="Hand" HorizontalAlignment="Center"/>
+        <Border x:Name="btnSignIn" Grid.Column="1" Grid.Row="5" Margin="0,15,0,0" Width="300" CornerRadius="8" Background="{StaticResource AccentPrimary}">
             <Button Content="Sign in" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" FontSize="16" FontWeight="Medium" Click="btnSignIn_Click" IsDefault="True" Background="{StaticResource AccentPrimary}" Foreground="White" BorderThickness="0">
                 <Button.Style>
                     <Style TargetType="Button">
@@ -104,7 +103,12 @@
                 </Button.Style>
             </Button>
         </Border>
-        <notifications:NotificationArea x:Name="WindowArea" Position="TopCenter" MaxItems="3" Grid.Row="5" Grid.ColumnSpan="2" Grid.RowSpan="4"  />
-        <notifications:NotificationArea x:Name="WindowAreaLoading" Position="TopCenter" MaxItems="3" Grid.Row="5" Grid.ColumnSpan="2" Grid.RowSpan="4"  />
+        <TextBlock Grid.Column="1" Grid.Row="6" Width="300" Height="45" Margin="5,12,5,0" HorizontalAlignment="Center" FontSize="13" TextWrapping="Wrap" 
+                       Text="To sign up or if you forgot your password, please visit Flightjobs on the web:" Foreground="{StaticResource TextSecondary}"/>
+        <TextBlock Grid.Column="1" Grid.Row="7" Height="20" Margin="5,0,5,5" HorizontalAlignment="Center" FontSize="14">
+            <Hyperlink Click="ForgotPassword_Click" Foreground="{StaticResource AccentPrimaryLight}"><TextBlock Text="Flightjobs" Foreground="{StaticResource AccentPrimaryLight}"/></Hyperlink>
+        </TextBlock>
+        <notifications:NotificationArea x:Name="WindowArea" Position="TopCenter" MaxItems="3" Grid.Row="4" Grid.ColumnSpan="2" Grid.RowSpan="4"  />
+        <notifications:NotificationArea x:Name="WindowAreaLoading" Position="TopCenter" MaxItems="3" Grid.Row="4" Grid.ColumnSpan="2" Grid.RowSpan="4"  />
     </Grid>
 </Window>

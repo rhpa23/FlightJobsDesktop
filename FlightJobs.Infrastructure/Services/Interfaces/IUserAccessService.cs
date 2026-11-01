@@ -1,4 +1,4 @@
-﻿using ConnectorClientAPI;
+using ConnectorClientAPI;
 using FlightJobs.Model.Models;
 using System.Threading.Tasks;
 
@@ -15,5 +15,8 @@ namespace FlightJobs.Infrastructure.Services.Interfaces
         Task<bool> TryAutoLoginWithSavedTokens();
         void SaveLoginData(LoginResponseModel login);
         bool LoadLoginData();
+        SavedCredentialsModel LoadSavedCredentials();
+        void SaveCredentials(string email, string password);
+        void ClearSavedCredentials();
     }
 }

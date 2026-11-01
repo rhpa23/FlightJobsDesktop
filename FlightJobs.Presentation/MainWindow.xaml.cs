@@ -1,4 +1,4 @@
-﻿using FlightJobs.Connect.MSFS.SDK;
+using FlightJobs.Connect.MSFS.SDK;
 using FlightJobs.Domain.Navdata.Interface;
 using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services.Interfaces;
@@ -101,10 +101,21 @@ namespace FlightJobsDesktop
                 {
                     var updateInfo = await manager.CheckForUpdate();
 
-                    if (updateInfo.ReleasesToApply.Any())
+                    if (updateInfo.ReleasesToApply.Any() && updateInfo.FutureReleaseEntry != null)
                     {
-                        await manager.UpdateApp();
-                        _notificationManager.ShowButtonWindow("Application updated. The new version will take effect when restarted.");
+                        var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                        var newVersion = updateInfo.FutureReleaseEntry.Version.Version;
+
+                        if (newVersion > currentVersion)
+                        {
+                            _log.Info($"Updating application from version {currentVersion} to {newVersion}");
+                            await manager.UpdateApp();
+                            _notificationManager.ShowButtonWindow("Application updated. The new version will take effect when restarted.");
+                        }
+                        else
+                        {
+                            _log.Info($"Update check: current version ({currentVersion}) is up to date with the latest available release ({newVersion}). Skipping update.");
+                        }
                     }
                 }
             }

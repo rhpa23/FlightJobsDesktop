@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -63,6 +63,10 @@
     <ProjectReference Include="..\ConnectorClientAPI\ConnectorClientAPI.csproj">
       <Project>{e274cce3-f4e3-42fb-82eb-137839180389}</Project>
       <Name>ConnectorClientAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FlightJobs.Domain\FlightJobs.Domain.csproj">
+      <Project>{3e95ca57-758a-4a00-a2db-fe1ad6c370a0}</Project>
+      <Name>FlightJobs.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\FlightJobs.Model\FlightJobs.Model.csproj">
       <Project>{c418b841-6e4f-457d-b59f-1451f69aa661}</Project>

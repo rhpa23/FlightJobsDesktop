@@ -18,7 +18,8 @@ namespace FlightJobsDesktop.Mapper
 
                     cfg.CreateMap<UserStatisticsModel, UserStatisticsFlightsViewModel>();
                     cfg.CreateMap<JobModel, CurrentJobViewModel>();
-                    cfg.CreateMap<JobModel, LastJobViewModel>();
+                    cfg.CreateMap<JobModel, LastJobViewModel>()
+                        .ForMember(dest => dest.Dist, opt => opt.MapFrom(src => src.Distance));
                     cfg.CreateMap<JobListItemModel, JobItemViewModel>();
                     cfg.CreateMap<CustomPlaneCapacityModel, CapacityViewModel>()
                           .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.CustomNameCapacity))

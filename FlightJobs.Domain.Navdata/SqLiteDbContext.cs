@@ -44,6 +44,8 @@ namespace FlightJobs.Domain.Navdata
 
         public AirportEntity GetAirportByIcao(string icao)
         {
+            if (string.IsNullOrEmpty(icao))
+                return null;
             DataTable dt = new DataTable();
             using (var cmd = _sqliteConnection.CreateCommand())
             {

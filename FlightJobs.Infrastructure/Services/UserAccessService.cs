@@ -1,4 +1,5 @@
-﻿using FlightJobs.Infrastructure.Services.Interfaces;
+using FlightJobs.Domain.Common;
+using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using System;
 using System.IO;
@@ -11,6 +12,11 @@ namespace FlightJobs.Infrastructure.Services
 {
     public class UserAccessService : ServiceBase, IUserAccessService
     {
+        private const string CredentialsSecretKey = "FlightJobsDesktopCredentialsKey_2026";
+        private static readonly string CredentialsFilePath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "FlightJobsDesktop\\ResourceData\\UserCredentials.dat");
+
         public async Task<bool> LoadUserStatisticsProperties()
         {
             try
@@ -93,6 +99,82 @@ namespace FlightJobs.Infrastructure.Services
         public void SaveLoginData(LoginResponseModel login)
         {
             _flightJobsConnectorClientAPI.SaveLoginData(login);
+        }
+
+        public SavedCredentialsModel LoadSavedCredentials()
+        {
+            try
+            {
+                if (!File.Exists(CredentialsFilePath))
+                {
+                    return new SavedCredentialsModel { RememberCredentials = false };
+                }
+
+                var content = File.ReadAllText(CredentialsFilePath);
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    return new SavedCredentialsModel { RememberCredentials = false };
+                }
+
+                var parts = content.Split(new[] { "||" }, StringSplitOptions.None);
+                if (parts.Length >= 2)
+                {
+                    var email = parts[0];
+                    var encryptedPassword = parts[1];
+                    var decryptedPassword = encryptedPassword.Decrypt(CredentialsSecretKey);
+
+                    return new SavedCredentialsModel
+                    {
+                        Email = email,
+                        Password = decryptedPassword,
+                        RememberCredentials = true
+                    };
+                }
+            }
+            catch
+            {
+                // Fallback silencioso em caso de arquivo ilegível/corrompido
+            }
+
+            return new SavedCredentialsModel { RememberCredentials = false };
+        }
+
+        public void SaveCredentials(string email, string password)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+                    return;
+
+                var directory = Path.GetDirectoryName(CredentialsFilePath);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                var encryptedPassword = password.Encrypt(CredentialsSecretKey);
+                var data = $"{email}||{encryptedPassword}";
+                File.WriteAllText(CredentialsFilePath, data);
+            }
+            catch
+            {
+                // Falha de salvamento tratada
+            }
+        }
+
+        public void ClearSavedCredentials()
+        {
+            try
+            {
+                if (File.Exists(CredentialsFilePath))
+                {
+                    File.Delete(CredentialsFilePath);
+                }
+            }
+            catch
+            {
+                // Tratamento silencioso
+            }
         }
     }
 }

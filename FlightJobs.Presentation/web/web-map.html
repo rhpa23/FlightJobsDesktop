@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" crossorigin="">
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" crossorigin=""></script>
@@ -17,10 +18,12 @@
     </style>
 
 </head>
+
 <body>
     <div id="mapContainer" class="map-container">
     </div>
 </body>
+
 </html>
 
 <script>
@@ -34,23 +37,39 @@
         var bounds = new L.latLngBounds();
         var flight_path = [];
 
-        var ortho = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                maxZoom: 19,
-                attribution: '&copy; Esri, Maxar, Earthstar Geographics, GIS User Community'
-            }
-        );
-        
-        var openstreetmap =  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }
+        var esriSatellite = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 19,
+            attribution: '&copy; Esri, Maxar, Earthstar Geographics, GIS User Community'
+        }
         );
 
-        openstreetmap.addTo(mymap);
+        var cartoVoyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19,
+            subdomains: 'abcd',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        }
+        );
+
+        var cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19,
+            subdomains: 'abcd',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        }
+        );
+
+        var esriTopo = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 19,
+            attribution: '&copy; Esri'
+        }
+        );
+
+        esriTopo.addTo(mymap);
 
         var baselayers = {
-            'Open Street Map': openstreetmap,
-            'Esri Satellite': ortho
+            'Esri Topographic': esriTopo,
+            'Esri Satellite': esriSatellite,
+            'Street Map (Carto/OSM)': cartoVoyager,
+            'Dark Mode': cartoDark
         };
 
         L.control.layers(baselayers).addTo(mymap);
@@ -101,7 +120,7 @@
                     '<br/>FPS: ' + marker.FPS);
             } else {
                 marker_icon.iconSize = [0, 0];
-                L.marker([marker.Latitude, marker.Longitude], { icon: marker_icon, opacity: 0, interactive: false  }).addTo(mymap);
+                L.marker([marker.Latitude, marker.Longitude], { icon: marker_icon, opacity: 0, interactive: false }).addTo(mymap);
             }
 
             flight_path.push([marker.Latitude, marker.Longitude]);

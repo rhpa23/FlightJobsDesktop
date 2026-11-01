@@ -1,4 +1,4 @@
-﻿using FlightJobs.Infrastructure;
+using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services.Interfaces;
 using FlightJobs.Model.Models;
 using FlightJobsDesktop.Factorys;
@@ -85,6 +85,7 @@ namespace FlightJobsDesktop.Views.Account
         {
             txbEmail.IsEnabled = enabled;
             txbPassword.IsEnabled = enabled;
+            chkRememberCredentials.IsEnabled = enabled;
             btnSignIn.IsEnabled = enabled;
         }
 
@@ -98,6 +99,15 @@ namespace FlightJobsDesktop.Views.Account
                 _loginData = await _userAccessService.Login(userViewModel.Email, userViewModel.Password);
                 if (_loginData != null)
                 {
+                    if (userViewModel.RememberCredentials)
+                    {
+                        _userAccessService.SaveCredentials(userViewModel.Email, userViewModel.Password);
+                    }
+                    else
+                    {
+                        _userAccessService.ClearSavedCredentials();
+                    }
+
                     await _userAccessService.LoadUserStatisticsProperties();
 
                     if (!discreteLogin)
@@ -223,9 +233,36 @@ namespace FlightJobsDesktop.Views.Account
             }
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
+            LoadSavedCredentials();
+        }
+
+        private void LoadSavedCredentials()
+        {
+            try
+            {
+                var savedCredentials = _userAccessService.LoadSavedCredentials();
+                _log.Info($"Loaded saved credentials. Email: {savedCredentials?.Email}");
+                if (savedCredentials != null && savedCredentials.RememberCredentials && !string.IsNullOrWhiteSpace(savedCredentials.Email))
+                {
+                    var userViewModel = (AspnetUserViewModel)DataContext;
+                    if (userViewModel != null)
+                    {
+                        userViewModel.Email = savedCredentials.Email;
+                        userViewModel.Password = savedCredentials.Password;
+                        userViewModel.RememberCredentials = true;
+                        txbEmail.Text = savedCredentials.Email ?? string.Empty;
+                        txbPassword.Password = savedCredentials.Password ?? string.Empty;
+                        TextChanged(null, null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Failed to load saved user credentials.", ex);
+            }
         }
 
         private void TextChanged(object sender, EventArgs e)

@@ -1,4 +1,4 @@
-﻿using FlightJobsDesktop.ValidationRules;
+using FlightJobsDesktop.ValidationRules;
 using System.Collections.Generic;
 
 namespace FlightJobsDesktop.ViewModels
@@ -68,6 +68,20 @@ namespace FlightJobsDesktop.ViewModels
             {
                 _email = value;
                 OnPropertyChanged(ref _email, value);
+            }
+        }
+
+        private bool _rememberCredentials;
+        public bool RememberCredentials
+        {
+            get
+            {
+                return _rememberCredentials;
+            }
+            set
+            {
+                _rememberCredentials = value;
+                OnPropertyChanged(ref _rememberCredentials, value);
             }
         }
 
