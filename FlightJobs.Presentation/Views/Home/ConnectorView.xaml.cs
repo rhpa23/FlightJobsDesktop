@@ -35,7 +35,7 @@ using System.Windows.Threading;
 namespace FlightJobsDesktop.Views.Home
 {
     /// <summary>
-    /// Interação lógica para ConnectorView.xam
+    /// Intera├º├úo l├│gica para ConnectorView.xam
     /// </summary>
     public partial class ConnectorView : UserControl
     {
@@ -44,7 +44,7 @@ namespace FlightJobsDesktop.Views.Home
         private NotificationManager _notificationManager;
         private IJobService _jobService;
         private IUserAccessService _userAccessService;
-        private ISqLiteDbContext _sqLiteDbContext;
+        private IAirportDataProvider _airportDataProvider;
 
         private DispatcherTimer _timerCheckSimData = new DispatcherTimer();
         private BackgroundWorker _backgroundCheck = new BackgroundWorker();
@@ -68,8 +68,8 @@ namespace FlightJobsDesktop.Views.Home
             _notificationManager = new NotificationManager();
             _jobService = MainWindow.JobServiceFactory.Create();
             _userAccessService = MainWindow.UserServiceFactory.Create();
-            _sqLiteDbContext = MainWindow.SqLiteContextFactory.Create();
-
+            _airportDataProvider = MainWindow.AirportDataProviderFactory.Create();
+            FlightJobsConnectSim.SimConnected += OnSimConnected;
             _backgroundCheck.DoWork += _backgroundCheck_DoWork;
 
             _timerCheckSimData = new DispatcherTimer();
@@ -106,7 +106,7 @@ namespace FlightJobsDesktop.Views.Home
                     }
                     _isJobStarted = true;
                     EnableDisableNavegation(false);
-                    _currentJob.StartIsEnable = !_isJobStarted;
+                    _currentJob.StartIsEnable = !_isJobStarted && _currentJob.IsNavdataLoaded;
                     _currentJob.FinishIsEnable = _isJobStarted;
                     FlightRecorderUtil.FlightRecorderList.Clear();
                     _log.Info("Job started");
@@ -175,7 +175,7 @@ namespace FlightJobsDesktop.Views.Home
                     await _userAccessService.LoadUserStatisticsProperties();
                     await LoadUserJobData(false);
                     EnableDisableNavegation(true);
-                    _currentJob.StartIsEnable = !_isJobStarted;
+                    _currentJob.StartIsEnable = !_isJobStarted && _currentJob.IsNavdataLoaded;
                     _currentJob.FinishIsEnable = _isJobStarted;
                     FlightRecorderUtil.SaveFlightRecorderFile(_currentJob);
                     _log.Info("Job finished");
@@ -194,14 +194,14 @@ namespace FlightJobsDesktop.Views.Home
                 _currentJob.StartIsEnable = false;
                 _currentJob.FinishIsEnable = true;
                 
-                // Verifica se é erro de expiração de sessão
+                // Verifica se ├® erro de expira├º├úo de sess├úo
                 bool isSessionExpired = ex.Message.Contains("Session expired") ||
                                         ex.Message.Contains("Unauthorized") ||
                                         ex.Message.Contains("login again");
                 
                 if (isSessionExpired)
                 {
-                    // Salva dados do job localmente para recuperação
+                    // Salva dados do job localmente para recupera├º├úo
                     SavePendingJobData();
                     
                     _notificationManager.Show(
@@ -238,7 +238,7 @@ namespace FlightJobsDesktop.Views.Home
         }
 
         /// <summary>
-        /// Salva dados do job pendente localmente para recuperação após reautenticação
+        /// Salva dados do job pendente localmente para recupera├º├úo ap├│s reautentica├º├úo
         /// </summary>
         private void SavePendingJobData()
         {
@@ -299,17 +299,20 @@ namespace FlightJobsDesktop.Views.Home
             {
                 if (FlightJobsConnectSim.TakeoffDataCaptured)
                 {
-                    Application.Current.Dispatcher.Invoke((Action) delegate
+                    Application.Current.Dispatcher.Invoke((Action) async delegate
                     {
                         var takeoffHelper = new RunwayHelper(_currentJob.PlaneSimData.HeadingTrue,
                                                               _currentJob.PlaneSimData.TakeoffLatitude,
                                                               _currentJob.PlaneSimData.TakeoffLongitude);
 
 
-                        var takeoffAirport = takeoffHelper.GetJobAirport(_sqLiteDbContext, _currentJob.DepartureICAO, null);
+                        var takeoffAirport = await takeoffHelper.GetJobAirport(_airportDataProvider, _currentJob.DepartureICAO, null);
+                        _log.Info($"Takeoff Airport: {takeoffAirport?.Ident ?? "Not found"}");
                         if (takeoffAirport != null)
                         {
                             var rwy = takeoffHelper.GetRunway(takeoffAirport.Runways);
+                            _log.Info($"Takeoff Runway: {rwy?.Name ?? "Not found"}");
+                            _log.Info($"Takeoff Runway Length: {rwy?.Length ?? 0}");
 
                             _currentJob.PlaneSimData.TakeoffCenterDerivation = takeoffHelper.GetCenterLineDistanceSigned(rwy);
 
@@ -347,13 +350,13 @@ namespace FlightJobsDesktop.Views.Home
             {
                 if (FlightJobsConnectSim.LandingDataCaptured)
                 {
-                    Application.Current.Dispatcher.Invoke((Action) delegate
+                    Application.Current.Dispatcher.Invoke((Action) async delegate
                     {
                         var landingHelper = new RunwayHelper(_currentJob.PlaneSimData.HeadingTrue,
                                                                   _currentJob.PlaneSimData.TouchdownLatitude,
                                                                   _currentJob.PlaneSimData.TouchdownLongitude);
 
-                        var landAirport = landingHelper.GetJobAirport(_sqLiteDbContext, _currentJob.ArrivalICAO, _currentJob.AlternativeICAO);
+                        var landAirport = await landingHelper.GetJobAirport(_airportDataProvider, _currentJob.ArrivalICAO, _currentJob.AlternativeICAO);
                         if (landAirport != null)
                         {
                             var rwy = landingHelper.GetRunway(landAirport.Runways);
@@ -599,21 +602,27 @@ namespace FlightJobsDesktop.Views.Home
 
         private void OnTickCheckSimData(object sender, EventArgs e)
         {
-            if (FlightJobsConnectSim.CommonSimData.IsConnected)
+            try
             {
-                if (!_backgroundCheck.IsBusy)
-                    _backgroundCheck.RunWorkerAsync();
+                if (FlightJobsConnectSim.CommonSimData.IsConnected)
+                {
+                    if (!_backgroundCheck.IsBusy)
+                        _backgroundCheck.RunWorkerAsync();
 
-                SetCurrentPayloadColor();
-                //ValidateLightsResults();
-                //ValidateAltimeterResults();
-
-                _currentJob.IsConnectedColor = Brushes.White;
-                _hasConnected = true;
+                    SetCurrentPayloadColor();
+                    _currentJob.IsConnectedColor = Brushes.White;
+                    _hasConnected = true;
+                }
+                else if (_hasConnected && AppProperties.UserSettings.LocalSettings.ExitWithFS)
+                {
+                    App.Current.Shutdown();
+                }
             }
-            else if (_hasConnected && AppProperties.UserSettings.LocalSettings.ExitWithFS)
+            catch (TypeInitializationException ex)
             {
-                App.Current.Shutdown();
+                // SimConnect assembly failed to load - Flight Simulator SDK not properly installed
+                // Log the error and continue without simulator connection
+                System.Diagnostics.Debug.WriteLine($"Warning: SimConnect initialization failed: {ex.InnerException?.Message}");
             }
         }
 
@@ -755,17 +764,12 @@ namespace FlightJobsDesktop.Views.Home
                     _currentJob = new AutoMapper.Mapper(DbModelToViewModelMapper.MapperCfg).Map<JobModel, CurrentJobViewModel>(activeJob);
                     _currentJob.JobSummary = $"Setup aircraft departure on {_currentJob.DepartureICAO} then fly to {_currentJob.ArrivalICAO} with this total payload";
                     _currentJob.LandingAnalisysMode = false;
-                    var arrivalEntity = _sqLiteDbContext.GetAirportByIcao(_currentJob.ArrivalICAO);
-                    var departureEntity = _sqLiteDbContext.GetAirportByIcao(_currentJob.DepartureICAO);
-                    var alternativeEntity = _sqLiteDbContext.GetAirportByIcao(_currentJob.AlternativeICAO);
-                    _currentJob.DepartureLatitude = departureEntity.Laty;
-                    _currentJob.DepartureLongitude = departureEntity.Lonx;
-                    _currentJob.ArrivalLatitude = arrivalEntity.Laty;
-                    _currentJob.ArrivalLongitude = arrivalEntity.Lonx;
-                    if (alternativeEntity != null)
+                    // Load coordinates from cache (safe - no NullReferenceException if MSFS not running)
+                    bool hasNavdata = await UpdateJobCoordinatesFromMSFS();
+                    _currentJob.IsNavdataLoaded = hasNavdata;
+                    if (FlightJobsConnectSim.CommonSimData.IsConnected && !hasNavdata && !_isJobStarted)
                     {
-                        _currentJob.AlternativeLatitude = alternativeEntity.Laty;
-                        _currentJob.AlternativeLongitude = alternativeEntity.Lonx;
+                        await Dispatcher.BeginInvoke((Action)(async () => await LoadNavdataFromMSFS()));
                     }
 
                     if (_siderJobWindow != null) _siderJobWindow.Close();
@@ -776,6 +780,7 @@ namespace FlightJobsDesktop.Views.Home
                     if (!_sliderTouchdownWindow.IsLoaded)
                         _sliderTouchdownWindow.Show();
 
+                    await LoadNavdataFromMSFS();
                     _siderJobWindow.GridSimData.Visibility = Visibility.Visible;// FlightJobsConnectSim.CommonSimData.IsConnected ? Visibility.Visible : Visibility.Collapsed;
                     _siderJobWindow.StartedIcon.Visibility = Visibility.Hidden;
                     _siderJobWindow.GridMessage.Visibility = Visibility.Collapsed;
@@ -783,10 +788,10 @@ namespace FlightJobsDesktop.Views.Home
                     _siderJobWindow.GridResults.Visibility = Visibility.Collapsed;
                     _stopCheckJobFinish = false;
                     _stopCheckJobStart = false;
-                    _currentJob.StartIsEnable = !_isJobStarted;
+                    _currentJob.StartIsEnable = !_isJobStarted && _currentJob.IsNavdataLoaded;
                     _currentJob.FinishIsEnable = _isJobStarted;
                     _currentJob.WeightUnit = AppProperties.UserSettings.WeightUnit;
-                    _log.Info("CurrentJob was set");
+                    _log.Info("CurrentJob was set");                    
                 }
                 else
                 {
@@ -891,7 +896,7 @@ namespace FlightJobsDesktop.Views.Home
                 _currentJob.Score = pendingJob.Score;
                 _resultMessages = pendingJob.ResultMessages?.ToObject<IList<string>>();
                 
-                // Restaura dados do simulador se disponíveis
+                // Restaura dados do simulador se dispon├¡veis
                 if (pendingJob.PlaneSimDataJson != null)
                 {
                     var planeData = JsonConvert.DeserializeObject<PlaneModel>(pendingJob.PlaneSimDataJson.ToString());
@@ -903,7 +908,7 @@ namespace FlightJobsDesktop.Views.Home
 
                 _log.Info("Pending job data recovered successfully");
                 
-                // Remove arquivo após recuperação bem-sucedida
+                // Remove arquivo ap├│s recupera├º├úo bem-sucedida
                 File.Delete(path);
                 
                 return true;
@@ -913,6 +918,91 @@ namespace FlightJobsDesktop.Views.Home
                 _log.Error("Failed to recover pending job", ex);
                 return false;
             }
+        }
+        private void OnSimConnected(object sender, EventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(async () =>
+            {
+                if (_currentJob != null && !string.IsNullOrEmpty(_currentJob.DepartureICAO) && !_currentJob.IsNavdataLoaded && !_isJobStarted)
+                {
+                    await LoadNavdataFromMSFS();
+                }
+            });
+        }
+
+        private async Task<bool> UpdateJobCoordinatesFromMSFS()
+        {
+            if (_currentJob == null || string.IsNullOrEmpty(_currentJob.DepartureICAO)) return false;
+
+            var dep = await _airportDataProvider.GetAirportAsync(_currentJob.DepartureICAO);
+            var arr = await _airportDataProvider.GetAirportAsync(_currentJob.ArrivalICAO);
+            var alt = await _airportDataProvider.GetAirportAsync(_currentJob.AlternativeICAO);
+
+            if (dep != null)
+            {
+                _currentJob.DepartureLatitude = dep.Laty;
+                _currentJob.DepartureLongitude = dep.Lonx;
+            }
+            if (arr != null)
+            {
+                _currentJob.ArrivalLatitude = arr.Laty;
+                _currentJob.ArrivalLongitude = arr.Lonx;
+            }
+            if (alt != null)
+            {
+                _currentJob.AlternativeLatitude = alt.Laty;
+                _currentJob.AlternativeLongitude = alt.Lonx;
+            }
+
+            bool hasBoth = dep != null && arr != null;
+            _currentJob.IsNavdataLoaded = hasBoth;
+            return hasBoth;
+        }
+
+        private async Task LoadNavdataFromMSFS()
+        {
+            if (!FlightJobsConnectSim.CommonSimData.IsConnected)
+                return;
+
+            MainWindow.ShowLoading();
+            try
+            {
+                var success = await _airportDataProvider.LoadFlightDataAsync(
+                    _currentJob.DepartureICAO,
+                    _currentJob.ArrivalICAO,
+                    _currentJob.AlternativeICAO);
+
+                if (success)
+                {
+                    if (!_currentJob.IsNavdataLoaded)
+                    {
+                        await UpdateJobCoordinatesFromMSFS();
+                        _currentJob.IsNavdataLoaded = true;
+                        _currentJob.StartIsEnable = !_isJobStarted;
+                        _notificationManager.Show("Success", "Airport and runway data loaded from MSFS!", NotificationType.Success, "WindowArea");
+                    }
+                }
+                else
+                {
+                    MainWindow.HideLoading();
+                    _log.Info("[Warning] Could not connect to Flight Simulator. Waiting for simulator start to connect.");
+                    //await LoadNavdataFromMSFS();
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Error loading data from MSFS", ex);
+                _notificationManager.Show("Error", $"Failed to communicate with MSFS: {ex.Message}", NotificationType.Error, "WindowArea");
+            }
+            finally
+            {
+                MainWindow.HideLoading();
+            }
+        }
+
+        private async void btnLoadNavdata_Click(object sender, RoutedEventArgs e)
+        {
+            await LoadNavdataFromMSFS();
         }
     }
 }

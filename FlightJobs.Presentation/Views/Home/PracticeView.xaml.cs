@@ -1,15 +1,11 @@
-﻿using FlightJobs.Connect.MSFS.SDK;
 using FlightJobs.Domain.Navdata.Interface;
-using FlightJobs.Infrastructure;
 using FlightJobs.Infrastructure.Services.Interfaces;
-using FlightJobs.Model.Models;
-using FlightJobsDesktop.Common;
-using FlightJobsDesktop.Mapper;
 using FlightJobsDesktop.ViewModels;
 using ModernWpf.Controls;
 using Notification.Wpf;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,7 +20,7 @@ namespace FlightJobsDesktop.Views.Home
     {
         private NotificationManager _notificationManager;
         private IJobService _jobService;
-        private ISqLiteDbContext _sqLiteDbContext;
+        private IAirportDataProvider _airportDataProvider;
         private Flyout _flyoutConfirm;
 
         private PracticeViewModel _practiceViewModel;
@@ -34,15 +30,23 @@ namespace FlightJobsDesktop.Views.Home
             InitializeComponent();
             _notificationManager = new NotificationManager();
             _jobService = MainWindow.JobServiceFactory.Create();
-            _sqLiteDbContext = MainWindow.SqLiteContextFactory.Create();
+            _airportDataProvider = MainWindow.AirportDataProviderFactory.Create();
 
             _practiceViewModel = (PracticeViewModel)DataContext;
         }
 
-        private IEnumerable GetIcaoSugestions(string text)
+        private async Task<IEnumerable> GetIcaoSugestions(string text)
         {
-            var list = _sqLiteDbContext.GetAirportsByIcaoAndName(text);
-            return list.Select(x => $"{x.Ident} - {x.Name}").ToArray();
+            if (string.IsNullOrWhiteSpace(text)) return new string[0];
+            text = text.Trim().ToUpperInvariant();
+            
+            var cached = await _airportDataProvider.GetAirportAsync(text);
+            if (cached != null)
+            {
+                return new[] { $"{cached.Ident} - {cached.Name}" };
+            }
+
+            return new[] { text };
         }
 
         private void HideConfirmPopup()
@@ -52,11 +56,11 @@ namespace FlightJobsDesktop.Views.Home
                 _flyoutConfirm.Hide();
             }
         }
+
         private async void AutoSuggestBoxICAO_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
-                //Set the ItemsSource to be your filtered dataset
                 var text = sender.Text;
                 if (text.Length > 1)
                 {
@@ -79,22 +83,34 @@ namespace FlightJobsDesktop.Views.Home
             HideConfirmPopup();
         }
 
-        private void BtnStartOk_Click(object sender, RoutedEventArgs e)
+        private async void BtnStartOk_Click(object sender, RoutedEventArgs e)
         {
             if (_practiceViewModel.ArrivalICAO?.Length >= 4)
             {
-                var icao = _practiceViewModel.ArrivalICAO.Substring(0, 4);
-                var airport = _sqLiteDbContext.GetAirportByIcao(icao);
-                if (airport != null)
+                var icao = _practiceViewModel.ArrivalICAO.Substring(0, 4).ToUpperInvariant();
+                MainWindow.ShowLoading();
+                try
                 {
-                    ConnectorView.LoadPracticeData(airport);
-                    PracticeStartGrid.Visibility = Visibility.Collapsed;
-                    PracticeFinishGrid.Visibility = Visibility.Visible;
-                    ArrivalICAOLabel.Text = _practiceViewModel.ArrivalICAO;
-                    HomeView.DisableTabControl();
-                    MainWindow.DisableNavigationBar();
-                    BtnPacticeFinishBorder.IsEnabled = true;
-                    HideConfirmPopup();
+                    var airport = await _airportDataProvider.GetAirportAsync(icao);
+                    if (airport != null)
+                    {
+                        ConnectorView.LoadPracticeData(airport);
+                        PracticeStartGrid.Visibility = Visibility.Collapsed;
+                        PracticeFinishGrid.Visibility = Visibility.Visible;
+                        ArrivalICAOLabel.Text = _practiceViewModel.ArrivalICAO;
+                        HomeView.DisableTabControl();
+                        MainWindow.DisableNavigationBar();
+                        BtnPacticeFinishBorder.IsEnabled = true;
+                        HideConfirmPopup();
+                    }
+                    else
+                    {
+                        _notificationManager.Show("Aviso", $"Não foi possível carregar os dados de {icao} do simulador ou cache.", NotificationType.Warning, "WindowArea");
+                    }
+                }
+                finally
+                {
+                    MainWindow.HideLoading();
                 }
             }
         }
@@ -112,13 +128,12 @@ namespace FlightJobsDesktop.Views.Home
             MainWindow.EnableNavigationBar();
         }
 
-        private void BtnPacticeReset_Click(object sender, RoutedEventArgs e)
+        private async void BtnPacticeReset_Click(object sender, RoutedEventArgs e)
         {
-
             if (_practiceViewModel.ArrivalICAO?.Length >= 4)
             {
-                var icao = _practiceViewModel.ArrivalICAO.Substring(0, 4);
-                var airport = _sqLiteDbContext.GetAirportByIcao(icao);
+                var icao = _practiceViewModel.ArrivalICAO.Substring(0, 4).ToUpperInvariant();
+                var airport = await _airportDataProvider.GetAirportAsync(icao);
                 if (airport != null)
                 {
                     ConnectorView.LoadPracticeData(airport);

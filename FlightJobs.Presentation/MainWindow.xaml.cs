@@ -42,15 +42,15 @@ namespace FlightJobsDesktop
         private static bool _isLogout;
         internal static Ellipse LicenseOverdueEllipse { get; set; }
 
-        private FlightJobsConnectSim _flightJobsConnectSim = new FlightJobsConnectSim();
-        
+        private FlightJobsConnectSim _flightJobsConnectSim;
+
         private static readonly ILog _log = LogManager.GetLogger(typeof(MainWindow));
 
         public static IAbstractFactory<IJobService> JobServiceFactory;
         public static IAbstractFactory<IUserAccessService> UserServiceFactory;
         public static IAbstractFactory<IInfraService> InfraServiceFactory;
-        public static IAbstractFactory<ISqLiteDbContext> SqLiteContextFactory;
-        public static IAbstractFactory<IPilotService> PilotServiceFactory;
+                public static IAbstractFactory<IPilotService> PilotServiceFactory;
+        public static IAbstractFactory<IAirportDataProvider> AirportDataProviderFactory;
 
         private UserSettingsViewModel _userSettings;
 
@@ -58,7 +58,7 @@ namespace FlightJobsDesktop
                           IAbstractFactory<IJobService> factoryJob, 
                           IAbstractFactory<IUserAccessService> factoryUser,
                           IAbstractFactory<IPilotService> factoryPilot,
-                          IAbstractFactory<ISqLiteDbContext> factorySqLiteContext)
+                                                    IAbstractFactory<IAirportDataProvider> factoryAirportDataProvider)
         {
             InitializeComponent();
             _notificationManager = new NotificationManager();
@@ -67,7 +67,7 @@ namespace FlightJobsDesktop
             UserServiceFactory = factoryUser;
             PilotServiceFactory = factoryPilot;
             InfraServiceFactory = factoryInfra;
-            SqLiteContextFactory = factorySqLiteContext;
+                        AirportDataProviderFactory = factoryAirportDataProvider;
 
             ResizeMode = ResizeMode.CanResizeWithGrip;
 
@@ -88,7 +88,9 @@ namespace FlightJobsDesktop
             miShow.Click += delegate (object sender, EventArgs args) { ShowMainWindow(); };
             var miExit = new System.Windows.Forms.MenuItem() { Text = "Exit" };
             miExit.Click += delegate (object sender, EventArgs args) { Application.Current.Shutdown(); };
-            
+
+            _flightJobsConnectSim = new FlightJobsConnectSim();
+
             ni.ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[] { miShow, miExit });
             _log.Info("Initialized");
         }
@@ -163,9 +165,8 @@ namespace FlightJobsDesktop
                 contentFrame.Navigate(typeof(HomeView));
                 nvMain.SelectedItem = HomeViewPageItem;
 
-                LoadAllSettingsData();
-
                 _flightJobsConnectSim.Initialize();
+                LoadAllSettingsData();                
 
                 TxbTitle.Text = $"FlightJobs Desktop - {Assembly.GetExecutingAssembly().GetName().Version}";
             }
@@ -315,11 +316,12 @@ namespace FlightJobsDesktop
 
         private void Logout()
         {
-            var loginWindow = new Login(InfraServiceFactory,
-                                        JobServiceFactory,
-                                        UserServiceFactory,
+            var loginWindow = new Login(
+                InfraServiceFactory,
+                JobServiceFactory,
+                UserServiceFactory,
                                         new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, PilotServiceFactory,
-                                                       SqLiteContextFactory));
+                                                       AirportDataProviderFactory));
 
             loginWindow.Show();
 
@@ -337,11 +339,11 @@ namespace FlightJobsDesktop
         /// </summary>
         internal static void ShowLoginWindow()
         {
-            var loginWindow = new Login(InfraServiceFactory,
-                                        JobServiceFactory,
-                                        UserServiceFactory,
-                                        new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, PilotServiceFactory,
-                                                       SqLiteContextFactory));
+            var loginWindow = new Login(
+                InfraServiceFactory,
+                JobServiceFactory,
+                UserServiceFactory,
+                new MainWindow(InfraServiceFactory, JobServiceFactory, UserServiceFactory, PilotServiceFactory, AirportDataProviderFactory));
             loginWindow.Show();
         }
 

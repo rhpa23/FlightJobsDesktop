@@ -20,6 +20,7 @@
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
     <RuntimeIdentifiers>win;win-x86;win-x64</RuntimeIdentifiers>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
@@ -101,6 +102,9 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Resources.Extensions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\system.resources.extensions\8.0.0\lib\net462\System.Resources.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -292,6 +296,7 @@
     <PackageReference Include="Microsoft.Web.WebView2">
       <Version>1.0.2651.64</Version>
     </PackageReference>
+    <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="img\background\tower-view.jpg" />
@@ -640,6 +645,10 @@
     <ProjectReference Include="..\FlightJobs.Model\FlightJobs.Model.csproj">
       <Project>{C418B841-6E4F-457D-B59F-1451F69AA661}</Project>
       <Name>FlightJobs.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FlightJobs.MSFS2024.Navdata\FlightJobs.MSFS2024.Navdata.csproj">
+      <Project>{8B8544B9-A484-48FE-8424-95C45053B5D3}</Project>
+      <Name>FlightJobs.MSFS2024.Navdata</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -80,6 +80,9 @@ namespace FlightJobs.Connect.MSFS.SDK
         public static bool ShowTakeoff { get; set; }
         public static bool LandingDataCaptured { get; set; }
         public static bool TakeoffDataCaptured { get; set; }
+        
+        // Evento disparado quando o simulador é conectado
+        public static event EventHandler SimConnected;
 
         private static FsConnect _fsConnect = new FsConnect();
         private static List<SimVar> _planeDataDefinitionList = new List<SimVar>();
@@ -241,8 +244,8 @@ namespace FlightJobs.Connect.MSFS.SDK
                     _fsConnect.RegisterDataDefinition<PlanePayloadResponseStruct>(RequestDefinitionEnum.PlanePayloadData, _planePayloadDataDefinitionList);
                     _fsConnect.RegisterDataDefinition<SimInfoResponseStruct>(RequestDefinitionEnum.SimData, _simDefinitionList);
                 }
-                catch (Exception ex)
-                { /* Empyt because the sim is not running. PLEASE DON'T LOG HERE!!! */  }
+                catch (Exception)
+                { /* Empty because the sim is not running. PLEASE DON'T LOG HERE!!! */  }
             }
         }
 
@@ -251,6 +254,7 @@ namespace FlightJobs.Connect.MSFS.SDK
             if (!_backgroundConnector.IsBusy)
                 _backgroundConnector.RunWorkerAsync();
 
+            bool wasConnected = CommonSimData.IsConnected;
             CommonSimData.IsConnected = _fsConnect.Connected;
 
             if (_fsConnect.Connected)
@@ -261,6 +265,12 @@ namespace FlightJobs.Connect.MSFS.SDK
                 if (_flightJobsSimConnect == null)
                 {
                     _flightJobsSimConnect = new FlightJobsSimConnect(CommonSimData);
+                }
+                
+                // Dispara evento apenas na primeira conexão
+                if (!wasConnected)
+                {
+                    SimConnected?.Invoke(this, EventArgs.Empty);
                 }
             }
             else

@@ -1,0 +1,6 @@
+{
+  "summary":  "Plano definitivo de migração de Navdata para SimConnect no MSFS 2024 atualizado com as decisões do usuário: remoção total do navdata.sqlite, uso dos binários do MSFS 2024 SDK com wrapper próprio e modal ModernWpf.",
+  "updatedAt":  "2026-11-01T19:29:59.786413900Z",
+  "requestFeedback":  true,
+  "userFacing":  true
+}

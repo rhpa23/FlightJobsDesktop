@@ -1,4 +1,4 @@
-﻿using FlightJobs.Connect.MSFS.SDK.Model;
+using FlightJobs.Connect.MSFS.SDK.Model;
 using System.Windows;
 using System.Windows.Media;
 
@@ -16,6 +16,28 @@ namespace FlightJobsDesktop.ViewModels
         public double DepartureLongitude { get; set; }
         public double ArrivalLatitude { get; set; }
         public double ArrivalLongitude { get; set; }
+        
+        // Alias properties for compatibility
+        public double DepartureLat 
+        { 
+            get => DepartureLatitude; 
+            set => DepartureLatitude = value; 
+        }
+        public double DepartureLon 
+        { 
+            get => DepartureLongitude; 
+            set => DepartureLongitude = value; 
+        }
+        public double ArrivalLat 
+        { 
+            get => ArrivalLatitude; 
+            set => ArrivalLatitude = value; 
+        }
+        public double ArrivalLon 
+        { 
+            get => ArrivalLongitude; 
+            set => ArrivalLongitude = value; 
+        }
         public double AlternativeLatitude { get; set; }
         public double AlternativeLongitude { get; set; }
         public long Distance { get; set; }
@@ -115,13 +137,19 @@ namespace FlightJobsDesktop.ViewModels
             set { OnPropertyChanged(); }
         }
 
-        private bool _startIsEnable { get; set; } = true;
+        private bool _isNavdataLoaded = false;
+        public bool IsNavdataLoaded
+        {
+            get { return _isNavdataLoaded; }
+            set { _isNavdataLoaded = value; OnPropertyChanged(); }
+        }
+
+        private bool _startIsEnable = false;
         public bool StartIsEnable
         {
             get { return _startIsEnable; }
             set { _startIsEnable = value; OnPropertyChanged(); }
         }
-
         private bool _finishIsEnable { get; set; } = false;
         public bool FinishIsEnable
         {
@@ -162,6 +190,7 @@ namespace FlightJobsDesktop.ViewModels
                 IsChallenge = currentJob.IsChallenge,
                 IsConnectedColor = currentJob.IsConnectedColor,
                 IsDone = currentJob.IsDone,
+                IsNavdataLoaded = currentJob.IsNavdataLoaded,
                 JobSummary = currentJob.JobSummary,
                 Month = currentJob.Month,
                 LastJob = currentJob.LastJob,

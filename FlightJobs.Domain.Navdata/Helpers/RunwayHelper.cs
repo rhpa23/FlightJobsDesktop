@@ -85,12 +85,12 @@ namespace FlightJobs.Domain.Navdata.Helpers
             return cross < 0 ? distance : -distance;
         }
 
-        public AirportEntity GetJobAirport(ISqLiteDbContext sqLiteDbContext, string icao, string alternativeICAO)
+        public async Task<AirportEntity> GetJobAirport(IAirportDataProvider airportDataProvider, string icao, string alternativeICAO)
         {
             if (icao != null)
             {
-                var airport = sqLiteDbContext.GetAirportByIcao(icao);
-                if (GeoCalculationsUtil.CheckClosestLocation(_latitude, _longitude, airport.Laty, airport.Lonx))
+                var airport = await airportDataProvider.GetAirportAsync(icao);
+                if (airport != null && GeoCalculationsUtil.CheckClosestLocation(_latitude, _longitude, airport.Laty, airport.Lonx))
                 {
                     return airport;
                 }
@@ -98,8 +98,8 @@ namespace FlightJobs.Domain.Navdata.Helpers
                 {
                     if (alternativeICAO == null) return null;
 
-                    var aptAlternative = sqLiteDbContext.GetAirportByIcao(alternativeICAO);
-                    if (GeoCalculationsUtil.CheckClosestLocation(_latitude, _longitude, aptAlternative.Laty, aptAlternative.Lonx))
+                    var aptAlternative = await airportDataProvider.GetAirportAsync(alternativeICAO);
+                    if (aptAlternative != null && GeoCalculationsUtil.CheckClosestLocation(_latitude, _longitude, aptAlternative.Laty, aptAlternative.Lonx))
                     {
                         return aptAlternative;
                     }

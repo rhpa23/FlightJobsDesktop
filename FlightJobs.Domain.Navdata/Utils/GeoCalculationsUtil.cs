@@ -9,24 +9,6 @@ namespace FlightJobs.Domain.Navdata.Utils
 {
     public class GeoCalculationsUtil
     {
-        private static SqLiteDbContext _sqLiteDbContext = new SqLiteDbContext();
-
-        public static int CalcDistance(string departure, string arrival)
-        {
-            var departureInfo = _sqLiteDbContext.GetAirportByIcao(departure);
-            var arrivalInfo = _sqLiteDbContext.GetAirportByIcao(arrival);
-            if (departureInfo != null && arrivalInfo != null)
-            {
-                var departureCoord = new GeoCoordinate(departureInfo.Laty, departureInfo.Lonx);
-                var arrivalCoord = new GeoCoordinate(arrivalInfo.Laty, arrivalInfo.Lonx);
-
-                var distMeters = departureCoord.GetDistanceTo(arrivalCoord);
-                var distMiles = (int)DataConversionUtil.ConvertMetersToMiles(distMeters);
-                return distMiles;
-            }
-            return 0;
-        }
-
         public static double CalcDistance(double actualLat, double actualLon, double verifyLat, double verifyLon)
         {
             var actualCoord = new GeoCoordinate(actualLat, actualLon);

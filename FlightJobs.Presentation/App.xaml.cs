@@ -1,28 +1,22 @@
-﻿using FlightJobs.Infrastructure.Services;
+using FlightJobs.Domain.Navdata.Interface;
+using FlightJobs.Infrastructure.Services;
 using FlightJobs.Infrastructure.Services.Interfaces;
+using FlightJobs.MSFS2024.Navdata;
 using FlightJobsDesktop.Factorys;
 using FlightJobsDesktop.Mapper;
+using FlightJobsDesktop.ViewModels;
 using FlightJobsDesktop.Views;
 using FlightJobsDesktop.Views.Account;
-using FlightJobsDesktop.Views.SlidersWindows;
-using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
-using System.Linq;
-using FlightJobs.Domain.Navdata.Interface;
-using FlightJobs.Domain.Navdata;
 using log4net.Config;
-using FlightJobs.Domain.Navdata.Utils;
-using FlightJobsDesktop.Views.POC;
+using Microsoft.Extensions.DependencyInjection;
 using ModernWpf;
-using System.Diagnostics;
-using System.Drawing;
-using System.Windows.Forms;
-using System;
-using FlightJobsDesktop.ViewModels;
 using Newtonsoft.Json;
-using System.IO;
 using Notification.Wpf;
-using System.Threading.Tasks;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Windows;
 
 namespace FlightJobsDesktop
 {
@@ -53,7 +47,7 @@ namespace FlightJobsDesktop
             services.AddAbstractFactory<IInfraService, InfraService>();
             services.AddAbstractFactory<IPilotService, PilotService>();
 
-            services.AddAbstractFactory<ISqLiteDbContext, SqLiteDbContext>();
+            services.AddAbstractFactory<IAirportDataProvider, SimConnectNavdataService>();
 
             services.AddSingleton<MainWindow>();
             services.AddSingleton<Login>();
@@ -61,13 +55,9 @@ namespace FlightJobsDesktop
 
         private async void OnStartup(object sender, StartupEventArgs e)
         {
-            //            new CurrentJobDataWindow().Show();
-            //new ChartsPoC().Show();
-
             SingleInstanceCheck();
 
             ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
-            var loginWindow = _serviceProvider.GetService<Login>();
 
             var userAccessService = _serviceProvider.GetService<IUserAccessService>();
 
@@ -76,14 +66,18 @@ namespace FlightJobsDesktop
 
             if (isLoginDataLoaded && isTryAutoLoginSuccess)
             {
-                
                 var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FlightJobsDesktop\\ResourceData\\Settings.json");
                 var jsonSettings = File.ReadAllText(path);
                 var userSettings = JsonConvert.DeserializeObject<UserSettingsViewModel>(jsonSettings);
 
                 if (!userSettings.StartInSysTray)
                 {
-                    var mainWindow = _serviceProvider.GetService<MainWindow>();
+                    var mainWindow = new MainWindow(
+                        _serviceProvider.GetService<IAbstractFactory<IInfraService>>(),
+                        _serviceProvider.GetService<IAbstractFactory<IJobService>>(),
+                        _serviceProvider.GetService<IAbstractFactory<IUserAccessService>>(),
+                        _serviceProvider.GetService<IAbstractFactory<IPilotService>>(),
+                        _serviceProvider.GetService<IAbstractFactory<IAirportDataProvider>>());
                     mainWindow.Show();
                 }
                 else
@@ -93,6 +87,18 @@ namespace FlightJobsDesktop
             }
             else
             {
+                var loginWindow = new Login(
+                    _serviceProvider.GetService<IAbstractFactory<IInfraService>>(),
+                    _serviceProvider.GetService<IAbstractFactory<IJobService>>(),
+                    _serviceProvider.GetService<IAbstractFactory<IUserAccessService>>(),
+                    new MainWindow(
+                        _serviceProvider.GetService<IAbstractFactory<IInfraService>>(),
+                        _serviceProvider.GetService<IAbstractFactory<IJobService>>(),
+                        _serviceProvider.GetService<IAbstractFactory<IUserAccessService>>(),
+                        _serviceProvider.GetService<IAbstractFactory<IPilotService>>(),
+                        _serviceProvider.GetService<IAbstractFactory<IAirportDataProvider>>()
+                    )
+                );
                 loginWindow.Show();
             }
         }
